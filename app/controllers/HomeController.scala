@@ -1,5 +1,6 @@
 package controllers
 
+import play.api.Logging
 import play.api.mvc._
 
 /**
@@ -7,7 +8,7 @@ import play.api.mvc._
  * application's home page.
  */
 
-class HomeController (override val controllerComponents: ControllerComponents) extends BaseController {
+class HomeController (override val controllerComponents: ControllerComponents) extends BaseController with Logging {
   /**
    * Create an Action to render an HTML page with a welcome message.
    * The configuration in the `routes` file means that this method
@@ -15,6 +16,7 @@ class HomeController (override val controllerComponents: ControllerComponents) e
    * a path of `/`.
    */
   def index = Action {
+    logger.info("hello there")
     Ok(views.html.index())
   }
 }
