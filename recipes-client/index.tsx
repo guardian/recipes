@@ -1,10 +1,8 @@
-import {render} from 'react-dom'
+import { render } from "react-dom";
 import * as React from "react";
 
-import {greeting} from "~consts";
+import { greeting } from "~consts";
 
-const App = () => (
-    <div>{greeting}</div>
-)
+const App = () => <div>{greeting}</div>;
 
-render(<App />, document.getElementById('root'))
+render(<App />, document.getElementById("root"));
