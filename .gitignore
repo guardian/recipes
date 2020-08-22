@@ -5,3 +5,6 @@ test-result
 server.pid
 *.eml
 target
+/node_modules
+/.cache
+/public/recipes-client

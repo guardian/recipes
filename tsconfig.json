@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "baseUrl": "./recipes-client",
+    "paths": {
+      "~*": ["./*"]
+    }
+  },
+  "include": ["recipes-client/**/*"]
+}
