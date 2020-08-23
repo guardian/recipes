@@ -14,6 +14,7 @@ module.exports = {
     'react',
     'react-hooks',
     '@typescript-eslint',
+    'emotion'
   ],
   settings: {
     react: { version: 'detect' }
@@ -30,6 +31,9 @@ module.exports = {
   env: {
     browser: true,
     es6: true
+  },
+  rules: {
+    "emotion/jsx-import": "error"
   }
 };
 
