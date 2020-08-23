@@ -1,11 +1,28 @@
+import scala.util.Try
+import scala.sys.process._
+
 val enumeratumVersion = "1.6.1"
 val enumeratumPlayVersion = "1.6.1"
 val jacksonVersion = "2.10.5"
 val logstashLogbackVersion = "6.4"
 
+val buildInfo = Seq(
+  buildInfoPackage := "recipes",
+  buildInfoKeys := Seq[BuildInfoKey](
+    name,
+    BuildInfoKey.sbtbuildinfoConstantEntry(("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")).getOrElse(
+      Try("git rev-parse HEAD".!!.trim).getOrElse("unknown")
+    ))),
+  ),
+  buildInfoOptions:= Seq(
+    BuildInfoOption.Traits("management.BuildInfo"),
+    BuildInfoOption.ToJson
+  )
+)
+
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala)
-  .settings(
+  .enablePlugins(PlayScala, BuildInfoPlugin)
+  .settings(buildInfo ++ Seq(
     name := """recipes""",
     version := "1.0-SNAPSHOT",
     scalaVersion := "2.13.1",
@@ -28,5 +45,5 @@ lazy val root = (project in file("."))
       "-Xfatal-warnings"
     ),
     javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
-  )
+  ))
 

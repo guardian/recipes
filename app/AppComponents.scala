@@ -1,4 +1,4 @@
-import controllers.{AssetsComponents, HomeController}
+import controllers.{AssetsComponents, HomeController, ManagementController}
 import filter.RequestLoggingFilter
 import play.api.ApplicationLoader.Context
 import play.api.BuiltInComponentsFromContext
@@ -14,10 +14,12 @@ class AppComponents(context: Context)
   override def httpFilters: Seq[EssentialFilter] = super.httpFilters ++ Seq(new RequestLoggingFilter(materializer))
 
   lazy val homeController = new HomeController(controllerComponents)
+  lazy val managementController = new ManagementController(controllerComponents)
 
   lazy val router: Router = new Routes(
     httpErrorHandler,
     homeController,
+    managementController,
     assets
   )
 }
