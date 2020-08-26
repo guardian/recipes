@@ -15,7 +15,7 @@ class HomeController (override val controllerComponents: ControllerComponents) e
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index = Action {
+  def index(id: String) = Action {
     logger.info("hello there")
     Ok(views.html.index())
   }
