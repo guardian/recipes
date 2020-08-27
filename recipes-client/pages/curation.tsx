@@ -3,7 +3,8 @@ import { Component } from "react";
 import { jsx } from "@emotion/core";
 import Recipe from "~components/recipe";
 
-import demoRecipe from "~data/recipe"
+import demoRecipe from "~data/recipe";
+import RecipeComponent from "~components/recipe-component";
 
 import schema from "~data/recipe-schema"
 
@@ -33,7 +34,8 @@ class Curation extends Component<CurationProps> {
         </div>
         <div css={{ gridArea: "right", background: "yellow" }}>
           <form>
-            <input type="text" value={demoRecipe['path']} readOnly></input>
+            <RecipeComponent title="hello" body={demoRecipe} />
+            {/* <input type="text" value={demoRecipe['path']} readOnly></input>
             <input type="text" value={demoRecipe['recipes_title']} readOnly></input>
             <input type="text" value={demoRecipe['serves']} readOnly></input>
             <input type="text" value={demoRecipe['credit']} readOnly></input>
@@ -41,7 +43,7 @@ class Curation extends Component<CurationProps> {
             <input type="text" value={demoRecipe['cuisines']} readOnly></input>
             <input type="text" value={demoRecipe['meal_type']} readOnly></input>
             <input type="text" value={demoRecipe['ingredient_tags']} readOnly></input>
-            <textarea value={demoRecipe['time'].join("\n")} readOnly></textarea>
+            <textarea value={demoRecipe['time'].join("\n")} readOnly></textarea> */}
           </form>
         </div>
         <div css={{ gridArea: "footer", background: "green" }}>buttons</div>
