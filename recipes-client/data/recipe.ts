@@ -3,10 +3,17 @@ export default {
     "recipes_title": "Grilled pepper salad with fresh cucumber and herbs.",
     "serves": "Serves 4.",
     "time": [
-      "Prep 20 min.",
-      "Cook 40 min."
+      {
+      "instruction": "Prep",
+      "quantity": "20",
+      "unit": "min"
+      },
+      {
+        "instruction": "Cook",
+        "quantity": "40",
+        "unit": "min"
+      }
     ],
-    "ingred_titles": [],
     "steps": [
       "Heat the oven to 250 C (230 C fan)/480 F/gas 9.",
       "In a large bowl, toss together all the peppers, tomatoes, onions, chilli, garlic, four tablespoons of oil, three-quarters of a teaspoon of salt and a good grind of pepper.",
