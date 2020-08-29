@@ -1,3 +1,6 @@
+import com.amazonaws.services.s3.AmazonS3ClientBuilder
+import com.gu.pandomainauth.PublicSettings
+import config.Config
 import controllers.{AssetsComponents, HomeController, ManagementController}
 import filter.RequestLoggingFilter
 import play.api.ApplicationLoader.Context
@@ -6,14 +9,23 @@ import play.api.mvc.EssentialFilter
 import play.api.routing.Router
 import router.Routes
 
-class AppComponents(context: Context)
+class AppComponents(context: Context, config: Config)
   extends BuiltInComponentsFromContext(context)
     with play.filters.HttpFiltersComponents
     with AssetsComponents {
 
-  override def httpFilters: Seq[EssentialFilter] = super.httpFilters ++ Seq(new RequestLoggingFilter(materializer))
+  private val disabledFilters: Set[EssentialFilter] = Set(allowedHostsFilter)
+  override def httpFilters: Seq[EssentialFilter] = super.httpFilters.filterNot(disabledFilters.contains) ++ Seq(new RequestLoggingFilter(materializer))
 
-  lazy val homeController = new HomeController(controllerComponents)
+  private val s3Client = AmazonS3ClientBuilder.standard()
+    .withCredentials(config.awsCredentials)
+    .withRegion(config.awsRegion)
+    .build()
+
+  val publicSettings = new PublicSettings(config.panDomainConfig.settingsFileKey, config.panDomainConfig.settingsBucket, s3Client)
+  publicSettings.start()
+
+  lazy val homeController = new HomeController(controllerComponents, publicSettings, config)
   lazy val managementController = new ManagementController(controllerComponents)
 
   lazy val router: Router = new Routes(

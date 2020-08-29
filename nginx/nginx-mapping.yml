@@ -1,0 +1,4 @@
+name: recipes
+mappings:
+  - prefix: recipes
+    port: 9090

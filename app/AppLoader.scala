@@ -10,6 +10,6 @@ class AppLoader extends ApplicationLoader {
     LogConfig.initPlayLogging(context)
     LogConfig.initLocalLogShipping(config)
 
-    new AppComponents(context).application
+    new AppComponents(context, config).application
   }
 }
