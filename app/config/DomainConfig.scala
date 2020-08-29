@@ -7,7 +7,8 @@ import model.Stage._
 
 case class DomainConfig(
   self: URI,
-  loginService: URI
+  loginService: URI,
+  proxyingDomain: URI = new URI("https://www.theguardian.com")
 )
 
 object DomainConfig {
