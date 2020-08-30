@@ -3,7 +3,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: ['./tsconfig.json'],
+    project: ['./tsconfig.eslint.json'],
     ecmaFeatures: {
       jsx: true
     },
@@ -33,7 +33,12 @@ module.exports = {
     es6: true
   },
   rules: {
-    "emotion/jsx-import": "error"
+    "emotion/jsx-import": 2,
+
+    // Enforcing this rule creates verbose function components.
+    // As `displayName` is just for debugging, we've chosen to disable it.
+    // See https://reactjs.org/docs/react-component.html#displayname
+    "react/display-name": 0
   }
 };
 

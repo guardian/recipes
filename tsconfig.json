@@ -7,5 +7,9 @@
       "~*": ["./*"]
     }
   },
-  "include": ["recipes-client/**/*"]
+  "include": ["recipes-client/**/*"],
+  "exclude": [
+    "node_modules",
+    "recipes-client/**/*.spec.ts"
+  ]
 }

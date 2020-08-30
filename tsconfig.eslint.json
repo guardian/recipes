@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "recipes-client/**/*",
+    "recipes-client/**/*.spec.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

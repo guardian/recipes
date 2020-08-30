@@ -1,20 +1,17 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import { Fragment } from "react";
 import { render } from "react-dom";
-import { text, background } from "@guardian/src-foundations/palette";
 
-import { greeting } from "~consts";
+import GuFrame from "~components/gu-frame";
+import { articlePath } from "~consts";
 
 const App = () => (
-  <div
-    css={{
-      color: text.ctaPrimary,
-      background: background.ctaPrimary,
-      fontSize: 200,
-    }}
-  >
-    {greeting}
-  </div>
+  <Fragment>
+    <div css={{ width: "50%", height: "100vh" }}>
+      <GuFrame articlePath={articlePath} />
+    </div>
+  </Fragment>
 );
 
 render(<App />, document.getElementById("root"));
