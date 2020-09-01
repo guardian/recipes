@@ -7,8 +7,6 @@ val jacksonVersion = "2.10.5"
 val logstashLogbackVersion = "6.4"
 val awsSdkVersion = "1.11.851"
 
-resolvers += Resolver.mavenLocal
-
 val buildInfo = Seq(
   buildInfoPackage := "recipes",
   buildInfoKeys := Seq[BuildInfoKey](
@@ -42,7 +40,7 @@ lazy val root = (project in file("."))
       // `com.fasterxml.jackson.databind.JsonMappingException: Scala module 2.10.2 requires Jackson Databind version >= 2.10.0 and < 2.11.0`
       "net.logstash.logback" % "logstash-logback-encoder" % logstashLogbackVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
 
-      "com.gu" %% "pan-domain-auth-verification" % "0.9.3-SNAPSHOT",
+      "com.gu" %% "pan-domain-auth-verification" % "1.0.4",
       "com.amazonaws" % "aws-java-sdk-s3" % awsSdkVersion,
     ),
     scalacOptions ++= List(
