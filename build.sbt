@@ -6,7 +6,7 @@ val logstashLogbackVersion = "6.4"
 val awsSdkVersion = "1.11.851"
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, RiffRaffArtifact, JDebPackaging, BuildInfoPlugin)
+  .enablePlugins(PlayScala, RiffRaffArtifact, JDebPackaging, SystemdPlugin, BuildInfoPlugin)
   .settings(Seq(
     name := """recipes""",
     version := "1.0-SNAPSHOT",
