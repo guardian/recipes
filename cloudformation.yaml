@@ -30,6 +30,10 @@ Parameters:
   AMI:
     Description: AMI ID. Set by RiffRaff on each deploy
     Type: String
+  KinesisLoggingStream:
+    Description: Name of the ELK logging stream in this account
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /account/services/logging.stream
 
 Mappings:
   StageVariables:
@@ -133,6 +137,21 @@ Resources:
               - s3:GetObject
             Resource:
               - arn:aws:s3:::pan-domain-auth-settings/*public
+      Roles:
+        - !Ref AppRole
+
+  LoggingPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: LoggingPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - kinesis:DescribeStream
+              - kinesis:PutRecord
+            Resource: !Ref KinesisLoggingStream
       Roles:
         - !Ref AppRole
 

@@ -39,6 +39,7 @@ class Config(playConfig: Configuration) extends Logging {
   lazy val awsRegion: Regions = Regions.EU_WEST_1
 
   lazy val localLogShipping: Boolean = sys.env.getOrElse("LOCAL_LOG_SHIPPING", "false").toBoolean
+  lazy val loggingStreamName: Option[String] = playConfig.getOptional[String]("recipes.loggingStreamName")
 
   val domainConfig: DomainConfig = DomainConfig(stage)
 }
