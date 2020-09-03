@@ -9,6 +9,7 @@ class AppLoader extends ApplicationLoader {
 
     LogConfig.initPlayLogging(context)
     LogConfig.initLocalLogShipping(config)
+    LogConfig.initRemoteLogShipping(config)
 
     new AppComponents(context, config).application
   }
