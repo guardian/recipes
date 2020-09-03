@@ -1,0 +1,22 @@
+stacks:
+  - flexible
+regions:
+  - eu-west-1
+deployments:
+  recipes:
+    type: autoscaling
+    parameters:
+      bucket: composer-dist
+    dependencies:
+      - cloudformation
+  cloudformation:
+    type: cloud-formation
+    app: recipes
+    parameters:
+      amiTags:
+        Recipe: editorial-tools-xenial-java8
+        AmigoStage: PROD
+        BuiltBy: amigo
+      amiEncrypted: true
+      templatePath: recipes.cfn.yaml
+      prependStackToCloudFormationStackName: false
