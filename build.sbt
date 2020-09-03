@@ -16,7 +16,8 @@ lazy val root = (project in file("."))
 
     riffRaffArtifactResources := Seq(
       (packageBin in Debian).value -> s"${name.value}/${name.value}.deb",
-      baseDirectory.value / "riff-raff.yaml" -> "riff-raff.yaml"
+      baseDirectory.value / "riff-raff.yaml" -> "riff-raff.yaml",
+      baseDirectory.value / "cloudformation.yaml" -> "cloudformation/recipes.cfn.yaml"
     ),
 
     buildInfoPackage := "recipes",
