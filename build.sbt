@@ -2,37 +2,41 @@ import scala.util.Try
 import scala.sys.process._
 
 val enumeratumVersion = "1.6.1"
-val enumeratumPlayVersion = "1.6.1"
 val jacksonVersion = "2.10.5"
 val logstashLogbackVersion = "6.4"
 val awsSdkVersion = "1.11.851"
 
-val buildInfo = Seq(
-  buildInfoPackage := "recipes",
-  buildInfoKeys := Seq[BuildInfoKey](
-    name,
-    BuildInfoKey.sbtbuildinfoConstantEntry(("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")).getOrElse(
-      Try("git rev-parse HEAD".!!.trim).getOrElse("unknown")
-    ))),
-  ),
-  buildInfoOptions:= Seq(
-    BuildInfoOption.Traits("management.BuildInfo"),
-    BuildInfoOption.ToJson
-  )
-)
-
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, BuildInfoPlugin)
-  .settings(buildInfo ++ Seq(
+  .enablePlugins(PlayScala, RiffRaffArtifact, JDebPackaging, BuildInfoPlugin)
+  .settings(Seq(
     name := """recipes""",
     version := "1.0-SNAPSHOT",
     scalaVersion := "2.13.1",
+
     PlayKeys.playDefaultPort := 9090,
+
+    riffRaffArtifactResources := Seq(
+      (packageBin in Debian).value -> s"${name.value}/${name.value}.deb",
+      baseDirectory.value / "riff-raff.yaml" -> "riff-raff.yaml"
+    ),
+
+    buildInfoPackage := "recipes",
+    buildInfoKeys := Seq[BuildInfoKey](
+      name,
+      BuildInfoKey.sbtbuildinfoConstantEntry(("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")).getOrElse(
+        Try("git rev-parse HEAD".!!.trim).getOrElse("unknown")
+      ))),
+    ),
+    buildInfoOptions:= Seq(
+      BuildInfoOption.Traits("management.BuildInfo"),
+      BuildInfoOption.ToJson
+    ),
+
     libraryDependencies ++= Seq(
       ws,
       "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
       "com.beachape" %% "enumeratum" % enumeratumVersion,
-      "com.beachape" %% "enumeratum-play" % enumeratumPlayVersion,
+      "com.beachape" %% "enumeratum-play" % enumeratumVersion,
       "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
 
       // logstash-logback-encoder brings in version 2.11.0

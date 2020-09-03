@@ -1,0 +1,9 @@
+stacks:
+  - flexible
+regions:
+  - eu-west-1
+deployments:
+  recipes:
+    type: autoscaling
+    parameters:
+      bucket: composer-dist
