@@ -31,7 +31,9 @@ object LogConfig {
     Json.toJson(Map(
       "stack" -> config.stack,
       "stage" -> config.stage.toString.toUpperCase,
-      "app" -> config.app
+      "app" -> config.app,
+      "region" -> config.awsRegion.getName,
+      "buildNumber" -> recipes.BuildInfo.buildNumber
     )).toString()
   }
 
