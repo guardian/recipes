@@ -62,7 +62,6 @@ class RecipeComponent extends Component<RecipeComponentProps> {
       {items.map((i: any) => <li key={i[0]}>{i}</li>)};
       </span>
     )
-    }
   }
 }
 export default RecipeComponent;
