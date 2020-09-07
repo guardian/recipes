@@ -5,8 +5,10 @@ import Recipe from "~components/recipe";
 
 import demoRecipe from "~data/recipe";
 import RecipeComponent from "~components/recipe-component";
+import GuFrame from "~/components/gu-frame"
 
-import {articlePath} from "~const/index";
+import {articlePath} from "~consts/index";
+
 
 import schema from "~data/recipe-schema"
 

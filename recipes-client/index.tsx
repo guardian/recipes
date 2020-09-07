@@ -19,8 +19,8 @@ import { text, background } from "@guardian/src-foundations/palette";
 import { greeting } from "~consts";
 
 function Topic() {
-  let { topicId } = useParams();
-  return <Curation topicId={topicId}> </Curation>
+  const { topicId: string } = useParams();
+  return <Curation topicId="foo/bar"> </Curation>
 }
 
 function App() {
