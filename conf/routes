@@ -3,7 +3,8 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+GET     /                           controllers.HomeController.index(id = "")
+GET     /curation/:id               controllers.HomeController.index(id)
 
 GET     /management/manifest        controllers.ManagementController.manifest
 GET     /management/healthcheck     controllers.ManagementController.healthCheck
