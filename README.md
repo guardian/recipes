@@ -28,7 +28,7 @@ We're using [pan-domain-authentication] to handle authentication.
 We're only verifying a pan domain cookie. Cookies are issued by [login.gutools].
 [login.gutools] requires credentials to access the relevant AWS resources.
 
-Get `composer` and `workflow` credentials from [Janus][janus-credentials].
+Get credentials from [Janus][janus-credentials].
 
 ### Setup
 By now you should have all dependencies installed.
@@ -97,7 +97,7 @@ ParcelJS will output the built app to Play's [public][directory-public] director
 [file-script-test]: ./scripts/test
 [fnm]: https://github.com/Schniz/fnm
 [guardian-source]: https://github.com/guardian/source
-[janus-credentials]: https://janus.gutools.co.uk/multi-credentials?&permissionIds=composer-dev,workflow-dev&tzOffset=1
+[janus-credentials]: https://janus.gutools.co.uk/credentials?permissionId=composer-login-local-dev&tzOffset=1
 [login.gutools]: https://github.com/guardian/login.gutools
 [nvm]: https://github.com/nvm-sh/nvm
 [pan-domain-authentication]: https://github.com/guardian/pan-domain-authentication
