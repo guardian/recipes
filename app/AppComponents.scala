@@ -1,7 +1,7 @@
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.gu.pandomainauth.PublicSettings
 import config.Config
-import controllers.{AssetsComponents, HomeController, ManagementController, ProxyController}
+import controllers.{AssetsComponents, HomeController, ApiController, ManagementController, ProxyController}
 import filter.RequestLoggingFilter
 import play.api.ApplicationLoader.Context
 import play.api.BuiltInComponentsFromContext
@@ -28,12 +28,14 @@ class AppComponents(context: Context, config: Config)
   publicSettings.start()
 
   lazy val homeController = new HomeController(controllerComponents, publicSettings, config)
+  lazy val apiController = new ApiController(controllerComponents, publicSettings, config)
   lazy val proxyController = new ProxyController(wsClient, controllerComponents, publicSettings, config)
   lazy val managementController = new ManagementController(controllerComponents)
 
   lazy val router: Router = new Routes(
     httpErrorHandler,
     homeController,
+    apiController,
     managementController,
     assets,
     proxyController,
