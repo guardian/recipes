@@ -22,7 +22,7 @@ class HomeController (
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index = ApiAuthAction {
+  def index(id: String) = ApiAuthAction {
     logger.info("hello there")
     Ok(views.html.index())
   }
