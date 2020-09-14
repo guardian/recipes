@@ -16,9 +16,11 @@ import {
 
 import { text, background } from "@guardian/src-foundations/palette";
 
-function Topic() {
-  // const { topicId: string } = useParams();
-  return <Curation topicId="foo/bar"> </Curation>
+
+function Article() {
+  let articleId: string = useParams();
+  console.log(articleId);
+  return <Curation articleId={articleId}> </Curation>
 }
 
 function App() {
@@ -39,13 +41,13 @@ function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/curation/:topicId">
-            <Topic />
+          <Route path="/curation/:articleId">
+            <Article />
           </Route>
           <Route path="/">
             <Home />
           </Route>
-                  </Switch>
+        </Switch>
       </div>
     </Router>
   );

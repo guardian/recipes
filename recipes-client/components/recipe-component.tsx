@@ -44,7 +44,8 @@ function parseItem(label:string, data: string|Array<Record<string, unknown>>|Rec
 
 interface RecipeComponentProps {
   title: string,
-  body: Record<string, unknown>
+  body: Record<string, unknown>|null,
+  schema: Record<string, unknown>
 }
 
 class RecipeComponent extends Component<RecipeComponentProps> {
@@ -53,14 +54,18 @@ class RecipeComponent extends Component<RecipeComponentProps> {
   }
   render() {
     const body = this.props.body;
-    const items: Record<string, unknown> = Object.entries(body).map( (k: Record<string, unknown>) => {
-      return [formatTitle(k[0]), parseItem(k[0], k[1])];
-    })
-    return (
-      <span>
-      {items.map((i: Record<string, unknown>) => <li key={i[0]}>{i}</li>)};
-      </span>
-    )
+    if (body != null){
+      const items: Record<string, unknown> = Object.entries(body).map( (k: Record<string, unknown>) => {
+        return [formatTitle(k[0]), parseItem(k[0], k[1])];
+      })
+      return (
+        <span>
+        {items.map((i: Record<string, unknown>) => <li key={i[0]}>{i}</li>)};
+        </span>
+      )
+    } else{
+      return <h3> LOADING... </h3>
+    }
   }
 }
 export default RecipeComponent;
