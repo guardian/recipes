@@ -24,14 +24,14 @@ class Curation extends Component<CurationProps> {
 
   componentDidMount() {
     // console.warn(this.props.articleId.articleId);
-    fetch(apiURL+ schemaEndpoint)
+    fetch(location.origin + apiURL+ schemaEndpoint)
       .then((response) => {return response.json()})
       .then((data) => this.setState({loading: true, schema: data}));
   }
 
   componentDidUpdate() {
     // console.warn(this.props.articleId.articleId);
-    fetch(apiURL+ this.props.articleId.articleId)
+    fetch(location.origin + apiURL+ this.props.articleId.articleId)
       .then((response) => {return response.json()})
       .then((data) => this.setState({loading: false, body: data}));
   }
