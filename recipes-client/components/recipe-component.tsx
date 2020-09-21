@@ -52,7 +52,7 @@ class RecipeComponent extends Component<RecipeComponentProps> {
   constructor(props: RecipeComponentProps) {
     super(props);
   }
-  render() {
+  render(): JSX.Element {
     const body = this.props.body;
     if (body != null){
       const items: Record<string, unknown> = Object.entries(body).map( (k: Record<string, unknown>) => {
