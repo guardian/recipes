@@ -23,7 +23,7 @@ interface FormItemProps {
       super(props);
     }
   
-    render() {
+    render(): React.Component|JSX.Element {
         const label = this.props.label;
         const text = this.props.text;
         if (label) {

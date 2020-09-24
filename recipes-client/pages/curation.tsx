@@ -37,12 +37,12 @@ class Curation extends Component<RouteComponentProps<RouteParams>, CurationState
     fetch(`${location.origin}${apiURL}${schemaEndpoint}`)
       .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
       .then((data: Record<string,unknown>) => this.setState({schema: data}))
-      .catch((e) => this.setState({schema: null, isLoading: false}) );
+      .catch(() => this.setState({schema: null, isLoading: false}) );
     const {articleId} = this.props.match.params;
     fetch(`${location.origin}${apiURL}${articleId}`)
       .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
       .then((data: Record<string,unknown>) => this.setState({isLoading: false, body: data}))
-      .catch((e) => this.setState({b: null, isLoading: false}) );
+      .catch(() => this.setState({b: null, isLoading: false}) );
   }
 
   render(): JSX.Element {

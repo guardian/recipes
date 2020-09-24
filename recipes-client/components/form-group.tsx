@@ -3,8 +3,6 @@ import { Component } from "react";
 import { jsx } from "@emotion/core";
 import FormItem from "./form-item";
 
-import recipeSchema from "~/data/recipe-schema"
-
 
 function formatTitle(text: string|null){
     // Reformat title with first letter uppercase
@@ -17,7 +15,7 @@ function formatTitle(text: string|null){
   }
 
 
-  function renderFormGroup(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title?: string, schema: schemaItem, key?: string){
+  function renderFormGroup(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title?: string, schema: schemaItem, key?: string): React.Component|JSX.Element{
     // Return FormGroup JSX, this is mainly because TS has an issue with an inline component that can multiple types as input  ¯\_(ツ)_/¯
     return <FormGroup formItems={fI}  title={title} schema={schema} key={key}></FormGroup>
   }
@@ -94,12 +92,10 @@ interface FormGroupProps {
       super(props);
     }
 
-    render() {
-        // TODO: Replace JSX return with functions above
+    render(): React.Component|JSX.Element {
         const formItems = this.props.formItems;
         const schema = this.props.schema;
         const title = this.props.title || null;
-        const label = null;
         if (getSchemaType(schema.type).includes("string") && typeof formItems === "string"){
           return (
               <fieldset>

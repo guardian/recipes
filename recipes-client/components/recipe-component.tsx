@@ -2,7 +2,6 @@
 import { Component } from "react";
 import { jsx } from "@emotion/core";
 import FormGroup from "~components/form-group";
-import renderFormGroup from "~components/form-group";
 
 // function formatTitle(text: string){
 //   // Reformat title with first letter uppercase
@@ -44,9 +43,9 @@ import renderFormGroup from "~components/form-group";
 //   }
 // }
 
-// function returnFGO(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title?: string, schema: schemaItem){
-//   return <FormGroup formItems={fI} title={title} schema={schema}></FormGroup>
-// }
+function renderFGO(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title?: string, schema: schemaItem){
+  return <FormGroup formItems={fI} title={title} schema={schema}></FormGroup>
+}
 
 interface RecipeComponentProps {
   title: string
@@ -80,7 +79,7 @@ class RecipeComponent extends Component<RecipeComponentProps> {
   constructor(props: RecipeComponentProps) {
     super(props);
   }
-  render(): React.Component|JSX.Element {
+  render(): React.Component|JSX.Element{ //}: React.Component|JSX.Element {
     if (this.props.schema === null){
       return <h3> No schema loaded... </h3>
     } else if (this.props.isLoading){
@@ -88,9 +87,8 @@ class RecipeComponent extends Component<RecipeComponentProps> {
     } else {
       const body = this.props.body;
       const schema: schemaType = this.props.schema;
-      console.log(Object.entries(body));
       return Object.entries(body).map( (k: ArrayLike<Record<string, unknown>>) => {
-        return renderFormGroup(k[1], k[0], schema.properties[k[0]])
+        return renderFGO(k[1], k[0], schema.properties[k[0]])
       })
     }
   }
