@@ -36,23 +36,20 @@ class Curation extends Component<RouteComponentProps<RouteParams>, CurationState
   componentDidMount(): void {
     fetch(`${location.origin}${apiURL}${schemaEndpoint}`)
       .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
-      .then((data: Record<string,unknown>) => this.setState({loading: true, schema: data}))
-      .catch(() => console.error("Failed to fetch schema."));
-  }
-
-  componentDidUpdate(): void {
+      .then((data: Record<string,unknown>) => this.setState({schema: data}))
+      .catch((e) => this.setState({schema: null, isLoading: false}) );
     const {articleId} = this.props.match.params;
     fetch(`${location.origin}${apiURL}${articleId}`)
       .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
-      .then((data: Record<string,unknown>) => this.setState({loading: false, body: data}))
-      .catch(() => console.error("Failed to fetch recipe data."));
+      .then((data: Record<string,unknown>) => this.setState({isLoading: false, body: data}))
+      .catch((e) => this.setState({b: null, isLoading: false}) );
   }
 
   render(): JSX.Element {
     const body = this.state.body;
     const schema = this.state.schema;
+    const isLoading = this.state.isLoading;
 
-    // ["path", "recipe_title", ....]
     return (
       <div
         css={{
@@ -68,7 +65,7 @@ class Curation extends Component<RouteComponentProps<RouteParams>, CurationState
         </div>
         <div css={{ gridArea: "right", background: "yellow" }}>
           <form>
-            <RecipeComponent title="hello" body={body} schema={schema}/>
+            <RecipeComponent title="hello" isLoading={isLoading} body={body} schema={schema}/>
           </form>
         </div>
         <div css={{ gridArea: "footer", background: "green" }}>buttons</div>
