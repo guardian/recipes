@@ -64,6 +64,7 @@ interface schemaItem {
     type: string;
     items?: Array<Record<string, unknown>>;
     properties?: Record<string, unknown>;
+    enum?: Array<string>;
   }
   
   // What's the point of having a fetch-ed schema then?
@@ -96,11 +97,12 @@ interface FormGroupProps {
         const formItems = this.props.formItems;
         const schema = this.props.schema;
         const title = this.props.title || null;
+        const choices = schema.enum || null;
         if (getSchemaType(schema.type).includes("string") && typeof formItems === "string"){
           return (
               <fieldset>
               <legend>{formatTitle(title)}</legend>
-                      <FormItem text={formItems} label={title} key={formItems}> </FormItem>
+                <FormItem text={formItems} choices={choices} key={formItems}> </FormItem>
               </fieldset>
           )
         } else if (schema.type === "array" && Array.isArray(formItems)) {
