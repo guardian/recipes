@@ -92,16 +92,21 @@ export default {
       "cuisines": {
         "type": "array",
         "items": {
-          "type": "string"
+          "type": "string",
+          "enum": [ "italian", "mexican", "southern_us", "indian", "french", "chinese", "thai", "cajun_creole", "japanese", "british", "greek", "spanish", "middleeastern",
+                    "eastern-european", "north-african/moroccan", "vietnamese", "korean", "filipino", "irish", "jamaican", "brazilian", "pan-african", "scandinavian",
+                    "australian", "turkish"]
         }
       },
       "meal_type": {
-        "type": "string"
+        "type": ["string","null"],
+        "enum": ["starter","main-course","dessert","snacks","breakfast","baking","barbecue","side-dishes","soup"]
       },
       "ingredient_tags": {
         "type": "array",
         "items": {
-          "type": "string"
+          "type": ["string","null"],
+          "enum": ["avocados", "beef","bread","cheese","chicken","chocolate","duck","eggs","fruit","lamb","meat","oysters","pork","potatoes","pumpkin","rice","sausages","seafood","shellfish","tomatoes","wine"]
         }
       }
     }

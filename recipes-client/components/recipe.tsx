@@ -10,7 +10,7 @@ class Recipe extends Component<RecipeProps> {
   constructor(props: RecipeProps) {
     super(props);
   }
-  render() {
+  render(): JSX.Element {
     const url = this.props.url;
 
     return (

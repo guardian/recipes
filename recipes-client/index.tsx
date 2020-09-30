@@ -1,8 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import { render } from "react-dom";
-import { Component } from "react";
-import Recipe from "~components/recipe";
 import Curation from "~pages/curation"
 import Home from "~pages/home"
 
@@ -11,15 +9,9 @@ import {
   Switch,
   Route,
   Link,
-  useParams
 } from "react-router-dom";
 
-import { text, background } from "@guardian/src-foundations/palette";
-
-function Topic() {
-  // const { topicId: string } = useParams();
-  return <Curation topicId="foo/bar"> </Curation>
-}
+// import { text, background } from "@guardian/src-foundations/palette";
 
 function App() {
   return (
@@ -39,13 +31,11 @@ function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/curation/:topicId">
-            <Topic />
-          </Route>
+          <Route path="/curation/:articleId" component={ Curation }/>
           <Route path="/">
             <Home />
           </Route>
-                  </Switch>
+        </Switch>
       </div>
     </Router>
   );
