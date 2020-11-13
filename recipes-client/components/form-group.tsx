@@ -98,7 +98,6 @@ interface FormGroupProps {
                     <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
                   {keys.map(k => {
                           return renderFormGroup(formItems[k],  k, schema.properties[k], key+'.'+k, dispatcher)
-                      // }
                   })}
                   </fieldset>
           )

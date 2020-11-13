@@ -1,9 +1,6 @@
 /** @jsx jsx */
-// import { Component, useReducer } from "react";
 import { jsx } from "@emotion/core";
-// import { defaultState, recipeReducer, initConfig } from "~/reducers/recipeReducer"; // This needs to stay in so that 'defaultState' is available.
 import {actions} from "~actions/recipeActions";
-// import useRecipe from "~components/recipe-component"
 import { Dispatch } from "@reduxjs/toolkit";
 import { ActionType } from "~components/interfaces";
 
@@ -44,8 +41,6 @@ interface FormItemProps {
   }
   
 function FormItem(prop: FormItemProps): JSX.Element{
-  // const [state, dispatch] = useReducer(recipeReducer, defaultState);
-  // const [state, dispatch] = useRecipe();
   const label = prop.label;
   const text = prop.text;
   const choices = prop.choices || null;
