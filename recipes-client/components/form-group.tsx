@@ -2,7 +2,7 @@
 import { Component } from "react";
 import { jsx } from "@emotion/core";
 import FormItem from "./form-item";
-import { Action, Dispatch } from "@reduxjs/toolkit";
+import { Dispatch } from "@reduxjs/toolkit";
 import { ActionType } from "~components/interfaces";
 
 
