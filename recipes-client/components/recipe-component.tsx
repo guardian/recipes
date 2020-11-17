@@ -28,16 +28,17 @@ function RecipeComponent(props: RecipeComponentProps2): JSX.Element|JSX.Element[
   const { body, isLoading, schema } = state;
   const {articleId} = props;
 
-  useEffect((aId: string) => {
+  useEffect( () => {
     fetch(`${location.origin}${apiURL}${schemaEndpoint}`)
     .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
     .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {schema: data}}))
     .catch(() => dispatch({"type": actions.error, "payload": "Error fetching schema data."}) );
-    fetch(`${location.origin}${apiURL}${aId}`)
+    const articleUrl = articleId.replace(/^\/+/, '');
+    fetch(`${location.origin}${apiURL}${articleUrl}`)
     .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
     .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {isLoading: false, body: data}}))
     .catch(() => dispatch({"type": actions.error, "payload": "Error fetching body data."}) );
-  }, [articleId]);
+  }, [articleId, dispatch]);
 
 
   if (schema === null){
