@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
-import FormGroup from "~components/form-group";
-import { ActionType, schemaItem, schemaType} from "~components/interfaces";
+// import FormGroup from "~components/form-group";
+import { ActionType, schemaType} from "~components/interfaces";
+import { renderFormGroup } from "~components/form-group"
 
-function renderFGO(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title: string, schema: schemaItem, key_:number, dispatcher: Dispatch<ActionType>){
-  return <FormGroup formItems={fI} title={title} schema={schema} key={key_} dispatcher={dispatcher}></FormGroup>
-}
+// function renderFGO(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title: string, schema: schemaItem, key_:number, dispatcher: Dispatch<ActionType>){
+//   return <FormGroup formItems={fI} title={title} schema={schema} key={key_} dispatcher={dispatcher}></FormGroup>
+// }
 
 interface RecipeComponentProps {
   articleId: string
@@ -27,8 +28,8 @@ function RecipeComponent(props: RecipeComponentProps): JSX.Element|JSX.Element[]
     return <h3> No bodayyyyy</h3>
   } else {
     return (
-        Object.entries(body).map( (k: ArrayLike<Record<string, unknown>>, i:int) => {
-          return renderFGO(k[1], k[0], schema.properties[k[0]], i, dispatcher)
+        Object.entries(body).map( (k: ArrayLike<Record<string, unknown>>) => {
+          return renderFormGroup(k[1], k[0], schema.properties[k[0]], k[0], dispatcher)
         })
     )
   }

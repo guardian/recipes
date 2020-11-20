@@ -3,6 +3,7 @@ import { Component, Dispatch } from "react";
 import { jsx } from "@emotion/core";
 import FormItem from "./form-item";
 import { ActionType } from "~components/interfaces";
+import {actions} from "~actions/recipeActions";
 
 
 function formatTitle(text: string|null){
@@ -16,7 +17,7 @@ function formatTitle(text: string|null){
   }
 
 
-function renderFormGroup(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title: string|null, schema: schemaItem, key?: string, dispatcher?:Dispatch<ActionType>): React.Component|JSX.Element{
+export function renderFormGroup(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title: string|null, schema: schemaItem, key?: string, dispatcher?:Dispatch<ActionType>): React.Component|JSX.Element{
   // Return FormGroup JSX, this is mainly because TS has an issue with an inline component that can have multiple types as input  ¯\_(ツ)_/¯
   return <FormGroup formItems={fI}  title={title} schema={schema} key_={key} key={key} dispatcher={dispatcher}></FormGroup>
 }
@@ -28,6 +29,13 @@ function getSchemaType(typ: string|Array<string>): Array<string>{
   } else {
     return new Array(typ)
   }
+}
+
+function handleAddField(objId: string, schemaItem: schemaItem, dispatcher: Dispatch<ActionType>): void {
+  dispatcher({"type": actions.add,
+              "payload": {"objId": objId},
+              "schemaItem": schemaItem
+            });
 }
 
 interface schemaItem {
@@ -60,47 +68,46 @@ interface FormGroupProps {
     dispatcher?: Dispatch<ActionType>|null
   }
   
-  class FormGroup extends Component<FormGroupProps> {
-    constructor(props: FormGroupProps) {
-      super(props);
-    }
-
-    render(): React.Component|JSX.Element {
-        const formItems = this.props.formItems;
-        const schema = this.props.schema;
-        const title = this.props.title;
-        const choices = schema.enum || null;
-        const key = this.props.key_ || title;
-        const dispatcher = this.props.dispatcher || null;
-        if (getSchemaType(schema.type).includes("string") && typeof formItems === "string"){
-          return (
-              <fieldset key={`${key}.fieldset`}>
-              <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
-                <FormItem text={formItems} choices={choices} label={key} key={`${key}.formItem`} dispatcher={dispatcher}> </FormItem>
-              </fieldset>
-          )
-        } else if (schema.type === "array" && Array.isArray(formItems)) {
-          const formItemArray = formItems.map( (item:schemaItem, i:int) => {
-            return renderFormGroup(item,  null, schema.items, key+'.'+String(i), dispatcher)
-          })
-
-          return (
-                  <fieldset key={`${key}.fieldset`}>
-                  <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
-                      {formItemArray}
-                  </fieldset>
-                  ) 
-        } else if (schema.type === "object" && typeof formItems === 'object'){
-          // HashMap, loop through and add keys as name of input field
-          const keys = Object.keys(formItems);
-          return ( <fieldset key={`${key}.fieldset`}>
-                    <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
-                  {keys.map(k => {
-                          return renderFormGroup(formItems[k],  k, schema.properties[k], key+'.'+k, dispatcher)
-                  })}
-                  </fieldset>
-          )
-        }
-    }
+class FormGroup extends Component<FormGroupProps> {
+  constructor(props: FormGroupProps) {
+    super(props);
   }
+
+  render(): React.Component|JSX.Element {
+      const { formItems, schema, title } = this.props;
+      const  choices = schema.enum || null;
+      const key = this.props.key_ || title;
+      const dispatcher = this.props.dispatcher || null;
+      if (getSchemaType(schema.type).includes("string") && typeof formItems === "string"){
+        return (
+            <fieldset key={`${key}.fieldset`}>
+            <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
+              <FormItem text={formItems} choices={choices} label={key} key={`${key}.formItem`} dispatcher={dispatcher}> </FormItem>
+            </fieldset>
+        )
+      } else if (schema.type === "array" && Array.isArray(formItems)) {
+        const formItemArray = formItems.map( (item:schemaItem, i:int) => {
+          return renderFormGroup(item,  null, schema.items, key+'.'+String(i), dispatcher)
+          });
+        const formItemAddId = `${key}.${formItemArray.length}`;
+        return (
+                <fieldset key={`${key}.fieldset`}>
+                <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
+                    {formItemArray}
+                <button type="button" id={`${key}.add`} onClick={() => handleAddField(formItemAddId, schema.items, dispatcher)}>+  {key.split('.').slice(-1)[0]}</button>
+                </fieldset>
+                ) 
+      } else if (schema.type === "object" && typeof formItems === 'object'){
+        // HashMap, loop through and add keys as name of input field
+        const keys = Object.keys(formItems);
+        return ( <fieldset key={`${key}.fieldset`}>
+                  <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
+                {keys.map(k => {
+                        return renderFormGroup(formItems[k],  k, schema.properties[k], `${key}.${k}`, dispatcher)
+                })}
+                </fieldset>
+        )
+      }
+  }
+}
 export default FormGroup;

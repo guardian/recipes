@@ -22,8 +22,19 @@ export interface schemaType {
 }
 
 export interface ActionType {
-  payload: CurationState;
+  payload: CurationState|AddRemoveItemType;
   type: string;
+}
+
+export interface AddRemoveItemType {
+  objId: string;
+}
+
+export function isCurationState(payload: CurationState | AddRemoveItemType): payload is CurationState {
+  if((payload as CurationState).isLoading){
+    return true
+  }
+  return false
 }
 
 export interface CurationState {
