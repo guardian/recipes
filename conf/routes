@@ -4,9 +4,11 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index(id = "")
-GET     /curation/:id               controllers.HomeController.index(id)
+GET     /curation/*id               controllers.HomeController.index(id)
 GET     /api/curation/schema        controllers.ApiController.schema
-GET     /api/curation/:id           controllers.ApiController.index(id)
+GET     /api/curation/*id           controllers.ApiController.index(id)
++nocsrf
+POST    /api/curation/*id           controllers.ApiController.postId(id)
 
 GET     /management/manifest        controllers.ManagementController.manifest
 GET     /management/healthcheck     controllers.ManagementController.healthCheck

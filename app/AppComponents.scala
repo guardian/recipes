@@ -16,7 +16,7 @@ class AppComponents(context: Context, config: Config)
     with AssetsComponents
     with AhcWSComponents{
 
-  private val disabledFilters: Set[EssentialFilter] = Set(allowedHostsFilter)
+  private val disabledFilters: Set[EssentialFilter] = Set(allowedHostsFilter, csrfFilter)
   override def httpFilters: Seq[EssentialFilter] = super.httpFilters.filterNot(disabledFilters.contains) ++ Seq(new RequestLoggingFilter(materializer))
 
   private val s3Client = AmazonS3ClientBuilder.standard()
