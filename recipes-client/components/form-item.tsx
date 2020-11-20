@@ -11,7 +11,6 @@ function formatTitle(text: string){
   }
 
 function handleChange(event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>, dispatcher: Dispatch<ActionType>): void{
-  console.log(event.target);
   const objId = event.target.id;
   const objVal = event.target.value;
   dispatcher({"type": actions.change,
