@@ -10,6 +10,12 @@ import {articlePath} from "~consts/index";
 import { RouteComponentProps } from 'react-router-dom';
 
 
+import { recipeReducer, defaultState } from "~reducers/recipe-reducer";
+import { actions } from "~actions/recipeActions";
+import {apiURL, schemaEndpoint} from "~consts/index";
+import { useEffect } from "react";
+import { useImmerReducer } from "use-immer";
+
 interface CurationProps {
   articleId: string;
 }
@@ -24,8 +30,22 @@ interface RouteParams {
     articleId: string;
 }
 
+
 function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
-  const {articleId} = props.match.params; 
+  const {articleId} = props.match.params;
+  const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
+
+  useEffect( () => {
+    fetch(`${location.origin}${apiURL}${schemaEndpoint}`)
+    .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
+    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {schema: data}}))
+    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching schema data."}) );
+    const articleUrl = articleId.replace(/^\/+/, '');
+    fetch(`${location.origin}${apiURL}${articleUrl}`)
+    .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
+    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {isLoading: false, body: data}}))
+    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching body data."}) );
+  }, [articleId, dispatch]);
 
   return (
     <div
@@ -46,11 +66,11 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
       </div>
       <div css={{ gridArea: "right", background: "yellow", overflow: "auto" }}>
         <form>
-          <RecipeComponent articleId={articlePath}/>
+          <RecipeComponent articleId={articlePath} isLoading={state.isLoading} body={state.body} schema={state.schema} dispatcher={dispatch}/>
         </form>
       </div>
       <div css={{ gridArea: "footer", background: "green", justifyItems: "center", display: "grid", align: "center"}}>
-        <Footer />
+        <Footer articleId={articlePath} body={state.body} dispatcher={dispatch}/>
       </div>
     </div>
   );

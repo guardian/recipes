@@ -1,45 +1,23 @@
 /** @jsx jsx */
-import { useEffect, Dispatch } from "react";
-import { useImmerReducer } from "use-immer";
+import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
 import FormGroup from "~components/form-group";
-import { recipeReducer, defaultState } from "~reducers/recipe-reducer";
-import { actions } from "~actions/recipeActions";
 import { ActionType, schemaItem, schemaType} from "~components/interfaces";
-import {apiURL, schemaEndpoint} from "~consts/index";
 
 function renderFGO(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title: string, schema: schemaItem, key_:number, dispatcher: Dispatch<ActionType>){
   return <FormGroup formItems={fI} title={title} schema={schema} key={key_} dispatcher={dispatcher}></FormGroup>
 }
 
-interface RecipeComponentProps2 {
-  articleId: string
-}
-
 interface RecipeComponentProps {
-  title: string
+  articleId: string
   body: Record<string, unknown>|null
   schema: schemaType
   isLoading: boolean
+  dispatcher: Dispatch<ActionType>
 }
 
-function RecipeComponent(props: RecipeComponentProps2): JSX.Element|JSX.Element[]{
-  const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
-  const { body, isLoading, schema } = state;
-  const {articleId} = props;
-
-  useEffect( () => {
-    fetch(`${location.origin}${apiURL}${schemaEndpoint}`)
-    .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
-    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {schema: data}}))
-    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching schema data."}) );
-    const articleUrl = articleId.replace(/^\/+/, '');
-    fetch(`${location.origin}${apiURL}${articleUrl}`)
-    .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
-    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {isLoading: false, body: data}}))
-    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching body data."}) );
-  }, [articleId, dispatch]);
-
+function RecipeComponent(props: RecipeComponentProps): JSX.Element|JSX.Element[]{
+  const { body, isLoading, schema, articleId, dispatcher } = props;
 
   if (schema === null){
     return <h3> No schema loaded... </h3>
@@ -50,7 +28,7 @@ function RecipeComponent(props: RecipeComponentProps2): JSX.Element|JSX.Element[
   } else {
     return (
         Object.entries(body).map( (k: ArrayLike<Record<string, unknown>>, i:int) => {
-          return renderFGO(k[1], k[0], schema.properties[k[0]], i, dispatch)
+          return renderFGO(k[1], k[0], schema.properties[k[0]], i, dispatcher)
         })
     )
   }

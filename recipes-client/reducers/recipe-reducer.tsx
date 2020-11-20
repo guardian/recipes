@@ -46,6 +46,14 @@ export const recipeReducer = produce((draft: CurationState, action: ActionType) 
         })
         break;
       }
+      case actions.reset: {
+        initStateItem(draft, 'body', action.payload.body)
+        break;
+      }
+      case actions.error: {
+        alert(action.payload);
+        break
+      }
       default: {
         throw new Error();
       }
