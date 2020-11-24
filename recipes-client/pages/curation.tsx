@@ -64,7 +64,7 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
       <div css={{ gridArea: "left", background: "blue", overflow: "auto" }}>
           <GuFrame articlePath={articlePath} />
       </div>
-      <div css={{ gridArea: "right", background: "yellow", overflow: "auto" }}>
+      <div css={{ gridArea: "right", background: "grey", overflow: "auto" }}>
         <form>
           <RecipeComponent articleId={articlePath} isLoading={state.isLoading} body={state.body} schema={state.schema} dispatcher={dispatch}/>
         </form>
