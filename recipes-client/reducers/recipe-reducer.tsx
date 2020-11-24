@@ -15,7 +15,7 @@ function updateBodyItem(obj: Record<string, unknown>, keyPath: Array<string>, va
     const key = keyPath[i];
     const nextKey = i < lastKeyIndex ? keyPath[i+1] : NaN
     if (!(key in obj)){
-      // Check whether array is needed rather than dict
+      // Check whether array is needed (key is number) rather than dict
       if (isFinite(nextKey)) {
         obj[key] = []
       }
@@ -28,15 +28,15 @@ function updateBodyItem(obj: Record<string, unknown>, keyPath: Array<string>, va
   obj[keyPath[lastKeyIndex]] = value;
 }
 
-function deleteBodyItem(obj: Record<string, unknown>, keyPath: Array<string>): void {
+function deleteBodyItem(keyPath: Array<string|number>, obj: Record<string, unknown>): void {
   const lastKeyIndex = keyPath.length-1;
   for (let i = 0; i < lastKeyIndex; ++ i) {
     const key = keyPath[i];
     const nextKey = i < lastKeyIndex ? keyPath[i+1] : NaN
     if (!(key in obj)){
-      // Check whether array is needed rather than dict
+      // Check whether array is needed (key is number) rather than dict
       if (isFinite(nextKey)) {
-        obj[key] = []
+        obj[parseInt(key)] = []
       }
       else {
         obj[key] = {}
@@ -44,7 +44,17 @@ function deleteBodyItem(obj: Record<string, unknown>, keyPath: Array<string>): v
     }
     obj = obj[key];
   }
-  delete obj[keyPath[lastKeyIndex]];
+  keyPath = keyPath.map(item => {const s = isFinite(item) ? parseInt(item): item; return s;})
+  // if (isFinite(keyPath[lastKeyIndex])){
+  //   const lastKeyNum = parseInt(keyPath.slice(lastKeyIndex, lastKeyIndex+1).slice(-1));
+  //   keyPath = keyPath.slice(0, lastKeyIndex);
+  //   keyPath.push(lastKeyNum);
+  // }
+  if (Array.isArray(obj)){
+    obj.splice(keyPath[lastKeyIndex], 1)
+  } else {
+    delete obj[keyPath[lastKeyIndex]]
+  }
 }
 
 function initStateItem(draft: Record<string, unknown>, k: string, value: string|number): void{
@@ -70,23 +80,24 @@ function getSchemaItem(schemaI: schemaItem): string|Record<string, unknown>|Arra
   } else if (schemaI.type === "object" || typeof schemaI === "object"){
       const schemaPropKeys = Object.keys(schemaI.properties);
       const item = schemaI.properties;
-      // const outputArray = schemaPropKeys.map<Array<string|Record<string, unknown>>>(key => {keyof typeof plotOptions;
       const outputArray = schemaPropKeys.map<Array<string|Record<string, unknown>>>(key => {
           return [key, getSchemaItem(item[key])];
       }, [])
-      const oo = Object.fromEntries(outputArray);
-      return oo
+      return Entries2Object(outputArray);
   } else {
     new ErrorEvent("Invalid schemaItem provided.");
   }
 }
 
-// function mapArray(input: schemaItem){
-//   const schemaPropKeys = Object.keys(input);
-//   return schemaPropKeys.map(key => {
-//     return [key, getSchemaItem(input[key])];
-//   }, [])
-// }
+function Entries2Object(arr: (string | Record<string, unknown>)[][]): Record<string, unknown>{
+  // Helper function to replace `Object.fromEntries(arr)`
+  return [...arr].reduce((obj: Record<string, unknown>, [key, val]) => {
+    if (typeof(key) === "string") {
+      obj[key] = val
+      return obj
+    }
+  }, {})
+}
 
 export const recipeReducer = produce((draft: CurationState, action: ActionType) => {
     switch (action.type) {
@@ -109,7 +120,10 @@ export const recipeReducer = produce((draft: CurationState, action: ActionType) 
       case actions.delete: {
         if (!isCurationState(action.payload)){
           const keyPathArr = action.payload["objId"].split(".")
-          deleteBodyItem(draft.body, keyPathArr)          
+          deleteBodyItem(keyPathArr, draft.body);
+          // draft.body[keyPathArr[0]].splice(keyPathArr[-1]],1)
+          // draft.filter(item => item.body.key !== action.payload["objId"]);
+          //draft.splice( draft.findIndex(item => item.body.key === keyPathArr[0]), keyPathArr[-1]);          
         }
         break;
       }

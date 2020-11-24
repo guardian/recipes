@@ -38,6 +38,12 @@ function handleAddField(objId: string, schemaItem: schemaItem, dispatcher: Dispa
             });
 }
 
+function handleRemoveField(objId: string, dispatcher: Dispatch<ActionType>): void {
+  dispatcher({"type": actions.delete,
+              "payload": {"objId": objId},
+            });
+}
+
 interface schemaItem {
     type: string;
     items?: Array<Record<string, unknown>>;
@@ -86,15 +92,20 @@ class FormGroup extends Component<FormGroupProps> {
             </fieldset>
         )
       } else if (schema.type === "array" && Array.isArray(formItems)) {
-        const formItemArray = formItems.map( (item:schemaItem, i:int) => {
-          return renderFormGroup(item,  null, schema.items, key+'.'+String(i), dispatcher)
-          });
-        const formItemAddId = `${key}.${formItemArray.length}`;
+        const formItemArrayRender = formItems.map( (item:schemaItem, i:int) => {
+          return (
+            renderFormGroup(item,  null, schema.items, key+'.'+String(i), dispatcher)
+          )
+        });
+
+        const formItemAddId = `${key}.${formItemArrayRender.length}`;
+        const formItemRemoveLastId = `${key}.${formItemArrayRender.length-1}`; 
         return (
                 <fieldset key={`${key}.fieldset`}>
                 <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
-                    {formItemArray}
+                    {formItemArrayRender}
                 <button type="button" id={`${key}.add`} onClick={() => handleAddField(formItemAddId, schema.items, dispatcher)}>+  {key.split('.').slice(-1)[0]}</button>
+                <button type="button" id={`${key}.remove`} onClick={() => handleRemoveField(formItemRemoveLastId, dispatcher)}>-  {key.split('.').slice(-1)[0]}</button>
                 </fieldset>
                 ) 
       } else if (schema.type === "object" && typeof formItems === 'object'){
