@@ -41,4 +41,5 @@ export interface CurationState {
   readonly isLoading: boolean;
   readonly body: Record<string, unknown>|null; 
   readonly schema: Record<string, unknown>|null;
+  readonly html: Record<string, unknown>|null;
 }
