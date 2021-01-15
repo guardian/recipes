@@ -5,3 +5,8 @@ export const apiURL = "/api/curation/"
 export const capiProxy = "/api/capi/"
 export const schemaEndpoint = "schema"
 export const saveEndpoint = "submit"
+
+export const urls = {
+  capiQuery: 'capi',
+  matches: 'check'
+}
