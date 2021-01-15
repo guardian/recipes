@@ -5,7 +5,8 @@
     "baseUrl": "./recipes-client",
     "paths": {
       "~*": ["./*"]
-    }
+    },
+    "allowJs": true
   },
   "include": ["recipes-client/**/*"],
   "exclude": [

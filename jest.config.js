@@ -7,6 +7,9 @@ module.exports = {
   transform: {
     "^.+\\.(t|j)sx?$": "ts-jest"
   },
+  transformIgnorePatterns: [
+    "<rootDir>/node_modules/(?!lodash-es|lodash)"
+  ],  
   testMatch: [
     "<rootDir>/recipes-client/**/*.spec.+(ts|tsx|js)"
   ],
