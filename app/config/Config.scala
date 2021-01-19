@@ -47,7 +47,7 @@ class Config(playConfig: Configuration) extends Logging {
   
   val identity = AppIdentity.whoAmI(defaultAppName = "recipes")
   val config: Config_ = ConfigurationLoader.load(identity) {
-    case AwsIdentity(app, "stack1", stage, _) => S3ConfigurationLocation("data-science-recipes-dist", s"recipes/$stage/$app.conf")
+    case AwsIdentity(app, stack, stage, _) => S3ConfigurationLocation("recipes-dist", s"$stage/$stack/$app.conf")
   }
   logger.info(config.toString())
   final lazy val capiApiKey: String =  config.getString("capiKey")
