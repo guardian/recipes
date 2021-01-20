@@ -23,7 +23,8 @@ class HomeController (
    * a path of `/`.
    */
   def index(id: String) = ApiAuthAction {
-    logger.info("hello there")
+    logger.info(s"Hello there, using api key: ${config.capiApiKey.slice(0,5)}...")
+
     Ok(views.html.index())
   }
 }
