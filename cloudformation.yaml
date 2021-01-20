@@ -140,6 +140,21 @@ Resources:
       Roles:
         - !Ref AppRole
 
+  GetBucketConfigPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: GetBucketConfigPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+            Resource:
+              - arn:aws:s3:::recipes-dist/*
+      Roles:
+        - !Ref AppRole
+
   LoggingPolicy:
     Type: AWS::IAM::Policy
     Properties:
