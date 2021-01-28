@@ -47,8 +47,8 @@ class Config(playConfig: Configuration) extends Logging {
   lazy val loggingStreamName: Option[String] = playConfig.getOptional[String]("recipes.loggingStreamName")
   
   lazy val identity = stage match {
-    case Dev => new DevIdentity(s"$app")
-    case _ => new AwsIdentity(s"$app", s"$stack", s"$stage", s"${awsRegion}")
+    case Dev => new DevIdentity(app)
+    case _ => new AwsIdentity(app, stack, stage, awsRegion)
   }
 
   // val identity = AppIdentity.whoAmI(defaultAppName = "recipes")
