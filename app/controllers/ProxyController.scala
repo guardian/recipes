@@ -38,6 +38,7 @@ class ProxyController(
   def redirectRelative(path: String) = ApiAuthAction { request =>
     import config.domainConfig._
     request.headers.get(REFERER) match {
+      case Some(referer) if referer.startsWith(s"$self/api/capi/") => Redirect(routes.ProxyController.getCAPI(path))
       case Some(referer) if referer.startsWith(s"$self/proxy/") => Redirect(routes.ProxyController.get(path))
       case _ => NotFound(s"Resource not found $path")
     }
@@ -48,8 +49,8 @@ class ProxyController(
   }
 
   def getCAPI(id: String) = Action.async { implicit request =>
-    val destination = "https://content.guardianapis.com/%s?show-fields=body&show-elements=image&api-key=%s".format(id, config.capiApiKey)
-    logger.info(destination)
+    val destination = "https://content.guardianapis.com/%s?show-fields=body&show-elements=image&api-key=%s".format(id,config.capiApiKey)
+    // logger.info(destination)
     wsClient.url(destination)
       .withMethod(HttpVerbs.GET)
       .withHttpHeaders(USER_AGENT -> s"gu-recipes-${config.stage}")
