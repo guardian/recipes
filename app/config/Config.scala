@@ -48,7 +48,7 @@ class Config(playConfig: Configuration) extends Logging {
   
   lazy val identity = stage match {
     case Dev => new DevIdentity(app)
-    case _ => new AwsIdentity(app, stack, stage, awsRegion)
+    case _ => new AwsIdentity(app, stack, stage.toString().toUpperCase(),  "eu-west-1")
   }
 
   // val identity = AppIdentity.whoAmI(defaultAppName = "recipes")
