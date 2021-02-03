@@ -12,4 +12,4 @@ export const urls = {
 }
 
 export const newColours = ["aquamarine", "blue", "brown", "coral", "yellow", "chartreuse", "darkseagreen"];
-export const defaultHighlightColours   = ["#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]
+export const defaultHighlightColours   = ["#E69F0090", "#56B4E990", "#009E7390", "#F0E44290", "#0072B290", "#D55E0090", "#CC79A790"]

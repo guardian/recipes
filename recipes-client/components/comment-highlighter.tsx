@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css } from "@emotion/core";
+import { jsx } from "@emotion/core";
 
 /* Original component from Giant, see here:
 https://github.com/guardian/pfi/blob/bfbb074e362e832944f4c708693698f9b5e7e9e2/frontend/giant-ui/src/js/components/viewer/CommentHighlighter.tsx
@@ -252,9 +252,9 @@ export function HighlightHTML(props: HTMLProps) {
         const CustomTag = node.rawTagName ? `${node.rawTagName.toLowerCase()}`: 'div';
         if (relevantHighlights.length === 0) { 
             // nothing to change return original
-            return <CustomTag dangerouslySetInnerHTML={{__html: node.outerHTML}} css={ css`max-width: 100%; height: auto;`}/>
+            return <CustomTag dangerouslySetInnerHTML={{__html: node.outerHTML}} />
         } else {
-            return <CustomTag dangerouslySetInnerHTML={{__html: createHighlightHTML(relevantHighlights, node, onHighlightMount, focusComment, colours) }} css={ css`max-width: 100%; height: auto;`}/>
+            return <CustomTag dangerouslySetInnerHTML={{__html: createHighlightHTML(relevantHighlights, node, onHighlightMount, focusComment, colours) }} />
         }
     })
 

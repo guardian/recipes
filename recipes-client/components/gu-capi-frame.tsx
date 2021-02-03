@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx, Global, css } from "@emotion/core";
 import React from 'react';
 import { HighlightHTML, HighlightPlainText} from "~components/comment-highlighter";
 import { GuCAPIProps, recipeFields} from '~components/interfaces'
@@ -58,7 +58,13 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
     <h3>Byline:
       <HighlightPlainText text={byline} highlights={bylineHighlights} focusedId="" onHighlightMount={onHighlightMount} focusComment={focusComment} colours={colourMap}/>
     </h3>
-    <HighlightHTML  html={doc} highlights={highlights} focusedId="" onHighlightMount={onHighlightMount} focusComment={focusComment} colours={colourMap} />
+      <Global styles={{
+        '.gu-image': { 
+          maxWidth: '100%',
+          height: 'auto',
+        }
+      }} />
+        <HighlightHTML  html={doc} highlights={highlights} focusedId="" onHighlightMount={onHighlightMount} focusComment={focusComment} colours={colourMap} />
     </>
     )
   }
