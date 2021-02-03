@@ -1,5 +1,9 @@
-// Original component from GIant, see here:
-// https://github.com/guardian/pfi/blob/bfbb074e362e832944f4c708693698f9b5e7e9e2/frontend/giant-ui/src/js/components/viewer/CommentHighlighter.tsx
+/** @jsx jsx */
+import { jsx, css } from "@emotion/core";
+
+/* Original component from Giant, see here:
+https://github.com/guardian/pfi/blob/bfbb074e362e832944f4c708693698f9b5e7e9e2/frontend/giant-ui/src/js/components/viewer/CommentHighlighter.tsx
+*/
 import React, { ReactElement, useState, createElement } from 'react';
 import sortBy from 'lodash-es/sortBy';
 import filter from "lodash-es/filter";
@@ -107,53 +111,6 @@ function HighlightWrapper({ highlight, text, focused, onHighlightMount, focusCom
     );
 }
 
-// function HighlightWrapperHTML({ highlight, text, focused, onHighlightMount, focusComment }: HighlightWrapperProps) {
-//     const [top, setTop] = useState<number | undefined>();
-
-//     function onMountOrUnmount(elem: HTMLSpanElement | null) {
-//         if(elem) {
-//             // IMPORTANT: this guard avoids infinite loops
-//             // The ref is mounted, we then setHighlightRenderedPosition which causes another render
-//             // and another call infinitely, unless we check that the position has not changed.
-//             if(elem.offsetTop !== top) {
-//                 onHighlightMount(highlight.id, elem.offsetTop, elem);
-//             }
-
-//             setTop(elem.offsetTop);
-//         }
-//     }
-
-//     const elementType = String(highlight.type); // === 'comment' ? 'comment-highlight' : 'result-highlight';
-
-//     const clName = focused ? `${elementType}--focused` : `${elementType}`
-//     const highlightOffset = highlight.range.startCharacter,
-
-//     return <span className={clName} 
-//         data-highlight-offset={highlightOffset}
-//         ref={onMountOrUnmount} onClick={(e: React.MouseEvent) => {
-//             if(highlight.type === 'comment') {
-//                 e.stopPropagation();
-//                 focusComment(highlight.id);
-//             }
-//         }}> {text.slice(highlight.range.startCharacter, highlight.range.endCharacter)}
-//         </span>
-//     // return React.createElement(
-//     //     'span',
-//     //     {
-//     //         'class': focused ? `${elementType}--focused` : `${elementType}`,
-//     //         'data-highlight-offset': highlight.range.startCharacter,
-//     //         'ref': onMountOrUnmount,
-//     //         'onClick': (e: React.MouseEvent) => {
-//     //             if(highlight.type === 'comment') {
-//     //                 e.stopPropagation();
-//     //                 focusComment(highlight.id);
-//     //             }
-//     //         }
-//     //     },
-//     //     text.slice(highlight.range.startCharacter, highlight.range.endCharacter)
-//     // );
-// }
-
 type Props = {
     text: string,
     highlights: Highlight[],
@@ -162,10 +119,9 @@ type Props = {
     focusComment: (id: string) => void
 }
 
-export function CommentHighlighter({ text, highlights, focusedId, onHighlightMount, focusComment }: Props) {
+export function CommentHighlighter({ text, highlights, focusedId, onHighlightMount, focusComment }: Props): JSX.Element[] {
     const sorted: Highlight[] = sortBy(highlights, ({ range: { startCharacter } }: Highlight) => startCharacter);
     const flattened = separateOverlappingHighlights(sorted);
-
     const [end, children] = flattened.reduce(([ptr, acc], highlight) => {
         const before = (<span key={`pre-${highlight.id}`} data-highlight-offset={ptr}>
             {text.slice(ptr, highlight.range.startCharacter)}
@@ -186,7 +142,6 @@ export function CommentHighlighter({ text, highlights, focusedId, onHighlightMou
     if(end < text.length) {
         children.push(<span key='catch-all' data-highlight-offset={end}>{text.slice(end, text.length)}</span>)
     }
-
     return <span className='comment__text'>
         {children}
     </span>
@@ -243,10 +198,35 @@ function mergeHighlights(before_: string[], inside_: string[], after_: string[])
     return result;
 }
 
-function markHTML(text: string, type: string, onHighlightMount, focusComment): string{
-    return `<mark class=${type} style="background: baf2e9; padding: 0.45em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.35em;">${text}
-    <span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">${type}</span>
+function markHTML(text: string, type: string, colour: string, onHighlightMount?, focusComment?, applyLabel?: boolean): string {
+    return `<mark class=${type} style="background: ${colour}; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">${text}
+    ${applyLabel ? renderLabel(type) : ""}
     </mark>`
+}
+
+function renderLabel(label: string): string {
+    return `<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">${label}</span>`
+}
+
+type TextProps = {
+    text: string,
+    highlights: Highlight[][],
+    colours?: Record<string,string> | null
+}
+
+export function HighlightPlainText(props: TextProps){
+    const { text, highlights, colours } = props;
+    const flat_highlights = flatten(highlights) //Extra flattening step
+    const sorted: Highlight[] = sortBy(flat_highlights, ['range.elementNumber', 'range.startCharacter']);
+    const [before, inside, after] = createHighlightTextFractions(sorted, text.innerHTML);
+
+    const altered = inside.map((insideText, i) => {
+        const highlightType = (highlights[i].type as string);
+        const lastInSpan = (highlights[Math.min(highlights.length-1, i+1)].id !== highlights[i].id) || (i === highlights.length-1);
+        return markHTML(insideText.trim(), highlightType, colours[highlightType], lastInSpan)
+    });
+
+    return <div className={"byline"} dangerouslySetInnerHTML={{__html: mergeHighlights(before, altered, after)}} />
 }
 
 type HTMLProps = {
@@ -254,64 +234,55 @@ type HTMLProps = {
         highlights: Highlight[][],
         focusedId?: string,
         onHighlightMount: (id: string, top: number, elem: HTMLElement) => void,
-        focusComment: (id: string) => void
+        focusComment: (id: string) => void,
+        colours?: Record<string,string> | null
     }
 
 // export function HighlightHTML({ html, highlights, focusedId, onHighlightMount, focusComment }) {
 export function HighlightHTML(props: HTMLProps) {
-    const { html, highlights, focusedId, onHighlightMount, focusComment } = props;
+    const { html, highlights, focusedId, onHighlightMount, focusComment, colours } = props;
     const flat_highlights = flatten(highlights) //Extra flattening step
     const sorted: Highlight[] = sortBy(flat_highlights, ['range.elementNumber', 'range.startCharacter']);
     
-    const flattened = separateOverlappingHighlights(sorted);
-
+    // const flattened = separateOverlappingHighlights(sorted);
     const htmlNodes = (Array.from(html.childNodes) as HTMLElement[]);
 
     const children = htmlNodes.map((node, inode) => {
-        const relevantHighlights: Highlight[] = filter(flattened, ({ range: range }: Highlight ) => range.elementNumber === inode )
+        const relevantHighlights: Highlight[] = filter(sorted, ({ range: range }: Highlight ) => range.elementNumber === inode )
         const CustomTag = node.rawTagName ? `${node.rawTagName.toLowerCase()}`: 'div';
         if (relevantHighlights.length === 0) { 
-            // return node;} // nothing to change return original
-            return <CustomTag dangerouslySetInnerHTML={{__html: node.outerHTML}} />;
+            // nothing to change return original
+            return <CustomTag dangerouslySetInnerHTML={{__html: node.outerHTML}} css={ css`max-width: 100%; height: auto;`}/>
         } else {
-            return <CustomTag dangerouslySetInnerHTML={{__html: createHighlightHTML(relevantHighlights, node, onHighlightMount, focusComment) }} />
+            return <CustomTag dangerouslySetInnerHTML={{__html: createHighlightHTML(relevantHighlights, node, onHighlightMount, focusComment, colours) }} css={ css`max-width: 100%; height: auto;`}/>
         }
     })
 
-    return <span className='comment__text'>
+    return <span className='article_body'>
         {children}
     </span>
-    // children needs to be 'merged with original dom to get all data
 
+}
+
+function createHighlightTextFractions(highlights: Highlight[], text: string){
+    return highlights.reduce<Array<string[]>>(([b, i, a], highlight) => {
+        const before = text.slice(0, highlight.range.startCharacter);
+        const after  = text.slice(highlight.range.endCharacter);
+        const inside = text.slice(highlight.range.startCharacter, highlight.range.endCharacter);
+        return [[...b, before], [...i, inside], [...a, after]];
+    }, [[],[],[]]);
 }
 
 function createHighlightHTML(highlights: Highlight[], node: HTMLElement,
                             onHighlightMount: (id: string, top: number, elem: HTMLElement) => void,
-                            focusComment: (id: string) => void): string {
-    // const {relevantNodes, node, onHighlightMount, focusComment} = props;
-    const [before, inside, after] = highlights.reduce<Array<string[]>>(([b, i, a], highlight) => {
-        const before = node.innerHTML.slice(0, highlight.range.startCharacter);
-        const after  = node.innerHTML.slice(highlight.range.endCharacter);
-        const inside = node.innerHTML.slice(highlight.range.startCharacter, highlight.range.endCharacter);
-        return [[...b, before], [...i, inside], [...a, after]];
-    }, [[],[],[]]);
+                            focusComment: (id: string) => void,
+                            colours: Record<string,string>): string {
 
-
+    const [before, inside, after] = createHighlightTextFractions(highlights, node.innerHTML);
     const altered = inside.map((insideText, i) => {
-        return markHTML(insideText.trim(), highlights[i].type, onHighlightMount, focusComment)
+        const highlightType = (highlights[i].type as string);
+        const lastInSpan = (highlights[Math.min(highlights.length-1, i+1)].id !== highlights[i].id) || (i === highlights.length-1);
+        return markHTML(insideText.trim(), highlightType, colours[highlightType], onHighlightMount, focusComment, lastInSpan)
     });
     return mergeHighlights(before, altered, after);
-
-    
-    // const CustomTag = node.rawTagName ? `${node.rawTagName.toLowerCase()}`: 'div';
-    // return <CustomTag key={`${node}`}
-    //     dangerouslySetInnerHTML={{__html: mergedText}} 
-    // />;
 };
-
-// export function HighlightType(type: string){
-//     return <span css={{fontSize: "0.8em", fontWeight: "bold", lineHeight: "1", borderRadius: "0.35em",
-//                         textTransform: "uppercase", verticalAlign: "middle", marginLeft: "0.5rem"}}>
-//             ${type}
-//             </span>
-// }
