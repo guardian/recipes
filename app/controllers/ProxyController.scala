@@ -49,7 +49,7 @@ class ProxyController(
   }
 
   def getCAPI(id: String) = Action.async { implicit request =>
-    val destination = "https://content.guardianapis.com/%s?show-fields=body&show-elements=image&api-key=%s".format(id,config.capiApiKey)
+    val destination = "https://content.guardianapis.com/%s?show-fields=body,main,byline&show-elements=image&api-key=%s".format(id,config.capiApiKey)
     // logger.info(destination)
     wsClient.url(destination)
       .withMethod(HttpVerbs.GET)

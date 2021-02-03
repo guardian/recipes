@@ -31,7 +31,7 @@ class ApiController (
     val data: String = """{
     "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
     "recipes_title": "Grilled pepper salad with fresh cucumber and herbs",
-    "serves": "Serves 4.",
+    "serves": "Serves 4",
     "time": [
       {
       "instruction": "Prep",
