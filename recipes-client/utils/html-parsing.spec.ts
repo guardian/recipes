@@ -62,59 +62,78 @@ test("findTextinHTML correctly finds text in nested <figure>", () => {
         ).toEqual(text);
 });
 
-test("findTextinHTML correctly finds text in simple steps <p>", () => {
+test("findTextinHTML correctly finds text (with markup) in simple steps <p>", () => {
   const htmlEl: HTMLElement = DOMParse(testHTML)
   
   const text = "Prep 20 min";
   const output: ResourceRange[] = findTextinHTML(text, htmlEl)
+  const desiredOutput = "Prep<strong> 20 min</strong>";
 
   const text2 = "Serves 4";
   const output2: ResourceRange[] = findTextinHTML(text2, htmlEl)
+  const desiredOutput2 = "Serves <strong>4</strong>";
+
+  const text3 = "Cook 40 min"
+  const output3: ResourceRange[] = findTextinHTML(text3, htmlEl)
+  const desiredOutput3 = "Cook <strong>40 min</strong>"
 
   // Check if correct amount of phrases extracted
-  expect(output.length).toEqual(3)
-  expect(output2.length).toEqual(2)
+  expect(output.length).toEqual(1)
+  expect(output2.length).toEqual(1)
+  expect(output3.length).toEqual(1)
+
 
   // Check if extracted text is correct
   const extractedText = output.reduce((prev, o) => {
     const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
     return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
   }, '')
-  expect(extractedText.trim()).toEqual(text);
+  expect(extractedText.trim()).toEqual(desiredOutput);
 
   const extractedText2 = output2.reduce((prev, o) => {
     const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
     return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
   }, '')
-  expect(extractedText2.trim()).toEqual(text2);
+  expect(extractedText2.trim()).toEqual(desiredOutput2);
+
+  const extractedText3 = output3.reduce((prev, o) => {
+    const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
+    return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
+  }, '')
+  expect(extractedText3.trim()).toEqual(desiredOutput3);
 });
 
 
-test("findTextinHTML correctly finds ingredient text", () => {
+test("findTextinHTML correctly finds ingredient text (with markup)", () => {
   const htmlEl: HTMLElement = DOMParse(testHTML)
 
-  const text = "6 large garlic cloves peeled";
-  const text2 = "4 medium vine tomatoes (400g) each cut into 4 wedges"
+  const ingredients = [
+    "6 large garlic cloves peeled",
+    "4 medium vine tomatoes (400g) each cut into 4 wedges",
+    "90ml olive oil",
+    "¾ tsp urfa chilli"
+  ]
+  const expectedOutputs = [
+    "<strong>6 large garlic cloves</strong>, peeled",
+    "<strong>4 medium vine tomatoes</strong><strong> (400g)</strong>, each cut into 4 wedges",
+    "<strong>90ml olive oil</strong>",
+    "<strong>¾ tsp <a href=\"https://ottolenghi.co.uk/urfa-chilli-flakes-shop\" title=\"\">urfa chilli</a></strong>"
+  ]
 
-  const output: ResourceRange[] = findTextinHTML(text, htmlEl)
-  const output2: ResourceRange[] = findTextinHTML(text2, htmlEl)
+  ingredients.forEach((ing, i) => {
+    const output: ResourceRange[] = findTextinHTML(ing, htmlEl)
 
-  // Check if correct amount of phrases extracted
-  expect(output.length).toEqual(5)
-  expect(output2.length).toEqual(10)
+    // Check if correct amount of phrases extracted
+    expect(output.length).toEqual(1)
 
-  // Check if extracted text is correct
-  const extractedText = output.reduce((prev, o) => {
-    const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
-    return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
-  }, '')
-  expect(extractedText.trim()).toEqual(text);
+    // Check if extracted text is correct
+    const extractedText = output.reduce((prev, o) => {
+      const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
+      return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
+    }, '')
+    expect(extractedText.trim()).toEqual(expectedOutputs[i]);
 
-  const extractedText2 = output2.reduce((prev, o) => {
-    const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
-    return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
-  }, '')
-  expect(extractedText2.trim()).toEqual(text2);
+  });
 });
 
 test("extractCommonText correctly get common text from two strings", () => {
