@@ -21,7 +21,7 @@ export interface recipeMetaFields {
   "cuisines": schemaItem;
 }
 
-export type recipeFields = {
+export interface recipeFields {
   "recipes_title": recipeItem;
   "serves": recipeItem;
   "time": recipeItem;
@@ -71,7 +71,8 @@ export interface GuCAPIProps {
   articlePath: string;
   isLoading: boolean;
   html: Record<string, Record<string, unknown>>;
-  recipeItems: recipeFields|null; //|Record<string, unknown>|null;
+  recipeItems: recipeFields| null; //|Record<string, unknown>|null;
+  colours?: string[] | null;
 }
 
 
@@ -87,6 +88,7 @@ export interface CurationState {
   readonly body: allRecipeFields|Record<string, unknown>|null; 
   readonly schema: Record<string, unknown>|null;
   readonly html: Record<string, unknown>|null;
+  readonly colours?: string[] | null;
 }
 
 export type HighlightType = keyof typeof recipeFields; // 'search_result' | 'comment'; //[key in keyof schemaType['properties']] 'search_result' | 'comment';
