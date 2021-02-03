@@ -7,6 +7,9 @@ export const schemaEndpoint = "schema"
 export const saveEndpoint = "submit"
 
 export const urls = {
-  capiQuery: 'capi',
-  matches: 'check'
+  capiQuery: "capi",
+  matches: "check"
 }
+
+export const newColours = ["aquamarine", "blue", "brown", "coral", "yellow", "chartreuse", "darkseagreen"];
+export const defaultHighlightColours   = ["#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]

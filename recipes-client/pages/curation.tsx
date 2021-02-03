@@ -2,12 +2,12 @@
 import { jsx } from "@emotion/core";
 
 import RecipeComponent from "~components/recipe-component";
-import GuFrame from "~/components/gu-frame";
+// import GuFrame from "~/components/gu-frame";
 import GuCAPIFrame from "~/components/gu-capi-frame";
 import Footer from "~components/footer";
 import Header from "~components/header";
 
-import {articlePath} from "~consts/index";
+import {articlePath, defaultHighlightColours} from "~consts/index";
 import { RouteComponentProps } from 'react-router-dom';
 
 
@@ -21,15 +21,12 @@ interface CurationProps {
   articleId: string;
 }
 
-// interface CurationState {
-//   isLoading: boolean;
-//   body: Record<string, unknown>|null; 
-//   schema: Record<string, unknown>|null;
-//   html: Record<string, unknown>|null;
-// }
-
 interface RouteParams {
     articleId: string;
+}
+
+function updateColours(){
+  console.log("Update Colours.");
 }
 
 
@@ -54,6 +51,8 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
     .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
     .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {isLoading: false, html: data}}))
     .catch(() => dispatch({"type": actions.error, "payload": "Error fetching HTML body data."}) );
+    // Set default colours
+    dispatch({"type": actions.changeColours, "payload": {colours: defaultHighlightColours}});
   }, [articleId, dispatch]);
 
   return (
@@ -68,15 +67,15 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
       }}
     >
       <div css={{ gridArea: "header", background: "red", justifyItems: "center", display: "grid", align: "center" }}>
-        <Header recipeUrl={articlePath}/>
+        <Header recipeUrl={articlePath} colours={state.colours} dispatcher={dispatch} />
       </div>
-      <div css={{ gridArea: "left", background: "white", overflow: "auto" }}>
+      <div css={{ gridArea: "left", background: "white", overflow: "auto", padding: "5px" }}>
           {/* <GuFrame articlePath={articlePath} /> */}
-          <GuCAPIFrame articlePath={articlePath} isLoading={state.isLoading} html={state.html} recipeItems={state.body} />
+          <GuCAPIFrame articlePath={articlePath} isLoading={state.isLoading} html={state.html} recipeItems={state.body} colours={state.colours}x />
       </div>
       <div css={{ gridArea: "right", background: "grey", overflow: "auto" }}>
         <form>
-          <RecipeComponent articleId={articlePath} isLoading={state.isLoading} body={state.body} schema={state.schema} dispatcher={dispatch}/>
+          <RecipeComponent isLoading={state.isLoading} body={state.body} schema={state.schema} dispatcher={dispatch}/>
         </form>
       </div>
       <div css={{ gridArea: "footer", background: "green", justifyItems: "center", display: "grid", align: "center"}}>
