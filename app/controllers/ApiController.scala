@@ -214,7 +214,8 @@ class ApiController (
       "fruit",
       "cheese",
       "seafood"
-    ]
+    ],
+    "image": "https://media.guim.co.uk/5eb266e966f8aa7c74f449804d13ee3b57eb81d6/1_0_3356_3355/1000.jpg"
   }"""
     Ok(Json.parse(data))
   }
@@ -333,6 +334,9 @@ class ApiController (
             "type": "string",
             "enum": ["avocados", "beef","bread","cheese","chicken","chocolate","duck","eggs","fruit","lamb","meat","oysters","pork","potatoes","pumpkin","rice","sausages","seafood","shellfish","tomatoes","wine"]
           }
+        },
+        "image": {
+          "type": ["string","null"]
         }
       }
     }"""
