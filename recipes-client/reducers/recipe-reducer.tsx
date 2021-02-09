@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import {actions} from "~/actions/recipeActions";
 import produce from "immer";
-import { ActionType, CurationState, schemaItem, isCurationState } from "~components/interfaces";
+import { ActionType, CurationState, schemaItem, isCurationState, isAddRemoveItemType } from "~components/interfaces";
 import { defaultHighlightColours } from "~consts";
 
 export const defaultState: CurationState = {
@@ -120,14 +120,14 @@ export const recipeReducer = produce((draft: CurationState, action: ActionType) 
         break;
       }
       case actions.delete: {
-        if (!isCurationState(action.payload)){
+        if (isAddRemoveItemType(action.payload)){
           const keyPathArr = action.payload["objId"].split(".")
           deleteBodyItem(keyPathArr, draft.body);        
         }
         break;
       }
       case actions.add: {
-        if (!isCurationState(action.payload)){
+        if (isAddRemoveItemType(action.payload)){
             const keyPathArr = action.payload["objId"].split(".")
             const value = getSchemaItem(action.schemaItem)
             updateBodyItem(draft.body, keyPathArr, value)
@@ -150,12 +150,16 @@ export const recipeReducer = produce((draft: CurationState, action: ActionType) 
         }
         break;
       }
+      case actions.selectImg: {
+        updateBodyItem(draft.body, ["image"], action.payload)
+        break;
+      }
       case actions.error: {
         alert(action.payload);
         break
       }
       default: {
-        throw new Error();
+        throw new Error(action.payload as string);
       }
     }
 }, {})

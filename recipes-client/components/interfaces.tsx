@@ -13,7 +13,7 @@ export interface schemaType {
     }
 }
 
-interface allRecipeFields extends recipeMetaFields, recipeFields {};
+export interface allRecipeFields extends recipeMetaFields, recipeFields {};
 
 export interface recipeMetaFields {
   "path": schemaItem;
@@ -28,6 +28,7 @@ export interface recipeFields {
   "steps": recipeItem;
   "credit": recipeItem;
   "ingredients_lists": recipeItem;
+  "image": string|null;
 }
 
 export type recipeItem = string 
@@ -59,7 +60,7 @@ export type timeField = {
 }
 
 export interface ActionType {
-  payload: CurationState|AddRemoveItemType;
+  payload: CurationState|AddRemoveItemType|string;
   type: string;
 }
 
@@ -76,11 +77,15 @@ export interface GuCAPIProps {
 }
 
 
-export function isCurationState(payload: CurationState | AddRemoveItemType): payload is CurationState {
+export function isCurationState(payload: CurationState | AddRemoveItemType | string): payload is CurationState {
   if((payload as CurationState).isLoading){
     return true
   }
   return false
+}
+
+export function isAddRemoveItemType(payload: CurationState | AddRemoveItemType | string): payload is AddRemoveItemType {
+  return (payload as AddRemoveItemType).objId !== undefined;
 }
 
 export interface CurationState {
