@@ -252,9 +252,9 @@ export function HighlightHTML(props: HTMLProps) {
         const CustomTag = node.rawTagName ? `${node.rawTagName.toLowerCase()}`: 'div';
         if (relevantHighlights.length === 0) { 
             // nothing to change return original
-            return <CustomTag dangerouslySetInnerHTML={{__html: node.outerHTML}} />
+            return <CustomTag key={inode} dangerouslySetInnerHTML={{__html: node.outerHTML}} />
         } else {
-            return <CustomTag dangerouslySetInnerHTML={{__html: createHighlightHTML(relevantHighlights, node, onHighlightMount, focusComment, colours) }} />
+            return <CustomTag key={inode} dangerouslySetInnerHTML={{__html: createHighlightHTML(relevantHighlights, node, onHighlightMount, focusComment, colours) }} />
         }
     })
 
