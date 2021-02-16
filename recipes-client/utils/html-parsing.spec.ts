@@ -30,6 +30,15 @@ const testHTML = `
 </p>
 `
 
+test("findTextinHTML correctly ignores empty text ('') ", () => {
+  const htmlEl: HTMLElement = DOMParse(testHTML)
+  const text = "";
+  const output: ResourceRange[] = findTextinHTML(text, htmlEl)
+
+  // Check if correct amount of phrases extracted
+  expect(output.length).toEqual(0)
+
+});
 
 test("findTextinHTML correctly finds text in simple <h2>", () => {
   const htmlEl: HTMLElement = DOMParse(testHTML)
