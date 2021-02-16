@@ -19,9 +19,9 @@ function handleRemoveField(id:string, dispatcher: Dispatch<ActionType>): void {
 
 function renderInput(text: string, key: string, choices: Array<string>|null, dispatcher?: Dispatch<ActionType>|null, removable?: boolean){
   const removeId = `${key}`;
-  const rmAllowed = removable ? removable : true;
+  const rmAllowed = (removable !== undefined) ? removable : true;
+  console.debug(`${text} ${key}`);
   if (choices === null || choices === undefined){
-    console.log(`${text} ${key}`);
     return ( 
       <><input css={{ minWidth: "500px" }} type="text" value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}></input>
         { rmAllowed && 
@@ -44,15 +44,15 @@ function renderInput(text: string, key: string, choices: Array<string>|null, dis
 
 interface FormItemProps {
     label: string,
-    text: string,
-    type: string|null,
+    text: string|null,
+    // type: string|null,
     choices: Array<string>|null
     dispatcher?: Dispatch<ActionType>|null
   }
   
 function FormItem(prop: FormItemProps): JSX.Element{
   const label = prop.label;
-  const text = prop.text;
+  const text = (prop.text === null) ? "None" : prop.text;
   const choices = prop.choices || null;
   const dispatch = prop.dispatcher || null;
 

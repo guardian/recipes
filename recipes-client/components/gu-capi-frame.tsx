@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Global, css } from "@emotion/core";
+import { jsx, Global } from "@emotion/core";
 import React from 'react';
 import { HighlightHTML, HighlightPlainText} from "~components/comment-highlighter";
 import { GuCAPIProps, recipeFields} from '~components/interfaces'

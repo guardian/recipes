@@ -2,7 +2,7 @@
 import { Component, Dispatch } from "react";
 import { jsx } from "@emotion/core";
 import FormItem from "./form-item";
-import { ActionType } from "~components/interfaces";
+import { ActionType, schemaItem } from "~components/interfaces";
 import {actions} from "~actions/recipeActions";
 
 
@@ -44,28 +44,6 @@ function handleRemoveField(objId: string, dispatcher: Dispatch<ActionType>): voi
             });
 }
 
-interface schemaItem {
-    type: string;
-    items?: Array<Record<string, unknown>>;
-    properties?: Record<string, unknown>;
-    enum?: Array<string>;
-  }
-  
-// What's the point of having a fetch-ed schema then?
-interface schemaType {
-  'properties': {
-  "path": schemaItem;
-  "recipes_title": schemaItem;
-  "serves": schemaItem;
-  "time": schemaItem;
-  "steps": schemaItem;
-  "credit": schemaItem;
-  "ingredients_lists": schemaItem;
-  "occasion": schemaItem;
-  "cuisines": schemaItem;
-  }
-}
-
 interface FormGroupProps {
     formItems: string | Array<string|Record<string, unknown>> | Record<string, unknown>
     schema: schemaItem
@@ -84,14 +62,17 @@ class FormGroup extends Component<FormGroupProps> {
       const  choices = schema.enum || null;
       const key = this.props.key_ || title;
       const dispatcher = this.props.dispatcher || null;
-      if (getSchemaType(schema.type).includes("string") && typeof formItems === "string"){
+
+      // Recursively parse all elements in JSON tree
+      if ((getSchemaType(schema.type).includes("null") && formItems === null) ||
+          (getSchemaType(schema.type).includes("string") && typeof formItems === "string")){
         return (
             <fieldset key={`${key}.fieldset`}>
             <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
               <FormItem text={formItems} choices={choices} label={key} key={`${key}.formItem`} dispatcher={dispatcher}> </FormItem>
             </fieldset>
         )
-      } else if (schema.type === "array" && Array.isArray(formItems)) {
+      } else if (getSchemaType(schema.type).includes("array") && Array.isArray(formItems)) {
         const formItemArrayRender = formItems.map( (item:schemaItem, i:int) => {
           return (
             renderFormGroup(item,  null, schema.items, key+'.'+String(i), dispatcher)
@@ -108,7 +89,7 @@ class FormGroup extends Component<FormGroupProps> {
                 <button type="button" id={`${key}.remove`} onClick={() => handleRemoveField(formItemRemoveLastId, dispatcher)}>-  {key.split('.').slice(-1)[0]}</button>
                 </fieldset>
                 ) 
-      } else if (schema.type === "object" && typeof formItems === 'object'){
+      } else if (getSchemaType(schema.type).includes("object") && typeof formItems === 'object'){
         // HashMap, loop through and add keys as name of input field
         const keys = Object.keys(formItems);
         return ( <fieldset key={`${key}.fieldset`}>

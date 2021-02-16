@@ -1,17 +1,18 @@
 /** @jsx jsx */
 import {actions} from "~/actions/recipeActions";
 import produce from "immer";
-import { ActionType, CurationState, schemaItem, isCurationState } from "~components/interfaces";
+import { ActionType, AppDataState, schemaItem, isCurationState, isLoadingState, AddRemoveItemType, ErrorItemType, isAddRemoveItemType } from "~components/interfaces";
 import { defaultHighlightColours } from "~consts";
 
-export const defaultState: CurationState = {
+export const defaultState: AppDataState = {
     isLoading: true, 
     body: null, 
     schema: null,
+    html: null,
     colours: null
 };
   
-function updateBodyItem(obj: Record<string, unknown>, keyPath: Array<string>, value: string|number): void {
+function updateStateItem(obj: Record<string, unknown>, keyPath: Array<string>, value: string|number): void {
   const lastKeyIndex = keyPath.length-1;
   for (let i = 0; i < lastKeyIndex; ++ i) {
     const key = keyPath[i];
@@ -30,7 +31,7 @@ function updateBodyItem(obj: Record<string, unknown>, keyPath: Array<string>, va
   obj[keyPath[lastKeyIndex]] = value;
 }
 
-function deleteBodyItem(keyPath: Array<string|number>, obj: Record<string, unknown>): void {
+function deleteStateItem(keyPath: Array<string|number>, obj: Record<string, unknown>): void {
   const lastKeyIndex = keyPath.length-1;
   for (let i = 0; i < lastKeyIndex; ++ i) {
     const key = keyPath[i];
@@ -101,18 +102,22 @@ function Entries2Object(arr: (string | Record<string, unknown>)[][]): Record<str
   }, {})
 }
 
-export const recipeReducer = produce((draft: CurationState, action: ActionType) => {
+export const recipeReducer = produce((draft: AppDataState|AddRemoveItemType|ErrorItemType, action: ActionType) => {
     switch (action.type) {
       case actions.change: {
         const key = Object.keys(action.payload)[0]
         const keyPathArr = key.split(".")
-        updateBodyItem(draft.body, keyPathArr, action.payload[key])
+        updateStateItem(draft.body, keyPathArr, action.payload[key])
         break;
       }
       case actions.init: {
-        Object.keys(action.payload).forEach((k) => { 
-          initStateItem(draft, k, action.payload[k])
-        })
+        if (isLoadingState(action.payload)) {
+          draft['isLoading'] = action.payload.isLoading;
+        } else {
+          Object.keys(action.payload).forEach((k) => { 
+            initStateItem(draft, k, action.payload[k])
+          })
+        }
         break;
       }
       case actions.reset: {
@@ -120,17 +125,17 @@ export const recipeReducer = produce((draft: CurationState, action: ActionType) 
         break;
       }
       case actions.delete: {
-        if (!isCurationState(action.payload)){
+        if (isAddRemoveItemType(action.payload)){
           const keyPathArr = action.payload["objId"].split(".")
-          deleteBodyItem(keyPathArr, draft.body);        
+          deleteStateItem(keyPathArr, draft.body);        
         }
         break;
       }
       case actions.add: {
-        if (!isCurationState(action.payload)){
+        if (isAddRemoveItemType(action.payload)){
             const keyPathArr = action.payload["objId"].split(".")
             const value = getSchemaItem(action.schemaItem)
-            updateBodyItem(draft.body, keyPathArr, value)
+            updateStateItem(draft.body, keyPathArr, value)
           }
         break;
       }
