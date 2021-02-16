@@ -2,5 +2,16 @@
 
 set -e
 
+trap user_interrupt INT
+
+user_interrupt() {
+  echo -e "\n Exiting, cleaning up..."
+  docker stop recipeDB
+}
+
+docker run --rm -d --name recipeDB -p 8000:8000 amazon/dynamodb-local
+
+npm run fill-db
+
 npm start &
 sbt run

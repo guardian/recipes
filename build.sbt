@@ -54,6 +54,7 @@ lazy val root = (project in file("."))
       "com.gu" % "kinesis-logback-appender" % "1.4.4",
       "com.gu" %% "pan-domain-auth-verification" % "1.0.4",
       "com.amazonaws" % "aws-java-sdk-s3" % awsSdkVersion,
+      "com.amazonaws" % "aws-java-sdk-dynamodb" % awsSdkVersion,
       "com.gu" %% "simple-configuration-s3" % "1.5.2"
     ),
     scalacOptions ++= List(
