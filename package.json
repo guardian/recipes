@@ -10,7 +10,7 @@
     "build": "parcel build recipes-client/index.tsx --out-dir public/recipes-client",
     "lint": "eslint recipes-client --ext .ts,.tsx",
     "format": "prettier --write recipes-client",
-    "fill-db": "node db/fill.js"
+    "fill-db": "node scripts/fill.js"
   },
   "author": "",
   "license": "ISC",
