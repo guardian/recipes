@@ -302,3 +302,29 @@ Resources:
           Value: !Ref Stack
         - Key: App
           Value: !Ref App
+
+  RecipesDynamoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: recipes
+      AttributeDefinitions:
+      - AttributeName: path
+        AttributeType: S
+      - AttributeName: recipeId
+        AttributeType: N
+      KeySchema:
+      - AttributeName: path
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+      - IndexName: recipeId
+        KeySchema:
+        - AttributeName: recipeId
+          KeyType: HASH
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
