@@ -170,6 +170,20 @@ Resources:
       Roles:
         - !Ref AppRole
 
+  DynamoAccessPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: DynamoAccessPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamo:*
+            Resource: !Ref RecipesDynamoTable
+      Roles:
+        - !Ref AppRole
+
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
