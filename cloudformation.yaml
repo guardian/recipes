@@ -339,7 +339,7 @@ Resources:
       AttributeDefinitions:
       - AttributeName: path
         AttributeType: S
-      - AttributeName: recipeId
+      - AttributeName: recipe_id
         AttributeType: N
       KeySchema:
       - AttributeName: path
@@ -348,9 +348,9 @@ Resources:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
       GlobalSecondaryIndexes:
-      - IndexName: recipeId
+      - IndexName: recipe_id
         KeySchema:
-        - AttributeName: recipeId
+        - AttributeName: recipe_id
           KeyType: HASH
         Projection:
           ProjectionType: ALL
