@@ -5,6 +5,9 @@ import FormItem from "./form-item";
 import { ActionType, schemaItem } from "~components/interfaces";
 import {actions} from "~actions/recipeActions";
 
+function isStringOrNumber(item: string | Array<string|Record<string, unknown>> | Record<string, unknown>){
+  return (typeof item === "string" || typeof item === "number")
+}
 
 function formatTitle(text: string|null){
     // Reformat title with first letter uppercase
@@ -65,7 +68,7 @@ class FormGroup extends Component<FormGroupProps> {
 
       // Recursively parse all elements in JSON tree
       if ((getSchemaType(schema.type).includes("null") && formItems === null) ||
-          (getSchemaType(schema.type).includes("string") && typeof formItems === "string")){
+          (getSchemaType(schema.type).includes("string") && typeof isStringOrNumber(formItems))){
         return (
             <fieldset key={`${key}.fieldset`}>
             <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
