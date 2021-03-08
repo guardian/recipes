@@ -179,7 +179,7 @@ Resources:
         Statement:
           - Effect: Allow
             Action:
-              - dynamo:*
+              - dynamodb:*
             Resource: !Ref RecipesDynamoTable
       Roles:
         - !Ref AppRole
