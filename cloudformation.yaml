@@ -180,7 +180,7 @@ Resources:
           - Effect: Allow
             Action:
               - dynamodb:*
-            Resource: !Ref RecipesDynamoTable
+            Resource: 'arn:aws:dynamodb:eu-west-1:743583969668:table/recipes'
       Roles:
         - !Ref AppRole
 
