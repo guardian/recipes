@@ -259,7 +259,7 @@ class ApiController (
             "type": ["string", "null"]
         },
         "time": {
-            "type": ["array"],
+            "type": ["array", "null"],
             "items": {
                 "maxItems": 1,
                 "minItems": 0,
@@ -267,7 +267,7 @@ class ApiController (
             }
         },
         "steps": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
                 "type": "string"
             }
@@ -276,7 +276,7 @@ class ApiController (
             "type": ["string", "array"]
         },
         "ingredients_lists": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
                 "type": ["object", "null"],
                 "required": [],
@@ -338,7 +338,7 @@ class ApiController (
           ]
         },
         "cuisines": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
                 "minItems": 1,
                 "type": ["string", "null"],
@@ -373,7 +373,7 @@ class ApiController (
             }
         },
         "meal_type": {
-          "type": "array",
+          "type": ["array", "null"],
           "items": {
               "type": [
                   "string",
@@ -393,7 +393,7 @@ class ApiController (
             }
         },
         "ingredient_tags": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
                 "type": ["string", "null"],
                 "enum": [
@@ -423,7 +423,7 @@ class ApiController (
         }
     },
     "diet_tags": {
-        "type": "array",
+        "type": ["array", "null"],
         "items": {
             "type": ["string", "null"],
             "enum": [
