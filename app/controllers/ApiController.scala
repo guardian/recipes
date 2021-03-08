@@ -439,8 +439,10 @@ class ApiController (
   }
 
   def db(id: String) = Action {
+    def isEmpty(x: String) = x == null || x.isEmpty
+    logger.info("%s is null? %s".format(config.dbUrl, isEmpty(config.dbUrl).toString()))
     val dbClient = config.dbUrl match {
-      case null => AmazonDynamoDBClientBuilder.standard()
+      case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
                   .withCredentials(config.awsCredentials)
                   .build()
       case _ => AmazonDynamoDBClientBuilder.standard()
@@ -452,7 +454,7 @@ class ApiController (
     val key_to_get = MMap("path" -> new AttributeValue("/"+id),
                           "recipe_id" -> new AttributeValue().withN("1")
                         ).asJava;
-                        
+
     val request: GetItemRequest = new GetItemRequest()
       .withKey(key_to_get)
       .withTableName(config.tableName);
