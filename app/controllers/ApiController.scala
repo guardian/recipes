@@ -444,14 +444,17 @@ class ApiController (
       .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
       .build()
 
-    val key_to_get = MMap("recipe_id" -> new AttributeValue("/"+id+"_1")).asJava;
+    val key_to_get = MMap("path" -> new AttributeValue("/"+id),
+                          "recipe_id" -> new AttributeValue().withN("1")
+                        ).asJava;
+
     val request: GetItemRequest = new GetItemRequest()
       .withKey(key_to_get)
       .withTableName(config.tableName);
 
     val data = dbClient.getItem(request).getItem();
     if (data == null) {
-      NotFound("No recipe with path: '%s'.".format(id))
+      NotFound("No recipe with path: '%s' and id: '%s'.".format(id, "1"))
     } else {
       Ok(Json.parse(ItemUtils.toItem(data).toJSON()));
     }

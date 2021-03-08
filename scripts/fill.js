@@ -82,9 +82,9 @@ ddb.createTable(params, function(err, data) {
     
       ddb.putItem(params, function(err, data) {
         if (err) {
-            console.error(`Unable to add item: ${item.path}_${item.recipe_id}`, ". Error JSON:", JSON.stringify(err, null, 2));
+            console.error(`Unable to add item: ${item.path}#${item.recipe_id}`, ". Error JSON:", JSON.stringify(err, null, 2));
         } else {
-            console.log(`PutItem succeeded: ${item.path}_${item.recipe_id}`);
+            console.log(`PutItem succeeded: ${item.path}#${item.recipe_id}`);
         }
       })
    });
