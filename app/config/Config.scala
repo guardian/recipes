@@ -60,6 +60,9 @@ class Config(playConfig: Configuration) extends Logging {
   }
   // logger.info(config.toString())
   final lazy val capiApiKey: String =  config.getString("capiKey")
-  final lazy val dbUrl: String =  config.getString("dbUrl")
+  lazy val dbUrl = stage match {
+    case Dev => config.getString("dbUrl")
+    case _ => null
+  }
   val domainConfig: DomainConfig = DomainConfig(stage)
 }

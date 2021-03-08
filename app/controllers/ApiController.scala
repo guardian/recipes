@@ -439,15 +439,20 @@ class ApiController (
   }
 
   def db(id: String) = Action {
-    val dbClient = AmazonDynamoDBClientBuilder.standard()
-      .withCredentials(config.awsCredentials)
-      .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
-      .build()
+    val dbClient = config.dbUrl match {
+      case null => AmazonDynamoDBClientBuilder.standard()
+                  .withCredentials(config.awsCredentials)
+                  .build()
+      case _ => AmazonDynamoDBClientBuilder.standard()
+                  .withCredentials(config.awsCredentials)
+                  .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
+                  .build()
+    }
 
     val key_to_get = MMap("path" -> new AttributeValue("/"+id),
                           "recipe_id" -> new AttributeValue().withN("1")
                         ).asJava;
-
+                        
     val request: GetItemRequest = new GetItemRequest()
       .withKey(key_to_get)
       .withTableName(config.tableName);
