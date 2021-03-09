@@ -34,6 +34,10 @@ Parameters:
     Description: Name of the ELK logging stream in this account
     Type: AWS::SSM::Parameter::Value<String>
     Default: /account/services/logging.stream
+  RecipesTable:
+    Description: Name of table to store recipes in.
+    Type: String
+    Default: recipes
 
 Mappings:
   StageVariables:
@@ -165,7 +169,7 @@ Resources:
           - Effect: Allow
             Action:
               - dynamodb:*
-            Resource: 'arn:aws:dynamodb:eu-west-1:743583969668:table/recipes'
+            Resource: arn:aws:dynamodb:eu-west-1:743583969668:table/${RecipesTable}
       Roles:
         - !Ref AppRole
 
@@ -320,7 +324,7 @@ Resources:
   RecipesDynamoTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: recipes
+      TableName: !Ref RecipesTable
       AttributeDefinitions:
       - AttributeName: path
         AttributeType: S
