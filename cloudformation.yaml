@@ -169,7 +169,7 @@ Resources:
           - Effect: Allow
             Action:
               - dynamodb:*
-            Resource: arn:aws:dynamodb:eu-west-1:743583969668:table/${RecipesTable}
+            Resource: !Sub arn:aws:dynamodb:eu-west-1:743583969668:table/${RecipesTable}
       Roles:
         - !Ref AppRole
 
