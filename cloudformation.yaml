@@ -184,11 +184,7 @@ Resources:
           - Effect: Allow
             Action:
               - dynamodb:*
-<<<<<<< HEAD
             Resource: arn:aws:dynamodb:eu-west-1:743583969668:table/${RecipesTable}
-=======
-            Resource: 'arn:aws:dynamodb:eu-west-1:743583969668:table/recipes'
->>>>>>> 3aa3815... Update table keys.
       Roles:
         - !Ref AppRole
 
