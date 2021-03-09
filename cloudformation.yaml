@@ -184,7 +184,11 @@ Resources:
           - Effect: Allow
             Action:
               - dynamodb:*
+<<<<<<< HEAD
             Resource: arn:aws:dynamodb:eu-west-1:743583969668:table/${RecipesTable}
+=======
+            Resource: 'arn:aws:dynamodb:eu-west-1:743583969668:table/recipes'
+>>>>>>> 3aa3815... Update table keys.
       Roles:
         - !Ref AppRole
 
@@ -348,16 +352,8 @@ Resources:
       KeySchema:
       - AttributeName: path
         KeyType: HASH
+      - AttributeName: recipeId
+        KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      GlobalSecondaryIndexes:
-      - IndexName: recipe_id
-        KeySchema:
-        - AttributeName: recipe_id
-          KeyType: RANGE
-        Projection:
-          ProjectionType: ALL
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
