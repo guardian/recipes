@@ -58,7 +58,7 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
     const byline = DOMParse(html['fields']['byline'])
     const recipeItemsByline = filterKey((recipeItems as Record<string, unknown>), 'credit') as recipeFields;
     const bylineHighlights = getHighlights(byline, recipeItemsByline);
-    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), ['credit', 'recipe_id']) as recipeFields;
+    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), ['credit', 'recipeId']) as recipeFields;
     const highlights = getHighlights(doc, recipeItemsBody);
 
     return (

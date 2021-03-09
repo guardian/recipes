@@ -30,7 +30,7 @@ var params = {
       AttributeType: 'S'
     },
     {
-      AttributeName: 'recipe_id',
+      AttributeName: 'recipeId',
       AttributeType: 'N'
     }
   ],
@@ -40,7 +40,7 @@ var params = {
       KeyType: 'HASH'
     },
     {
-      AttributeName: 'recipe_id',
+      AttributeName: 'recipeId',
       KeyType: 'Range'
     }
   ],
@@ -73,8 +73,8 @@ ddb.createTable(params, function(err, data) {
 
     rawdata.slice(-(numItems)).forEach((item) => {
       const regex = new RegExp("_(\\d+)$", 'gm')
-      const match = regex.exec(item.recipe_id);
-      item.recipe_id = parseInt(match[1]);
+      const match = regex.exec(item.recipeId);
+      item.recipeId = parseInt(match[1]);
       let params = {
         TableName: "recipes",
         Item: AWS.DynamoDB.Converter.marshall(item)
@@ -82,9 +82,9 @@ ddb.createTable(params, function(err, data) {
     
       ddb.putItem(params, function(err, data) {
         if (err) {
-            console.error(`Unable to add item: ${item.path}#${item.recipe_id}`, ". Error JSON:", JSON.stringify(err, null, 2));
+            console.error(`Unable to add item: ${item.path}#${item.recipeId}`, ". Error JSON:", JSON.stringify(err, null, 2));
         } else {
-            console.log(`PutItem succeeded: ${item.path}#${item.recipe_id}`);
+            console.log(`PutItem succeeded: ${item.path}#${item.recipeId}`);
         }
       })
    });

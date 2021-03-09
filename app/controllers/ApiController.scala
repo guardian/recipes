@@ -45,7 +45,7 @@ class ApiController (
   def index(id: String) = Action {
     val data: String = """{
     "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
-    "recipe_id": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding_STUB",
+    "recipeId": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding_STUB",
     "recipes_title": "Grilled pepper salad with fresh cucumber and herbs",
     "serves": "Serves 4",
     "time": [
@@ -240,13 +240,13 @@ class ApiController (
     "type": "object",
     "required": [
         "path",
-        "recipe_id"
+        "recipeId"
     ],
     "properties": {
         "path": {
             "type": "string"
         },
-        "recipe_id": {
+        "recipeId": {
             "type": "string"
         },
         "recipes_title": {
@@ -452,7 +452,7 @@ class ApiController (
     }
 
     val key_to_get = MMap("path" -> new AttributeValue("/"+id),
-                          "recipe_id" -> new AttributeValue().withN("1")
+                          "recipeId" -> new AttributeValue().withN("1")
                         ).asJava;
 
     val request: GetItemRequest = new GetItemRequest()
