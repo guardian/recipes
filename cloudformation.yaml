@@ -164,8 +164,8 @@ Resources:
         Statement:
           - Effect: Allow
             Action:
-              - dynamo:*
-            Resource: !Ref RecipesDynamoTable
+              - dynamodb:*
+            Resource: 'arn:aws:dynamodb:eu-west-1:743583969668:table/recipes'
       Roles:
         - !Ref AppRole
 
@@ -329,16 +329,8 @@ Resources:
       KeySchema:
       - AttributeName: path
         KeyType: HASH
+      - AttributeName: recipeId
+        KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      GlobalSecondaryIndexes:
-      - IndexName: recipeId
-        KeySchema:
-        - AttributeName: recipeId
-          KeyType: HASH
-        Projection:
-          ProjectionType: ALL
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
