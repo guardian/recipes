@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import { render } from "react-dom";
-import Curation from "~pages/curation"
-import Home from "~pages/home"
+import Curation from "~pages/curation";
+import Home from "~pages/home";
 
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link,
+  Route
 } from "react-router-dom";
 
 // import { text, background } from "@guardian/src-foundations/palette";
@@ -17,7 +16,7 @@ function App() {
   return (
     <Router>
       <div>
-        <nav>
+        {/* <nav>
           <ul>
             <li>
               <Link to="/">Home</Link>
@@ -26,7 +25,7 @@ function App() {
               <Link to="/curation">Curation</Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}

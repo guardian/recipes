@@ -1,7 +1,9 @@
 /** @jsx jsx */
-import { Component } from "react";
+import { Component, Dispatch } from "react";
 import { jsx } from "@emotion/core";
 import FormItem from "./form-item";
+import { ActionType } from "~components/interfaces";
+import {actions} from "~actions/recipeActions";
 
 
 function formatTitle(text: string|null){
@@ -15,50 +17,32 @@ function formatTitle(text: string|null){
   }
 
 
-  function renderFormGroup(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title?: string, schema: schemaItem, key?: string): React.Component|JSX.Element{
-    // Return FormGroup JSX, this is mainly because TS has an issue with an inline component that can multiple types as input  ¯\_(ツ)_/¯
-    return <FormGroup formItems={fI}  title={title} schema={schema} key={key}></FormGroup>
+export function renderFormGroup(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title: string|null, schema: schemaItem, key?: string, dispatcher?:Dispatch<ActionType>): React.Component|JSX.Element{
+  // Return FormGroup JSX, this is mainly because TS has an issue with an inline component that can have multiple types as input  ¯\_(ツ)_/¯
+  return <FormGroup formItems={fI}  title={title} schema={schema} key_={key} key={key} dispatcher={dispatcher}></FormGroup>
+}
+
+
+function getSchemaType(typ: string|Array<string>): Array<string>{
+  if (Array.isArray(typ)){
+    return typ;
+  } else {
+    return new Array(typ)
   }
+}
 
+function handleAddField(objId: string, schemaItem: schemaItem, dispatcher: Dispatch<ActionType>): void {
+  dispatcher({"type": actions.add,
+              "payload": {"objId": objId},
+              "schemaItem": schemaItem
+            });
+}
 
-  function getSchemaType(typ: string|Array<string>): Array<string>{
-    if (Array.isArray(typ)){
-      return typ;
-    } else {
-      return new Array(typ)
-    }
-  }
-
-// function parseItem(label:string, data: string|Array<Record<string, unknown>>|Record<string, unknown>, parentLabel: int|string|null): Array<Record<string, unknown>> {
-//     // Goes through the tree and parses elements
-//     if (typeof(data)==='string'){
-//       // String means the end of the line, return input field
-//       return makeInputField(label, data, parentLabel); //<input type="text" value={data} readOnly></input>
-//     } else if (data instanceof Array) {
-//       // Array, loop through and create flat array of DOM elements
-//       const itemList: Record<string, unknown> = data.map((item, i) => {return parseItem(label, item, i);})
-//       return Array(itemList.flat()) as Array<Record<string, unknown>>;
-//     } else if (data instanceof Object){
-//       // HashMap, loop through and add keys as name of input field
-//       const keys = Object.keys(data);
-//       return keys.map(k => {
-//         return [formatLabel(k), parseItem(k, data[k], label)]
-//       })
-  
-//     } else {
-//       // No idea what data's type is, print out
-//       console.warn(data)
-//       return null;
-//     }
-//   }
-
-// function createItemsFromObject(obj: Record<string, unknown>){
-//     return (
-//     <p>
-//         <FormItem text={formItems[index]} label={key} key={index}> </FormItem>
-//     </p>
-//     )
-// }
+function handleRemoveField(objId: string, dispatcher: Dispatch<ActionType>): void {
+  dispatcher({"type": actions.delete,
+              "payload": {"objId": objId},
+            });
+}
 
 interface schemaItem {
     type: string;
@@ -67,67 +51,74 @@ interface schemaItem {
     enum?: Array<string>;
   }
   
-  // What's the point of having a fetch-ed schema then?
-  interface schemaType {
-    'properties': {
-    "path": schemaItem;
-    "recipes_title": schemaItem;
-    "serves": schemaItem;
-    "time": schemaItem;
-    "steps": schemaItem;
-    "credit": schemaItem;
-    "ingredients_lists": schemaItem;
-    "occasion": schemaItem;
-    "cuisines": schemaItem;
-    }
+// What's the point of having a fetch-ed schema then?
+interface schemaType {
+  'properties': {
+  "path": schemaItem;
+  "recipes_title": schemaItem;
+  "serves": schemaItem;
+  "time": schemaItem;
+  "steps": schemaItem;
+  "credit": schemaItem;
+  "ingredients_lists": schemaItem;
+  "occasion": schemaItem;
+  "cuisines": schemaItem;
   }
+}
 
 interface FormGroupProps {
     formItems: string | Array<string|Record<string, unknown>> | Record<string, unknown>
     schema: schemaItem
-    title: string|null
+    title: string
+    key_?: string|null
+    dispatcher?: Dispatch<ActionType>|null
   }
   
-  class FormGroup extends Component<FormGroupProps> {
-    constructor(props: FormGroupProps) {
-      super(props);
-    }
-
-    render(): React.Component|JSX.Element {
-        const formItems = this.props.formItems;
-        const schema = this.props.schema;
-        const title = this.props.title || null;
-        const choices = schema.enum || null;
-        if (getSchemaType(schema.type).includes("string") && typeof formItems === "string"){
-          return (
-              <fieldset>
-              <legend>{formatTitle(title)}</legend>
-                <FormItem text={formItems} choices={choices} key={formItems}> </FormItem>
-              </fieldset>
-          )
-        } else if (schema.type === "array" && Array.isArray(formItems)) {
-          const formItemArray = formItems.map( (item:schemaItem) => {
-            return renderFormGroup(item,  null, schema.items, item)
-          })
-
-          return (
-                  <fieldset>
-                  <legend>{formatTitle(title)}</legend>
-                      {formItemArray}
-                  </fieldset>
-                  ) 
-        } else if (schema.type === "object" && typeof formItems === 'object'){
-          // HashMap, loop through and add keys as name of input field
-          const keys = Object.keys(formItems);
-          return ( <fieldset>
-                    <legend>{formatTitle(title)}</legend>
-                  {keys.map(k => {
-                          return renderFormGroup(formItems[k],  k, schema.properties[k])
-                      // }
-                  })}
-                  </fieldset>
-          )
-        }
-    }
+class FormGroup extends Component<FormGroupProps> {
+  constructor(props: FormGroupProps) {
+    super(props);
   }
+
+  render(): React.Component|JSX.Element {
+      const { formItems, schema, title } = this.props;
+      const  choices = schema.enum || null;
+      const key = this.props.key_ || title;
+      const dispatcher = this.props.dispatcher || null;
+      if (getSchemaType(schema.type).includes("string") && typeof formItems === "string"){
+        return (
+            <fieldset key={`${key}.fieldset`}>
+            <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
+              <FormItem text={formItems} choices={choices} label={key} key={`${key}.formItem`} dispatcher={dispatcher}> </FormItem>
+            </fieldset>
+        )
+      } else if (schema.type === "array" && Array.isArray(formItems)) {
+        const formItemArrayRender = formItems.map( (item:schemaItem, i:int) => {
+          return (
+            renderFormGroup(item,  null, schema.items, key+'.'+String(i), dispatcher)
+          )
+        });
+
+        const formItemAddId = `${key}.${formItemArrayRender.length}`;
+        const formItemRemoveLastId = `${key}.${formItemArrayRender.length-1}`; 
+        return (
+                <fieldset key={`${key}.fieldset`}>
+                <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
+                    {formItemArrayRender}
+                <button type="button" id={`${key}.add`} onClick={() => handleAddField(formItemAddId, schema.items, dispatcher)}>+  {key.split('.').slice(-1)[0]}</button>
+                <button type="button" id={`${key}.remove`} onClick={() => handleRemoveField(formItemRemoveLastId, dispatcher)}>-  {key.split('.').slice(-1)[0]}</button>
+                </fieldset>
+                ) 
+      } else if (schema.type === "object" && typeof formItems === 'object'){
+        // HashMap, loop through and add keys as name of input field
+        const keys = Object.keys(formItems);
+        return ( <fieldset key={`${key}.fieldset`}>
+                  <legend key={`${key}.legend`}>{formatTitle(title)}</legend>
+                {keys.map(k => {
+                        return renderFormGroup(formItems[k],  k, schema.properties[k], `${key}.${k}`, dispatcher)
+                })}
+                </fieldset>
+        )
+      }
+  }
+}
 export default FormGroup;

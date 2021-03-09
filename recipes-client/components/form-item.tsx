@@ -1,54 +1,65 @@
 /** @jsx jsx */
-import { Component } from "react";
 import { jsx } from "@emotion/core";
+import {actions} from "~actions/recipeActions";
+import { Dispatch } from "@reduxjs/toolkit";
+import { ActionType } from "~components/interfaces";
+import React = require("react");
 
+function handleChange(event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>, dispatcher: Dispatch<ActionType>): void{
+  const objId = event.target.id;
+  const objVal = event.target.value;
+  dispatcher({"type": actions.change,
+              "payload": {[objId]: objVal}});
+}
 
-function formatTitle(text: string){
-    // Reformat title with first letter uppercase
-    const title = text.replace('_', ' ');
-    return title[0].toUpperCase() + title.slice(1);
-  }
+function handleRemoveField(id:string, dispatcher: Dispatch<ActionType>): void {
+  dispatcher({"type": actions.delete,
+              "payload": {"objId": id} });
+}
 
-function renderInput(text: string, choices?: Array<string>|null){
+function renderInput(text: string, key: string, choices: Array<string>|null, dispatcher?: Dispatch<ActionType>|null, removable?: boolean){
+  const removeId = `${key}`;
   if (choices === null || choices === undefined){
-    return <input css={{ minWidth: "500px" }} type="text" value={text} readOnly></input>
+    console.log(`${text} ${key}`);
+    return ( 
+      <><input css={{ minWidth: "500px" }} type="text" value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}></input>
+        <button type="button" id={removeId} onClick={() => handleRemoveField(removeId, dispatcher)}>-</button></>
+    )
   } else {
-    choices.unshift('null');
+    const choices_ = choices.slice();
+    choices_.unshift('None');
     return (
-    <select css={{ minWidth: "500px" }} value={text}>
-      {choices.map( (item) => {return <option key={item} value={item}>{item}</option>} )}
+    <><select css={{ minWidth: "500px" }} value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}>
+      {choices_.map( (item) => {return <option key={`${key}.${String(item)}`} value={item}>{item}</option>} )}
     </select>
+    <button type="button" id={removeId} onClick={() => handleRemoveField(removeId, dispatcher)}>-</button></>
     )
   }
 }
 
 interface FormItemProps {
-    label: string|null,
+    label: string,
     text: string,
     type: string|null,
     choices: Array<string>|null
-    key: string|number
+    dispatcher?: Dispatch<ActionType>|null
   }
   
-  class FormItem extends Component<FormItemProps> {
-    constructor(props: FormItemProps) {
-      super(props);
-    }
-  
-    render(): React.Component|JSX.Element {
-        const label = this.props.label;
-        const text = this.props.text;
-        const choices = this.props.choices || null;
-        if (label) {
-            return (
-                <p>
-                    <label css={{ marginRight: "10px"}} key={label}>{formatTitle(label)}</label>
-                    {renderInput(text, choices)}
-                </p>
-            )
-        } else {
-            return renderInput(text, choices)
-        }
-    }
-  }
+function FormItem(prop: FormItemProps): JSX.Element{
+  const label = prop.label;
+  const text = prop.text;
+  const choices = prop.choices || null;
+  const dispatch = prop.dispatcher || null;
+
+  // if (label) {
+  //   return (
+  //     <p>
+  //         <label css={{ marginRight: "10px"}} key={label+'.label'}>{formatTitle(label)}</label>
+  //         {renderInput(text, label, choices, dispatch)}
+  //     </p>
+  //   )
+  // } else {
+    return renderInput(text, label, choices, dispatch)
+  // }
+}
 export default FormItem;

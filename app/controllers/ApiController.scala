@@ -22,6 +22,11 @@ class ApiController (
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
+
+  def postId(id: String) = Action { implicit request =>
+      Ok("{Request [" + request + "] for '"+id+"'.")
+  }
+
   def index(id: String) = Action {
     val data: String = """{
     "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
