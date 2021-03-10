@@ -15,7 +15,8 @@ class HomeController (
   override val controllerComponents: ControllerComponents,
   val publicSettings: PublicSettings,
   val config: Config
-) extends BaseController with Logging with PanDomainAuthentication {
+) extends BaseController with Logging {
+  //with PanDomainAuthentication {
   /**
    * Create an Action to render an HTML page with a welcome message.
    * The configuration in the `routes` file means that this method

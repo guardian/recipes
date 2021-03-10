@@ -75,7 +75,6 @@ export interface GuCAPIProps {
   colours?: string[] | null;
 }
 
-
 export function isCurationState(payload: CurationState | AddRemoveItemType): payload is CurationState {
   if((payload as CurationState).isLoading){
     return true
