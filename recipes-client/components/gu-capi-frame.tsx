@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Global, css } from "@emotion/core";
+import { jsx, Global } from "@emotion/core";
 import React from 'react';
 import { HighlightHTML, HighlightPlainText} from "~components/comment-highlighter";
 import { GuCAPIProps, recipeFields} from '~components/interfaces'
@@ -34,6 +34,15 @@ function filterOutKey(dict: Record<string, unknown>, key: string): Record<string
       }, {});
 }
 
+function filterOutKeys(dict: Record<string, unknown>, keys: string[]): Record<string, unknown> { 
+  return Object.keys(dict
+    ).filter(key_ => (!keys.includes(key_))
+    ).reduce((obj, key_) => {
+        obj[key_] = dict[key_];
+        return obj;
+      }, {});
+}
+
 function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
   const {isLoading, recipeItems, html, colours} = props;
   if (isLoading || recipeItems === null){
@@ -49,7 +58,7 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
     const byline = DOMParse(html['fields']['byline'])
     const recipeItemsByline = filterKey((recipeItems as Record<string, unknown>), 'credit') as recipeFields;
     const bylineHighlights = getHighlights(byline, recipeItemsByline);
-    const recipeItemsBody = filterOutKey((recipeItems as Record<string, unknown>), 'credit') as recipeFields;
+    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), ['credit', 'recipeId']) as recipeFields;
     const highlights = getHighlights(doc, recipeItemsBody);
 
     return (

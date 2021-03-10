@@ -6,6 +6,21 @@ import config.Config
 import play.api.Logging
 import play.api.mvc._
 import play.api.libs.json.Json
+
+
+import java.util.Map;
+import scala.collection.immutable.{Map => MMap};
+import scala.jdk.CollectionConverters._
+
+import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.services.dynamodbv2.{AmazonDynamoDB, AmazonDynamoDBClientBuilder}
+import com.amazonaws.auth.AWSCredentialsProvider
+import com.amazonaws.services.dynamodbv2.model.GetItemRequest
+import com.amazonaws.services.dynamodbv2.model.AttributeValue
+import com.amazonaws.services.dynamodbv2.document.ItemUtils
+// import com.amazonaws.services.dynamodbv2.Ama
+//, DynamoDB, Item, ItemCollection, QueryOutcome, Table}
+// import com.amazonaws.services.dynamodbv2.spec.QuerySpec;
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -30,6 +45,7 @@ class ApiController (
   def index(id: String) = Action {
     val data: String = """{
     "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
+    "recipeId": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding_STUB",
     "recipes_title": "Grilled pepper salad with fresh cucumber and herbs",
     "serves": "Serves 4",
     "time": [
@@ -221,121 +237,233 @@ class ApiController (
 
   def schema() = Action {
     val schema: String = """{
-      "type": "object",
-      "required": [],
-      "properties": {
+    "type": "object",
+    "required": [
+        "path",
+        "recipeId"
+    ],
+    "properties": {
         "path": {
-          "type": "string"
+            "type": "string"
+        },
+        "recipeId": {
+            "type": "string"
         },
         "recipes_title": {
-          "type": "string"
+            "type": ["string", "null"]
         },
         "serves": {
-          "type": "string"
+            "type": ["string", "null"]
+        },
+        "image": {
+            "type": ["string", "null"]
         },
         "time": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [],
-            "properties": {
-              "instruction": {
-                "type": "string"
-              },
-              "quantity": {
-                "type": "string"
-              },
-              "unit": {
-                "type": "string"
-              },
-              "text": {
-                "type": "string"
-              }
+            "type": ["array", "null"],
+            "items": {
+                "maxItems": 1,
+                "minItems": 0,
+                "type": ["string", "null"]
             }
-          }
         },
         "steps": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+            "type": ["array", "null"],
+            "items": {
+                "type": "string"
+            }
         },
         "credit": {
-          "type": "string"
+            "type": ["string", "array"]
         },
         "ingredients_lists": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [],
-            "properties": {
-              "title": {
-                "type": "string"
-              },
-              "ingredients": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "required": [],
-                  "properties": {
-                    "text": {
-                      "type": "string"
+            "type": ["array", "null"],
+            "items": {
+                "type": ["object", "null"],
+                "required": [],
+                "properties": {
+                    "title": {
+                        "type": "string"
                     },
-                    "item": {
-                      "type": "string"
-                    },
-                    "unit": {
-                      "type": "string"
-                    },
-                    "comment": {
-                      "type": "string"
-                    },
-                    "quantity": {
-                      "type": "object",
-                      "required": [],
-                      "properties": {
-                        "absolute": {
-                          "type": "string"
-                        },
-                        "from": {
-                          "type": "string"
-                        },
-                        "to": {
-                          "type": "string"
+                    "ingredients": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [],
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                },
+                                "item": {
+                                    "type": "string"
+                                },
+                                "unit": {
+                                    "type": "string"
+                                },
+                                "comment": {
+                                    "type": "string"
+                                },
+                                "quantity": {
+                                    "type": "object",
+                                    "required": [],
+                                    "properties": {
+                                        "absolute": {
+                                            "type": "string"
+                                        },
+                                        "from": {
+                                            "type": "string"
+                                        },
+                                        "to": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
                         }
-                      }                      
                     }
-                  }
                 }
-              }
             }
-          }
         },
         "occasion": {
-          "type": "string"
+          "type": ["string", "null"],
+          "enum": [
+              null,
+              "burns-night",
+              "christmas-food-and-drink",
+              "christmas-food-and-drink-2018",
+              "christmas-food-and-drink-2019",
+              "winter-food-and-drink",
+              "summer-food-and-drink",
+              "spring-food-and-drink",
+              "autumn-food-and-drink"
+          ]
         },
         "cuisines": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [ "italian", "mexican", "southern_us", "indian", "french", "chinese", "thai", "cajun_creole", "japanese", "british", "greek", "spanish", "middleeastern",
-                      "eastern-european", "north-african/moroccan", "vietnamese", "korean", "filipino", "irish", "jamaican", "brazilian", "pan-african", "scandinavian",
-                      "australian", "turkish"]
-          }
+            "type": ["array", "null"],
+            "items": {
+                "minItems": 1,
+                "type": ["string", "null"],
+                "enum": [
+                    null,
+                    "italian",
+                    "mexican",
+                    "southern_us",
+                    "indian",
+                    "french",
+                    "chinese",
+                    "thai",
+                    "cajun_creole",
+                    "japanese",
+                    "british",
+                    "greek",
+                    "spanish",
+                    "middleeastern",
+                    "eastern-european",
+                    "north-african/moroccan",
+                    "vietnamese",
+                    "korean",
+                    "filipino",
+                    "irish",
+                    "jamaican",
+                    "brazilian",
+                    "pan-african",
+                    "scandinavian",
+                    "australian",
+                    "turkish"
+                ]
+            }
         },
         "meal_type": {
-          "type": ["string","null"],
-          "enum": ["starter","main-course","dessert","snacks","breakfast","baking","barbecue","side-dishes","soup"]
+          "type": ["array", "null"],
+          "items": {
+              "type": [
+                  "string",
+                  "null"
+              ],
+              "enum": [
+                  "starter",
+                  "main-course",
+                  "dessert",
+                  "snacks",
+                  "breakfast",
+                  "baking",
+                  "barbecue",
+                  "side-dishes",
+                  "soup"
+              ]
+            }
         },
         "ingredient_tags": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["avocados", "beef","bread","cheese","chicken","chocolate","duck","eggs","fruit","lamb","meat","oysters","pork","potatoes","pumpkin","rice","sausages","seafood","shellfish","tomatoes","wine"]
-          }
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "AVOCADOS",
+                    "BEEF",
+                    "BREAD",
+                    "CHEESE",
+                    "CHICKEN",
+                    "CHOCOLATE",
+                    "DUCK",
+                    "EGGS",
+                    "FRUIT",
+                    "LAMB",
+                    "MEAT",
+                    "OYSTERS",
+                    "PORK",
+                    "POTATOES",
+                    "PUMPKIN",
+                    "RICE",
+                    "SAUSAGES",
+                    "SEAFOOD",
+                    "SHELLFISH",
+                    "TOMATOES",
+                    "WINE"
+                ]
+            }
         }
-      }
-    }"""
+    },
+    "diet_tags": {
+        "type": ["array", "null"],
+        "items": {
+            "type": ["string", "null"],
+            "enum": [
+                "vegetarian",
+                "vegan",
+                "meat"
+            ]
+        }
+    }
+}
+"""
     Ok(Json.parse(schema))
+  }
+
+  def db(id: String) = Action {
+    def isEmpty(x: String) = x == null || x.isEmpty
+    logger.info("%s is null? %s".format(config.dbUrl, isEmpty(config.dbUrl).toString()))
+    val dbClient = config.dbUrl match {
+      case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
+                  .withCredentials(config.awsCredentials)
+                  .build()
+      case _ => AmazonDynamoDBClientBuilder.standard()
+                  .withCredentials(config.awsCredentials)
+                  .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
+                  .build()
+    }
+
+    val key_to_get = MMap("path" -> new AttributeValue("/"+id),
+                          "recipeId" -> new AttributeValue().withN("1")
+                        ).asJava;
+
+    val request: GetItemRequest = new GetItemRequest()
+      .withKey(key_to_get)
+      .withTableName(config.tableName);
+
+    val data = dbClient.getItem(request).getItem();
+    if (data == null) {
+      NotFound("No recipe with path: '%s' and id: '%s'.".format(id, "1"))
+    } else {
+      Ok(Json.parse(ItemUtils.toItem(data).toJSON()));
+    }
   }
 }

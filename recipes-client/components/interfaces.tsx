@@ -30,7 +30,8 @@ export interface recipeFields {
   "ingredients_lists": recipeItem;
 }
 
-export type recipeItem = string 
+export type recipeItem = null
+                      | string 
                       | string[] 
                       | ingredientListFields[]
                       | ingredientField 
@@ -59,13 +60,12 @@ export type timeField = {
 }
 
 export interface ActionType {
-  payload: CurationState|AddRemoveItemType;
+  payload: AppDataState|AddRemoveItemType|ErrorItemType;
   type: string;
 }
 
-export interface AddRemoveItemType {
-  objId: string;
-}
+
+export type ErrorItemType = string;
 
 export interface GuCAPIProps {
   articlePath: string;
@@ -75,15 +75,42 @@ export interface GuCAPIProps {
   colours?: string[] | null;
 }
 
-export function isCurationState(payload: CurationState | AddRemoveItemType): payload is CurationState {
-  if((payload as CurationState).isLoading){
+
+export function isCurationState(payload: keyof typeof ActionType.payload): payload is CurationState {
+  const cs = (payload as CurationState);
+  if (cs.body || cs.schema || cs.html){
     return true
   }
   return false
 }
 
-export interface CurationState {
+export function isLoadingState(payload: keyof typeof ActionType.payload): payload is LoadingState {
+  const ls = (payload as LoadingState);
+  if (ls.isLoading !== undefined){
+    return true
+  }
+  return false
+}
+
+export function isAddRemoveItemType(payload: keyof typeof ActionType.payload): payload is AddRemoveItemType {
+  const p = (payload as AddRemoveItemType);
+  if (p.objId !== undefined){
+    return true
+  }
+  return false
+}
+
+export interface AddRemoveItemType {
+  objId: string;
+}
+
+export type AppDataState = CurationState & LoadingState
+
+export interface LoadingState {
   readonly isLoading: boolean;
+}
+
+export interface CurationState {
   readonly body: allRecipeFields|Record<string, unknown>|null; 
   readonly schema: Record<string, unknown>|null;
   readonly html: Record<string, unknown>|null;

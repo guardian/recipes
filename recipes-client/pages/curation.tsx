@@ -14,8 +14,9 @@ import { RouteComponentProps } from 'react-router-dom';
 import { recipeReducer, defaultState } from "~reducers/recipe-reducer";
 import { actions } from "~actions/recipeActions";
 import {apiURL, capiProxy, schemaEndpoint} from "~consts/index";
-import { useEffect } from "react";
+import { Dispatch, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
+import { ActionType, AddRemoveItemType, AppDataState, ErrorItemType } from "~components/interfaces";
 
 interface CurationProps {
   articleId: string;
@@ -25,34 +26,37 @@ interface RouteParams {
     articleId: string;
 }
 
-function updateColours(){
-  console.log("Update Colours.");
+async function fetchAndDispatch(url: string, action: string, payloadType: string, 
+  dispatcher: Dispatch<ActionType>): Promise<void> {
+  
+  const payload: { [id: string] : AppDataState|AddRemoveItemType|ErrorItemType } = {};
+  return fetch(url).then((response) => {
+    return response.json()
+    }).then((data: Record<string,AppDataState|AddRemoveItemType>|ErrorItemType) => {
+      payload[payloadType] = data;
+      dispatcher({"type": action, "payload": payload });
+    }).catch(() => dispatcher({"type": actions.error, "payload": `Error fetching ${payloadType} data.`}) );
 }
 
+
+function setLoadingFinished(dispatcher: Dispatch<ActionType>): void {
+  dispatcher({"type": actions.init, "payload": {'isLoading': false}})
+}
 
 function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
   const {articleId} = props.match.params;
   const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
 
   useEffect( () => {
-    // Get schema
-    fetch(`${location.origin}${apiURL}${schemaEndpoint}`)
-    .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
-    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {schema: data}}))
-    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching schema data."}) );
-    // Get parsed recipe items
     const articleUrl = articleId.replace(/^\/+/, '');
-    fetch(`${location.origin}${apiURL}${articleUrl}`)
-    .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
-    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {isLoading: true, body: data}}))
-    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching recipe data."}) );
-    // Get article content
-    fetch(`${location.origin}${capiProxy}${articleUrl}`)
-    .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
-    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {isLoading: false, html: data}}))
-    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching HTML body data."}) );
-    // Set default colours
-    dispatch({"type": actions.changeColours, "payload": {colours: defaultHighlightColours}});
+    Promise.all([
+    // Get schema
+      fetchAndDispatch(`${location.origin}${apiURL}${schemaEndpoint}`, actions.init, "schema", dispatch),
+      // Get parsed recipe items
+      fetchAndDispatch(`${location.origin}/api/db/${articleUrl}`, actions.init, "body", dispatch),
+      // Get article content
+      fetchAndDispatch(`${location.origin}${capiProxy}${articleUrl}`, actions.init, "html", dispatch)
+    ]).then( () => setLoadingFinished(dispatch) ).catch((err) => {console.error(err);});
   }, [articleId, dispatch]);
 
   return (

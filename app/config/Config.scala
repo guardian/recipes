@@ -19,6 +19,7 @@ class Config(playConfig: Configuration) extends Logging {
 
   lazy val stack: String = playConfig.get[String]("stack")
   lazy val app: String = playConfig.get[String]("app")
+  lazy val tableName: String = playConfig.get[String]("tableName")
 
   final lazy val stage: Stage = {
     val stageFilePath: String = "/etc/gu/stage"
@@ -59,6 +60,9 @@ class Config(playConfig: Configuration) extends Logging {
   }
   // logger.info(config.toString())
   final lazy val capiApiKey: String =  config.getString("capiKey")
-
+  lazy val dbUrl = stage match {
+    case Dev => config.getString("dbUrl")
+    case _ => null
+  }
   val domainConfig: DomainConfig = DomainConfig(stage)
 }
