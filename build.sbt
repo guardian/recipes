@@ -37,6 +37,9 @@ lazy val root = (project in file("."))
       BuildInfoOption.ToJson
     ),
 
+    resolvers ++= Seq(
+      "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
+    ),
     libraryDependencies ++= Seq(
       ws,
       "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
@@ -51,6 +54,7 @@ lazy val root = (project in file("."))
       "com.gu" % "kinesis-logback-appender" % "1.4.4",
       "com.gu" %% "pan-domain-auth-verification" % "1.0.4",
       "com.amazonaws" % "aws-java-sdk-s3" % awsSdkVersion,
+      "com.gu" %% "simple-configuration-s3" % "1.5.2"
     ),
     scalacOptions ++= List(
       "-encoding", "utf8",

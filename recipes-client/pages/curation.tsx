@@ -3,6 +3,7 @@ import { jsx } from "@emotion/core";
 
 import RecipeComponent from "~components/recipe-component";
 import GuFrame from "~/components/gu-frame";
+import GuCAPIFrame from "~/components/gu-capi-frame";
 import Footer from "~components/footer";
 import Header from "~components/header";
 
@@ -12,7 +13,7 @@ import { RouteComponentProps } from 'react-router-dom';
 
 import { recipeReducer, defaultState } from "~reducers/recipe-reducer";
 import { actions } from "~actions/recipeActions";
-import {apiURL, schemaEndpoint} from "~consts/index";
+import {apiURL, capiProxy, schemaEndpoint} from "~consts/index";
 import { useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 
@@ -20,11 +21,12 @@ interface CurationProps {
   articleId: string;
 }
 
-interface CurationState {
-  isLoading: boolean;
-  body: Record<string, unknown>|null; 
-  schema: Record<string, unknown>|null;
-}
+// interface CurationState {
+//   isLoading: boolean;
+//   body: Record<string, unknown>|null; 
+//   schema: Record<string, unknown>|null;
+//   html: Record<string, unknown>|null;
+// }
 
 interface RouteParams {
     articleId: string;
@@ -36,15 +38,22 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
   const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
 
   useEffect( () => {
+    // Get schema
     fetch(`${location.origin}${apiURL}${schemaEndpoint}`)
     .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
     .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {schema: data}}))
     .catch(() => dispatch({"type": actions.error, "payload": "Error fetching schema data."}) );
+    // Get parsed recipe items
     const articleUrl = articleId.replace(/^\/+/, '');
     fetch(`${location.origin}${apiURL}${articleUrl}`)
     .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
-    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {isLoading: false, body: data}}))
-    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching body data."}) );
+    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {isLoading: true, body: data}}))
+    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching recipe data."}) );
+    // Get article content
+    fetch(`${location.origin}${capiProxy}${articleUrl}`)
+    .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
+    .then((data: Record<string,unknown>) => dispatch({"type": actions.init, "payload": {isLoading: false, html: data}}))
+    .catch(() => dispatch({"type": actions.error, "payload": "Error fetching HTML body data."}) );
   }, [articleId, dispatch]);
 
   return (
@@ -61,8 +70,9 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
       <div css={{ gridArea: "header", background: "red", justifyItems: "center", display: "grid", align: "center" }}>
         <Header recipeUrl={articlePath}/>
       </div>
-      <div css={{ gridArea: "left", background: "blue", overflow: "auto" }}>
-          <GuFrame articlePath={articlePath} />
+      <div css={{ gridArea: "left", background: "white", overflow: "auto" }}>
+          {/* <GuFrame articlePath={articlePath} /> */}
+          <GuCAPIFrame articlePath={articlePath} isLoading={state.isLoading} html={state.html}/>
       </div>
       <div css={{ gridArea: "right", background: "grey", overflow: "auto" }}>
         <form>

@@ -18,4 +18,6 @@ GET     /robots.txt                 controllers.ManagementController.disallowRob
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 GET     /proxy/*path                controllers.ProxyController.get(path)
+GET     /api/capi/*id               controllers.ProxyController.getCAPI(id)
 GET     /*path                      controllers.ProxyController.redirectRelative(path)
+

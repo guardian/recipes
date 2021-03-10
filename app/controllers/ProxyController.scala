@@ -6,6 +6,7 @@ import config.Config
 import play.api.Logging
 import play.api.http.HttpVerbs
 import play.api.libs.ws.WSClient
+import play.api.libs.json.Json
 import play.api.mvc.{BaseController, ControllerComponents}
 import proxy.{ProxyResponse, ProxyResult}
 
@@ -44,5 +45,33 @@ class ProxyController(
 
   private def handleResponse: PartialFunction[ProxyResponse, Future[ProxyResult]] = {
     case response => Future.successful(ProxyResult(response))
+  }
+
+  def getCAPI(id: String) = Action.async { implicit request =>
+    val destination = "https://content.guardianapis.com/%s?show-fields=body&show-elements=image&api-key=%s".format(id, config.capiApiKey)
+    logger.info(destination)
+    wsClient.url(destination)
+      .withMethod(HttpVerbs.GET)
+      .withHttpHeaders(USER_AGENT -> s"gu-recipes-${config.stage}")
+      .withRequestTimeout(TIMEOUT)
+      .stream()
+      .map {
+        resp => {
+          val responses = Json.parse(resp.body)
+          val isok = (responses \ "response" \ "status").as[String]
+          if (isok == "ok") {
+            val numResults = (responses \ "response" \ "total").as[Int]
+
+            if (numResults < 1) {
+              NotFound("No CAPI responses for: %s.".format(id))
+            } else {
+              Ok((responses \ "response" \ "content").get )
+            }
+          } else {
+            val msg = (responses \ "response" \ "message").get
+            InternalServerError("CAPI returned error: %s".format(msg))
+          }
+        }
+      }
   }
 }
