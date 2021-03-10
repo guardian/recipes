@@ -4,6 +4,7 @@ import { jsx } from "@emotion/core";
 import RecipeComponent from "~components/recipe-component";
 // import GuFrame from "~/components/gu-frame";
 import GuCAPIFrame from "~/components/gu-capi-frame";
+import ImagePicker from "~components/image-picker";
 import Footer from "~components/footer";
 import Header from "~components/header";
 
@@ -38,7 +39,6 @@ async function fetchAndDispatch(url: string, action: string, payloadType: string
     }).catch(() => dispatcher({"type": actions.error, "payload": `Error fetching ${payloadType} data.`}) );
 }
 
-
 function setLoadingFinished(dispatcher: Dispatch<ActionType>): void {
   dispatcher({"type": actions.init, "payload": {'isLoading': false}})
 }
@@ -46,6 +46,7 @@ function setLoadingFinished(dispatcher: Dispatch<ActionType>): void {
 function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
   const {articleId} = props.match.params;
   const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
+  const image = (state.body === null) ? null : state.body.image;
 
   useEffect( () => {
     const articleUrl = articleId.replace(/^\/+/, '');
@@ -75,9 +76,10 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
       </div>
       <div css={{ gridArea: "left", background: "white", overflow: "auto", padding: "5px" }}>
           {/* <GuFrame articlePath={articlePath} /> */}
-          <GuCAPIFrame articlePath={articlePath} isLoading={state.isLoading} html={state.html} recipeItems={state.body} colours={state.colours}x />
+          <GuCAPIFrame articlePath={articlePath} isLoading={state.isLoading} html={state.html} recipeItems={state.body} colours={state.colours} />
       </div>
-      <div css={{ gridArea: "right", background: "grey", overflow: "auto" }}>
+      <div css={{ gridArea: "right", background: "grey", overflow: "auto", padding: "5px" }}>
+        <ImagePicker html={state.html} selected={image} isLoading={state.isLoading} dispatcher={dispatch} />
         <form>
           <RecipeComponent isLoading={state.isLoading} body={state.body} schema={state.schema} dispatcher={dispatch}/>
         </form>

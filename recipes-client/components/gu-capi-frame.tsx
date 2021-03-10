@@ -5,7 +5,7 @@ import { HighlightHTML, HighlightPlainText} from "~components/comment-highlighte
 import { GuCAPIProps, recipeFields} from '~components/interfaces'
 import { getHighlights, DOMParse } from "~utils/html-parsing";
 import {defaultHighlightColours} from "~consts/index";
-
+import {filterKeys, filterOutKeys} from "~utils/filter";
 
 function onHighlightMount(id: string, top: number, elem: HTMLElement): void {
   console.debug(`${id} highlight mount.`)
@@ -15,33 +15,6 @@ function onHighlightMount(id: string, top: number, elem: HTMLElement): void {
 function focusComment(id: string): void {
   console.log(`${id} focussed.`)
 };
-
-function filterKey(dict: Record<string, unknown>, key: string): Record<string, unknown> { 
-  return Object.keys(dict
-    ).filter(key_ => (key_ === key)
-    ).reduce((obj, key_) => {
-        obj[key_] = dict[key_];
-        return obj;
-      }, {});
-}
-
-function filterOutKey(dict: Record<string, unknown>, key: string): Record<string, unknown> { 
-  return Object.keys(dict
-    ).filter(key_ => (key_ !== key)
-    ).reduce((obj, key_) => {
-        obj[key_] = dict[key_];
-        return obj;
-      }, {});
-}
-
-function filterOutKeys(dict: Record<string, unknown>, keys: string[]): Record<string, unknown> { 
-  return Object.keys(dict
-    ).filter(key_ => (!keys.includes(key_))
-    ).reduce((obj, key_) => {
-        obj[key_] = dict[key_];
-        return obj;
-      }, {});
-}
 
 function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
   const {isLoading, recipeItems, html, colours} = props;
@@ -56,9 +29,9 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
 
     const doc = DOMParse(html['fields']['body'])
     const byline = DOMParse(html['fields']['byline'])
-    const recipeItemsByline = filterKey((recipeItems as Record<string, unknown>), 'credit') as recipeFields;
+    const recipeItemsByline = filterKeys((recipeItems as Record<string, unknown>), ['credit']) as recipeFields;
     const bylineHighlights = getHighlights(byline, recipeItemsByline);
-    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), ['credit', 'recipeId']) as recipeFields;
+    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), ['credit', 'recipeId', 'image']) as recipeFields;
     const highlights = getHighlights(doc, recipeItemsBody);
 
     return (

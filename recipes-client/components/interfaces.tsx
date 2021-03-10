@@ -13,7 +13,7 @@ export interface schemaType {
     }
 }
 
-interface allRecipeFields extends recipeMetaFields, recipeFields {};
+export interface allRecipeFields extends recipeMetaFields, recipeFields {};
 
 export interface recipeMetaFields {
   "path": schemaItem;
@@ -28,6 +28,7 @@ export interface recipeFields {
   "steps": recipeItem;
   "credit": recipeItem;
   "ingredients_lists": recipeItem;
+  "image": string|null;
 }
 
 export type recipeItem = null

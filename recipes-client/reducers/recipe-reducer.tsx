@@ -12,7 +12,7 @@ export const defaultState: AppDataState = {
     colours: null
 };
   
-function updateStateItem(obj: Record<string, unknown>, keyPath: Array<string>, value: string|number): void {
+function updateStateItem(obj: Record<string, unknown>, keyPath: Array<string>, value: string|number|AppDataState): void {
   const lastKeyIndex = keyPath.length-1;
   for (let i = 0; i < lastKeyIndex; ++ i) {
     const key = keyPath[i];
@@ -155,12 +155,16 @@ export const recipeReducer = produce((draft: AppDataState|AddRemoveItemType|Erro
         }
         break;
       }
+      case actions.selectImg: {
+        updateStateItem(draft.body, ["image"], action.payload)
+        break;
+      }
       case actions.error: {
         alert(action.payload);
         break
       }
       default: {
-        throw new Error();
+        throw new Error(action.payload as string);
       }
     }
 }, {})

@@ -8,5 +8,8 @@ export const actions = {
     reset: 'reset',
     save: 'save',
     error: 'error',
-    changeColours: 'changeColours'
+    fetchSuccess: 'fetchSuccess',
+    fetchFail: 'fetchFail',
+    changeColours: 'changeColours',
+    selectImg: 'selectImg'
   };

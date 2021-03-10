@@ -230,7 +230,8 @@ class ApiController (
       "fruit",
       "cheese",
       "seafood"
-    ]
+    ],
+    "image": "https://media.guim.co.uk/5eb266e966f8aa7c74f449804d13ee3b57eb81d6/1_0_3356_3355/1000.jpg"
   }"""
     Ok(Json.parse(data))
   }

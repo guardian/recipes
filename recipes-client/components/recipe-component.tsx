@@ -2,18 +2,17 @@
 import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
 // import FormGroup from "~components/form-group";
-import { ActionType, schemaType} from "~components/interfaces";
-import { renderFormGroup } from "~components/form-group"
+import { ActionType, schemaType, allRecipeFields} from "~components/interfaces";
+import { renderFormGroup } from "~components/form-group";
+import filter from "lodash-es/filter";
 
-// function renderFGO(fI: Array<string|Record<string, unknown>> | Record<string, unknown>, title: string, schema: schemaItem, key_:number, dispatcher: Dispatch<ActionType>){
-//   return <FormGroup formItems={fI} title={title} schema={schema} key={key_} dispatcher={dispatcher}></FormGroup>
-// }
+import {excludeInForm} from '~consts/index';
 
 interface RecipeComponentProps {
-  body: Record<string, unknown>|null
-  schema: schemaType
-  isLoading: boolean
-  dispatcher: Dispatch<ActionType>
+  body: allRecipeFields;
+  schema: schemaType;
+  isLoading: boolean;
+  dispatcher: Dispatch<ActionType>;
 }
 
 function RecipeComponent(props: RecipeComponentProps): JSX.Element|JSX.Element[]{
@@ -23,11 +22,12 @@ function RecipeComponent(props: RecipeComponentProps): JSX.Element|JSX.Element[]
     return <h3> No schema loaded... </h3>
   } else if (isLoading){
     return <h3> LOADING... </h3>
-  } else if (body === undefined){
+  } else if (body === undefined || body === null){
     return <h3> No bodayyyyy</h3>
   } else {
     return (
-        Object.entries(body).map( (k: ArrayLike<Record<string, unknown>>) => {
+      filter(Object.entries(body), (item) => {return !excludeInForm.includes(item[0]);}
+      ).map( (k: ArrayLike<Record<string, unknown>>) => {
           return renderFormGroup(k[1], k[0], schema.properties[k[0]], k[0], dispatcher)
         })
     )
