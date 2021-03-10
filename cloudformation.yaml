@@ -343,7 +343,7 @@ Resources:
       AttributeDefinitions:
       - AttributeName: path
         AttributeType: S
-      - AttributeName: recipe_id
+      - AttributeName: recipeId
         AttributeType: N
       KeySchema:
       - AttributeName: path

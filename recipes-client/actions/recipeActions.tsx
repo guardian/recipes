@@ -8,6 +8,5 @@ export const actions = {
     reset: 'reset',
     save: 'save',
     error: 'error',
-
     changeColours: 'changeColours'
   };
