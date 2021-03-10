@@ -30,18 +30,20 @@ class ApiController (
   def index(id: String) = Action {
     val data: String = """{
     "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
-    "recipes_title": "Grilled pepper salad with fresh cucumber and herbs.",
-    "serves": "Serves 4.",
+    "recipes_title": "Grilled pepper salad with fresh cucumber and herbs",
+    "serves": "Serves 4",
     "time": [
       {
       "instruction": "Prep",
       "quantity": "20",
-      "unit": "min"
+      "unit": "min",
+      "text": "Prep 20 min"
       },
       {
         "instruction": "Cook",
         "quantity": "40",
-        "unit": "min"
+        "unit": "min",
+        "text": "Cook 40 min"
       }
     ],
     "steps": [
@@ -56,7 +58,7 @@ class ApiController (
     "ingredients_lists": [{
       "title": "",
       "ingredients": [{
-          "text": "4 green peppers, stems removed, deseeded and flesh cut into roughly 3 cm pieces.",
+          "text": "4 green peppers, stems removed, deseeded and flesh cut into roughly 3 cm pieces",
           "item": "green peppers",
           "unit": "",
           "comment": "stems removed deseeded and flesh cut into roughly 3 cm pieces",
@@ -67,7 +69,7 @@ class ApiController (
           }
         },
         {
-          "text": "2 red peppers, stems removed, deseeded and flesh cut into roughly 3 cm pieces.",
+          "text": "2 red peppers, stems removed, deseeded and flesh cut into roughly 3 cm pieces",
           "item": "red peppers",
           "unit": "",
           "comment": "stems removed deseeded and flesh cut into roughly 3 cm pieces",
@@ -78,7 +80,7 @@ class ApiController (
           }
         },
         {
-          "text": "4 medium vine tomatoes (400 g), each cut into 4 wedges.",
+          "text": "4 medium vine tomatoes (400 g), each cut into 4 wedges",
           "item": "medium vine tomatoes",
           "unit": "",
           "comment": "400 g each cut into  wedges",
@@ -89,7 +91,7 @@ class ApiController (
           }
         },
         {
-          "text": "2 small red onions, peeled and cut into roughly 3 cm pieces.",
+          "text": "2 small red onions, peeled and cut into roughly 3 cm pieces",
           "item": "small red onions",
           "unit": "",
           "comment": "peeled and cut into roughly 3 cm pieces",
@@ -100,7 +102,7 @@ class ApiController (
           }
         },
         {
-          "text": "1 green chilli, roughly sliced, seeds and all.",
+          "text": "1 green chilli, roughly sliced, seeds and all",
           "item": "green chilli",
           "unit": "",
           "comment": "roughly sliced seeds and all",
@@ -111,7 +113,7 @@ class ApiController (
           }
         },
         {
-          "text": "6 large garlic cloves, peeled.",
+          "text": "6 large garlic cloves, peeled",
           "item": "garlic",
           "unit": "cloves",
           "comment": "large   peeled",
@@ -122,7 +124,7 @@ class ApiController (
           }
         },
         {
-          "text": "90 ml olive oil.",
+          "text": "90 ml olive oil",
           "item": "olive oil",
           "unit": "ml",
           "comment": "",
@@ -133,7 +135,7 @@ class ApiController (
           }
         },
         {
-          "text": "Salt and black pepper.",
+          "text": "Salt and black pepper",
           "item": "black pepper",
           "unit": "",
           "comment": "Salt and",
@@ -144,7 +146,7 @@ class ApiController (
           }
         },
         {
-          "text": "1\\u00bd tbsp lemon juice.",
+          "text": "1\\u00bd tbsp lemon juice",
           "item": "lemon juice",
           "unit": "tbsp",
           "comment": "",
@@ -155,7 +157,7 @@ class ApiController (
           }
         },
         {
-          "text": "10 g parsley leaves, roughly chopped.",
+          "text": "10 g parsley leaves, roughly chopped",
           "item": "parsley leaves",
           "unit": "g",
           "comment": "roughly chopped",
@@ -166,7 +168,7 @@ class ApiController (
           }
         },
         {
-          "text": "10 g coriander leaves, roughly chopped.",
+          "text": "10 g coriander leaves, roughly chopped",
           "item": "coriander leaves",
           "unit": "g",
           "comment": "roughly chopped",
@@ -177,7 +179,7 @@ class ApiController (
           }
         },
         {
-          "text": "1 cucumber, peeled, deseeded and cut into 1 cm cubes.",
+          "text": "1 cucumber, peeled, deseeded and cut into 1 cm cubes",
           "item": "cucumber",
           "unit": "",
           "comment": "peeled deseeded and cut into  cm cubes",
@@ -188,7 +190,7 @@ class ApiController (
           }
         },
         {
-          "text": "\\u00be tsp urfa chilli.",
+          "text": "\\u00be tsp urfa chilli",
           "item": "urfa chilli",
           "unit": "tsp",
           "comment": "",
@@ -244,6 +246,9 @@ class ApiController (
                 "type": "string"
               },
               "unit": {
+                "type": "string"
+              },
+              "text": {
                 "type": "string"
               }
             }

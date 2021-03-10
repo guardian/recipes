@@ -2,11 +2,13 @@
 import {actions} from "~/actions/recipeActions";
 import produce from "immer";
 import { ActionType, CurationState, schemaItem, isCurationState } from "~components/interfaces";
+import { defaultHighlightColours } from "~consts";
 
 export const defaultState: CurationState = {
     isLoading: true, 
     body: null, 
-    schema: null 
+    schema: null,
+    colours: null
 };
   
 function updateBodyItem(obj: Record<string, unknown>, keyPath: Array<string>, value: string|number): void {
@@ -120,10 +122,7 @@ export const recipeReducer = produce((draft: CurationState, action: ActionType) 
       case actions.delete: {
         if (!isCurationState(action.payload)){
           const keyPathArr = action.payload["objId"].split(".")
-          deleteBodyItem(keyPathArr, draft.body);
-          // draft.body[keyPathArr[0]].splice(keyPathArr[-1]],1)
-          // draft.filter(item => item.body.key !== action.payload["objId"]);
-          //draft.splice( draft.findIndex(item => item.body.key === keyPathArr[0]), keyPathArr[-1]);          
+          deleteBodyItem(keyPathArr, draft.body);        
         }
         break;
       }
@@ -133,6 +132,22 @@ export const recipeReducer = produce((draft: CurationState, action: ActionType) 
             const value = getSchemaItem(action.schemaItem)
             updateBodyItem(draft.body, keyPathArr, value)
           }
+        break;
+      }
+      case actions.changeColours: {
+        if (isCurationState(action.payload)){
+          const colours = (action.payload.colours !== null) ? action.payload.colours : defaultHighlightColours;
+          // let colourMap = null;
+          // if (colours === null) {
+          //   colourMap = Object.keys(recipeItems).reduce((acc, key, i) => {
+          //     acc[key] = cols[i % cols.length];
+          //     return acc
+          //   }, {})
+          // } else {
+            
+          // }
+          initStateItem(draft, "colours", colours);
+        }
         break;
       }
       case actions.error: {

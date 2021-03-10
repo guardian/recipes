@@ -23,8 +23,9 @@ class HomeController (
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index(id: String) = Action { //ApiAuthAction {
-    logger.info("hello there")
+  def index(id: String) = ApiAuthAction {
+    logger.info(s"Hello there, using api key: ${config.capiApiKey.slice(0,5)}...")
+
     Ok(views.html.index())
   }
 }

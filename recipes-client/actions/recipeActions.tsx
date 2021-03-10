@@ -7,5 +7,8 @@ export const actions = {
     add: 'add',
     reset: 'reset',
     save: 'save',
-    error: 'error'
+    error: 'error',
+    fetchSuccess: 'fetchSuccess',
+    fetchFail: 'fetchFail',
+    changeColours: 'changeColours'
   };

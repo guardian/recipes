@@ -10,7 +10,6 @@ import { renderFormGroup } from "~components/form-group"
 // }
 
 interface RecipeComponentProps {
-  articleId: string
   body: Record<string, unknown>|null
   schema: schemaType
   isLoading: boolean
@@ -18,7 +17,7 @@ interface RecipeComponentProps {
 }
 
 function RecipeComponent(props: RecipeComponentProps): JSX.Element|JSX.Element[]{
-  const { body, isLoading, schema, articleId, dispatcher } = props;
+  const { body, isLoading, schema, dispatcher } = props;
 
   if (schema === null){
     return <h3> No schema loaded... </h3>
