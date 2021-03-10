@@ -34,6 +34,10 @@ Parameters:
     Description: Name of the ELK logging stream in this account
     Type: AWS::SSM::Parameter::Value<String>
     Default: /account/services/logging.stream
+  RecipesTable:
+    Description: Name of table to store recipes in.
+    Type: String
+    Default: recipes
 
 Mappings:
   StageVariables:
@@ -167,6 +171,20 @@ Resources:
               - kinesis:DescribeStream
               - kinesis:PutRecord
             Resource: !Ref KinesisLoggingStream
+      Roles:
+        - !Ref AppRole
+
+  DynamoAccessPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: DynamoAccessPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:*
+            Resource: !Sub arn:aws:dynamodb:eu-west-1:743583969668:table/${RecipesTable}
       Roles:
         - !Ref AppRole
 
@@ -317,3 +335,21 @@ Resources:
           Value: !Ref Stack
         - Key: App
           Value: !Ref App
+
+  RecipesDynamoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref RecipesTable
+      AttributeDefinitions:
+      - AttributeName: path
+        AttributeType: S
+      - AttributeName: recipeId
+        AttributeType: N
+      KeySchema:
+      - AttributeName: path
+        KeyType: HASH
+      - AttributeName: recipeId
+        KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

@@ -9,6 +9,11 @@ export function DOMParse(html: string): HTMLElement {
   }
 
 
+// type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
+// function ObjectEntries<T extends object>(t: T): Entries<T>[] {
+//   return Object.entries(t) as any;
+// }
+
 export function getHighlights(doc: HTMLElement, recipeItems: recipeFields): Highlight[][]{
   /* Create array of Highlight objects from 'doc' given 'recipeItems' */
   const allHighlights = Object.entries(recipeItems).map( (k: [string, recipeItem]) => {
@@ -33,8 +38,11 @@ export function getHighlights(doc: HTMLElement, recipeItems: recipeFields): High
 
 
 function isIngredientFieldsArray(arg: Array<string|ingredientListFields|ingredientField|timeField>): arg is ingredientListFields[] {
-  if (typeof arg[0] === "string"){ return false; }
-  return 'ingredients' in arg[0];
+  if (typeof arg[0] === "string" || arg.length === 0  || arg[0] === null){ 
+    return false; 
+  } else {
+    return 'ingredients' in arg[0];
+  }
 }
 
 
@@ -50,6 +58,8 @@ export function getTextfromRecipeItem(item: recipeItem): string[] {
   if (typeof(item) === 'string'){
     // Plain string, wrap up as array
     return [item];
+  } else if (item === null){
+    return [''];
   } else if (item instanceof Array) {
     if (isStringArray(item)) {
       // String array, return as is
@@ -77,6 +87,8 @@ export function findTextinHTML(text: string, html: HTMLElement): ResourceRange[]
       return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
     }
 
+    const results: ResourceRange[] = [];
+    if (text === ""){ return results; } // Safe-guard for empty strings
     const words: string[] = escapeRegExp(
       // Split into words
       text.trim()).split(/[\\.,:;-]{0,1}\s/).map(w => {
@@ -88,7 +100,6 @@ export function findTextinHTML(text: string, html: HTMLElement): ResourceRange[]
     });
 
     const regex = new RegExp(`((?!<br>)(<\\w+>\\W?)?${words.join("(?:\\W?<\\/?\\w+.*?>)?\\W*?")}(\\W?<\\/\\w+.*?>){0,2})`, 'gm')
-    const results: ResourceRange[] = [];
     
     Array.from(html.childNodes).forEach((el, indx) => {
       const htmlEl  = (el as HTMLElement);

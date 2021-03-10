@@ -9,3 +9,5 @@ target
 /.cache
 /public/recipes-client
 logs
+.metals/
+.bloop/

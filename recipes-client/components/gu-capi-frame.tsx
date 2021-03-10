@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Global, css } from "@emotion/core";
+import { jsx, Global } from "@emotion/core";
 import React from 'react';
 import { HighlightHTML, HighlightPlainText} from "~components/comment-highlighter";
 import { GuCAPIProps, recipeFields} from '~components/interfaces'
@@ -31,7 +31,7 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
     const byline = DOMParse(html['fields']['byline'])
     const recipeItemsByline = filterKeys((recipeItems as Record<string, unknown>), ['credit']) as recipeFields;
     const bylineHighlights = getHighlights(byline, recipeItemsByline);
-    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), ['credit', 'image']) as recipeFields;
+    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), ['credit', 'recipeId', 'image']) as recipeFields;
     const highlights = getHighlights(doc, recipeItemsBody);
 
     return (
