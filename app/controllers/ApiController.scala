@@ -18,6 +18,17 @@ import com.amazonaws.auth.AWSCredentialsProvider
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.amazonaws.services.dynamodbv2.document.ItemUtils
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest
+import play.api.libs.json.JsPath
+import java.util.ArrayList
+import com.amazonaws.services.dynamodbv2.document.Item
+// import com.amazonaws.services.dynamodbv2.datamodeling.DomainObject;
 // import com.amazonaws.services.dynamodbv2.Ama
 //, DynamoDB, Item, ItemCollection, QueryOutcome, Table}
 // import com.amazonaws.services.dynamodbv2.spec.QuerySpec;
@@ -37,6 +48,11 @@ class ApiController (
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
+
+  // Utility functions
+  def isEmpty(x: String) = x == null || x.isEmpty
+
+  // Endpoint functions
 
   def postId(id: String) = Action { implicit request =>
       Ok("{Request [" + request + "] for '"+id+"'.")
@@ -440,8 +456,6 @@ class ApiController (
   }
 
   def db(id: String) = Action {
-    def isEmpty(x: String) = x == null || x.isEmpty
-    logger.info("%s is null? %s".format(config.dbUrl, isEmpty(config.dbUrl).toString()))
     val dbClient = config.dbUrl match {
       case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
                   .withCredentials(config.awsCredentials)
@@ -452,8 +466,8 @@ class ApiController (
                   .build()
     }
 
-    val key_to_get = MMap("path" -> new AttributeValue("/"+id),
-                          "recipeId" -> new AttributeValue().withN("1")
+    val key_to_get = MMap(config.hashKey -> new AttributeValue("/"+id),
+                          config.rangeKey -> new AttributeValue().withN("1")
                         ).asJava;
 
     val request: GetItemRequest = new GetItemRequest()
@@ -462,9 +476,46 @@ class ApiController (
 
     val data = dbClient.getItem(request).getItem();
     if (data == null) {
-      NotFound("No recipe with path: '%s' and id: '%s'.".format(id, "1"))
+      NotFound("No recipe with %s: '%s' and id: '%s'.".format(config.hashKey, id, "1"))
     } else {
       Ok(Json.parse(ItemUtils.toItem(data).toJSON()));
+    }
+  }
+
+  def list(id: String) = Action {
+    // List all recipes available for `path`
+    val dbClient = config.dbUrl match {
+      case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
+                  .withCredentials(config.awsCredentials)
+                  .build()
+      case _ => AmazonDynamoDBClientBuilder.standard()
+                  .withCredentials(config.awsCredentials)
+                  .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
+                  .build()
+    }
+    val partition_alias = "#p";
+    val range_alias = ":r";
+    val recipes_key = MMap(partition_alias -> config.hashKey).asJava;
+    val recipes_to_get = MMap(":"+config.hashKey -> new AttributeValue("/"+id)).asJava;
+
+    val queryExpression = new QueryRequest()
+      .withTableName(config.tableName)
+      .withKeyConditionExpression(partition_alias+ " = :path")
+      .withExpressionAttributeNames(recipes_key)
+      .withExpressionAttributeValues(recipes_to_get)
+
+    val recipeResult = dbClient.query(queryExpression)
+    println(recipeResult.getCount())
+
+    if (recipeResult == null) {
+      NotFound("No recipe with %s: '%s'.".format(config.hashKey, id))
+    } else {
+      val data = ItemUtils.toItemList(recipeResult.getItems()).asScala
+
+      val response = Json.toJson(data.map(
+        i => Json.parse(i.toJSON())
+      ))
+      Ok(response);
     }
   }
 }
