@@ -28,10 +28,8 @@ import com.amazonaws.services.dynamodbv2.model.QueryRequest
 import play.api.libs.json.JsPath
 import java.util.ArrayList
 import com.amazonaws.services.dynamodbv2.document.Item
-// import com.amazonaws.services.dynamodbv2.datamodeling.DomainObject;
-// import com.amazonaws.services.dynamodbv2.Ama
-//, DynamoDB, Item, ItemCollection, QueryOutcome, Table}
-// import com.amazonaws.services.dynamodbv2.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest
+import com.amazonaws.services.dynamodbv2.model.ScanResult
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -52,8 +50,18 @@ class ApiController (
   // Utility functions
   def isEmpty(x: String) = x == null || x.isEmpty
 
-  // Endpoint functions
+  def getPathRecipeId(x: String): (String, String) = {
+    // Attempt to split input into `path`_`id`
+    // If it fails, `id` is set to 1 and `path` is unchanged
+    // Returns path, id [string, number]
+    val pathMatch = "(.*)_(\\d+)$".r
+    x match {
+        case pathMatch(first, second) => return (first, second)
+        case _ => return (x, "1")
+    }
+  }
 
+  // Endpoint functions
   def postId(id: String) = Action { implicit request =>
       Ok("{Request [" + request + "] for '"+id+"'.")
   }
@@ -456,6 +464,8 @@ class ApiController (
   }
 
   def db(id: String) = Action {
+    val (path, recipId) = getPathRecipeId(id);
+
     val dbClient = config.dbUrl match {
       case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
                   .withCredentials(config.awsCredentials)
@@ -466,8 +476,8 @@ class ApiController (
                   .build()
     }
 
-    val key_to_get = MMap(config.hashKey -> new AttributeValue("/"+id),
-                          config.rangeKey -> new AttributeValue().withN("1")
+    val key_to_get = MMap(config.hashKey -> new AttributeValue("/"+path),
+                          config.rangeKey -> new AttributeValue().withN(recipId)
                         ).asJava;
 
     val request: GetItemRequest = new GetItemRequest()
@@ -476,11 +486,47 @@ class ApiController (
 
     val data = dbClient.getItem(request).getItem();
     if (data == null) {
-      NotFound("No recipe with %s: '%s' and id: '%s'.".format(config.hashKey, id, "1"))
+      NotFound("No recipe with %s: '%s' and id: '%s'.".format(config.hashKey, path, recipId))
     } else {
       Ok(Json.parse(ItemUtils.toItem(data).toJSON()));
     }
   }
+
+  def get_list() = Action {
+    // Get a list of recipes
+    val dbClient = config.dbUrl match {
+    case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
+                .withCredentials(config.awsCredentials)
+                .build()
+    case _ => AmazonDynamoDBClientBuilder.standard()
+                .withCredentials(config.awsCredentials)
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
+                .build()
+    }
+
+    val partition_alias = "#p";
+    val range_alias = "#r";
+    val expressionAttributeValues = MMap(partition_alias -> config.hashKey,
+                          range_alias -> config.rangeKey
+                        ).asJava;
+
+    val scanRequest = new ScanRequest()
+        .withTableName(config.tableName)
+        .withProjectionExpression("%s, %s, recipes_title".format(partition_alias, range_alias))
+        .withExpressionAttributeNames(expressionAttributeValues)
+        .withLimit(20);
+
+
+    val result = dbClient.scan(scanRequest);
+    val data = ItemUtils.toItemList(result.getItems()).asScala
+
+      val response = Json.toJson(data.map(
+        i => Json.parse(i.toJSON())
+      ))
+      Ok(response);
+
+  }
+        
 
   def list(id: String) = Action {
     // List all recipes available for `path`

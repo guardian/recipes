@@ -21,6 +21,18 @@ class ProxyController(
 )(implicit ec: ExecutionContext) extends BaseController with PanDomainAuthentication with Logging {
   private val TIMEOUT = 10000.millis
 
+  // Utility function
+  def getPathRecipeId(x: String): (String, String) = {
+    // Attempt to split input into `path`_`id`
+    // If it fails, `id` is set to 1 and `path` is unchanged
+    // Returns path, id [string, number]
+    val pathMatch = "(.*)_(\\d+)$".r
+    x match {
+        case pathMatch(first, second) => return (first, second)
+        case _ => return (x, "1")
+    }
+  }
+
   def get(path: String) = ApiAuthAction.async {
     val destination = s"${config.domainConfig.proxyingDomain}/$path"
 
@@ -49,7 +61,8 @@ class ProxyController(
   }
 
   def getCAPI(id: String) = Action.async { implicit request =>
-    val destination = "https://content.guardianapis.com/%s?show-fields=body,main,byline&show-elements=image&api-key=%s".format(id,config.capiApiKey)
+    val (path, recipId) = getPathRecipeId(id);
+    val destination = "https://content.guardianapis.com/%s?show-fields=body,main,byline&show-elements=image&api-key=%s".format(path,config.capiApiKey)
     // logger.info(destination)
     wsClient.url(destination)
       .withMethod(HttpVerbs.GET)
