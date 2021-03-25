@@ -5,6 +5,7 @@ import { jsx } from "@emotion/core";
 
 interface HeaderProps {
   recipeUrl: string
+  recipeNumber: number|null
   }
 
 class Header extends Component<HeaderProps> {
@@ -12,8 +13,9 @@ class Header extends Component<HeaderProps> {
       super(props);
     }
     render(): React.Component|JSX.Element{
+        const {recipeUrl, recipeNumber} = this.props;
         return (
-            <h4>Current recipe: {this.props.recipeUrl} </h4>
+            <h4>Article: {recipeUrl} Recipe Number: {recipeNumber}</h4>
         )
     }
   }
