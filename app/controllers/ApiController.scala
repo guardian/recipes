@@ -551,7 +551,6 @@ class ApiController (
       .withExpressionAttributeValues(recipes_to_get)
 
     val recipeResult = dbClient.query(queryExpression)
-    println(recipeResult.getCount())
 
     if (recipeResult == null) {
       NotFound("No recipe with %s: '%s'.".format(config.hashKey, id))
