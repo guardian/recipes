@@ -28,10 +28,33 @@ const testHTML = `
    <strong>1 cucumber</strong>, peeled, deseeded and cut into 1cm cubes<br>
    <strong>¾ tsp <a href="https://ottolenghi.co.uk/urfa-chilli-flakes-shop" title="">urfa chilli</a></strong>
 </p>
+<p><p>For the wasabi guacamole<br>
+    <strong>2 ripe avocados, peeled (net&nbsp;weight&nbsp;300g) </strong><br>
+    <strong>2 tbsp lime juice</strong>
+    <br><strong>2 tsp wasabi paste </strong><br>
+    <strong>20g chopped spring onion</strong><br>
+    <strong>Salt</strong>
+  </p></p>
 `
+
 const testHTMLSpaceCase = `
   <strong>350g cherry tomatoes (a mix of&nbsp;colours, if possible)</strong>
 `
+
+const testUnmatchedParetheses = `
+<p>
+<strong>1 medium courgette, grated (net&nbsp;weight 150g)</strong><br>
+<strong>½ large cucumber, grated (net&nbsp;weight 150g)</strong><br>
+<strong>Coarse sea salt and black pepper</strong><br>
+<strong>8 dried kaffir lime leaves</strong><br>
+<strong>250g Greek yogurt</strong><br>
+<strong>20g unsalted butter</strong><br>
+<strong>1½ tsp lime juice</strong><br>
+<strong>1 tbsp shredded mint leaves</strong><br>
+<strong>1 clove garlic, peeled and crushed</strong>
+</p>
+`
+
 test("findTextinHTML correctly finds full text containing HTML '&nbsp;' ", () => {
   const htmlEl: HTMLElement = DOMParse(testHTMLSpaceCase)
   const text = "350g cherry tomatoes (a mix of colours, if possible)";
@@ -69,10 +92,6 @@ test("findTextinHTML correctly finds text in simple <h2>", () => {
 
 
 test("findTextinHTML correctly finds text in nested <figure>", () => {
-  // const htmlEl: HTMLElement = DOMParse(`<figure class=\"element element-image\" data-media-id=\"f030fdded18725c9467738aac77a24e1f6e4a00f\"> 
-  //   <img src=\"https://media.guim.co.uk/f030fdded18725c9467738aac77a24e1f6e4a00f/3_0_3678_3678/1000.jpg\" alt=\"Yotam Ottolenghi’s pepper salad with cucumber and herbs.\" width=\"1000\" height=\"1000\" class=\"gu-image\" > 
-  //   <figcaption> <span class=\"element-image__caption\">Yotam Ottolenghi’s grilled pepper salad with cucumber and herbs.</span> 
-  //   <span class=\"element-image__credit\">Photograph: Louise Hagger/The Guardian</span> </figcaption> </figure>`)
   const htmlEl: HTMLElement = DOMParse(testHTML)
   const text = "Yotam Ottolenghi";
   const output: ResourceRange[] = findTextinHTML(text, htmlEl)
@@ -159,7 +178,51 @@ test("findTextinHTML correctly finds ingredient text (with markup)", () => {
   });
 });
 
-// TODO: add test for ingredient list title
+test("findTextinHTML correctly extracts ingredient list title", () => {
+  const htmlEl: HTMLElement = DOMParse(testHTML);
+  const ingredTitle = "For the wasabi guacamole";
+  const output: ResourceRange[] = findTextinHTML(ingredTitle, htmlEl)
+
+  // Check if correct amount of phrases extracted
+  expect(output.length).toEqual(1)
+
+  // Check if extracted ingredient title is correct
+  const extractedText = output.reduce((prev, o) => {
+    const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
+    return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
+  }, '')
+  expect(extractedText.trim()).toEqual(ingredTitle);
+});
+
+
+test("Check partial matches", () => {
+  const htmlEl: HTMLElement = DOMParse(testUnmatchedParetheses);
+  const fullMatch = "<strong>1 medium courgette, grated (net&nbsp;weight 150g)</strong>"
+  const partialMatch = "<strong>1 medium courgette, grated"
+
+  const outputFull: ResourceRange[] = findTextinHTML(fullMatch, htmlEl)
+  const outputPartial: ResourceRange[] = findTextinHTML(partialMatch, htmlEl)
+
+  // Check if correct amount of phrases extracted
+  expect(outputFull.length).toEqual(1)
+  expect(outputPartial.length).toEqual(1)
+
+  // Check if full match is correct
+  const extractedText = outputFull.reduce((prev, o) => {
+    const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
+    return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
+  }, '')
+  expect(extractedText.trim()).toEqual(fullMatch);
+
+  // Check if partial match is correct
+  const extractedPartialText = outputPartial.reduce((prev, o) => {
+    const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
+    return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
+  }, '')
+  expect(extractedPartialText.trim()).toEqual(partialMatch);
+
+});
+
 
 test("extractCommonText correctly get common text from two strings", () => {
   const text1 = "<strong>4 green peppers</strong>, ";
