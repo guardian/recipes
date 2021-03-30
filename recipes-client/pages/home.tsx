@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Component, useState } from "react";
+import { useState } from "react";
 import { jsx } from "@emotion/core";
 import RecipeList from "~components/recipe-list";
 import { listEndpoint } from "~consts/index";
