@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/core";
 import {actions} from "~actions/recipeActions";
 import { Dispatch } from "@reduxjs/toolkit";
-import { ActionType } from "~components/interfaces";
+import { ActionType } from "~interfaces/main";
 import React = require("react");
 
 function handleChange(event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>, dispatcher: Dispatch<ActionType>): void{

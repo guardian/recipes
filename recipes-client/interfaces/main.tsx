@@ -1,11 +1,21 @@
 /** @jsx jsx */
 
 export interface schemaItem {
-    type: string;
-    items?: Array<Record<string, unknown>>;
+    type: string|string[];
+    items?: schemaItem;
     properties?: Record<string, unknown>|ingredientListFields;
     enum?: Array<string>;
   }
+
+export interface schemaArrayItem {
+    type: string|string[];
+    items: Array<Record<string, unknown>>;
+  }
+
+export function isSchemaArray(obj: number|string|string[]|recipeItem|schemaItem|schemaType): obj is schemaArrayItem {
+  if (obj === null | typeof obj === 'string') { return false };
+  return "items" in Object.keys(obj);
+} 
 
 export interface schemaType {
     "properties": {
@@ -16,18 +26,19 @@ export interface schemaType {
 export interface allRecipeFields extends recipeMetaFields, recipeFields {};
 
 export interface recipeMetaFields {
-  "path": schemaItem;
-  "occasion": schemaItem;
-  "cuisines": schemaItem;
+  "path": string;
+  "recipeId": string;
+  "occasion": string|null;
+  "cuisines": string[]|null;
 }
 
 export interface recipeFields {
-  "recipes_title": recipeItem;
-  "serves": recipeItem;
-  "time": recipeItem;
-  "steps": recipeItem;
-  "credit": recipeItem;
-  "ingredients_lists": recipeItem;
+  "recipes_title": string|null;
+  "serves": string|null;
+  "time": timeField[]|null;
+  "steps": string[]|null;
+  "credit": string[]|string|null;
+  "ingredients_lists": ingredientListFields[];
   "image": string|null;
 }
 
@@ -35,14 +46,12 @@ export type recipeItem = null
                       | string 
                       | string[] 
                       | ingredientListFields[]
-                      | ingredientField 
-                      | ingredientField[] 
-                      | timeField 
-                      | timeField[];
+                      | timeField[]
+                      | ingredientField[];
 
 export type ingredientListFields = {
   "title": string | null;
-  "ingredients": Array<ingredientField>;
+  "ingredients": ingredientField[];
 }
 
 export type ingredientField = {
@@ -73,6 +82,7 @@ export interface GuCAPIProps {
   isLoading: boolean;
   html: Record<string, Record<string, unknown>>;
   recipeItems: recipeFields| null; //|Record<string, unknown>|null;
+  schema: schemaType;
   colours?: string[] | null;
 }
 

@@ -2,7 +2,7 @@
 import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
 // import FormGroup from "~components/form-group";
-import { ActionType, schemaType, allRecipeFields} from "~components/interfaces";
+import { ActionType, schemaType, allRecipeFields} from "~interfaces/main";
 import { renderFormGroup } from "~components/form-group";
 import filter from "lodash-es/filter";
 

@@ -2,7 +2,7 @@
 import { Component, Dispatch } from "react";
 import { jsx } from "@emotion/core";
 import FormItem from "./form-item";
-import { ActionType, schemaItem } from "~components/interfaces";
+import { ActionType, schemaItem } from "~interfaces/main";
 import {actions} from "~actions/recipeActions";
 
 function isStringOrNumber(item: string | Array<string|Record<string, unknown>> | Record<string, unknown>){

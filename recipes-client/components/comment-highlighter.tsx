@@ -7,7 +7,7 @@ https://github.com/guardian/pfi/blob/bfbb074e362e832944f4c708693698f9b5e7e9e2/fr
 import React, { ReactElement, useState, createElement } from 'react';
 import sortBy from 'lodash-es/sortBy';
 import filter from "lodash-es/filter";
-import { Highlight, ResourceRange } from '~components/interfaces';
+import { Highlight, ResourceRange } from '~interfaces/main';
 import { HTMLElement  } from 'node-html-parser';
 import { extractCommonText } from  '~utils/html-parsing';
 

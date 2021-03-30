@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import React, { useState } from 'react';
 import { Dispatch } from "react";
 import CheckButton from "./check-button";
-import { ActionType } from "./interfaces";
+import { ActionType } from "../interfaces/main";
 import minBy from "lodash-es/minBy";
 import { actions } from "~actions/recipeActions";
 
@@ -38,14 +38,28 @@ function getPictureUrls(elems: assetsInfo[]|undefined): string[]{
   if (elems === undefined){
     return [];
   } else {
-    return elems.reduce((acc, el) => {
+    return Array.from(
+      elems.reduce((acc, el) => {
       const smallestAsset = findSmallestVersion(el['assets']);
-      if ('file' in smallestAsset) { acc.push(smallestAsset['file']) }
+      if ('file' in smallestAsset) { acc.add(smallestAsset['file']) }
       return acc
-    }, [])
+    }, new Set<string>())
+    )
   }
 }
 
+function getPictureIds(elems: assetsInfo[]|undefined): string[]{
+  if (elems === undefined){
+    return [];
+  } else {
+    return Array.from(
+      elems.reduce((acc, el) => {
+        if ('id' in el) { acc.add(el['id']) }
+        return acc
+      }, new Set<string>())
+    )
+  }
+}
 // function getSelectedPic(body: Record<string, string>): string {
 //   return body['picture']
 // }
@@ -57,8 +71,8 @@ function select(objId: string, isSelected: boolean, dispatcher: Dispatch<ActionT
   "payload": obj});
 }
 
-function PictureGrid(props:{ pics: string[], selected: string|null, dispatcher: Dispatch<ActionType>}) {
-  const { pics, selected, dispatcher } = props;
+function PictureGrid(props:{ pics: string[], picIds: string[], selected: string|null, dispatcher: Dispatch<ActionType>}) {
+  const { pics, picIds, selected, dispatcher } = props;
   const [picHovered, setHover] = useState(-1)
   return (
     <><h3>{"Available Pictures: "}</h3>
@@ -79,7 +93,7 @@ function PictureGrid(props:{ pics: string[], selected: string|null, dispatcher: 
         return (
           <div onMouseOver={() => setHover(i)}
                 onMouseOut={() => setHover(-1)}
-                onClick={() => select(p, p === selected, dispatcher)}
+                onClick={() => select(picIds[i], picIds[i] === selected, dispatcher)}
                 css={{
                   gridArea: `${Math.floor((i / 5) + 1)}`, background: "lightgrey", justifyItems: "center",
                   display: "grid", align: "center", maxWidth: "100%", alignContent: "center",
@@ -93,11 +107,11 @@ function PictureGrid(props:{ pics: string[], selected: string|null, dispatcher: 
               pointerEvents: "none",
               opacity: 1,
               position: "relative",
-              top: "-190px",
+              top: "-90px",
               height: "36px",
               width: "100%"}}
           >
-            <CheckButton objId={p} isSelected={p === selected} hover={i === picHovered } dispatcher={dispatcher} /> 
+            <CheckButton objId={picIds[i]} isSelected={picIds[i] === selected} hover={i === picHovered } dispatcher={dispatcher} /> 
           </div>
         </div>);
         })}
@@ -111,9 +125,9 @@ function ImagePicker(props: ImagePickerProps): JSX.Element {
     return <h3> Loading pictures... </h3>
   } else {
     const picUrls = getPictureUrls(html['elements']);
-    // const selectedPic = getSelectedPic(body);
+    const picIds = getPictureIds(html['elements']);
    
-    return <PictureGrid pics={picUrls} selected={selected} dispatcher={dispatcher} />
+    return <PictureGrid pics={picUrls} picIds={picIds} selected={selected} dispatcher={dispatcher} />
   }
 }
 

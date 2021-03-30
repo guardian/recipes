@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
-import { ActionType, schemaType } from "./interfaces";
+import { ActionType, schemaType } from "../interfaces/main";
 import { apiURL } from "~consts";
 import { actions } from "~actions/recipeActions";
 
