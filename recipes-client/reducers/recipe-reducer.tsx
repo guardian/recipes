@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import {actions} from "~/actions/recipeActions";
 import produce from "immer";
-import { ActionType, AppDataState, schemaItem, isCurationState, isLoadingState, AddRemoveItemType, ErrorItemType, isAddRemoveItemType } from "~components/interfaces";
+import { ActionType, AppDataState, schemaItem, isCurationState, isLoadingState, 
+  AddRemoveItemType, ErrorItemType, isAddRemoveItemType, isSchemaArray } from "~interfaces/main";
 import { defaultHighlightColours } from "~consts";
 
 export const defaultState: AppDataState = {
@@ -68,7 +69,8 @@ function getSchemaItem(schemaI: schemaItem): string|Record<string, unknown>|Arra
   // Function returning "default" values for new item of type schemaItem.
   if (schemaI.type === "string") {
     return "" ;
-  } else if (schemaI.type === "array") {
+  } else if (Object.keys(schemaI).includes("items") && 
+      isSchemaArray(schemaI)) {
       if (schemaI.items.type === "string"){
       // Simple list like steps
       return schemaI.items.map( (item:schemaItem) => {
