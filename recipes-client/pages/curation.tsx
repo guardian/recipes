@@ -8,7 +8,7 @@ import ImagePicker from "~components/image-picker";
 import Footer from "~components/footer";
 import Header from "~components/header";
 
-import {articlePath, defaultHighlightColours} from "~consts/index";
+// import { defaultHighlightColours } from "~consts/index";
 import { RouteComponentProps } from 'react-router-dom';
 
 
@@ -17,7 +17,7 @@ import { actions } from "~actions/recipeActions";
 import {apiURL, capiProxy, schemaEndpoint} from "~consts/index";
 import { Dispatch, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
-import { ActionType, AddRemoveItemType, AppDataState, ErrorItemType } from "~components/interfaces";
+import { ActionType, AddRemoveItemType, AppDataState, ErrorItemType } from "~interfaces/main";
 
 interface CurationProps {
   articleId: string;
@@ -47,6 +47,8 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
   const {articleId} = props.match.params;
   const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
   const image = (state.body === null) ? null : state.body.image;
+  const recipeId = state.body === null ? null : state.body.recipeId;
+  const articlePath = state.body === null ? articleId : state.body.path;
 
   useEffect( () => {
     const articleUrl = articleId.replace(/^\/+/, '');
@@ -72,11 +74,11 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
       }}
     >
       <div css={{ gridArea: "header", background: "red", justifyItems: "center", display: "grid", align: "center" }}>
-        <Header recipeUrl={articlePath} colours={state.colours} dispatcher={dispatch} />
+        <Header recipeUrl={articlePath} recipeNumber={recipeId} colours={state.colours} dispatcher={dispatch} />
       </div>
       <div css={{ gridArea: "left", background: "white", overflow: "auto", padding: "5px" }}>
-          {/* <GuFrame articlePath={articlePath} /> */}
-          <GuCAPIFrame articlePath={articlePath} isLoading={state.isLoading} html={state.html} recipeItems={state.body} colours={state.colours} />
+          {/* <GuFrame articlePath={articleId} /> */}
+          <GuCAPIFrame articlePath={articlePath} isLoading={state.isLoading} html={state.html} recipeItems={state.body} schema={state.schema} colours={state.colours} />
       </div>
       <div css={{ gridArea: "right", background: "grey", overflow: "auto", padding: "5px" }}>
         <ImagePicker html={state.html} selected={image} isLoading={state.isLoading} dispatcher={dispatch} />
@@ -85,7 +87,7 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
         </form>
       </div>
       <div css={{ gridArea: "footer", background: "green", justifyItems: "center", display: "grid", align: "center"}}>
-        <Footer articleId={articlePath} body={state.body} dispatcher={dispatch}/>
+        <Footer articleId={articleId} body={state.body} dispatcher={dispatch}/>
       </div>
     </div>
   );
