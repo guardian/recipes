@@ -1,5 +1,5 @@
 import { Highlight, ingredientField, recipeFields, recipeItem, 
-         ResourceRange, timeField, ingredientListFields } from "~components/interfaces";
+         ResourceRange, timeField, ingredientListFields } from "~interfaces/main";
 import { HTMLElement, parse } from 'node-html-parser';
 import flatten from "lodash-es/flatten";
 
@@ -9,19 +9,14 @@ export function DOMParse(html: string): HTMLElement {
   }
 
 
-// type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
-// function ObjectEntries<T extends object>(t: T): Entries<T>[] {
-//   return Object.entries(t) as any;
-// }
-
 export function getHighlights(doc: HTMLElement, recipeItems: recipeFields): Highlight[][]{
-  /* Create array of Highlight objects from 'doc' given 'recipeItems' */
-  const allHighlights = Object.entries(recipeItems).map( (k: [string, recipeItem]) => {
-    const textItems: string[] = flatten(getTextfromRecipeItem(k[1])) // bit of a hack, better approach?
+  /* Create array of Highlight objects from 'doc' given 'recipeItems' and optional list of keys.*/
+  const allHighlights = Object.entries(recipeItems).map( (k) => {
+    const textItems: string[] = flatten(getTextfromRecipeItem(k[1] as recipeItem)) // bit of a hack, better approach?
     const highlights = textItems.map( (text, ii) => {
       const offsets = findTextinHTML(text, doc)
       const ttt = offsets.map( offset => {
-        const highlightType = k[0]
+        const highlightType = k[0];
         const id = `${highlightType}_${ii}`
         return {
           'id': id,
@@ -50,8 +45,9 @@ function isStringArray(arg: Array<unknown>): arg is string[] {
   return typeof arg[0] === "string";
 }
 
+// export function getTextfromRecipeItem(item: string | ingredientField | ingredientField[] | timeField | null): string[] {
 
-export function getTextfromRecipeItem(item: recipeItem): string[] {
+export function getTextfromRecipeItem(item: recipeItem|string): string[] {
   /* Extract text from recipe item
      Select relevant field (item if array of strings, 'text' if object)
   */
@@ -67,12 +63,15 @@ export function getTextfromRecipeItem(item: recipeItem): string[] {
     } else if (isIngredientFieldsArray(item)) {
       // Parse each array of each 'ingredient' key
       return flatten(item.map(i => {
-        return getTextfromRecipeItem(i['ingredients']);
+        return getTextfromRecipeItem([
+          ...getTextfromRecipeItem(i['title']), 
+          ...getTextfromRecipeItem(i['ingredients'])
+        ]);
       }));
     } else {
       // Parse each entry in time/ingredient array
       return flatten((item as Array<timeField|ingredientField>).map(i => {
-        return getTextfromRecipeItem(i);
+        return getTextfromRecipeItem(i["text"]);
       }));
     }
   } else {
@@ -99,7 +98,12 @@ export function findTextinHTML(text: string, html: HTMLElement): ResourceRange[]
       });
     });
 
-    const regex = new RegExp(`((?!<br>)(<\\w+>\\W?)?${words.join("(?:\\W?<\\/?\\w+.*?>)?\\W*?")}(\\W?<\\/\\w+.*?>){0,2})`, 'gm')
+    // Assemble regex to match text elements in HTML
+    const startingMarkupAndBreak = '(?!<br>)(<\\w+>\\W?)?' // eg. <br><strong>...
+    const closingMarkup = '(\\W?<\\/\\w+.*?>){0,2}' // eg. </strong>
+    const wordSepPattern = "[\\s&,:;]" //"(\\s|&)"
+    const wordSequenceToMatch = words.join(`(?:\\W?<\\/?\\w+.*?>)?${wordSepPattern}.*?`)
+    const regex = new RegExp(`(${startingMarkupAndBreak}${wordSequenceToMatch}${closingMarkup})`, 'gm')
     
     Array.from(html.childNodes).forEach((el, indx) => {
       const htmlEl  = (el as HTMLElement);

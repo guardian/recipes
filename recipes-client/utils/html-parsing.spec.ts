@@ -1,5 +1,5 @@
 import { findTextinHTML, DOMParse, extractCommonText } from "~utils/html-parsing";
-import { ResourceRange } from "~components/interfaces";
+import { ResourceRange } from "~interfaces/main";
 import { HTMLElement } from 'node-html-parser';
 
 const testHTML = `
@@ -29,6 +29,20 @@ const testHTML = `
    <strong>¾ tsp <a href="https://ottolenghi.co.uk/urfa-chilli-flakes-shop" title="">urfa chilli</a></strong>
 </p>
 `
+const testHTMLSpaceCase = `
+  <strong>350g cherry tomatoes (a mix of&nbsp;colours, if possible)</strong>
+`
+test("findTextinHTML correctly finds full text containing HTML '&nbsp;' ", () => {
+  const htmlEl: HTMLElement = DOMParse(testHTMLSpaceCase)
+  const text = "350g cherry tomatoes (a mix of colours, if possible)";
+  const output: ResourceRange[] = findTextinHTML(text, htmlEl)
+
+  // Check if correct amount of phrases extracted
+  expect(output.length).toEqual(1)
+  // Check if extraction has properly worked (= includes HTML space)
+  expect((htmlEl.childNodes[output[0].elementNumber] as HTMLElement).innerHTML.slice(output[0].startCharacter, output[0].endCharacter)
+        ).toEqual("350g cherry tomatoes (a mix of&nbsp;colours, if possible)");
+});
 
 test("findTextinHTML correctly ignores empty text ('') ", () => {
   const htmlEl: HTMLElement = DOMParse(testHTML)
@@ -144,6 +158,8 @@ test("findTextinHTML correctly finds ingredient text (with markup)", () => {
 
   });
 });
+
+// TODO: add test for ingredient list title
 
 test("extractCommonText correctly get common text from two strings", () => {
   const text1 = "<strong>4 green peppers</strong>, ";
