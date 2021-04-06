@@ -4,7 +4,7 @@ import React from 'react';
 import { HighlightHTML, HighlightPlainText} from "~components/comment-highlighter";
 import { allRecipeFields, GuCAPIProps, recipeFields, recipeItem, schemaArrayItem, schemaItem, schemaType} from '~interfaces/main'
 import { getHighlights, DOMParse } from "~utils/html-parsing";
-import { defaultHighlightColours, excludeInForm, bylineFields } from "~consts/index";
+import { defaultHighlightColours, excludeInHighlights, bylineFields } from "~consts/index";
 import { filterKeys, filterOutKeys } from "~utils/filter";
 import { getSchemaType } from "~utils/schema";
 
@@ -73,7 +73,7 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
     const byline = DOMParse(html['fields']['byline'])
     const recipeItemsByline = filterKeys((recipeItems as Record<string, unknown>), bylineFields) as recipeFields;
     const bylineHighlights = getHighlights(byline, recipeItemsByline);
-    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), excludeInForm) as recipeFields;
+    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), excludeInHighlights) as recipeFields;
     const highlights = getHighlights(doc, recipeItemsBody);
 
     return (
