@@ -63,12 +63,11 @@ class ProxyController(
   def getCAPI(id: String) = Action.async { implicit request =>
     val (path, recipId) = getPathRecipeId(id);
     val destination = "https://content.guardianapis.com/%s?show-fields=body,main,byline&show-elements=image&api-key=%s".format(path,config.capiApiKey)
-    // logger.info(destination)
     wsClient.url(destination)
       .withMethod(HttpVerbs.GET)
       .withHttpHeaders(USER_AGENT -> s"gu-recipes-${config.stage}")
       .withRequestTimeout(TIMEOUT)
-      .stream()
+      .execute()
       .map {
         resp => {
           val responses = Json.parse(resp.body)
