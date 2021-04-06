@@ -67,7 +67,7 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
     //   return acc
     // }, {} as typeof recipeItems)
     const keyList = flattenSchema(schema);
-    const colourMap = createColourMap(keyList, excludeInForm, cols);
+    const colourMap = createColourMap(keyList, excludeInHighlights, cols);
 
     const doc = DOMParse(html['fields']['body'])
     const byline = DOMParse(html['fields']['byline'])
