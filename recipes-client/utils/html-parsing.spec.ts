@@ -41,7 +41,7 @@ const testHTMLSpaceCase = `
   <strong>350g cherry tomatoes (a mix of&nbsp;colours, if possible)</strong>
 `
 
-const testUnmatchedParetheses = `
+const testHTMLnonBreakingSpace = `
 <p>
 <strong>1 medium courgette, grated (net&nbsp;weight 150g)</strong><br>
 <strong>½ large cucumber, grated (net&nbsp;weight 150g)</strong><br>
@@ -54,6 +54,19 @@ const testUnmatchedParetheses = `
 <strong>1 clove garlic, peeled and crushed</strong>
 </p>
 `
+
+const testHtmlDuplication = `
+<p>500g salt cod <br>
+600g potatoes, peeled and thinly sliced<br>
+3 large shallots (or 2 red onions), thinly sliced <br>
+1 garlic clove, crushed<br>3 tbsp flat-leaf parsley, chopped<br>
+Large pinch of dried oregano<br>150g small plum tomatoes, chopped <br>
+50g pecorino, grated<br>
+50g seasoned breadcrumbs <br>
+50ml olive oil<br>
+Salt and black pepper</p>
+`.replace(/\n/g, '')
+
 
 test("findTextinHTML correctly finds full text containing HTML '&nbsp;' ", () => {
   const htmlEl: HTMLElement = DOMParse(testHTMLSpaceCase)
@@ -89,7 +102,6 @@ test("findTextinHTML correctly finds text in simple <h2>", () => {
   expect((htmlEl.childNodes[output[0].elementNumber] as HTMLElement).innerHTML.slice(output[0].startCharacter, output[0].endCharacter)
         ).toEqual(text);
 });
-
 
 test("findTextinHTML correctly finds text in nested <figure>", () => {
   const htmlEl: HTMLElement = DOMParse(testHTML)
@@ -145,7 +157,6 @@ test("findTextinHTML correctly finds text (with markup) in simple steps <p>", ()
   expect(extractedText3.trim()).toEqual(desiredOutput3);
 });
 
-
 test("findTextinHTML correctly finds ingredient text (with markup)", () => {
   const htmlEl: HTMLElement = DOMParse(testHTML)
 
@@ -194,9 +205,54 @@ test("findTextinHTML correctly extracts ingredient list title", () => {
   expect(extractedText.trim()).toEqual(ingredTitle);
 });
 
+test("findTextinHTML does not trip for ingredients starting with same first number", () => {
+  const htmlEl: HTMLElement = DOMParse(testHtmlDuplication)
+
+  const ingredients = [
+    "500g salt cod",
+    "600g potatoes, peeled and thinly sliced",
+    "3 large shallots (or 2 red onions), thinly sliced",
+    "1 garlic clove, crushed",
+    "3 tbsp flat-leaf parsley, chopped",
+    "Large pinch of dried oregano",
+    "150g small plum tomatoes, chopped",
+    "50g pecorino, grated",
+    "50g seasoned breadcrumbs",
+    "50ml olive oil",
+    "Salt and black pepper"
+  ]
+  const expectedOutputs = [
+    "500g salt cod",
+    "600g potatoes, peeled and thinly sliced",
+    "3 large shallots (or 2 red onions), thinly sliced",
+    "1 garlic clove, crushed",
+    "3 tbsp flat-leaf parsley, chopped",
+    "Large pinch of dried oregano",
+    "150g small plum tomatoes, chopped",
+    "50g pecorino, grated",
+    "50g seasoned breadcrumbs",
+    "50ml olive oil",
+    "Salt and black pepper"
+  ]
+
+  ingredients.forEach((ing, i) => {
+    const output: ResourceRange[] = findTextinHTML(ing, htmlEl)
+
+    // Check if correct amount of phrases extracted
+    expect(output.length).toEqual(1)
+
+    // Check if extracted text is correct
+    const extractedText = output.reduce((prev, o) => {
+      const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
+      return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
+    }, '')
+    expect(extractedText.trim()).toEqual(expectedOutputs[i]);
+
+  });
+});
 
 test("Check partial matches", () => {
-  const htmlEl: HTMLElement = DOMParse(testUnmatchedParetheses);
+  const htmlEl: HTMLElement = DOMParse(testHTMLnonBreakingSpace);
   const fullMatch = "<strong>1 medium courgette, grated (net&nbsp;weight 150g)</strong>"
   const partialMatch = "<strong>1 medium courgette, grated"
 
@@ -223,8 +279,7 @@ test("Check partial matches", () => {
 
 });
 
-
-test("extractCommonText correctly get common text from two strings", () => {
+test("extractCommonText correctly gets common text from two strings", () => {
   const text1 = "<strong>4 green peppers</strong>, ";
   const text2 = "</strong>, stems removed, deseeded and flesh cut into roughly 3cm pieces<br>";
 

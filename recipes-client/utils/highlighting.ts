@@ -3,8 +3,9 @@ import { HTMLElement } from 'node-html-parser';
 import { extractCommonText } from  '~utils/html-parsing';
 
 export function createHighlightTextFractions(highlights: Highlight[], text: string): string[][] {
+    // Create before, after and inside slices of text to allow applying markup at later stage 
     return highlights.reduce<Array<string[]>>(([b, i, a], highlight) => {
-        const before = text.slice(0, highlight.range.startCharacter);
+        const before = text.slice(0, Math.max(0, highlight.range.startCharacter));
         const after = text.slice(highlight.range.endCharacter);
         const inside = text.slice(highlight.range.startCharacter, highlight.range.endCharacter);
         return [[...b, before], [...i, inside], [...a, after]];
@@ -26,7 +27,7 @@ export function createHighlightHTML(highlights: Highlight[], node: HTMLElement,
 }
 
 export function markHTML(text: string, type: string, colour: string, applyLabel?: boolean): string {
-    return `<mark class=${type} style="background: ${colour}; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">${text}
+    return `<mark class="${type}" style="background: ${colour}; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">${text}
     ${applyLabel ? renderLabel(type) : ""}
     </mark>`
 }

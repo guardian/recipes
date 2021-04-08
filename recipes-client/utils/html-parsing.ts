@@ -91,7 +91,6 @@ export function findTextinHTML(text: string, html: HTMLElement): ResourceRange[]
     const words: string[] = escapeRegExp(
       // Split into words
       text.trim()).split(/[\\.,:;-]{0,1}\s/).map(w => {
-      // text.trim().replace(/(\W)$/, "")).split(/[\\.,:;-]{0,1}\s/).map(w => { // Remove trailing punctuation attached to end of word
       // Convert any unicode characters
       return w.replace(/\\u([a-f0-9]{4})/gi, function (n, hex) {
         return String.fromCharCode(parseInt(hex, 16));
@@ -101,10 +100,10 @@ export function findTextinHTML(text: string, html: HTMLElement): ResourceRange[]
     // Assemble regex to match text elements in HTML
     const startingMarkupAndBreak = '(?!<br>)(<\\w+>\\W?)?' // eg. <br><strong>...
     const closingMarkup = '(\\W?<\\/\\w+.*?>){0,2}' // eg. </strong>
-    const wordSepPattern = "[\\s&,:;]" //"(\\s|&)"
-    const wordSequenceToMatch = words.join(`(?:\\W?<\\/?\\w+.*?>)?${wordSepPattern}.*?`)
+    const wordSepPattern = '(&nbsp;|,|:|;)?\\s?' // whitespace, &nbsp, comma, colon, semi-colon
+    const wordSequenceToMatch = words.join(`(?:\\W?<\\/?\\w+.*?>)?${wordSepPattern}`)
     const regex = new RegExp(`(${startingMarkupAndBreak}${wordSequenceToMatch}${closingMarkup})`, 'gm')
-    
+
     Array.from(html.childNodes).forEach((el, indx) => {
       const htmlEl  = (el as HTMLElement);
       const htmlInner = (htmlEl.innerHTML === undefined) ? htmlEl.innerText : htmlEl.innerHTML;
