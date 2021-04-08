@@ -127,7 +127,7 @@ Resources:
           - autoscaling:DescribeAutoScalingGroups
           - autoscaling:DescribeAutoScalingInstances
       Roles:
-      - !Ref AppRole 
+        - !Ref AppRole 
   GetDistributablesPolicy:
     Type: AWS::IAM::Policy
     Properties:
