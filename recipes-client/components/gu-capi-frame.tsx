@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, Global } from "@emotion/core";
 import React from 'react';
-import { HighlightHTML, HighlightPlainText} from "~components/comment-highlighter";
+import { HighlightHTML, HighlightByLine} from "~components/comment-highlighter";
 import { allRecipeFields, GuCAPIProps, recipeFields, recipeItem, schemaArrayItem, schemaItem, schemaType} from '~interfaces/main'
 import { getHighlights, DOMParse } from "~utils/html-parsing";
 import { defaultHighlightColours, excludeInHighlights, bylineFields } from "~consts/index";
@@ -80,7 +80,7 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
     <>
     <h1> {html.webTitle} </h1> 
     <h3>Byline:
-      <HighlightPlainText text={byline} highlights={bylineHighlights} focusedId="" onHighlightMount={onHighlightMount} focusComment={focusComment} colours={colourMap}/>
+      <HighlightByLine text={byline} highlights={bylineHighlights} focusedId="" onHighlightMount={onHighlightMount} focusComment={focusComment} colours={colourMap}/>
     </h3>
       <Global styles={{
         '.gu-image': { 

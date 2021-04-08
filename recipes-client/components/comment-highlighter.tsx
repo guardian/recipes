@@ -180,19 +180,20 @@ function flatten(array: Highlight[][]): Highlight[] {
 }
 
 type TextProps = {
-    text: string,
+    text: HTMLElement,
     highlights: Highlight[][],
+    label: string,
     colours?: Record<string,string> | null
 }
 
-export function HighlightPlainText(props: TextProps){
+export function HighlightByLine(props: TextProps){
     const { text, highlights, colours } = props;
     const flat_highlights = flatten(highlights) //Extra flattening step
     const sorted: Highlight[] = sortBy(flat_highlights, ['range.elementNumber', 'range.startCharacter']);
     const [before, inside, after] = createHighlightTextFractions(sorted, text.innerHTML);
 
     const altered = inside.map((insideText, i) => {
-        const highlightType = (highlights[i].type as string);
+        const highlightType = sorted[i].type;
         const lastInSpan = (highlights[Math.min(highlights.length-1, i+1)].id !== highlights[i].id) || (i === highlights.length-1);
         return markHTML(insideText.trim(), highlightType, colours[highlightType], lastInSpan)
     });
