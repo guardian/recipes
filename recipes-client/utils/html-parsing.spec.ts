@@ -1,75 +1,11 @@
 import { findTextinHTML, DOMParse, extractCommonText } from "~utils/html-parsing";
 import { ResourceRange } from "~interfaces/main";
 import { HTMLElement } from 'node-html-parser';
-
-const testHTML = `
-<p>All food is a celebration of something, but some dishes are especially celebratory. What makes them so? For me, they
-  have to have a built-in “ta-da!” factor, and anything that you need to flip over, inverting it from a pan and on to a
-  platter, helps no end with that. Savoury dishes with the word “cake” in their name also tend to please, as do ones
-  with layers. These are just some of the things that make a dish “celebratory” for me, and there will be more for
-  others still. One thing is a must, though: it should be very hard to walk into a room holding a celebratory dish
-  without emitting a little whoop.</p>
-<h2>Grilled pepper salad with fresh cucumber and herbs</h2>
-<figure class="element element-image" data-media-id="f030fdded18725c9467738aac77a24e1f6e4a00f"> 
-  <img src="https://media.guim.co.uk/f030fdded18725c9467738aac77a24e1f6e4a00f/3_0_3678_3678/1000.jpg" alt="Yotam Ottolenghi’s pepper salad with cucumber and herbs." width="1000" height="1000" class="gu-image" > 
-  <figcaption> <span class="element-image__caption">Yotam Ottolenghi’s grilled pepper salad with cucumber and herbs.</span> 
-  <span class="element-image__credit">Photograph: Louise Hagger/The Guardian</span> </figcaption> 
-</figure>
-<p>Prep<strong> 20 min</strong><br>Cook <strong>40 min</strong><br>Serves <strong>4</strong></p>
-<p><strong>4 green peppers</strong>, stems removed, deseeded and flesh cut into roughly 3cm pieces<br>
-   <strong>2 red peppers</strong>, stems removed, deseeded and flesh cut into roughly 3cm pieces<br>
-   <strong>4 medium vine tomatoes</strong><strong> (400g)</strong>, each cut into 4 wedges<br>
-   <strong>2 small red onions</strong>, peeled and cut into roughly 3cm pieces<br>
-   <strong>1 green chilli</strong>, roughly sliced, seeds and all<strong> </strong><br>
-   <strong>6 large garlic cloves</strong>, peeled<br><strong>90ml olive oil</strong><br>
-   <strong>Salt and black pepper</strong><br><strong>1½ tbsp lemon juice</strong><br>
-   <strong>10g parsley leaves</strong>, roughly chopped<br>
-   <strong>10g coriander leaves</strong>, roughly chopped<br>
-   <strong>1 cucumber</strong>, peeled, deseeded and cut into 1cm cubes<br>
-   <strong>¾ tsp <a href="https://ottolenghi.co.uk/urfa-chilli-flakes-shop" title="">urfa chilli</a></strong>
-</p>
-<p><p>For the wasabi guacamole<br>
-    <strong>2 ripe avocados, peeled (net&nbsp;weight&nbsp;300g) </strong><br>
-    <strong>2 tbsp lime juice</strong>
-    <br><strong>2 tsp wasabi paste </strong><br>
-    <strong>20g chopped spring onion</strong><br>
-    <strong>Salt</strong>
-  </p></p>
-`
-
-const testHTMLSpaceCase = `
-  <strong>350g cherry tomatoes (a mix of&nbsp;colours, if possible)</strong>
-`
-
-const testHTMLnonBreakingSpace = `
-<p>
-<strong>1 medium courgette, grated (net&nbsp;weight 150g)</strong><br>
-<strong>½ large cucumber, grated (net&nbsp;weight 150g)</strong><br>
-<strong>Coarse sea salt and black pepper</strong><br>
-<strong>8 dried kaffir lime leaves</strong><br>
-<strong>250g Greek yogurt</strong><br>
-<strong>20g unsalted butter</strong><br>
-<strong>1½ tsp lime juice</strong><br>
-<strong>1 tbsp shredded mint leaves</strong><br>
-<strong>1 clove garlic, peeled and crushed</strong>
-</p>
-`
-
-const testHtmlDuplication = `
-<p>500g salt cod <br>
-600g potatoes, peeled and thinly sliced<br>
-3 large shallots (or 2 red onions), thinly sliced <br>
-1 garlic clove, crushed<br>3 tbsp flat-leaf parsley, chopped<br>
-Large pinch of dried oregano<br>150g small plum tomatoes, chopped <br>
-50g pecorino, grated<br>
-50g seasoned breadcrumbs <br>
-50ml olive oil<br>
-Salt and black pepper</p>
-`.replace(/\n/g, '')
-
+import { testRecipeHTML, testIngredSpaceCaseHTML, testIngListnonBreakingSpaceHTML,
+         testHtmlDuplication, testHtmlDuplicationWithMissingIngredient } from "~utils/test-fixtures";
 
 test("findTextinHTML correctly finds full text containing HTML '&nbsp;' ", () => {
-  const htmlEl: HTMLElement = DOMParse(testHTMLSpaceCase)
+  const htmlEl: HTMLElement = DOMParse(testIngredSpaceCaseHTML)
   const text = "350g cherry tomatoes (a mix of colours, if possible)";
   const output: ResourceRange[] = findTextinHTML(text, htmlEl)
 
@@ -81,7 +17,7 @@ test("findTextinHTML correctly finds full text containing HTML '&nbsp;' ", () =>
 });
 
 test("findTextinHTML correctly ignores empty text ('') ", () => {
-  const htmlEl: HTMLElement = DOMParse(testHTML)
+  const htmlEl: HTMLElement = DOMParse(testRecipeHTML)
   const text = "";
   const output: ResourceRange[] = findTextinHTML(text, htmlEl)
 
@@ -91,7 +27,7 @@ test("findTextinHTML correctly ignores empty text ('') ", () => {
 });
 
 test("findTextinHTML correctly finds text in simple <h2>", () => {
-  const htmlEl: HTMLElement = DOMParse(testHTML)
+  const htmlEl: HTMLElement = DOMParse(testRecipeHTML)
   const text = "Grilled pepper salad with fresh cucumber and herbs";
   const output: ResourceRange[] = findTextinHTML(text, htmlEl)
 
@@ -104,7 +40,7 @@ test("findTextinHTML correctly finds text in simple <h2>", () => {
 });
 
 test("findTextinHTML correctly finds text in nested <figure>", () => {
-  const htmlEl: HTMLElement = DOMParse(testHTML)
+  const htmlEl: HTMLElement = DOMParse(testRecipeHTML)
   const text = "Yotam Ottolenghi";
   const output: ResourceRange[] = findTextinHTML(text, htmlEl)
 
@@ -117,7 +53,7 @@ test("findTextinHTML correctly finds text in nested <figure>", () => {
 });
 
 test("findTextinHTML correctly finds text (with markup) in simple steps <p>", () => {
-  const htmlEl: HTMLElement = DOMParse(testHTML)
+  const htmlEl: HTMLElement = DOMParse(testRecipeHTML)
   
   const text = "Prep 20 min";
   const output: ResourceRange[] = findTextinHTML(text, htmlEl)
@@ -158,7 +94,7 @@ test("findTextinHTML correctly finds text (with markup) in simple steps <p>", ()
 });
 
 test("findTextinHTML correctly finds ingredient text (with markup)", () => {
-  const htmlEl: HTMLElement = DOMParse(testHTML)
+  const htmlEl: HTMLElement = DOMParse(testRecipeHTML)
 
   const ingredients = [
     "6 large garlic cloves peeled",
@@ -190,7 +126,7 @@ test("findTextinHTML correctly finds ingredient text (with markup)", () => {
 });
 
 test("findTextinHTML correctly extracts ingredient list title", () => {
-  const htmlEl: HTMLElement = DOMParse(testHTML);
+  const htmlEl: HTMLElement = DOMParse(testRecipeHTML);
   const ingredTitle = "For the wasabi guacamole";
   const output: ResourceRange[] = findTextinHTML(ingredTitle, htmlEl)
 
@@ -204,6 +140,48 @@ test("findTextinHTML correctly extracts ingredient list title", () => {
   }, '')
   expect(extractedText.trim()).toEqual(ingredTitle);
 });
+
+test("findTextinHTML correctly extracts ingredients when some ingredients are missing", () => {
+  const htmlEl: HTMLElement = DOMParse(testHtmlDuplicationWithMissingIngredient);
+  const ingredients = [
+    "Sticky apple balsamic spare ribs",
+    "1.5kg free-range pork ribs (2 racks)",
+    "4 tbsp redcurrant, plum, crab apple or other fruit jelly",
+    "3 tbsp apple balsamic vinegar",
+    "2 tbsp light muscovado sugar",
+    "3 garlic cloves, crushed to a paste",
+    "1 tbsp finely grated fresh ginger",
+    "½-1 medium-hot red chilli, finely chopped, or ½ tsp dried chilli flakes",
+    "2 tbsp soy sauce"
+  ]
+
+  const expectedOutputs = [
+    "",
+    "<strong>1.5kg free-range pork ribs (2&nbsp;racks) </strong>",
+    "<strong>4 tbsp redcurrant, plum, crab apple or other fruit jelly</strong>",
+    "<strong>3 tbsp apple balsamic vinegar</strong>",
+    "<strong>2 tbsp light muscovado sugar</strong>",
+    "<strong>3 garlic cloves, crushed to a paste</strong>",
+    "<strong>1 tbsp finely grated fresh ginger</strong>",
+    "<strong>½-1 medium-hot red chilli, finely chopped, or ½ tsp dried chilli flakes</strong>",
+    "<strong>2 tbsp soy sauce </strong>"
+  ]
+
+  ingredients.forEach((ing, i) => {
+    const output: ResourceRange[] = findTextinHTML(ing, htmlEl)
+
+    // Check if correct amount of phrases extracted
+    const expectedPhrases = expectedOutputs[i].length === 0 ? 0 : 1;
+    expect(output.length).toEqual(expectedPhrases)
+
+    // Check if extracted text is correct
+    const extractedText = output.reduce((prev, o) => {
+      const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
+      return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
+    }, '')
+    expect(extractedText.trim()).toEqual(expectedOutputs[i]);
+  })
+})
 
 test("findTextinHTML does not trip for ingredients starting with same first number", () => {
   const htmlEl: HTMLElement = DOMParse(testHtmlDuplication)
@@ -252,7 +230,7 @@ test("findTextinHTML does not trip for ingredients starting with same first numb
 });
 
 test("Check partial matches", () => {
-  const htmlEl: HTMLElement = DOMParse(testHTMLnonBreakingSpace);
+  const htmlEl: HTMLElement = DOMParse(testIngListnonBreakingSpaceHTML);
   const fullMatch = "<strong>1 medium courgette, grated (net&nbsp;weight 150g)</strong>"
   const partialMatch = "<strong>1 medium courgette, grated"
 
