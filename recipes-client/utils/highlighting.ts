@@ -35,19 +35,17 @@ export function markHTML(text: string, type: string, colour: string, applyLabel?
 export function mergeHighlights(before_: string[], inside_: string[], after_: string[]): string {
     // Given array of altered texts, merge them to avoid duplication.
     let result = ""
-    inside_.forEach((a, i) => {
+    inside_.forEach((inside, i) => {
         if (i === 0 ){
-            result = result.concat(`${before_[i]} ${inside_[i]}`.trim())
+            result = result.concat(`${before_[i]} ${inside}`.trim())
         } else {
-            // work out common text
+            // work out common text and prepend to `inside` string
             const newBefore = extractCommonText(before_[i], after_[i-1])
-            // stripCommonText(after[i-1], before[i])
-            result = result.concat(` ${newBefore} ${inside_[i]}`)
+            result = result.concat(` ${newBefore} ${inside}`)
         }
+    });
     // Add remaining string
     result = result.concat(after_[inside_.length-1])
-    
-    });
     return result;
 }
 
