@@ -128,7 +128,7 @@ export interface CurationState {
   readonly colours?: string[] | null;
 }
 
-export type HighlightType = keyof typeof recipeFields; // 'search_result' | 'comment'; //[key in keyof schemaType['properties']] 'search_result' | 'comment';
+export type HighlightType = string; //keyof recipeFields;
 
 export type Highlight = {
   id: string,

@@ -19,7 +19,7 @@ export function createHighlightHTML(highlights: Highlight[], node: HTMLElement,
 
     const [before, inside, after] = createHighlightTextFractions(highlights, node.innerHTML);
     const altered = inside.map((insideText, i) => {
-        const highlightType = (highlights[i].type as string);
+        const highlightType = highlights[i].type;
         const lastInSpan = (highlights[Math.min(highlights.length - 1, i + 1)].id !== highlights[i].id) || (i === highlights.length - 1);
         return markHTML(insideText.trim(), highlightType, colours[highlightType], lastInSpan); //onHighlightMount, focusComment, lastInSpan);
     });

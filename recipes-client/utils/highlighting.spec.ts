@@ -22,7 +22,7 @@ test("Merge fractions correctly ", () => {
 test("Mark HTML correctly", () => {
     const highlights: Highlight[] = [{ id: 'test', type: "test", range: {elementNumber: 0, startCharacter: 0, endCharacter: 35 }}] as Highlight[]
     const colours: Record<string, string> = {"test": "green"};
-    const expectedMarkupText = `1 medium courgette, grated ${highlights[0].type as string} (net weight 150g)`
+    const expectedMarkupText = `1 medium courgette, grated ${highlights[0].type} (net weight 150g)`
     const expectedAfterMarkup = `(net&nbsp;weight 150g)</strong><br>
     <strong>½ large cucumber, grated (net&nbsp;weight 150g)</strong><br>
     <strong>Coarse sea salt and black pepper</strong><br>
@@ -36,7 +36,7 @@ test("Mark HTML correctly", () => {
 
     const [before, inside, after] = createHighlightTextFractions(highlights, testIngListHTML);
 
-    const highlightType = (highlights[0].type as string);
+    const highlightType = highlights[0].type;
     const lastInSpan = true; 
     const altered = [markHTML(inside[0].trim(), highlightType, colours[highlightType], lastInSpan)];
 
