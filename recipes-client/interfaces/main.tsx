@@ -12,9 +12,8 @@ export interface schemaArrayItem {
     items: Array<Record<string, unknown>>;
   }
 
-export function isSchemaArray(obj: number|string|string[]|recipeItem|schemaItem|schemaType): obj is schemaArrayItem {
-  if (obj === null | typeof obj === 'string') { return false };
-  return "items" in Object.keys(obj);
+export function isSchemaArray(obj: schemaItem): obj is schemaArrayItem {
+  return Object.keys(obj).includes("items");
 } 
 
 export interface schemaType {

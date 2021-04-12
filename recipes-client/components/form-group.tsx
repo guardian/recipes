@@ -4,6 +4,7 @@ import { jsx } from "@emotion/core";
 import FormItem from "./form-item";
 import { ActionType, schemaItem } from "~interfaces/main";
 import {actions} from "~actions/recipeActions";
+import { getSchemaType } from "~utils/schema";
 
 function isStringOrNumber(item: string | Array<string|Record<string, unknown>> | Record<string, unknown>){
   return (typeof item === "string" || typeof item === "number")
@@ -25,14 +26,6 @@ export function renderFormGroup(fI: Array<string|Record<string, unknown>> | Reco
   return <FormGroup formItems={fI}  title={title} schema={schema} key_={key} key={key} dispatcher={dispatcher}></FormGroup>
 }
 
-
-function getSchemaType(typ: string|Array<string>): Array<string>{
-  if (Array.isArray(typ)){
-    return typ;
-  } else {
-    return new Array(typ)
-  }
-}
 
 function handleAddField(objId: string, schemaItem: schemaItem, dispatcher: Dispatch<ActionType>): void {
   dispatcher({"type": actions.add,
