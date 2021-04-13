@@ -17,16 +17,11 @@ export const defaultState: AppDataState = {
 function updateStateItem(obj: Record<string, unknown>, keyPath: Array<string>, value: string|number|AppDataState): void {
   const lastKeyIndex = keyPath.length-1;
   for (let i = 0; i < lastKeyIndex; ++ i) {
-    const key = keyPath[i];
+    const key = isFinite(keyPath[i]) ? parseInt(keyPath[i]) : keyPath[i];
     const nextKey = i < lastKeyIndex ? keyPath[i+1] : NaN
-    if (!(key in obj)){
+    if (!(key in obj) || obj[key] === null){
       // Check whether array is needed (key is number) rather than dict
-      if (isFinite(nextKey)) {
-        obj[key] = []
-      }
-      else {
-        obj[key] = {}
-      }
+      obj[key] = isFinite(nextKey) ? [] : {}
     }
     obj = obj[key];
   }
@@ -36,17 +31,11 @@ function updateStateItem(obj: Record<string, unknown>, keyPath: Array<string>, v
 function deleteStateItem(keyPath: Array<string|number>, obj: Record<string, unknown>): void {
   const lastKeyIndex = keyPath.length-1;
   for (let i = 0; i < lastKeyIndex; ++ i) {
-    const key = keyPath[i];
-    const nextKey = i < lastKeyIndex ? keyPath[i+1] : NaN
-    if (!(key in obj)){
-      // Check whether array is needed (key is number) rather than dict
-      if (isFinite(nextKey)) {
-        obj[parseInt(key)] = []
-      }
-      else {
-        obj[key] = {}
-      }
-    }
+    const key = isFinite(keyPath[i]) ? parseInt(keyPath[i]) : keyPath[i];
+    const nextKey = i < lastKeyIndex ? Math.max(0, keyPath[i+1]) : NaN
+    if (!(key in obj) || obj[key] === null) {
+      obj[key] = isFinite(nextKey) ? [] : {}
+    } 
     obj = obj[key];
   }
   keyPath = keyPath.map(item => {const s = isFinite(item) ? parseInt(item): item; return s;})

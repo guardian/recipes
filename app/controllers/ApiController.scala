@@ -298,7 +298,7 @@ class ApiController (
             }
         },
         "credit": {
-            "type": ["string", "array"]
+            "type": ["null", "string", "array"]
         },
         "ingredients_lists": {
             "type": ["array", "null"],
@@ -349,18 +349,28 @@ class ApiController (
             }
         },
         "occasion": {
-          "type": ["string", "null"],
-          "enum": [
-              null,
-              "burns-night",
-              "christmas-food-and-drink",
-              "christmas-food-and-drink-2018",
-              "christmas-food-and-drink-2019",
-              "winter-food-and-drink",
-              "summer-food-and-drink",
-              "spring-food-and-drink",
-              "autumn-food-and-drink"
-          ]
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "minItems": 0,
+                "type": [
+                    "string",
+                    "null"
+                ],
+                "enum": [
+                    null,
+                    "burns-night",
+                    "christmas-food-and-drink",
+                    "christmas-food-and-drink-2018",
+                    "christmas-food-and-drink-2019",
+                    "winter-food-and-drink",
+                    "summer-food-and-drink",
+                    "spring-food-and-drink",
+                    "autumn-food-and-drink"
+                ]
+            }
         },
         "cuisines": {
             "type": ["array", "null"],
@@ -514,7 +524,7 @@ class ApiController (
         .withTableName(config.tableName)
         .withProjectionExpression("%s, %s, recipes_title".format(partition_alias, range_alias))
         .withExpressionAttributeNames(expressionAttributeValues)
-        .withLimit(20);
+        .withLimit(60);
 
 
     val result = dbClient.scan(scanRequest);

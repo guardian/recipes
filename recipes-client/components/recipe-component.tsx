@@ -2,15 +2,15 @@
 import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
 // import FormGroup from "~components/form-group";
-import { ActionType, schemaType, allRecipeFields} from "~interfaces/main";
-import { renderFormGroup } from "~components/form-group";
+import { ActionType, schemaItem, allRecipeFields, isingredientListFields} from "~interfaces/main";
+import { FormGroup } from "~components/form-group";
 import filter from "lodash-es/filter";
 
 import {excludeInForm} from '~consts/index';
 
 interface RecipeComponentProps {
   body: allRecipeFields;
-  schema: schemaType;
+  schema: schemaItem|null;
   isLoading: boolean;
   dispatcher: Dispatch<ActionType>;
 }
@@ -18,17 +18,21 @@ interface RecipeComponentProps {
 function RecipeComponent(props: RecipeComponentProps): JSX.Element|JSX.Element[]{
   const { body, isLoading, schema, dispatcher } = props;
 
-  if (schema === null){
-    return <h3> No schema loaded... </h3>
-  } else if (isLoading){
+  if (isLoading) {
     return <h3> LOADING... </h3>
-  } else if (body === undefined || body === null){
+  } else if (schema === null || schema.properties === undefined) {
+    return <h3> No schema loaded... </h3>
+  } else if (body === undefined || body === null) {
     return <h3> No bodayyyyy</h3>
   } else {
     return (
       filter(Object.entries(body), (item) => {return !excludeInForm.includes(item[0]);}
-      ).map( (k: ArrayLike<Record<string, unknown>>) => {
-          return renderFormGroup(k[1], k[0], schema.properties[k[0]], k[0], dispatcher)
+        ).map( ([key, fI]: [keyof allRecipeFields, Record<string, unknown>]) => {
+          if (isingredientListFields(schema.properties)) {
+            return <span/>
+          } else {
+            return <FormGroup formItems={fI} schema={schema.properties[key]} key_={key} title={key} dispatcher={dispatcher} key={key}></FormGroup>
+          }
         })
     )
   }

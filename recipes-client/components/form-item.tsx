@@ -19,11 +19,12 @@ function handleRemoveField(id:string, dispatcher: Dispatch<ActionType>): void {
 
 function renderInput(text: string, key: string, choices: Array<string>|null, dispatcher?: Dispatch<ActionType>|null, removable?: boolean){
   const removeId = `${key}`;
-  const rmAllowed = (removable !== undefined) ? removable : true;
+  const rmAllowed = (removable !== undefined) ? removable : false;
+
   console.debug(`${text} ${key}`);
   if (choices === null || choices === undefined){
     return ( 
-      <><input css={{ minWidth: "500px" }} type="text" value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}></input>
+      <><input css={{ minWidth: "500px", display: "grid" }} type="text" value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}></input>
         { rmAllowed && 
         <button type="button" id={removeId} onClick={() => handleRemoveField(removeId, dispatcher)}>-</button>
         }</>
@@ -32,7 +33,7 @@ function renderInput(text: string, key: string, choices: Array<string>|null, dis
     const choices_ = choices.slice();
     choices_.unshift('None');
     return (
-    <><select css={{ minWidth: "500px" }} value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}>
+    <><select css={{ minWidth: "500px", display: "grid" }} value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}>
       {choices_.map( (item) => {return <option key={`${key}.${String(item)}`} value={item}>{item}</option>} )}
       </select>
       { rmAllowed &&
@@ -48,15 +49,16 @@ interface FormItemProps {
     // type: string|null,
     choices: Array<string>|null
     dispatcher?: Dispatch<ActionType>|null
+    removable?: boolean
   }
   
 function FormItem(prop: FormItemProps): JSX.Element{
-  const label = prop.label;
+  const {label} = prop;
   const text = (prop.text === null) ? "None" : prop.text;
   const choices = prop.choices || null;
   const dispatch = prop.dispatcher || null;
 
-  return renderInput(text, label, choices, dispatch)
+  return renderInput(text, label, choices, dispatch, prop.removable)
 
 }
 export default FormItem;

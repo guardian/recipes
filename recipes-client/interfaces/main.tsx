@@ -3,7 +3,7 @@
 export interface schemaItem {
     type: string|string[];
     items?: schemaItem;
-    properties?: Record<string, unknown>|ingredientListFields;
+    properties?: allRecipeFields|ingredientListFields;
     enum?: Array<string>;
   }
 
@@ -22,12 +22,20 @@ export interface schemaType {
     }
 }
 
+export function isingredientListFields(obj: schemaType|allRecipeFields|ingredientListFields): obj is ingredientListFields {
+  if (obj.properties !== undefined){
+    return Object.keys(obj.properties).includes("ingredients")
+  } else {
+    return Object.keys(obj).includes("ingredients")
+  }
+}
+
 export interface allRecipeFields extends recipeMetaFields, recipeFields {};
 
 export interface recipeMetaFields {
   "path": string;
   "recipeId": string;
-  "occasion": string|null;
+  "occasion": string[]|null;
   "cuisines": string[]|null;
 }
 
