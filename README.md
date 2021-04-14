@@ -17,6 +17,7 @@ This app uses:
 ### Install dependencies
 - Java: `brew install adoptopenjdk8`
 - SBT: `brew install guardian/devtools/gu-scala`
+- Docker `brew install docker`
 - [dev-nginx]: `brew install guardian/devtools/dev-nginx`
 - Node: `brew install node`
 - A Node version manager. [fnm] is recommended (you could use [nvm] too, I guess): `brew install Schniz/tap/fnm`
@@ -39,7 +40,7 @@ We can now setup the project!
 
 ### Running
 By now you should have all dependencies installed,
-including all npm packages.
+including all npm packages. Make sure Docker is running.
 
 We can run the app by running the [start script][file-script-start]:
 
