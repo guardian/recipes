@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
-// import FormGroup from "~components/form-group";
-import { ActionType, schemaItem, allRecipeFields, isingredientListFields} from "~interfaces/main";
+import { ActionType, schemaItem, allRecipeFields, isingredientListFields, isschemaType, schemaType} from "~interfaces/main";
 import { FormGroup } from "~components/form-group";
-import filter from "lodash-es/filter";
 
-import {excludeInForm} from '~consts/index';
+import { isDisplayed, UIschema } from '~consts/index';
+import { isUIschemaItem } from "~interfaces/ui";
+import { orderComponents } from "../utils/ordering";
 
 interface RecipeComponentProps {
   body: allRecipeFields;
@@ -17,6 +17,7 @@ interface RecipeComponentProps {
 
 function RecipeComponent(props: RecipeComponentProps): JSX.Element|JSX.Element[]{
   const { body, isLoading, schema, dispatcher } = props;
+  const UIOrder = isUIschemaItem(UIschema) ? UIschema['ui:order'] : null;
 
   if (isLoading) {
     return <h3> LOADING... </h3>
@@ -25,16 +26,16 @@ function RecipeComponent(props: RecipeComponentProps): JSX.Element|JSX.Element[]
   } else if (body === undefined || body === null) {
     return <h3> No bodayyyyy</h3>
   } else {
-    return (
-      filter(Object.entries(body), (item) => {return !excludeInForm.includes(item[0]);}
-        ).map( ([key, fI]: [keyof allRecipeFields, Record<string, unknown>]) => {
-          if (isingredientListFields(schema.properties)) {
-            return <span/>
-          } else {
-            return <FormGroup formItems={fI} schema={schema.properties[key]} key_={key} title={key} dispatcher={dispatcher} key={key}></FormGroup>
-          }
-        })
-    )
+      const recipeComponents = UIOrder ? orderComponents(body, UIOrder) : body;
+      return Object.keys(recipeComponents).reduce((acc, key: keyof allRecipeFields) => {
+        if (isDisplayed(key) && isschemaType(schema)) {
+          return [...acc,
+          <FormGroup formItems={body[key]} schema={schema.properties[key]} UIschema={UIschema[key]} key_={key} title={key} dispatcher={dispatcher} key={key}></FormGroup>
+          ]
+        } else {
+          return [acc]
+        }
+      }, [] as JSX.Element[])
   }
 }
 

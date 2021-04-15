@@ -22,15 +22,25 @@ export interface schemaType {
     }
 }
 
+export function isschemaType(obj: schemaType): obj is schemaType {
+  if ((typeof obj !== 'object') || (obj === null)) return false;
+  const wObj: {[k: string]: unknown} = obj; 
+  // const wObj: {[obj['properties']]?: unknown} = obj;
+  // console.log(Object.keys(wObj))
+  return isallRecipeFields(wObj.properties);
+}
+
 export function isingredientListFields(obj: schemaType|allRecipeFields|ingredientListFields): obj is ingredientListFields {
-  if (obj.properties !== undefined){
-    return Object.keys(obj.properties).includes("ingredients")
-  } else {
-    return Object.keys(obj).includes("ingredients")
-  }
+  if (isschemaType(obj) || isallRecipeFields(obj) || (obj === null)) return false; 
+  return Object.keys(obj).includes("ingredients")
 }
 
 export interface allRecipeFields extends recipeMetaFields, recipeFields {};
+
+export function isallRecipeFields(obj: any): obj is allRecipeFields {
+  const keys = Object.keys(obj);
+  return keys.includes("path") && keys.includes("credit")
+}
 
 export interface recipeMetaFields {
   "path": string;
