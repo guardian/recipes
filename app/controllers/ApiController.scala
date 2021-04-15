@@ -455,17 +455,17 @@ class ApiController (
                     "WINE"
                 ]
             }
-        }
-    },
-    "diet_tags": {
-        "type": ["array", "null"],
-        "items": {
-            "type": ["string", "null"],
-            "enum": [
-                "vegetarian",
-                "vegan",
-                "meat"
-            ]
+        },
+        "diet_tags": {
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "vegetarian",
+                    "vegan",
+                    "meat"
+                ]
+            }
         }
     }
 }
