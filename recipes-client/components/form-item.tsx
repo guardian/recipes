@@ -4,6 +4,7 @@ import {actions} from "~actions/recipeActions";
 import { Dispatch } from "@reduxjs/toolkit";
 import { ActionType } from "~interfaces/main";
 import React = require("react");
+import { formatTitle } from "./form-group";
 
 function handleChange(event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>, dispatcher: Dispatch<ActionType>): void{
   const objId = event.target.id;
@@ -17,22 +18,27 @@ function handleRemoveField(id:string, dispatcher: Dispatch<ActionType>): void {
               "payload": {"objId": id} });
 }
 
+
 function renderInput(text: string, key: string, choices: Array<string>|null, dispatcher?: Dispatch<ActionType>|null, removable?: boolean){
   const removeId = `${key}`;
-  const rmAllowed = (removable !== undefined) ? removable : true;
+  const rmAllowed = (removable !== undefined) ? removable : false;
+
   console.debug(`${text} ${key}`);
   if (choices === null || choices === undefined){
     return ( 
-      <><input css={{ minWidth: "500px" }} type="text" value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}></input>
-        { rmAllowed && 
-        <button type="button" id={removeId} onClick={() => handleRemoveField(removeId, dispatcher)}>-</button>
-        }</>
+    <div css={{display: "grid" }}>
+      <label key={key+'.label'}>{formatTitle(key)}</label>
+      <input css={{ minWidth: "500px" }} type="text" value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}></input>
+      { rmAllowed && 
+      <button type="button" id={removeId} onClick={() => handleRemoveField(removeId, dispatcher)}>-</button>
+      }
+    </div>
     )
   } else {
     const choices_ = choices.slice();
     choices_.unshift('None');
     return (
-    <><select css={{ minWidth: "500px" }} value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}>
+    <><select css={{ minWidth: "500px", display: "grid" }} value={text} key={key} id={key} onChange={(event) => handleChange(event, dispatcher)}>
       {choices_.map( (item) => {return <option key={`${key}.${String(item)}`} value={item}>{item}</option>} )}
       </select>
       { rmAllowed &&
@@ -48,15 +54,15 @@ interface FormItemProps {
     // type: string|null,
     choices: Array<string>|null
     dispatcher?: Dispatch<ActionType>|null
+    removable?: boolean
   }
   
 function FormItem(prop: FormItemProps): JSX.Element{
-  const label = prop.label;
+  const {label} = prop;
   const text = (prop.text === null) ? "None" : prop.text;
   const choices = prop.choices || null;
   const dispatch = prop.dispatcher || null;
-
-  return renderInput(text, label, choices, dispatch)
-
+  
+  return renderInput(text, label, choices, dispatch, prop.removable)
 }
 export default FormItem;

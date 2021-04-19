@@ -1,36 +1,41 @@
 /** @jsx jsx */
 import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
-// import FormGroup from "~components/form-group";
-import { ActionType, schemaType, allRecipeFields} from "~interfaces/main";
-import { renderFormGroup } from "~components/form-group";
-import filter from "lodash-es/filter";
+import { ActionType, schemaItem, allRecipeFields, isingredientListFields, isschemaType, schemaType} from "~interfaces/main";
+import { FormGroup } from "~components/form-group";
 
-import {excludeInForm} from '~consts/index';
+import { isDisplayed, UIschema } from '~consts/index';
+import { isUIschemaItem } from "~interfaces/ui";
+import { orderComponents } from "../utils/ordering";
 
 interface RecipeComponentProps {
   body: allRecipeFields;
-  schema: schemaType;
+  schema: schemaItem|null;
   isLoading: boolean;
   dispatcher: Dispatch<ActionType>;
 }
 
 function RecipeComponent(props: RecipeComponentProps): JSX.Element|JSX.Element[]{
   const { body, isLoading, schema, dispatcher } = props;
+  const UIOrder = isUIschemaItem(UIschema) ? UIschema['ui:order'] : null;
 
-  if (schema === null){
-    return <h3> No schema loaded... </h3>
-  } else if (isLoading){
+  if (isLoading) {
     return <h3> LOADING... </h3>
-  } else if (body === undefined || body === null){
+  } else if (schema === null || schema.properties === undefined) {
+    return <h3> No schema loaded... </h3>
+  } else if (body === undefined || body === null) {
     return <h3> No bodayyyyy</h3>
   } else {
-    return (
-      filter(Object.entries(body), (item) => {return !excludeInForm.includes(item[0]);}
-      ).map( (k: ArrayLike<Record<string, unknown>>) => {
-          return renderFormGroup(k[1], k[0], schema.properties[k[0]], k[0], dispatcher)
-        })
-    )
+      const recipeComponents = UIOrder ? orderComponents(body, UIOrder) : body;
+      return Object.keys(recipeComponents).reduce((acc, key: keyof allRecipeFields) => {
+        if (isDisplayed(key) && isschemaType(schema)) {
+          return [...acc,
+          <FormGroup formItems={body[key]} schema={schema.properties[key]} UIschema={UIschema[key]} key_={key} title={key} dispatcher={dispatcher} key={key}></FormGroup>
+          ]
+        } else {
+          return [acc]
+        }
+      }, [] as JSX.Element[])
   }
 }
 

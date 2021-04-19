@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { jsx, Global } from "@emotion/core";
 import React from 'react';
-import { HighlightHTML, HighlightPlainText} from "~components/comment-highlighter";
+import { HighlightHTML, HighlightByLine} from "~components/comment-highlighter";
 import { allRecipeFields, GuCAPIProps, recipeFields, recipeItem, schemaArrayItem, schemaItem, schemaType} from '~interfaces/main'
-import { getHighlights, DOMParse } from "~utils/html-parsing";
-import { defaultHighlightColours, excludeInForm, bylineFields } from "~consts/index";
+import { getHighlights, DOMParse, getUniqueHighlightTypes } from "~utils/html-parsing";
+import { defaultHighlightColours, excludeInHighlights, bylineFields } from "~consts/index";
 import { filterKeys, filterOutKeys } from "~utils/filter";
 import { getSchemaType } from "~utils/schema";
+import { createColourMap } from "~utils/colours";
 
 function onHighlightMount(id: string, top: number, elem: HTMLElement): void {
   console.debug(`${id} highlight mount.`)
@@ -46,41 +47,27 @@ function flattenSchema(schema: schemaType): string[]{
     return [...acc, key];
   }, [] as string[])
 }
-
-function createColourMap(keyList: string[], excludeItems: string[] , colours: string[]): Record<string, string>{
-  return keyList.reduce((acc, key, i) => {
-    if (!excludeItems.includes(key)) {
-      acc[key]= colours[i % colours.length];
-    }
-    return acc
-  }, {} as Record<string, string>)
-}
-
 function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
   const {isLoading, recipeItems, html, schema, colours} = props;
   if (isLoading || recipeItems === null || schema === null){
     return <h3> LOADING... </h3>
   } else {
-    const cols = (colours === null || colours === undefined) ? defaultHighlightColours : colours;
-    // const colourMap = Object.keys(recipeItems).reduce((acc, key, i) => {
-    //   acc[key] = cols[i % cols.length];
-    //   return acc
-    // }, {} as typeof recipeItems)
-    const keyList = flattenSchema(schema);
-    const colourMap = createColourMap(keyList, excludeInForm, cols);
-
     const doc = DOMParse(html['fields']['body'])
     const byline = DOMParse(html['fields']['byline'])
     const recipeItemsByline = filterKeys((recipeItems as Record<string, unknown>), bylineFields) as recipeFields;
     const bylineHighlights = getHighlights(byline, recipeItemsByline);
-    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), excludeInForm) as recipeFields;
+    const recipeItemsBody = filterOutKeys((recipeItems as Record<string, unknown>), excludeInHighlights) as recipeFields;
     const highlights = getHighlights(doc, recipeItemsBody);
+
+    const cols = (colours === null || colours === undefined) ? defaultHighlightColours : colours;
+    const keyList = getUniqueHighlightTypes(bylineHighlights.concat(highlights)); //flattenSchema(schema);
+    const colourMap = createColourMap(keyList, cols);
 
     return (
     <>
     <h1> {html.webTitle} </h1> 
     <h3>Byline:
-      <HighlightPlainText text={byline} highlights={bylineHighlights} focusedId="" onHighlightMount={onHighlightMount} focusComment={focusComment} colours={colourMap}/>
+      <HighlightByLine text={byline} highlights={bylineHighlights} focusedId="" onHighlightMount={onHighlightMount} focusComment={focusComment} colours={colourMap}/>
     </h3>
       <Global styles={{
         '.gu-image': { 

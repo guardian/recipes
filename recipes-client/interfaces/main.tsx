@@ -3,7 +3,7 @@
 export interface schemaItem {
     type: string|string[];
     items?: schemaItem;
-    properties?: Record<string, unknown>|ingredientListFields;
+    properties?: allRecipeFields|ingredientListFields;
     enum?: Array<string>;
   }
 
@@ -12,9 +12,8 @@ export interface schemaArrayItem {
     items: Array<Record<string, unknown>>;
   }
 
-export function isSchemaArray(obj: number|string|string[]|recipeItem|schemaItem|schemaType): obj is schemaArrayItem {
-  if (obj === null | typeof obj === 'string') { return false };
-  return "items" in Object.keys(obj);
+export function isSchemaArray(obj: schemaItem): obj is schemaArrayItem {
+  return Object.keys(obj).includes("items");
 } 
 
 export interface schemaType {
@@ -23,12 +22,30 @@ export interface schemaType {
     }
 }
 
+export function isschemaType(obj: schemaType): obj is schemaType {
+  if ((typeof obj !== 'object') || (obj === null)) return false;
+  const wObj: {[k: string]: unknown} = obj; 
+  // const wObj: {[obj['properties']]?: unknown} = obj;
+  // console.log(Object.keys(wObj))
+  return isallRecipeFields(wObj.properties);
+}
+
+export function isingredientListFields(obj: schemaType|allRecipeFields|ingredientListFields): obj is ingredientListFields {
+  if (isschemaType(obj) || isallRecipeFields(obj) || (obj === null)) return false; 
+  return Object.keys(obj).includes("ingredients")
+}
+
 export interface allRecipeFields extends recipeMetaFields, recipeFields {};
+
+export function isallRecipeFields(obj: any): obj is allRecipeFields {
+  const keys = Object.keys(obj);
+  return keys.includes("path") && keys.includes("credit")
+}
 
 export interface recipeMetaFields {
   "path": string;
   "recipeId": string;
-  "occasion": string|null;
+  "occasion": string[]|null;
   "cuisines": string[]|null;
 }
 
@@ -128,7 +145,7 @@ export interface CurationState {
   readonly colours?: string[] | null;
 }
 
-export type HighlightType = keyof typeof recipeFields; // 'search_result' | 'comment'; //[key in keyof schemaType['properties']] 'search_result' | 'comment';
+export type HighlightType = string; //keyof recipeFields;
 
 export type Highlight = {
   id: string,

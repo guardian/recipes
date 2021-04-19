@@ -4,6 +4,7 @@ import produce from "immer";
 import { ActionType, AppDataState, schemaItem, isCurationState, isLoadingState, 
   AddRemoveItemType, ErrorItemType, isAddRemoveItemType, isSchemaArray } from "~interfaces/main";
 import { defaultHighlightColours } from "~consts";
+import { getSchemaType } from "~utils/schema";
 
 export const defaultState: AppDataState = {
     isLoading: true, 
@@ -16,16 +17,11 @@ export const defaultState: AppDataState = {
 function updateStateItem(obj: Record<string, unknown>, keyPath: Array<string>, value: string|number|AppDataState): void {
   const lastKeyIndex = keyPath.length-1;
   for (let i = 0; i < lastKeyIndex; ++ i) {
-    const key = keyPath[i];
+    const key = isFinite(keyPath[i]) ? parseInt(keyPath[i]) : keyPath[i];
     const nextKey = i < lastKeyIndex ? keyPath[i+1] : NaN
-    if (!(key in obj)){
+    if (!(key in obj) || obj[key] === null){
       // Check whether array is needed (key is number) rather than dict
-      if (isFinite(nextKey)) {
-        obj[key] = []
-      }
-      else {
-        obj[key] = {}
-      }
+      obj[key] = isFinite(nextKey) ? [] : {}
     }
     obj = obj[key];
   }
@@ -35,25 +31,15 @@ function updateStateItem(obj: Record<string, unknown>, keyPath: Array<string>, v
 function deleteStateItem(keyPath: Array<string|number>, obj: Record<string, unknown>): void {
   const lastKeyIndex = keyPath.length-1;
   for (let i = 0; i < lastKeyIndex; ++ i) {
-    const key = keyPath[i];
-    const nextKey = i < lastKeyIndex ? keyPath[i+1] : NaN
-    if (!(key in obj)){
-      // Check whether array is needed (key is number) rather than dict
-      if (isFinite(nextKey)) {
-        obj[parseInt(key)] = []
-      }
-      else {
-        obj[key] = {}
-      }
-    }
+    const key = isFinite(keyPath[i]) ? parseInt(keyPath[i]) : keyPath[i];
+    const nextKey = i < lastKeyIndex ? Math.max(0, keyPath[i+1]) : NaN
+    if (!(key in obj) || obj[key] === null) {
+      obj[key] = isFinite(nextKey) ? [] : {}
+    } 
     obj = obj[key];
   }
   keyPath = keyPath.map(item => {const s = isFinite(item) ? parseInt(item): item; return s;})
-  // if (isFinite(keyPath[lastKeyIndex])){
-  //   const lastKeyNum = parseInt(keyPath.slice(lastKeyIndex, lastKeyIndex+1).slice(-1));
-  //   keyPath = keyPath.slice(0, lastKeyIndex);
-  //   keyPath.push(lastKeyNum);
-  // }
+
   if (Array.isArray(obj)){
     obj.splice(keyPath[lastKeyIndex], 1)
   } else {
@@ -67,9 +53,9 @@ function initStateItem(draft: Record<string, unknown>, k: string, value: string|
 
 function getSchemaItem(schemaI: schemaItem): string|Record<string, unknown>|Array<Record<string,unknown>> {
   // Function returning "default" values for new item of type schemaItem.
-  if (schemaI.type === "string") {
+  if (getSchemaType(schemaI.type).includes("string")) {
     return "" ;
-  } else if (Object.keys(schemaI).includes("items") && 
+  } else if (getSchemaType(schemaI.type).includes("array") && 
       isSchemaArray(schemaI)) {
       if (schemaI.items.type === "string"){
       // Simple list like steps
@@ -82,7 +68,7 @@ function getSchemaItem(schemaI: schemaItem): string|Record<string, unknown>|Arra
           return [getSchemaItem(items)];
       // })
     }
-  } else if (schemaI.type === "object" || typeof schemaI === "object"){
+  } else if (getSchemaType(schemaI.type).includes("object") || typeof schemaI === "object"){
       const schemaPropKeys = Object.keys(schemaI.properties);
       const item = schemaI.properties;
       const outputArray = schemaPropKeys.map<Array<string|Record<string, unknown>>>(key => {
