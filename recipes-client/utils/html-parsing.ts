@@ -139,9 +139,10 @@ export function findTextinHTML(text: string, html: HTMLElement): ResourceRange[]
 
     // Assemble regex to match text elements in HTML
     const startingMarkupAndBreak = '(?!<br>)(<\\w+>\\W?)?' // eg. <br><strong>...
-    const closingMarkup = '(\\W?<\\/\\w+.*?>){0,2}' // eg. </strong>
-    const wordSepPattern = '(&nbsp;|,|:|;)?\\s?' // whitespace, &nbsp, comma, colon, semi-colon
-    const wordSequenceToMatch = words.join(`(?:\\W?<\\/?\\w+.*?>)?${wordSepPattern}`)
+    const closingMarkup = '(\\W?<\\/\\w+.*?>){0,2}' // eg. </strong></p>
+    const wordSepPattern = '(&nbsp;|,|:|;)?\\s?' // whitespace, &nbsp;, comma, colon, semi-colon
+    const textHTMLMarkup = '(?:\\W?<\\/?[^>]*>){0,2}' // any HTML markup <a href=...> </strong>, etc [matching stops as '>']
+    const wordSequenceToMatch = words.join(`${textHTMLMarkup}${wordSepPattern}`) //words.join(`(?:\\W?<\\/?\\w+.*?>)?${wordSepPattern}`)
     const regex = new RegExp(`(${startingMarkupAndBreak}${wordSequenceToMatch}${closingMarkup})`, 'gm')
 
     Array.from(html.childNodes).forEach((el, indx) => {

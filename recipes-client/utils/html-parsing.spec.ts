@@ -2,7 +2,7 @@ import { findTextinHTML, DOMParse, extractCommonText } from "~utils/html-parsing
 import { ResourceRange } from "~interfaces/main";
 import { HTMLElement } from 'node-html-parser';
 import { testRecipeHTML, testIngredSpaceCaseHTML, testIngListnonBreakingSpaceHTML,
-         testHtmlDuplication, testHtmlDuplicationWithMissingIngredient } from "~utils/test-fixtures";
+         testHtmlDuplication, testHtmlDuplication2, testHtmlDuplicationWithMissingIngredient } from "~utils/test-fixtures";
 
 test("findTextinHTML correctly finds full text containing HTML '&nbsp;' ", () => {
   const htmlEl: HTMLElement = DOMParse(testIngredSpaceCaseHTML)
@@ -182,6 +182,53 @@ test("findTextinHTML correctly extracts ingredients when some ingredients are mi
     expect(extractedText.trim()).toEqual(expectedOutputs[i]);
   })
 })
+
+test("findTextinHTML does not trip for ingredients starting with same text", () => {
+  const htmlEl: HTMLElement = DOMParse(testHtmlDuplication2)
+  const ingredients = [
+    'butter 175g',
+    'plain flour 225g',
+    'egg 1 yolk',
+    'water 2-3 tbsp, cold',
+    'banana shallots 5',
+    'groundnut or other oil 1 tbsp',
+    'plain flour 2 level tbsp',
+    'double cream 250ml',
+    'parsley 20g',
+    'celeriac 150g (prepared weight)',
+    'butter 30g, melted'
+  ]
+
+  const expectedOutputs = [
+    "<strong>butter</strong> 175g",
+    "<strong>plain flour</strong> 225g",
+    "<strong>egg </strong>1 yolk",
+    "<strong>water</strong> 2-3 tbsp, cold",
+    "<strong>banana shallots</strong> 5",
+    "<strong>groundnut or other oil</strong> 1 tbsp",
+    "<strong>plain flour</strong> 2 level tbsp",
+    "<strong>double cream</strong> 250ml",
+    "<strong>parsley</strong> 20g",
+    "<strong>celeriac</strong> 150g (prepared weight)",
+    "<strong>butter</strong> 30g, melted"
+  ]
+
+  ingredients.forEach((ing, i) => {
+    const output: ResourceRange[] = findTextinHTML(ing, htmlEl)
+
+    // Check if correct amount of phrases extracted
+    expect(output.length).toEqual(1)
+
+    // Check if extracted text is correct
+    const extractedText = output.reduce((prev, o) => {
+      const el = (htmlEl.childNodes[o.elementNumber] as HTMLElement);
+      return prev = prev.concat(`${el.innerHTML.slice(o.startCharacter, o.endCharacter)} `)
+    }, '')
+
+    expect(extractedText.trim()).toEqual(expectedOutputs[i]);
+
+  });
+});
 
 test("findTextinHTML does not trip for ingredients starting with same first number", () => {
   const htmlEl: HTMLElement = DOMParse(testHtmlDuplication)

@@ -139,3 +139,47 @@ export const markupHtmlDuplicationWithMissingIngredient = `
 </mark><br>
 <strong>Steamed rice and wilted greens, to&nbsp;serve </strong>
 `;
+
+export const testHtmlDuplication2 = `
+<p>Serves 6<br>
+For the pastry:<br>
+<strong>butter</strong> 175g <br>
+<strong>plain flour</strong> 225g<br>
+<strong>egg </strong>1 yolk<br>
+<strong>water</strong> 2-3 tbsp, cold<br>
+<br>
+For the filing:<br>
+<strong>banana shallots</strong> 5 <br>
+<strong>groundnut or other oil</strong> 1 tbsp <br>
+<strong>gammon</strong> smoked or not, trimmed, 650g<br>
+<strong>plain flour</strong> 2 level tbsp<br>
+<strong>double cream</strong> 250ml <br>
+<strong>parsley</strong> 20g<br>
+<strong>celeriac</strong> 150g (prepared weight)<br>
+<strong>butter</strong> 30g, melted<br></p>
+`.replace(/\n/g, '');
+
+export const markupHtmlDuplication2 = `
+Serves 6<br>For the pastry:<br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>butter</strong> 175g
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>plain flour</strong> 225g
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>egg </strong>1 yolk
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>water</strong> 2-3 tbsp, cold
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark> <br><br>For the filing:<br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>banana shallots</strong> 5
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>groundnut or other oil</strong> 1 tbsp
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark>  <br><strong>gammon</strong> smoked or not, trimmed, 650g<br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>plain flour</strong> 2 level tbsp
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>double cream</strong> 250ml
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>parsley</strong> 20g
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>celeriac</strong> 150g (prepared weight)
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>butter</strong> 30g, melted
+<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+</mark><br>`;

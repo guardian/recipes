@@ -2,7 +2,8 @@ import { Highlight, ResourceRange } from '~interfaces/main';
 import { DOMParse, findTextinHTML } from "~utils/html-parsing";
 import { createHighlightTextFractions, mergeHighlights, markHTML, createHighlightHTML } from "~utils/highlighting";
 import { HTMLElement } from 'node-html-parser';
-import { testIngListHTML, testHtmlDuplication, markupHtmlDuplication, testHtmlDuplicationWithMissingIngredient, 
+import { testIngListHTML, testHtmlDuplication, testHtmlDuplication2, 
+    markupHtmlDuplication, markupHtmlDuplication2, testHtmlDuplicationWithMissingIngredient, 
     markupHtmlDuplicationWithMissingIngredient } from '~utils/test-fixtures';
 
 
@@ -82,7 +83,7 @@ test("No duplication in ingredients fields ", () => {
                                                 }
                                             })
 
-    // Explicitely check steps in 'createHighlightHTML' function code
+    // Explicitly check steps in 'createHighlightHTML' function code
     const [before, inside, after] = createHighlightTextFractions(highlightInfo, htmlNodes[0].innerHTML)
     const merged = mergeHighlights(before, inside, after)
     expect(merged.replace(/\s/g, '')).toEqual(htmlNodes[0].innerHTML.replace(/\s/g, ''))
@@ -90,6 +91,48 @@ test("No duplication in ingredients fields ", () => {
     // Check 'createHighlightHTML' function as a whole
     const result = createHighlightHTML(highlightInfo, htmlNodes[0], {'test':'yellow'});
     expect (result.replace(/\s/g, "")).toEqual(markupHtmlDuplication.replace(/\s/g, "").replace(/"/g, '"'))
+
+})
+
+test("No duplication in ingredients fields with reverse order ", () => {
+    const htmlEl: HTMLElement = DOMParse(testHtmlDuplication2)
+    const htmlNodes = (Array.from(htmlEl.childNodes) as HTMLElement[]);
+
+    const ingredients = [
+        'butter 175g',
+        'plain flour 225g',
+        'egg 1 yolk',
+        'water 2-3 tbsp, cold',
+        'banana shallots 5',
+        'groundnut or other oil 1 tbsp',
+        'plain flour 2 level tbsp',
+        'double cream 250ml',
+        'parsley 20g',
+        'celeriac 150g (prepared weight)',
+        'butter 30g, melted'
+      ]
+
+      
+    const output: ResourceRange[] = ingredients.reduce((acc, ing) => {
+        return [...acc, ...findTextinHTML(ing, htmlEl)]
+     }, [] as ResourceRange[]);
+
+    const highlightInfo: Highlight[] = output.map((o, i) => { return { id: `test_${i}`, 
+                                                  type: "test", 
+                                                  range: {elementNumber: 0, 
+                                                          startCharacter: o.startCharacter, 
+                                                          endCharacter: o.endCharacter }
+                                                }
+                                            })
+
+    // Explicitly check steps in 'createHighlightHTML' function code)
+    const [before, inside, after] = createHighlightTextFractions(highlightInfo, htmlNodes[0].innerHTML)
+    const merged = mergeHighlights(before, inside, after)
+    expect(merged.replace(/\s/g, '')).toEqual(htmlNodes[0].innerHTML.replace(/\s/g, ''))
+
+    // Check 'createHighlightHTML' function as a whole
+    const result = createHighlightHTML(highlightInfo, htmlNodes[0], {'test':'yellow'});
+    expect (result.replace(/\s/g, "")).toEqual(markupHtmlDuplication2.replace(/\s/g, "").replace(/"/g, '"'))
 
 })
 
@@ -122,7 +165,7 @@ test("No duplication in ingredients field when skipping ingredient ", () => {
                                                 }
                                             })
 
-    // Explicitely check steps in 'createHighlightHTML' function code
+    // Explicitly check steps in 'createHighlightHTML' function code
     const [before, inside, after] = createHighlightTextFractions(highlightInfo, htmlNodes[1].innerHTML)
     const merged = mergeHighlights(before, inside, after)
     expect(merged.replace(/\s/g, '')).toEqual(htmlNodes[1].innerHTML.replace(/\s/g, ''))
