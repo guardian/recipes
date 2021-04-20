@@ -28,6 +28,31 @@ function updateStateItem(obj: Record<string, unknown>, keyPath: Array<string>, v
   obj[keyPath[lastKeyIndex]] = value;
 }
 
+
+function addStateItem(obj: Record<string, unknown>, keyPath: Array<string>, value: string|number|AppDataState): void {
+  const lastKeyIndex = keyPath.length-1;
+  // Get nested object
+  for (let i = 0; i < lastKeyIndex; ++ i) {
+    const key = isFinite(keyPath[i]) ? parseInt(keyPath[i]) : keyPath[i];
+    const nextKey = i < lastKeyIndex ? keyPath[i+1] : NaN
+    if (!(key in obj) || obj[key] === null){
+      // Check whether array is needed (key is number) rather than dict
+      obj[key] = isFinite(nextKey) ? [] : {}
+    }
+    obj = obj[key];
+  }
+
+  // Add/Set value
+  if (obj[keyPath[lastKeyIndex]] !== undefined && Array.isArray(obj)) {
+    // a value at `lastKeyIndex` exists need to insert at desired position
+    obj.splice(keyPath[lastKeyIndex], 0, value)
+  } else {
+    // New item, set value
+    obj[keyPath[lastKeyIndex]] = value;
+  }   
+}
+
+
 function deleteStateItem(keyPath: Array<string|number>, obj: Record<string, unknown>): void {
   const lastKeyIndex = keyPath.length-1;
   for (let i = 0; i < lastKeyIndex; ++ i) {
@@ -123,7 +148,7 @@ export const recipeReducer = produce((draft: AppDataState|AddRemoveItemType|Erro
         if (isAddRemoveItemType(action.payload)){
             const keyPathArr = action.payload["objId"].split(".")
             const value = getSchemaItem(action.schemaItem)
-            updateStateItem(draft.body, keyPathArr, value)
+            addStateItem(draft.body, keyPathArr, value)
           }
         break;
       }
