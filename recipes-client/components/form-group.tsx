@@ -13,7 +13,7 @@ function isStringOrNumber(item: string | Array<string|Record<string, unknown>> |
   return (typeof item === "string" || typeof item === "number")
 }
 
-export function formatTitle(text: string|null){
+export function formatTitle(text: string|null): JSX.Element|null{
     // Reformat title with first letter uppercase
     if (text === null){
         return null;
@@ -90,12 +90,11 @@ function getFormFields(formItems: string | Array<string|Record<string, unknown>>
   } else if (isingredientQuantityField(formItems)) {
     // ingredient quantity object
     return Object.keys(formItems).map((k: keyof ingredientQuantityField) => {
-      return <FormItem text={formItems[k]} choices={choices} label={k} key={`${key}.${k}`} dispatcher={dispatcher} > </FormItem>
+      return <FormItem text={formItems[k]} choices={choices} label={`Quantity:${k}`} key={`${key}.${k}`} dispatcher={dispatcher} > </FormItem>
     })
   } else if (isingredientField(formItems)) {
     // ingredient field object
     // return renderIngredientField(formItems, schema, key, dispatcher);
-    const formFieldsSchema = getFormFieldsSchema(formItems, schema)
     const formItemAddId = `${key}`;
     const formItemRemoveLastId = `${key}`;
     const fields = Object.keys(formItems).map((k: keyof ingredientField) => {
@@ -157,7 +156,7 @@ export class FormGroup extends Component<FormGroupProps> {
 
   render(): React.Component|JSX.Element {
     const { formItems, schema, title, UIschema } = this.props;
-    const  choices = schema.enum || null;
+    // const  choices = schema.enum || null;
     const key = this.props.key_ || title;
     const dispatcher = this.props.dispatcher || null;
 
