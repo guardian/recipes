@@ -16,6 +16,6 @@ export interface UIItem {
 
 export type UIGeneralItem = UIItem & ingredientListFields & ingredientField
 
-export function isUIschemaItem(obj: any): obj is UIschemaItem {
+export function isUIschemaItem(obj: UIschemaItem|allRecipeFields): obj is UIschemaItem {
   return isallRecipeFields(obj)
 }

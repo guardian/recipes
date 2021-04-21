@@ -1,5 +1,5 @@
 import { schemaItem } from "~interfaces/main"
-import { UIschemaItem, UIItem } from "~interfaces/ui"
+import { UIschemaItem } from "~interfaces/ui"
 
 /* Routing information */
 export const apiURL = "/api/curation/"

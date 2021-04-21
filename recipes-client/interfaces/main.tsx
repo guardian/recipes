@@ -1,5 +1,7 @@
 /** @jsx jsx */
 
+import { UIschemaItem } from "./ui";
+
 export interface schemaItem {
     type: string|string[];
     items?: schemaItem;
@@ -22,22 +24,24 @@ export interface schemaType {
     }
 }
 
-export function isschemaType(obj: schemaType): obj is schemaType {
+export function isschemaType(obj: schemaType|allRecipeFields|ingredientListFields): obj is schemaType {
   if ((typeof obj !== 'object') || (obj === null)) return false;
   const wObj: {[k: string]: unknown} = obj; 
   // const wObj: {[obj['properties']]?: unknown} = obj;
   // console.log(Object.keys(wObj))
-  return isallRecipeFields(wObj.properties);
+  return isallRecipeFields(wObj.properties); // Improve this, ends up being called twice sometimes from isingredientListFields
 }
 
-export function isingredientListFields(obj: schemaType|allRecipeFields|ingredientListFields): obj is ingredientListFields {
-  if (isschemaType(obj) || isallRecipeFields(obj) || (obj === null)) return false; 
+export function isingredientListFields(obj: schemaType|allRecipeFields|ingredientListFields|undefined): obj is ingredientListFields {
+  if ((obj === undefined) || (obj === null)) return false;
+  if (isschemaType(obj) || isallRecipeFields(obj)) return false; 
   return Object.keys(obj).includes("ingredients")
 }
 
 export interface allRecipeFields extends recipeMetaFields, recipeFields {};
 
-export function isallRecipeFields(obj: any): obj is allRecipeFields {
+export function isallRecipeFields(obj: undefined|null|allRecipeFields|UIschemaItem): obj is allRecipeFields {
+  if ((obj === undefined) || (obj === null)) return false;
   const keys = Object.keys(obj);
   return keys.includes("path") && keys.includes("credit")
 }
@@ -76,7 +80,24 @@ export type ingredientField = {
   "item" : string; 
   "unit" : string; 
   "comment" : string;
-  "quantity" : string;
+  "quantity" : ingredientQuantityField;
+}
+
+export type ingredientQuantityField = {
+  "absolute": string;
+  "from": string;
+  "to": string;
+}
+
+export function isingredientQuantityField(obj: ingredientQuantityField|ingredientQuantityField|Record<string,unknown>): obj is ingredientQuantityField {
+  if ((typeof obj !== 'object') || (obj === null)) return false;
+  return Object.keys(obj).includes("absolute");
+}
+
+
+export function isingredientField(obj: schemaItem|ingredientField): obj is ingredientField {
+  if ((typeof obj !== 'object') || (obj === null)) return false;
+  return Object.keys(obj).includes("quantity");
 }
 
 export type timeField = {
