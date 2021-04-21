@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
-import { ActionType, schemaItem, allRecipeFields, isingredientListFields, isschemaType, schemaType} from "~interfaces/main";
+import { ActionType, schemaItem, allRecipeFields, isschemaType } from "~interfaces/main";
 import { FormGroup } from "~components/form-group";
 
 import { isDisplayed, UIschema } from '~consts/index';

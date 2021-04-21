@@ -1,5 +1,7 @@
 /** @jsx jsx */
 
+import { UIschemaItem } from "./ui";
+
 export interface schemaItem {
     type: string|string[];
     items?: schemaItem;
@@ -38,7 +40,7 @@ export function isingredientListFields(obj: schemaType|allRecipeFields|ingredien
 
 export interface allRecipeFields extends recipeMetaFields, recipeFields {};
 
-export function isallRecipeFields(obj: any): obj is allRecipeFields {
+export function isallRecipeFields(obj: undefined|null|allRecipeFields|UIschemaItem): obj is allRecipeFields {
   if ((obj === undefined) || (obj === null)) return false;
   const keys = Object.keys(obj);
   return keys.includes("path") && keys.includes("credit")
