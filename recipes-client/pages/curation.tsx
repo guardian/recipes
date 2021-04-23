@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { space } from '@guardian/src-foundations';
+import { background, text } from '@guardian/src-foundations/palette';
 import RecipeComponent from "~components/recipe-component";
 // import GuFrame from "~/components/gu-frame";
 import GuCAPIFrame from "~/components/gu-capi-frame";
@@ -25,21 +26,22 @@ const gridLayout = css`
   display: grid;
   grid-template-columns: 25% 25% 25% 25%;
   height: 100vh;
-  grid-template-rows: 40px 1fr 30px;
+  grid-template-rows: 70px 1fr 50px;
   grid-template-areas: "header header header header" "left left right right" "footer footer footer footer";
 `;
 
 const header = css`
   grid-area: header;
-  background: red;
-  justify-items: center;
+  background: ${background.ctaPrimary};
+  color: ${text.ctaPrimary};
   display: grid;
-  align: center;
+  align-items: center;
+  padding-left: ${space[5]}px;
 `;
 
 const articleView = css`
   grid-area: left;
-  background: white;
+  background: ${background.primary};
   overflow: auto;
   padding: ${space[5]}px;
 `;
@@ -51,13 +53,13 @@ const dataView = css`
   padding: 5px;
 `;
 
-const footer = {
-  gridArea: "footer",
-  background: "green",
-  justifyItems: "center",
-  display: "grid",
-  align: "center",
-}
+const footer = css`
+  grid-area: footer;
+  background: ${background.ctaPrimary};
+  justify-items: center;
+  display: grid;
+  align-items: center;
+`;
 
 // Types
 
@@ -66,7 +68,7 @@ interface CurationProps {
 }
 
 interface RouteParams {
-    articleId: string;
+  articleId: string;
 }
 
 async function fetchAndDispatch(url: string, action: string, payloadType: string,
@@ -107,16 +109,38 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
   return (
     <div css={gridLayout}>
       <div css={header}>
-        <Header recipeUrl={articlePath} recipeNumber={recipeId} colours={state.colours} dispatcher={dispatch} />
+        <Header
+          recipeUrl={articlePath}
+          recipeNumber={recipeId}
+          colours={state.colours}
+          dispatcher={dispatch}
+        />
       </div>
       <div css={articleView}>
           {/* <GuFrame articlePath={articleId} /> */}
-          <GuCAPIFrame articlePath={articlePath} isLoading={state.isLoading} html={state.html} recipeItems={state.body} schema={state.schema} colours={state.colours} />
+          <GuCAPIFrame
+            articlePath={articlePath}
+            isLoading={state.isLoading}
+            html={state.html}
+            recipeItems={state.body}
+            schema={state.schema}
+            colours={state.colours}
+          />
       </div>
       <div css={dataView}>
-        <ImagePicker html={state.html} selected={image} isLoading={state.isLoading} dispatcher={dispatch} />
+        <ImagePicker
+          html={state.html}
+          selected={image}
+          isLoading={state.isLoading}
+          dispatcher={dispatch}
+        />
         <form>
-          <RecipeComponent isLoading={state.isLoading} body={state.body} schema={state.schema} dispatcher={dispatch}/>
+          <RecipeComponent
+            isLoading={state.isLoading}
+            body={state.body}
+            schema={state.schema}
+            dispatcher={dispatch}
+          />
         </form>
       </div>
       <div css={footer}>

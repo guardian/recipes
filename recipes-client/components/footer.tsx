@@ -1,10 +1,16 @@
 /** @jsx jsx */
 import { Dispatch } from "react";
-import { jsx } from "@emotion/core";
+import { jsx, css } from "@emotion/core";
+import { space } from '@guardian/src-foundations';
 import { ActionType, schemaType } from "../interfaces/main";
 import { apiURL } from "~consts";
 import { actions } from "~actions/recipeActions";
+import { Button, buttonBrand } from '@guardian/src-button';
+import { ThemeProvider } from 'emotion-theming'
 
+const firstButtonMargin = css`
+  margin-right: ${space[3]}px;
+`;
 
 interface FooterProps {
     articleId: string|null
@@ -64,9 +70,11 @@ function Footer(props: FooterProps): JSX.Element|JSX.Element[]{
     }
 
     return (
-        <form >
-            <button onClick={submit}>Save</button>
-            <button onClick={reset}>Reset</button>
+        <form>
+          <ThemeProvider theme={buttonBrand}>
+            <Button css={firstButtonMargin} priority="primary" size="xsmall" onClick={submit}>Save</Button>
+            <Button priority="secondary" size="xsmall" onClick={reset}>Reset</Button>
+          </ThemeProvider>
         </form>
     )
   }
