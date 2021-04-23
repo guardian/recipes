@@ -7,7 +7,7 @@ import { getHighlights, DOMParse, getUniqueHighlightTypes } from "~utils/html-pa
 import { defaultHighlightColours, excludeInHighlights, bylineFields } from "~consts/index";
 import { filterKeys, filterOutKeys } from "~utils/filter";
 import { createColourMap } from "~utils/colours";
-import { headline } from '@guardian/src-foundations/typography';
+import { headline, textSans } from '@guardian/src-foundations/typography';
 import { space } from '@guardian/src-foundations';
 
 const pageTitle = css`
@@ -54,9 +54,23 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
     </div>
 
       <Global styles={{
+        'figure.element.element-image':{
+          margin: '0',
+        }
+        'span.element-image__caption':{
+          fontFamily: 'arial',
+          fontSize: '14px',
+          display: 'block',
+        }
+        'span.element-image__credit':{
+          fontFamily: 'arial',
+          fontSize: '14px',
+          display: 'block',
+        }
         '.gu-image': {
           maxWidth: '100%',
           height: 'auto',
+          marginLeft: '0',
         }
       }} />
         <p dangerouslySetInnerHTML={{__html: html.fields.main}} />

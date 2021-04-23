@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx, css } from "@emotion/core";
 
 /* Original component from Giant, see here:
 https://github.com/guardian/pfi/blob/bfbb074e362e832944f4c708693698f9b5e7e9e2/frontend/giant-ui/src/js/components/viewer/CommentHighlighter.tsx
@@ -10,6 +10,8 @@ import filter from "lodash-es/filter";
 import { Highlight, ResourceRange } from '~interfaces/main';
 import { HTMLElement  } from 'node-html-parser';
 import { createHighlightTextFractions, markHTML, mergeHighlights, createHighlightHTML } from "~utils/highlighting";
+import { body } from '@guardian/src-foundations/typography';
+import { space } from '@guardian/src-foundations';
 
 type FlattenAction =
     { type: 'delete' } |
@@ -210,6 +212,23 @@ type HTMLProps = {
         colours?: Record<string,string> | null
     }
 
+const articleBody = css`
+  p {
+    ${body.medium()}
+  }
+  figure {
+    margin-left: 0;
+  }
+  mark {
+    display: block;
+    margin-bottom: ${space[2]}px;
+  }
+  br {
+    display: none;
+  }
+
+`;
+
 // export function HighlightHTML({ html, highlights, focusedId, onHighlightMount, focusComment }) {
 export function HighlightHTML(props: HTMLProps) {
     const { html, highlights, focusedId, onHighlightMount, focusComment, colours } = props;
@@ -230,7 +249,7 @@ export function HighlightHTML(props: HTMLProps) {
         }
     })
 
-    return <span className='article_body'>
+    return <span css={articleBody}>
         {children}
     </span>
 
