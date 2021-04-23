@@ -215,14 +215,14 @@ export function HighlightHTML(props: HTMLProps) {
     const { html, highlights, focusedId, onHighlightMount, focusComment, colours } = props;
     const flat_highlights = flatten(highlights) //Extra flattening step
     const sorted: Highlight[] = sortBy(flat_highlights, ['range.elementNumber', 'range.startCharacter']);
-    
+
     // const flattened = separateOverlappingHighlights(sorted);
     const htmlNodes = (Array.from(html.childNodes) as HTMLElement[]);
 
     const children = htmlNodes.map((node, inode) => {
         const relevantHighlights: Highlight[] = filter(sorted, ({ range: range }: Highlight ) => range.elementNumber === inode )
         const CustomTag = node.rawTagName ? `${node.rawTagName.toLowerCase()}`: 'div';
-        if (relevantHighlights.length === 0) { 
+        if (relevantHighlights.length === 0) {
             // nothing to change return original
             return <CustomTag key={inode} dangerouslySetInnerHTML={{__html: node.outerHTML}} />
         } else {

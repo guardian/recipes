@@ -1,6 +1,6 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
-
+import { css, jsx } from "@emotion/core";
+import { space } from '@guardian/src-foundations';
 import RecipeComponent from "~components/recipe-component";
 // import GuFrame from "~/components/gu-frame";
 import GuCAPIFrame from "~/components/gu-capi-frame";
@@ -19,6 +19,48 @@ import { Dispatch, useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 import { ActionType, AddRemoveItemType, AppDataState, ErrorItemType } from "~interfaces/main";
 
+// Styles
+
+const gridLayout = css`
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  height: 100vh;
+  grid-template-rows: 40px 1fr 30px;
+  grid-template-areas: "header header header header" "left left right right" "footer footer footer footer";
+`;
+
+const header = css`
+  grid-area: header;
+  background: red;
+  justify-items: center;
+  display: grid;
+  align: center;
+`;
+
+const articleView = css`
+  grid-area: left;
+  background: white;
+  overflow: auto;
+  padding: ${space[5]}px;
+`;
+
+const dataView = css`
+  grid-area: right;
+  background: grey;
+  overflow: auto;
+  padding: 5px;
+`;
+
+const footer = {
+  gridArea: "footer",
+  background: "green",
+  justifyItems: "center",
+  display: "grid",
+  align: "center",
+}
+
+// Types
+
 interface CurationProps {
   articleId: string;
 }
@@ -27,9 +69,9 @@ interface RouteParams {
     articleId: string;
 }
 
-async function fetchAndDispatch(url: string, action: string, payloadType: string, 
+async function fetchAndDispatch(url: string, action: string, payloadType: string,
   dispatcher: Dispatch<ActionType>): Promise<void> {
-  
+
   const payload: { [id: string] : AppDataState|AddRemoveItemType|ErrorItemType } = {};
   return fetch(url).then((response) => {
     return response.json()
@@ -63,30 +105,21 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
   }, [articleId, dispatch]);
 
   return (
-    <div
-      css={{
-        display: "grid",
-        gridTemplateColumns: "25% 25% 25% 25%",
-        // gridTemplateRows: "auto",
-        height: "100vh",
-        gridTemplateRows: "40px 1fr 30px",
-        gridTemplateAreas: `"header header header header" "left left right right" "footer footer footer footer"`,
-      }}
-    >
-      <div css={{ gridArea: "header", background: "red", justifyItems: "center", display: "grid", align: "center" }}>
+    <div css={gridLayout}>
+      <div css={header}>
         <Header recipeUrl={articlePath} recipeNumber={recipeId} colours={state.colours} dispatcher={dispatch} />
       </div>
-      <div css={{ gridArea: "left", background: "white", overflow: "auto", padding: "5px" }}>
+      <div css={articleView}>
           {/* <GuFrame articlePath={articleId} /> */}
           <GuCAPIFrame articlePath={articlePath} isLoading={state.isLoading} html={state.html} recipeItems={state.body} schema={state.schema} colours={state.colours} />
       </div>
-      <div css={{ gridArea: "right", background: "grey", overflow: "auto", padding: "5px" }}>
+      <div css={dataView}>
         <ImagePicker html={state.html} selected={image} isLoading={state.isLoading} dispatcher={dispatch} />
         <form>
           <RecipeComponent isLoading={state.isLoading} body={state.body} schema={state.schema} dispatcher={dispatch}/>
         </form>
       </div>
-      <div css={{ gridArea: "footer", background: "green", justifyItems: "center", display: "grid", align: "center"}}>
+      <div css={footer}>
         <Footer articleId={articleId} body={state.body} dispatcher={dispatch}/>
       </div>
     </div>
