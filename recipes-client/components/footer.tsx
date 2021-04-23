@@ -12,6 +12,13 @@ interface FooterProps {
     dispatcher: Dispatch<ActionType>
   }
 
+  // replace nulls with empty list
+  const cleanRecipe = (data: schemaType|null) => {
+    const nullableFields = ['cuisines', 'occasion']
+    nullableFields.forEach(field => data[field] = data[field] ? data[field] : [])
+    return data
+  }
+
 async function postRecipe(aId: string|null, data: schemaType|null): Promise<Record<string, unknown>>{
 // async function postRecipe(aId: string|null, data: Record<string, unknown>|null): Promise<Record<string, unknown>>{
     if (aId === null) {
@@ -32,7 +39,7 @@ async function postRecipe(aId: string|null, data: schemaType|null): Promise<Reco
         },
         redirect: 'follow', // manual, *follow, error
         referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
+        body: JSON.stringify(cleanRecipe(data)) // body data type must match "Content-Type" header
     });
     return {"status": response.status}; //.json(); // parses JSON response into native JavaScript objects
   }

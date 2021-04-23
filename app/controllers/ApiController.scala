@@ -6,30 +6,30 @@ import config.Config
 import play.api.Logging
 import play.api.mvc._
 import play.api.libs.json.Json
+import java.util.Map
 
-
-import java.util.Map;
-import scala.collection.immutable.{Map => MMap};
+import scala.collection.immutable.{Map => MMap}
 import scala.jdk.CollectionConverters._
-
-import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.dynamodbv2.{AmazonDynamoDB, AmazonDynamoDBClientBuilder}
 import com.amazonaws.auth.AWSCredentialsProvider
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.amazonaws.services.dynamodbv2.document.ItemUtils
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression
 import com.amazonaws.services.dynamodbv2.model.QueryRequest
 import play.api.libs.json.JsPath
 import java.util.ArrayList
+
 import com.amazonaws.services.dynamodbv2.document.Item
 import com.amazonaws.services.dynamodbv2.model.ScanRequest
 import com.amazonaws.services.dynamodbv2.model.ScanResult
+import model.Recipe
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -62,8 +62,19 @@ class ApiController (
   }
 
   // Endpoint functions
-  def postId(id: String) = Action { implicit request =>
-      Ok("{Request [" + request + "] for '"+id+"'.")
+  def postId(id: String): Action[AnyContent] = Action { implicit request =>
+    val recipe = for {
+      json <- request.body.asJson
+      recipe <- Recipe.parseRecipe(json)
+      } yield recipe
+
+    recipe.fold{
+      logger.error(s"Failed to parse recipe ${id}")
+      InternalServerError("Failed to parse recipe")
+    }{r =>
+      Ok(s"Recipe ${r.recipeId} succesfully parsed")
+    }
+
   }
 
   def index(id: String) = Action {
@@ -536,7 +547,7 @@ class ApiController (
       Ok(response);
 
   }
-        
+
 
   def list(id: String) = Action {
     // List all recipes available for `path`
