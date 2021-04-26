@@ -56,17 +56,17 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
       <Global styles={{
         'figure.element.element-image':{
           margin: '0',
-        }
+        },
         'span.element-image__caption':{
           fontFamily: 'arial',
           fontSize: '14px',
           display: 'block',
-        }
+        },
         'span.element-image__credit':{
           fontFamily: 'arial',
           fontSize: '14px',
           display: 'block',
-        }
+        },
         '.gu-image': {
           maxWidth: '100%',
           height: 'auto',

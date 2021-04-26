@@ -28,7 +28,7 @@ export function createHighlightHTML(highlights: Highlight[], node: HTMLElement,
 }
 
 export function markHTML(text: string, type: string, colour: string, applyLabel?: boolean): string {
-    return `<mark class="${type}" style="${body.medium()}; background: white; border: 2px ${colour} solid; padding: 0.25em 0.6em; line-height: 1; border-radius: 0.15em;">${text}
+    return `<mark class="${type}" style="${body.medium()}; background: ${colour}; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">${text}
     ${applyLabel ? renderLabel(type) : ""}
     </mark>`
 }
