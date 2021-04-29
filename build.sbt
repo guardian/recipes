@@ -37,9 +37,6 @@ lazy val root = (project in file("."))
       BuildInfoOption.ToJson
     ),
 
-    resolvers ++= Seq(
-      "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
-    ),
     libraryDependencies ++= Seq(
       ws,
       "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
@@ -77,4 +74,3 @@ lazy val root = (project in file("."))
     ),
     javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
   ))
-
