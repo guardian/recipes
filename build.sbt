@@ -52,7 +52,7 @@ lazy val root = (project in file("."))
       "com.gu" %% "pan-domain-auth-verification" % "1.0.4",
       "com.amazonaws" % "aws-java-sdk-s3" % awsSdkVersion,
       "com.amazonaws" % "aws-java-sdk-dynamodb" % awsSdkVersion,
-      "com.gu" %% "simple-configuration-s3" % "1.5.2"
+      "com.gu" %% "simple-configuration-s3" % "1.5.5"
     ),
     scalacOptions ++= List(
       "-encoding", "utf8",
