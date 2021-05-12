@@ -2,8 +2,8 @@ import { Highlight, ResourceRange } from '~interfaces/main';
 import { DOMParse, findTextinHTML } from "~utils/html-parsing";
 import { createHighlightTextFractions, mergeHighlights, markHTML, createHighlightHTML } from "~utils/highlighting";
 import { HTMLElement } from 'node-html-parser';
-import { testIngListHTML, testHtmlDuplication, testHtmlDuplication2, 
-    markupHtmlDuplication, markupHtmlDuplication2, testHtmlDuplicationWithMissingIngredient, 
+import { testIngListHTML, testHtmlDuplication, testHtmlDuplication2,
+    markupHtmlDuplication, markupHtmlDuplication2, testHtmlDuplicationWithMissingIngredient,
     markupHtmlDuplicationWithMissingIngredient } from '~utils/test-fixtures';
 
 
@@ -38,7 +38,7 @@ test("Mark HTML correctly", () => {
     const [before, inside, after] = createHighlightTextFractions(highlights, testIngListHTML);
 
     const highlightType = highlights[0].type;
-    const lastInSpan = true; 
+    const lastInSpan = true;
     const altered = [markHTML(inside[0].trim(), highlightType, colours[highlightType], lastInSpan)];
 
     const ttEl: HTMLElement = DOMParse(before[0]+altered[0]+after[0])
@@ -70,15 +70,15 @@ test("No duplication in ingredients fields ", () => {
         "Salt and black pepper"
       ]
 
-      
+
     const output: ResourceRange[] = ingredients.reduce((acc, ing) => {
         return [...acc, ...findTextinHTML(ing, htmlEl)]
      }, [] as ResourceRange[]);
 
-    const highlightInfo: Highlight[] = output.map((o, i) => { return { id: `test_${i}`, 
-                                                  type: "test", 
-                                                  range: {elementNumber: 0, 
-                                                          startCharacter: o.startCharacter, 
+    const highlightInfo: Highlight[] = output.map((o, i) => { return { id: `test_${i}`,
+                                                  type: "test",
+                                                  range: {elementNumber: 0,
+                                                          startCharacter: o.startCharacter,
                                                           endCharacter: o.endCharacter }
                                                 }
                                             })
@@ -112,15 +112,15 @@ test("No duplication in ingredients fields with reverse order ", () => {
         'butter 30g, melted'
       ]
 
-      
+
     const output: ResourceRange[] = ingredients.reduce((acc, ing) => {
         return [...acc, ...findTextinHTML(ing, htmlEl)]
      }, [] as ResourceRange[]);
 
-    const highlightInfo: Highlight[] = output.map((o, i) => { return { id: `test_${i}`, 
-                                                  type: "test", 
-                                                  range: {elementNumber: 0, 
-                                                          startCharacter: o.startCharacter, 
+    const highlightInfo: Highlight[] = output.map((o, i) => { return { id: `test_${i}`,
+                                                  type: "test",
+                                                  range: {elementNumber: 0,
+                                                          startCharacter: o.startCharacter,
                                                           endCharacter: o.endCharacter }
                                                 }
                                             })
@@ -152,15 +152,15 @@ test("No duplication in ingredients field when skipping ingredient ", () => {
         "2 tbsp soy sauce"
     ]
 
-      
+
     const output: ResourceRange[] = ingredients.reduce((acc, ing) => {
         return [...acc, ...findTextinHTML(ing, htmlEl)]
      }, [] as ResourceRange[]);
 
-    const highlightInfo: Highlight[] = output.map((o, i) => { return { id: `test_${i}`, 
-                                                  type: "test", 
-                                                  range: {elementNumber: 1, 
-                                                          startCharacter: o.startCharacter, 
+    const highlightInfo: Highlight[] = output.map((o, i) => { return { id: `test_${i}`,
+                                                  type: "test",
+                                                  range: {elementNumber: 1,
+                                                          startCharacter: o.startCharacter,
                                                           endCharacter: o.endCharacter }
                                                 }
                                             })

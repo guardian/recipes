@@ -18,5 +18,8 @@ module.exports = {
     "tsx",
     "js"
   ],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: "<rootDir>/recipes-client/"})
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(compilerOptions.paths, {prefix: "<rootDir>/recipes-client/"}),
+    "^@guardian/src-foundations/(.*)(?<!cjs)$": "@guardian/src-foundations/$1/cjs"
+  }
 };

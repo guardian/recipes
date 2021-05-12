@@ -1,9 +1,10 @@
 import { Highlight } from '~interfaces/main';
 import { HTMLElement } from 'node-html-parser';
 import { extractCommonText } from  '~utils/html-parsing';
+import { body } from '@guardian/src-foundations/typography';
 
 export function createHighlightTextFractions(highlights: Highlight[], text: string): string[][] {
-    // Create before, after and inside slices of text to allow applying markup at later stage 
+    // Create before, after and inside slices of text to allow applying markup at later stage
     return highlights.reduce<Array<string[]>>(([b, i, a], highlight) => {
         const before = text.slice(0, Math.max(0, highlight.range.startCharacter));
         const after = text.slice(highlight.range.endCharacter);
@@ -27,7 +28,7 @@ export function createHighlightHTML(highlights: Highlight[], node: HTMLElement,
 }
 
 export function markHTML(text: string, type: string, colour: string, applyLabel?: boolean): string {
-    return `<mark class="${type}" style="background: ${colour}; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">${text}
+    return `<mark class="${type}" style="${body.medium()}; background: ${colour}; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">${text}
     ${applyLabel ? renderLabel(type) : ""}
     </mark>`
 }
@@ -50,5 +51,5 @@ export function mergeHighlights(before_: string[], inside_: string[], after_: st
 }
 
 function renderLabel(label: string): string {
-    return `<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">${label}</span>`
+    return `<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">${label}</span>`
 }
