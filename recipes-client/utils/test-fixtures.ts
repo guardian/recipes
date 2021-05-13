@@ -1,6 +1,10 @@
 /*
   Fixtures for unit tests
+  STRONG DEPENDENCY OF MARKUP STYLING
+  TODO: de-couple this dependency better.
 */
+import { body } from '@guardian/src-foundations/typography';
+
 export const testRecipeHTML = `
 <p>All food is a celebration of something, but some dishes are especially celebratory. What makes them so? For me, they
   have to have a built-in “ta-da!” factor, and anything that you need to flip over, inverting it from a pan and on to a
@@ -80,28 +84,28 @@ Salt and black pepper</p>
 `.replace(/\n/g, '');
 
 export const markupHtmlDuplication = `
-<mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">500g salt cod
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">600g potatoes, peeled and thinly sliced
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">3 large shallots (or 2 red onions), thinly sliced
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">1 garlic clove, crushed
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">3 tbsp flat-leaf parsley, chopped
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">Large pinch of dried oregano
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">150g small plum tomatoes, chopped
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">50g pecorino, grated
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">50g seasoned breadcrumbs
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">50ml olive oil
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">Salt and black pepper
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+<mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">500g salt cod
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">600g potatoes, peeled and thinly sliced
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">3 large shallots (or 2 red onions), thinly sliced
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">1 garlic clove, crushed
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">3 tbsp flat-leaf parsley, chopped
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">Large pinch of dried oregano
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">150g small plum tomatoes, chopped
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">50g pecorino, grated
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">50g seasoned breadcrumbs
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">50ml olive oil
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">Salt and black pepper
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
 </mark>
 `.replace(/\n/g, '');
 
@@ -120,22 +124,22 @@ For the marinade<br><strong>4 tbsp redcurrant, plum, crab apple or other fruit j
 `.replace(/\n/g, '');
 
 export const markupHtmlDuplicationWithMissingIngredient = `
-<mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>1.5kg free-range pork ribs (2&nbsp;racks) </strong>
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br>For the marinade<br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>4 tbsp redcurrant, plum, crab apple or other fruit jelly</strong>
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>3 tbsp apple balsamic vinegar</strong>
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>2 tbsp light muscovado sugar</strong>
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>3 garlic cloves, crushed to a paste</strong>
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>1 tbsp finely grated fresh ginger</strong>
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>½-1 medium-hot red chilli, finely chopped, or ½ tsp dried chilli flakes</strong>
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>2 tbsp soy sauce </strong>
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+<mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>1.5kg free-range pork ribs (2&nbsp;racks) </strong>
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br>For the marinade<br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>4 tbsp redcurrant, plum, crab apple or other fruit jelly</strong>
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>3 tbsp apple balsamic vinegar</strong>
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>2 tbsp light muscovado sugar</strong>
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>3 garlic cloves, crushed to a paste</strong>
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>1 tbsp finely grated fresh ginger</strong>
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>½-1 medium-hot red chilli, finely chopped, or ½ tsp dried chilli flakes</strong>
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>2 tbsp soy sauce </strong>
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
 </mark><br>
 <strong>Steamed rice and wilted greens, to&nbsp;serve </strong>
 `;
@@ -160,26 +164,26 @@ For the filing:<br>
 `.replace(/\n/g, '');
 
 export const markupHtmlDuplication2 = `
-Serves 6<br>For the pastry:<br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>butter</strong> 175g
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>plain flour</strong> 225g
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>egg </strong>1 yolk
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>water</strong> 2-3 tbsp, cold
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br><br>For the filing:<br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>banana shallots</strong> 5
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>groundnut or other oil</strong> 1 tbsp
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark>  <br><strong>gammon</strong> smoked or not, trimmed, 650g<br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>plain flour</strong> 2 level tbsp
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>double cream</strong> 250ml
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark>  <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>parsley</strong> 20g
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>celeriac</strong> 150g (prepared weight)
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
-</mark> <br> <mark class="test" style="background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>butter</strong> 30g, melted
-<span style="font-size: 0.7em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem position: relative; top: 0.5em; position: relative;">test</span>
+Serves 6<br>For the pastry:<br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>butter</strong> 175g
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>plain flour</strong> 225g
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>egg </strong>1 yolk
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>water</strong> 2-3 tbsp, cold
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br><br>For the filing:<br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>banana shallots</strong> 5
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>groundnut or other oil</strong> 1 tbsp
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark>  <br><strong>gammon</strong> smoked or not, trimmed, 650g<br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>plain flour</strong> 2 level tbsp
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>double cream</strong> 250ml
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark>  <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>parsley</strong> 20g
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>celeriac</strong> 150g (prepared weight)
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
+</mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>butter</strong> 30g, melted
+<span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
 </mark><br>`;
