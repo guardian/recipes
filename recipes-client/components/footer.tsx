@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { Dispatch } from "react";
 import { jsx } from "@emotion/core";
-import { ActionType, schemaType } from "../interfaces/main";
+import { ActionType, allRecipeFields, schemaType } from "../interfaces/main";
 import { apiURL } from "~consts";
 import { actions } from "~actions/recipeActions";
 
@@ -13,13 +13,13 @@ interface FooterProps {
   }
 
   // replace nulls with empty list
-  const cleanRecipe = (data: schemaType|null) => {
-    const nullableFields = ['cuisines', 'occasion']
-    nullableFields.forEach(field => data[field] = data[field] ? data[field] : [])
+  const cleanRecipe = (data: allRecipeFields|null) => {
+    const nullableFields = ['cuisines', 'occasion'] as Array<keyof allRecipeFields>
+    nullableFields.forEach((field: keyof allRecipeFields) => data[field] = data[field] ? data[field] : [])
     return data
   }
 
-async function postRecipe(aId: string|null, data: schemaType|null): Promise<Record<string, unknown>>{
+async function postRecipe(aId: string|null, data: allRecipeFields|null): Promise<Record<string, unknown>>{
 // async function postRecipe(aId: string|null, data: Record<string, unknown>|null): Promise<Record<string, unknown>>{
     if (aId === null) {
         console.warn("No url provided!")
