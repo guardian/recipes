@@ -37,9 +37,6 @@ lazy val root = (project in file("."))
       BuildInfoOption.ToJson
     ),
 
-    resolvers ++= Seq(
-      "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
-    ),
     libraryDependencies ++= Seq(
       ws,
       "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
@@ -55,7 +52,7 @@ lazy val root = (project in file("."))
       "com.gu" %% "pan-domain-auth-verification" % "1.0.4",
       "com.amazonaws" % "aws-java-sdk-s3" % awsSdkVersion,
       "com.amazonaws" % "aws-java-sdk-dynamodb" % awsSdkVersion,
-      "com.gu" %% "simple-configuration-s3" % "1.5.2"
+      "com.gu" %% "simple-configuration-s3" % "1.5.6"
     ),
     scalacOptions ++= List(
       "-encoding", "utf8",
@@ -63,6 +60,9 @@ lazy val root = (project in file("."))
       "-feature",
       "-unchecked",
       "-Xfatal-warnings"
+    ),
+    dependencyOverrides ++= Seq(
+    "com.fasterxml.jackson.core" % "jackson-databind" % "2.10.5",
     ),
     javaOptions in Universal ++= Seq(
       s"-Dpidfile.path=/dev/null",
@@ -77,4 +77,3 @@ lazy val root = (project in file("."))
     ),
     javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
   ))
-

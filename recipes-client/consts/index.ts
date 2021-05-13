@@ -16,7 +16,7 @@ export const urls = {
 
 /* UI display output config */
 export const newColours = ["aquamarine", "blue", "brown", "coral", "yellow", "chartreuse", "darkseagreen"];
-export const defaultHighlightColours   = ["#E69F0090", "#56B4E990", "#009E7390", "#F0E44290", "#0072B290", "#D55E0090", "#CC79A790"]
+export const defaultHighlightColours   = ["#E69F0090", "#56B4E990", "#009E7390", "#FEDC2A", "#0072B290", "#D55E0090", "#CC79A790"]
 
 export const excludeInForm = ["credit", "recipeId", "image", "path"];
 export const excludeInHighlights = excludeInForm.concat(["ingredient_tag", "cuisines", "meal_type", "occasion"]);
@@ -115,7 +115,7 @@ export const UIschema: UIschemaItem = {
 
 // }
 // function isLocked(key:string){
-  
+
 // }
 export function isDisplayed(key: keyof schemaItem|string): boolean {
   // const wObj: {[k: string]: unknown} = obj;

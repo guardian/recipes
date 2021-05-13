@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Global } from "@emotion/core";
+import { css, jsx, Global } from "@emotion/core";
 import React from 'react';
 import { HighlightHTML, HighlightByLine} from "~components/comment-highlighter";
 import { GuCAPIProps, recipeFields } from '~interfaces/main'
@@ -7,6 +7,18 @@ import { getHighlights, DOMParse, getUniqueHighlightTypes } from "~utils/html-pa
 import { defaultHighlightColours, excludeInHighlights, bylineFields } from "~consts/index";
 import { filterKeys, filterOutKeys } from "~utils/filter";
 import { createColourMap } from "~utils/colours";
+import { headline, textSans } from '@guardian/src-foundations/typography';
+import { space } from '@guardian/src-foundations';
+
+const pageTitle = css`
+  ${headline.medium({ fontWeight: 'bold' })};
+  margin-top: 0;
+`;
+
+const byline = css`
+  ${headline.xsmall()};
+`;
+
 
 function onHighlightMount(id: string, top: number, elem: HTMLElement): void {
   console.debug(`${id} highlight mount.`)
@@ -35,14 +47,30 @@ function GuCAPIFrame(props: GuCAPIProps): JSX.Element {
 
     return (
     <>
-    <h1> {html.webTitle} </h1> 
-    <h3>Byline:
+    <h1 css={pageTitle}>{html.webTitle}</h1>
+    <h3>Byline</h3>
+    <div css={byline}>
       <HighlightByLine text={byline} highlights={bylineHighlights} focusedId="" onHighlightMount={onHighlightMount} focusComment={focusComment} colours={colourMap}/>
-    </h3>
+    </div>
+
       <Global styles={{
-        '.gu-image': { 
+        'figure.element.element-image':{
+          margin: '0',
+        },
+        'span.element-image__caption':{
+          fontFamily: 'arial',
+          fontSize: '14px',
+          display: 'block',
+        },
+        'span.element-image__credit':{
+          fontFamily: 'arial',
+          fontSize: '14px',
+          display: 'block',
+        },
+        '.gu-image': {
           maxWidth: '100%',
           height: 'auto',
+          marginLeft: '0',
         }
       }} />
         <p dangerouslySetInnerHTML={{__html: html.fields.main}} />
