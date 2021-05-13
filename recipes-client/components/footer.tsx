@@ -15,7 +15,9 @@ interface FooterProps {
   // replace nulls with empty list
   const cleanRecipe = (data: allRecipeFields|null) => {
     const nullableFields = ['cuisines', 'occasion'] as Array<keyof allRecipeFields>
-    nullableFields.forEach((field: keyof allRecipeFields) => data[field] = data[field] ? data[field] : [])
+    if (data !== null) {
+        nullableFields.forEach((field: keyof allRecipeFields) => data[field] = data[field] ? data[field] : [])
+    }
     return data
   }
 
