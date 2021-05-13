@@ -2,7 +2,7 @@
 import { Dispatch } from "react";
 import { jsx, css } from "@emotion/core";
 import { space } from '@guardian/src-foundations';
-import { ActionType, schemaType } from "../interfaces/main";
+import { ActionType, recipeMetaFields, schemaType } from "../interfaces/main";
 import { apiURL } from "~consts";
 import { actions } from "~actions/recipeActions";
 import { Button, buttonBrand } from '@guardian/src-button';
@@ -19,10 +19,10 @@ interface FooterProps {
   }
 
   // replace nulls with empty list
-  const cleanRecipe = (data: allRecipeFields|null) => {
-    const nullableFields = ['cuisines', 'occasion'] as Array<keyof allRecipeFields>
+  const cleanRecipe = (data: recipeMetaFields|null) => {
+    const nullableFields = ['cuisines', 'occasion'] as Array<keyof recipeMetaFields>
     if (data !== null) {
-        nullableFields.forEach((field: keyof allRecipeFields) => data[field] = data[field] ? data[field] : [])
+        nullableFields.forEach((field: keyof recipeMetaFields) => data[field] = data[field] ? data[field] : [])
     }
     return data
   }
