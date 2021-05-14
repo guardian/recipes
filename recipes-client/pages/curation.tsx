@@ -16,9 +16,9 @@ import { RouteComponentProps } from 'react-router-dom';
 import { recipeReducer, defaultState } from "~reducers/recipe-reducer";
 import { actions } from "~actions/recipeActions";
 import {apiURL, capiProxy, schemaEndpoint} from "~consts/index";
-import { Dispatch, useEffect } from "react";
+import { useEffect } from "react";
 import { useImmerReducer } from "use-immer";
-import { ActionType, AddRemoveItemType, AppDataState, ErrorItemType } from "~interfaces/main";
+import { fetchAndDispatch, setLoadingFinished } from "~utils/requests";
 
 // Styles
 
@@ -69,22 +69,6 @@ interface CurationProps {
 
 interface RouteParams {
   articleId: string;
-}
-
-async function fetchAndDispatch(url: string, action: string, payloadType: string,
-  dispatcher: Dispatch<ActionType>): Promise<void> {
-
-  const payload: { [id: string] : AppDataState|AddRemoveItemType|ErrorItemType } = {};
-  return fetch(url).then((response) => {
-    return response.json()
-    }).then((data: Record<string,AppDataState|AddRemoveItemType>|ErrorItemType) => {
-      payload[payloadType] = data;
-      dispatcher({"type": action, "payload": payload });
-    }).catch(() => dispatcher({"type": actions.error, "payload": `Error fetching ${payloadType} data.`}) );
-}
-
-function setLoadingFinished(dispatcher: Dispatch<ActionType>): void {
-  dispatcher({"type": actions.init, "payload": {'isLoading': false}})
 }
 
 function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
