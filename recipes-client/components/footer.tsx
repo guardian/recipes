@@ -5,8 +5,10 @@ import { space } from '@guardian/src-foundations';
 import { ActionType, recipeMetaFields, schemaType } from "../interfaces/main";
 import { apiURL } from "~consts";
 import { actions } from "~actions/recipeActions";
+import { fetchAndDispatch } from "~utils/requests";
 import { Button, buttonBrand } from '@guardian/src-button';
-import { ThemeProvider } from 'emotion-theming'
+import { ThemeProvider } from 'emotion-theming';
+import fromPairs from "lodash-es/fromPairs";
 
 const firstButtonMargin = css`
   margin-right: ${space[3]}px;
@@ -20,11 +22,20 @@ interface FooterProps {
 
   // replace nulls with empty list
   const cleanRecipe = (data: recipeMetaFields|null) => {
-    const nullableFields = ['cuisines', 'occasion'] as Array<keyof recipeMetaFields>
+    // const nullableFields = ['cuisines', 'occasion'] as Array<keyof recipeMetaFields>
     if (data !== null) {
-        nullableFields.forEach((field: keyof recipeMetaFields) => data[field] = data[field] ? data[field] : [])
+        const out = Object.keys(data).map((field: keyof recipeMetaFields) => {
+          if (field === 'serves'){
+            return [field, data[field] ? data[field] : '']
+          } else {
+            return [field, data[field] ? data[field] : []]
+          }
+        })
+        return fromPairs(out)
+        // nullableFields.forEach((field: keyof recipeMetaFields) => data[field] = data[field] ? data[field] : [])
+    } else {
+      return data
     }
-    return data
   }
 
 async function postRecipe(aId: string|null, data: allRecipeFields|null): Promise<Record<string, unknown>>{
@@ -58,10 +69,7 @@ function resetRecipe(aId: string|null, dispatcher: Dispatch<ActionType>): void {
         dispatcher({"type": actions.error, "payload": "[Reset] Error: No article id provided."});
     } else {
         const articleUrl = aId.replace(/^\/+/, '');
-        fetch(`${location.origin}${apiURL}${articleUrl}`)
-        .then((response) => {return response.json<{ data: Record<string,unknown>}>()})
-        .then((data: Record<string,unknown>) => dispatcher({"type": actions.init, "payload": {isLoading: false, body: data}}))
-        .catch(() => dispatcher({"type": actions.error, "payload": "Error fetching body data."}) );
+        void fetchAndDispatch(`${location.origin}/api/db/${articleUrl}`, actions.init, "body", dispatcher)
     }
 }
 
