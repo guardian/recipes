@@ -14,6 +14,7 @@ import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.dynamodbv2.{AmazonDynamoDB, AmazonDynamoDBClientBuilder}
 import com.amazonaws.auth.AWSCredentialsProvider
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest
+import com.amazonaws.services.dynamodbv2.model.PutItemRequest
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.amazonaws.services.dynamodbv2.document.ItemUtils
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression
@@ -30,6 +31,7 @@ import com.amazonaws.services.dynamodbv2.document.Item
 import com.amazonaws.services.dynamodbv2.model.ScanRequest
 import com.amazonaws.services.dynamodbv2.model.ScanResult
 import model.Recipe
+import com.amazonaws.services.dynamodbv2.document.DynamoDB
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -72,7 +74,26 @@ class ApiController (
       logger.error(s"Failed to parse recipe ${id}")
       InternalServerError("Failed to parse recipe")
     }{r =>
-      Ok(s"Recipe ${r.recipeId} succesfully parsed")
+      val dbClient = config.dbUrl match {
+        case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
+                    .withCredentials(config.awsCredentials)
+                    .build()
+        case _ => AmazonDynamoDBClientBuilder.standard()
+                    .withCredentials(config.awsCredentials)
+                    .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
+                    .build()
+      }
+
+      val item = ItemUtils.fromSimpleMap(
+        Item.fromJSON(Json.toJson(r).toString()).asMap()
+      );
+
+      val request: PutItemRequest = new PutItemRequest()
+      .withTableName(config.tableNameEditedRecipes)
+      .withItem(item);
+
+      val response = dbClient.putItem(request);
+      Ok(s"Recipe ${r.path} #${r.recipeId} succesfully parsed")
     }
 
   }
