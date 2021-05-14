@@ -25,7 +25,7 @@ interface FooterProps {
     // const nullableFields = ['cuisines', 'occasion'] as Array<keyof recipeMetaFields>
     if (data !== null) {
         const out = Object.keys(data).map((field: keyof recipeMetaFields) => {
-          if (field === 'serves'){
+          if (['serves', 'image', 'recipes_title'].includes(field)){
             return [field, data[field] ? data[field] : '']
           } else {
             return [field, data[field] ? data[field] : []]
