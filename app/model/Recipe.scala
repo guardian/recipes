@@ -6,7 +6,7 @@ import scala.collection.immutable.{Map => MMap}
 
 case class Quantity(absolute: Option[String], from: Option[String], to: Option[String])
 case class Ingredient(item: String, unit: String, quantity: Quantity, comment: Option[String], text: String)
-case class IngredientsList(ingredients: List[Ingredient])
+case class IngredientsList(ingredients: List[Ingredient], title: String)
 case class Time(instruction: String, quantity: String, unit: String)
 case class Recipe(
   recipeId: Long,
