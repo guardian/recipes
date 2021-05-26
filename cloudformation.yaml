@@ -41,7 +41,7 @@ Parameters:
   EditedRecipesTable:
     Description: Name of table to store edited recipes in.
     Type: String
-    Default: recipes
+    Default: recipes-edited
 
 Mappings:
   StageVariables:
