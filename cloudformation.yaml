@@ -370,6 +370,7 @@ Resources:
           Value: !Ref App
 
   RecipesDynamoTable:
+    DeletionPolicy: Retain
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: !Ref RecipesTable
@@ -388,6 +389,7 @@ Resources:
         WriteCapacityUnits: 1
 
   EditedRecipesDynamoTable:
+  DeletionPolicy: Retain
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: !Ref EditedRecipesTable
