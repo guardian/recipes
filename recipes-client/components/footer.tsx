@@ -112,7 +112,7 @@ function Footer(props: FooterProps): JSX.Element|JSX.Element[]{
         resetRecipe(articleId, dispatcher);
     }
 
-    function downloadExcel(event: React.MouseEvent<HTMLInputElement>): void {
+    function downloadCSV(event: React.MouseEvent<HTMLInputElement>): void {
       event.preventDefault();
       const [data, fields] = formatCSV(body);
       const aId = articleId !== null ? articleId : undefined
@@ -124,7 +124,7 @@ function Footer(props: FooterProps): JSX.Element|JSX.Element[]{
           <ThemeProvider theme={buttonBrand}>
             <Button css={firstButtonMargin} priority="primary" size="xsmall" onClick={submit}>Save</Button>
             <Button priority="secondary" size="xsmall" onClick={reset}>Reset</Button>
-            <Button css={ButtonMarginLeft} priority="tertiary" size="xsmall" onClick={downloadExcel}>Download as CSV</Button>
+            <Button css={ButtonMarginLeft} priority="tertiary" size="xsmall" onClick={downloadCSV}>Download as CSV</Button>
           </ThemeProvider>
         </form>
     )
