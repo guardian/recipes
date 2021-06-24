@@ -46,14 +46,14 @@ const getBodyData = ({ data, fields, separator }: bodyData): string => {
     }).join("\n");
   };
   
-export const convertToCsv = ({ data, fields, headers, separator }: convertToCsvData): string => {
+const convertToCsv = ({ data, fields, headers, separator }: convertToCsvData): string => {
     const body = getBodyData({ data, fields, separator }),
       header = headers.join(separator);
   
     return header + "\n" + body;
   };
 
-export const saveCsv = ({ data, fileformat, filename }: saveCsvData): void => {
+const saveCsv = ({ data, fileformat, filename }: saveCsvData): void => {
   const blob = new Blob(
     [data as BlobPart],
     {
