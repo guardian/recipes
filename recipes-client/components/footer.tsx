@@ -2,17 +2,24 @@
 import { Dispatch } from "react";
 import { jsx, css } from "@emotion/core";
 import { space } from '@guardian/src-foundations';
-import { ActionType, recipeMetaFields, schemaType } from "../interfaces/main";
+import { ActionType, allRecipeFields, ingredientListFields, recipeMetaFields, schemaType } from "../interfaces/main";
 import { apiURL } from "~consts";
 import { actions } from "~actions/recipeActions";
 import { fetchAndDispatch } from "~utils/requests";
 import { Button, buttonBrand } from '@guardian/src-button';
 import { ThemeProvider } from 'emotion-theming';
 import fromPairs from "lodash-es/fromPairs";
+import { saveAsCsv } from "~utils/json-csv";
+import flatten from "lodash-es/flatten";
+
 
 const firstButtonMargin = css`
-  margin-right: ${space[3]}px;
+  margin-right: ${space[2]}px;
 `;
+const ButtonMarginLeft = css`
+  margin-left: ${space[6]}px;
+`;
+
 
 interface FooterProps {
     articleId: string|null
@@ -73,6 +80,25 @@ function resetRecipe(aId: string|null, dispatcher: Dispatch<ActionType>): void {
     }
 }
 
+function formatCSV(data: allRecipeFields): [Record<string,string>[], Record<string,string>] {
+  const ingreds = data['ingredients_lists'].map((ingL: ingredientListFields, i: number) => {
+    return ingL['ingredients'].map(ingred => {
+      return {'list_number': i, 'list_title': ingL['title'], "ingredient": ingred['text']}
+    })
+  })
+  const fields = {
+    "title":"recipes_title",
+    "list_title": "list_title",
+    "list_number": "list_number",
+    "ingredient": "ingredient"
+  },
+  dataFormatted = flatten(ingreds).map(ing => {
+    return { title: data['recipes_title'], ...ing};
+  });
+
+  return [dataFormatted, fields]
+}
+
 function Footer(props: FooterProps): JSX.Element|JSX.Element[]{
     const {articleId, body, dispatcher} = props;
 
@@ -86,11 +112,19 @@ function Footer(props: FooterProps): JSX.Element|JSX.Element[]{
         resetRecipe(articleId, dispatcher);
     }
 
+    function downloadCSV(event: React.MouseEvent<HTMLInputElement>): void {
+      event.preventDefault();
+      const [data, fields] = formatCSV(body);
+      const aId = articleId !== null ? articleId : undefined
+      saveAsCsv({data: data, fields: fields, fileformat: undefined, filename: aId, separator: ";"});
+    }
+    
     return (
         <form>
           <ThemeProvider theme={buttonBrand}>
             <Button css={firstButtonMargin} priority="primary" size="xsmall" onClick={submit}>Save</Button>
             <Button priority="secondary" size="xsmall" onClick={reset}>Reset</Button>
+            <Button css={ButtonMarginLeft} priority="tertiary" size="xsmall" onClick={downloadCSV}>Download as CSV</Button>
           </ThemeProvider>
         </form>
     )
