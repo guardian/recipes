@@ -13,28 +13,6 @@ interface bodyData {
   fields: string[];
   separator: string;
 }
-
-interface csvData {
-  data: Record<string, string>[];
-  fields: Record<string, string>;
-  fileformat: string|undefined;
-  filename: string|undefined;
-  separator: string;
-}
-
-interface saveCsvData {
-  data: string;
-  fileformat: string;
-  filename: string;
-}
-
-interface convertToCsvData {
-  data: Record<string, string>;
-  fields: string[];
-  headers: string[];
-  separator: string;
-}
-
 const getBodyData = ({ data, fields, separator }: bodyData): string => {
     return data.map((row: { [x: string]: string; hasOwnProperty: (arg0: string) => string; }) => {
       return fields.map((field: string | number) => {
@@ -45,7 +23,13 @@ const getBodyData = ({ data, fields, separator }: bodyData): string => {
       }).join(separator);
     }).join("\n");
   };
-  
+
+interface convertToCsvData {
+  data: Record<string, string>;
+  fields: string[];
+  headers: string[];
+  separator: string;
+}
 const convertToCsv = ({ data, fields, headers, separator }: convertToCsvData): string => {
     const body = getBodyData({ data, fields, separator }),
       header = headers.join(separator);
@@ -53,6 +37,11 @@ const convertToCsv = ({ data, fields, headers, separator }: convertToCsvData): s
     return header + "\n" + body;
   };
 
+interface saveCsvData {
+  data: string;
+  fileformat: string;
+  filename: string;
+}
 const saveCsv = ({ data, fileformat, filename }: saveCsvData): void => {
   const blob = new Blob(
     [data as BlobPart],
@@ -64,6 +53,13 @@ const saveCsv = ({ data, fileformat, filename }: saveCsvData): void => {
   saveAs(blob, [`${filename}.${fileformat}`]);
 };
 
+interface csvData {
+  data: Record<string, string>[];
+  fields: Record<string, string>;
+  fileformat: string|undefined;
+  filename: string|undefined;
+  separator: string;
+}
 export const saveAsCsv = ({
       data,
       fields,
