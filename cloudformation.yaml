@@ -389,7 +389,7 @@ Resources:
         WriteCapacityUnits: 1
 
   EditedRecipesDynamoTable:
-  DeletionPolicy: Retain
+    DeletionPolicy: Retain
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: !Ref EditedRecipesTable
