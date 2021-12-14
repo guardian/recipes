@@ -15,7 +15,7 @@ lazy val root = (project in file("."))
     PlayKeys.playDefaultPort := 9090,
 
     riffRaffArtifactResources := Seq(
-      (packageBin in Debian).value -> s"${name.value}/${name.value}.deb",
+      (Debian / packageBin).value -> s"${name.value}/${name.value}.deb",
       baseDirectory.value / "riff-raff.yaml" -> "riff-raff.yaml",
       baseDirectory.value / "cloudformation.yaml" -> "cloudformation/recipes.cfn.yaml"
     ),
@@ -64,7 +64,7 @@ lazy val root = (project in file("."))
     dependencyOverrides ++= Seq(
     "com.fasterxml.jackson.core" % "jackson-databind" % "2.10.5",
     ),
-    javaOptions in Universal ++= Seq(
+    Universal / javaOptions ++= Seq(
       s"-Dpidfile.path=/dev/null",
       "-J-XX:MaxRAMFraction=2",
       "-J-XX:InitialRAMFraction=2",
@@ -75,5 +75,5 @@ lazy val root = (project in file("."))
       s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
       "-Dconfig.file=/etc/gu/recipes.conf"
     ),
-    javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
+    Test / javaOptions += "-Dconfig.file=conf/application.test.conf"
   ))
