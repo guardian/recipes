@@ -2,7 +2,7 @@ import com.gu.riffraff.artifact.BuildInfo
 
 val enumeratumVersion = "1.6.1"
 val jacksonVersion = "2.10.5"
-val logstashLogbackVersion = "6.4"
+val logstashLogbackVersion = "7.0.1"
 val awsSdkVersion = "1.11.851"
 
 lazy val root = (project in file("."))
