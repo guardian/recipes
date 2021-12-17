@@ -1,8 +1,8 @@
 import com.gu.riffraff.artifact.BuildInfo
 
 val enumeratumVersion = "1.6.1"
-val jacksonVersion = "2.10.5"
-val logstashLogbackVersion = "6.4"
+val jacksonVersion = "2.11.4"
+val logstashLogbackVersion = "7.0.1"
 val awsSdkVersion = "1.11.851"
 
 lazy val root = (project in file("."))
@@ -15,7 +15,7 @@ lazy val root = (project in file("."))
     PlayKeys.playDefaultPort := 9090,
 
     riffRaffArtifactResources := Seq(
-      (packageBin in Debian).value -> s"${name.value}/${name.value}.deb",
+      (Debian / packageBin).value -> s"${name.value}/${name.value}.deb",
       baseDirectory.value / "riff-raff.yaml" -> "riff-raff.yaml",
       baseDirectory.value / "cloudformation.yaml" -> "cloudformation/recipes.cfn.yaml"
     ),
@@ -62,9 +62,9 @@ lazy val root = (project in file("."))
       "-Xfatal-warnings"
     ),
     dependencyOverrides ++= Seq(
-    "com.fasterxml.jackson.core" % "jackson-databind" % "2.10.5",
+    "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
     ),
-    javaOptions in Universal ++= Seq(
+    Universal / javaOptions ++= Seq(
       s"-Dpidfile.path=/dev/null",
       "-J-XX:MaxRAMFraction=2",
       "-J-XX:InitialRAMFraction=2",
@@ -75,5 +75,5 @@ lazy val root = (project in file("."))
       s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
       "-Dconfig.file=/etc/gu/recipes.conf"
     ),
-    javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
+    Test / javaOptions += "-Dconfig.file=conf/application.test.conf"
   ))
