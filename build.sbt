@@ -49,7 +49,7 @@ lazy val root = (project in file("."))
       // `com.fasterxml.jackson.databind.JsonMappingException: Scala module 2.10.2 requires Jackson Databind version >= 2.10.0 and < 2.11.0`
       "net.logstash.logback" % "logstash-logback-encoder" % logstashLogbackVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
       "com.gu" % "kinesis-logback-appender" % "1.4.4",
-      "com.gu" %% "pan-domain-auth-verification" % "1.0.4",
+      "com.gu" %% "pan-domain-auth-verification" % "1.0.6",
       "com.amazonaws" % "aws-java-sdk-s3" % awsSdkVersion,
       "com.amazonaws" % "aws-java-sdk-dynamodb" % awsSdkVersion,
       "com.gu" %% "simple-configuration-s3" % "1.5.6"
