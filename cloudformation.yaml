@@ -47,7 +47,7 @@ Mappings:
   StageVariables:
     PROD:
       MaxInstances: 6
-      MinInstances: 3
+      MinInstances: 0
       InstanceType: t3.small
       Domain: recipes.gutools.co.uk
 
