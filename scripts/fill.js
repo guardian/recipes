@@ -1,4 +1,4 @@
-/*  
+/*
   Fill local Docker-based DB with data from db/data.json
   Runs as part of the `start` script under `scripts/`
 */
@@ -10,7 +10,7 @@ var AWS = require('aws-sdk');
 var credentials = new AWS.SharedIniFileCredentials({profile: 'composer'});
 AWS.config.credentials = credentials;
 
-// Set the region 
+// Set the region
 AWS.config.update({region: 'eu-west-1', 'endpoint': 'http://localhost:8000'});
 
 // How many items to insert in database
@@ -72,14 +72,11 @@ ddb.createTable(params, function(err, data) {
     console.log(`Table created, filling with max ${numItems} data points...`);
 
     rawdata.slice(-(numItems)).forEach((item) => {
-      const regex = new RegExp("_(\\d+)$", 'gm')
-      const match = regex.exec(item.recipeId);
-      item.recipeId = parseInt(match[1]);
       let params = {
         TableName: "recipes",
         Item: AWS.DynamoDB.Converter.marshall(item)
       }
-    
+
       ddb.putItem(params, function(err, data) {
         if (err) {
             console.error(`Unable to add item: ${item.path}#${item.recipeId}`, ". Error JSON:", JSON.stringify(err, null, 2));
