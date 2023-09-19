@@ -70,7 +70,8 @@ class Config(playConfig: Configuration) extends Logging {
   lazy val home = System getProperty "user.home"
   val config: Config_ = ConfigurationLoader.load(identity, credentials = awsCredentialsV2) {
     case AwsIdentity(app, stack, stage, _) => S3ConfigurationLocation("recipes-dist", s"$stage/$stack/$app.conf", "eu-west-1")
-    case _ => FileConfigurationLocation( new File(s"$home/.gu/$app.conf"))
+    // Adjust path to match your local folder structure
+    case _ => FileConfigurationLocation( new File(s"$home/code/recipes/$app.conf"))
   }
   // logger.info(config.toString())
   final lazy val capiApiKey: String =  config.getString("capiKey")
