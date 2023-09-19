@@ -3,19 +3,16 @@ import { css, jsx } from "@emotion/core";
 import { space } from '@guardian/src-foundations';
 import { background, text } from '@guardian/src-foundations/palette';
 import RecipeComponent from "~components/recipe-component";
-// import GuFrame from "~/components/gu-frame";
 import GuCAPIFrame from "~/components/gu-capi-frame";
 import ImagePicker from "~components/image-picker";
 import Footer from "~components/footer";
 import Header from "~components/header";
 
-// import { defaultHighlightColours } from "~consts/index";
-import { RouteComponentProps } from 'react-router-dom';
-
+import { useParams } from "react-router-dom";
 
 import { recipeReducer, defaultState } from "~reducers/recipe-reducer";
 import { actions } from "~actions/recipeActions";
-import {apiURL, capiProxy, schemaEndpoint} from "~consts/index";
+import { apiURL, capiProxy, schemaEndpoint } from "~consts/index";
 import { useEffect } from "react";
 import { useImmerReducer } from "use-immer";
 import { fetchAndDispatch, setLoadingFinished } from "~utils/requests";
@@ -71,23 +68,27 @@ interface RouteParams {
   articleId: string;
 }
 
-function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
-  const {articleId} = props.match.params;
+function Curation(): JSX.Element {
+  const props = useParams<{
+    section: string;
+    "*": string;
+  }>();
+  const articleId = props.section + '/' + props["*"];
   const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
   const image = (state.body === null) ? null : state.body.image;
   const recipeId = state.body === null ? null : state.body.recipeId;
   const articlePath = state.body === null ? articleId : state.body.path;
 
-  useEffect( () => {
+  useEffect(() => {
     const articleUrl = articleId.replace(/^\/+/, '');
     Promise.all([
-    // Get schema
+      // Get schema
       fetchAndDispatch(`${location.origin}${apiURL}${schemaEndpoint}`, actions.init, "schema", dispatch),
       // Get parsed recipe items
       fetchAndDispatch(`${location.origin}/api/db/${articleUrl}`, actions.init, "body", dispatch),
       // Get article content
       fetchAndDispatch(`${location.origin}${capiProxy}${articleUrl}`, actions.init, "html", dispatch)
-    ]).then( () => setLoadingFinished(dispatch) ).catch((err) => {console.error(err);});
+    ]).then(() => setLoadingFinished(dispatch)).catch((err) => { console.error(err); });
   }, [articleId, dispatch]);
 
   return (
@@ -101,15 +102,15 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
         />
       </div>
       <div css={articleView}>
-          {/* <GuFrame articlePath={articleId} /> */}
-          <GuCAPIFrame
-            articlePath={articlePath}
-            isLoading={state.isLoading}
-            html={state.html}
-            recipeItems={state.body}
-            schema={state.schema}
-            colours={state.colours}
-          />
+        {/* <GuFrame articlePath={articleId} /> */}
+        <GuCAPIFrame
+          articlePath={articlePath}
+          isLoading={state.isLoading}
+          html={state.html}
+          recipeItems={state.body}
+          schema={state.schema}
+          colours={state.colours}
+        />
       </div>
       <div css={dataView}>
         <ImagePicker
@@ -128,7 +129,7 @@ function Curation(props: RouteComponentProps<RouteParams>): JSX.Element{
         </form>
       </div>
       <div css={footer}>
-        <Footer articleId={articleId} body={state.body} dispatcher={dispatch}/>
+        <Footer articleId={articleId} body={state.body} dispatcher={dispatch} />
       </div>
     </div>
   );

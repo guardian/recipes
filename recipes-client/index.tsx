@@ -6,20 +6,18 @@ import Home from "~pages/home";
 
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route
 } from "react-router-dom";
-
-// import { text, background } from "@guardian/src-foundations/palette";
 
 function App() {
   return (
     <Router>
       <div>
-        <Switch>
-          <Route path="/curation/:articleId*" component={ Curation }/>
-          <Route path="/" component={ Home }/>
-        </Switch>
+        <Routes>
+          <Route path="/curation/:section/*" element={<Curation />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
       </div>
     </Router>
   );
