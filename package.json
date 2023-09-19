@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",
+    "@emotion/react": "^11.11.1",
     "@guardian/src-button": "^2.8.2",
     "@guardian/src-foundations": "^2.2.0",
     "@reduxjs/toolkit": "^1.5.0",

@@ -11,3 +11,4 @@ target
 logs
 .metals/
 .bloop/
+recipes.conf
