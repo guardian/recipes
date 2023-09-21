@@ -69,11 +69,11 @@ interface RouteParams {
 }
 
 function Curation(): JSX.Element {
-  const props = useParams<{
+  const { section, "*": path } = useParams<{
     section: string;
     "*": string;
   }>();
-  const articleId = props.section + '/' + props["*"];
+  const articleId = (section && path) ? `/${section}/${path}` : "";
   const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
   const image = (state.body === null) ? null : state.body.image;
   const recipeId = state.body === null ? null : state.body.recipeId;
