@@ -1,21 +1,14 @@
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import { Dispatch } from "react";
-import { jsx, css } from "@emotion/core";
-import { space } from "@guardian/src-foundations";
-import {
-  ActionType,
-  allRecipeFields,
-  ingredientListFields,
-  recipeMetaFields,
-  schemaType,
-} from "../interfaces/main";
-import { apiURL } from "~consts";
-import { actions } from "~actions/recipeActions";
-import { fetchAndDispatch } from "~utils/requests";
-import { Button, buttonBrand } from "@guardian/src-button";
-import { ThemeProvider } from "emotion-theming";
+import { css } from "@emotion/react";
+import { space } from '@guardian/source-foundations';
+import { ActionType, allRecipeFields, ingredientListFields, recipeMetaFields, schemaType } from "../interfaces/main";
+import { apiURL } from "../consts";
+import { actions } from "../actions/recipeActions";
+import { fetchAndDispatch } from "../utils/requests";
+import { Button } from '@guardian/source-react-components';
 import fromPairs from "lodash-es/fromPairs";
-import { saveAsCsv } from "~utils/json-csv";
+import { saveAsCsv } from "../utils/json-csv";
 import flatten from "lodash-es/flatten";
 
 const firstButtonMargin = css`
@@ -26,9 +19,9 @@ const ButtonMarginLeft = css`
 `;
 
 interface FooterProps {
-  articleId: string | null;
-  body: schemaType | null;
-  dispatcher: Dispatch<ActionType>;
+  articleId: string | null
+  body: schemaType | null
+  dispatcher: Dispatch<ActionType>
 }
 
 // replace nulls with empty list
@@ -36,93 +29,71 @@ const cleanRecipe = (data: recipeMetaFields | null) => {
   // const nullableFields = ['cuisines', 'occasion'] as Array<keyof recipeMetaFields>
   if (data !== null) {
     const out = Object.keys(data).map((field: keyof recipeMetaFields) => {
-      if (["serves", "image", "recipes_title"].includes(field)) {
-        return [field, data[field] ? data[field] : ""];
+      if (['serves', 'image', 'recipes_title'].includes(field)) {
+        return [field, data[field] ? data[field] : '']
       } else {
-        return [field, data[field] ? data[field] : []];
+        return [field, data[field] ? data[field] : []]
       }
-    });
-    return fromPairs(out);
+    })
+    return fromPairs(out)
     // nullableFields.forEach((field: keyof recipeMetaFields) => data[field] = data[field] ? data[field] : [])
   } else {
-    return data;
+    return data
   }
-};
+}
 
-async function postRecipe(
-  aId: string | null,
-  data: allRecipeFields | null,
-): Promise<Record<string, unknown>> {
+async function postRecipe(aId: string | null, data: allRecipeFields | null): Promise<Record<string, unknown>> {
   // async function postRecipe(aId: string|null, data: Record<string, unknown>|null): Promise<Record<string, unknown>>{
   if (aId === null) {
-    console.warn("No url provided!");
-    return { error: "No url provided." };
+    console.warn("No url provided!")
+    return { "error": "No url provided." }
   } else if (data === null) {
-    console.warn("No data provided!");
-    return { error: "No data provided." };
+    console.warn("No data provided!")
+    return { "error": "No data provided." }
   }
-  const articleUrl = aId.replace(/^\/+/, "");
+  const articleUrl = aId.replace(/^\/+/, '');
   const response = await fetch(`${location.origin}${apiURL}${articleUrl}`, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(cleanRecipe(data)), // body data type must match "Content-Type" header
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(cleanRecipe(data)) // body data type must match "Content-Type" header
   });
-  return { status: response.status }; //.json(); // parses JSON response into native JavaScript objects
+  return { "status": response.status }; //.json(); // parses JSON response into native JavaScript objects
 }
 
-function resetRecipe(
-  aId: string | null,
-  dispatcher: Dispatch<ActionType>,
-): void {
+function resetRecipe(aId: string | null, dispatcher: Dispatch<ActionType>): void {
   if (aId === null) {
-    console.warn("No url provided!");
-    dispatcher({
-      type: actions.error,
-      payload: "[Reset] Error: No article id provided.",
-    });
+    console.warn("No url provided!")
+    dispatcher({ "type": actions.error, "payload": "[Reset] Error: No article id provided." });
   } else {
-    const articleUrl = aId.replace(/^\/+/, "");
-    void fetchAndDispatch(
-      `${location.origin}/api/db/${articleUrl}`,
-      actions.init,
-      "body",
-      dispatcher,
-    );
+    const articleUrl = aId.replace(/^\/+/, '');
+    void fetchAndDispatch(`${location.origin}/api/db/${articleUrl}`, actions.init, "body", dispatcher)
   }
 }
 
-function formatCSV(
-  data: allRecipeFields,
-): [Record<string, string>[], Record<string, string>] {
-  const ingreds = data["ingredients_lists"].map(
-    (ingL: ingredientListFields, i: number) => {
-      return ingL["ingredients"].map((ingred) => {
-        return {
-          list_number: i,
-          list_title: ingL["title"],
-          ingredient: ingred["text"],
-        };
-      });
-    },
-  );
+function formatCSV(data: allRecipeFields): [Record<string, string>[], Record<string, string>] {
+  const ingreds = data['ingredients_lists'].map((ingL: ingredientListFields, i: number) => {
+    return ingL['ingredients'].map(ingred => {
+      return { 'list_number': i, 'list_title': ingL['title'], "ingredient": ingred['text'] }
+    })
+  })
   const fields = {
-      title: "recipes_title",
-      list_title: "list_title",
-      list_number: "list_number",
-      ingredient: "ingredient",
-    },
-    dataFormatted = flatten(ingreds).map((ing) => {
-      return { title: data["recipes_title"], ...ing };
+    "title": "recipes_title",
+    "list_title": "list_title",
+    "list_number": "list_number",
+    "ingredient": "ingredient"
+  },
+    dataFormatted = flatten(ingreds).map(ing => {
+      return { title: data['recipes_title'], ...ing };
     });
 
-  return [dataFormatted, fields];
+  return [dataFormatted, fields]
 }
 
 function Footer(props: FooterProps): JSX.Element | JSX.Element[] {
@@ -141,40 +112,16 @@ function Footer(props: FooterProps): JSX.Element | JSX.Element[] {
   function downloadCSV(event: React.MouseEvent<HTMLInputElement>): void {
     event.preventDefault();
     const [data, fields] = formatCSV(body);
-    const aId = articleId !== null ? articleId : undefined;
-    saveAsCsv({
-      data: data,
-      fields: fields,
-      fileformat: undefined,
-      filename: aId,
-      separator: ";",
-    });
+    const aId = articleId !== null ? articleId : undefined
+    saveAsCsv({ data: data, fields: fields, fileformat: undefined, filename: aId, separator: ";" });
   }
 
   return (
     <form>
-      <ThemeProvider theme={buttonBrand}>
-        <Button
-          css={firstButtonMargin}
-          priority="primary"
-          size="xsmall"
-          onClick={submit}
-        >
-          Save
-        </Button>
-        <Button priority="secondary" size="xsmall" onClick={reset}>
-          Reset
-        </Button>
-        <Button
-          css={ButtonMarginLeft}
-          priority="tertiary"
-          size="xsmall"
-          onClick={downloadCSV}
-        >
-          Download as CSV
-        </Button>
-      </ThemeProvider>
+      <Button priority="primary" size="xsmall" onClick={submit}>Save</Button>
+      <Button priority="secondary" size="xsmall" onClick={reset}>Reset</Button>
+      <Button priority="tertiary" size="xsmall" onClick={downloadCSV}>Download as CSV</Button>
     </form>
-  );
+  )
 }
 export default Footer;

@@ -3,7 +3,7 @@
   STRONG DEPENDENCY OF MARKUP STYLING
   TODO: de-couple this dependency better.
 */
-import { body } from "@guardian/src-foundations/typography";
+import { body } from '@guardian/source-foundations';
 
 export const testRecipeHTML = `
 <p>All food is a celebration of something, but some dishes are especially celebratory. What makes them so? For me, they
@@ -13,10 +13,10 @@ export const testRecipeHTML = `
   others still. One thing is a must, though: it should be very hard to walk into a room holding a celebratory dish
   without emitting a little whoop.</p>
 <h2>Grilled pepper salad with fresh cucumber and herbs</h2>
-<figure class="element element-image" data-media-id="f030fdded18725c9467738aac77a24e1f6e4a00f"> 
-  <img src="https://media.guim.co.uk/f030fdded18725c9467738aac77a24e1f6e4a00f/3_0_3678_3678/1000.jpg" alt="Yotam Ottolenghi’s pepper salad with cucumber and herbs." width="1000" height="1000" class="gu-image" > 
-  <figcaption> <span class="element-image__caption">Yotam Ottolenghi’s grilled pepper salad with cucumber and herbs.</span> 
-  <span class="element-image__credit">Photograph: Louise Hagger/The Guardian</span> </figcaption> 
+<figure class="element element-image" data-media-id="f030fdded18725c9467738aac77a24e1f6e4a00f">
+  <img src="https://media.guim.co.uk/f030fdded18725c9467738aac77a24e1f6e4a00f/3_0_3678_3678/1000.jpg" alt="Yotam Ottolenghi’s pepper salad with cucumber and herbs." width="1000" height="1000" class="gu-image" >
+  <figcaption> <span class="element-image__caption">Yotam Ottolenghi’s grilled pepper salad with cucumber and herbs.</span>
+  <span class="element-image__credit">Photograph: Louise Hagger/The Guardian</span> </figcaption>
 </figure>
 <p>Prep<strong> 20 min</strong><br>Cook <strong>40 min</strong><br>Serves <strong>4</strong></p>
 <p><strong>4 green peppers</strong>, stems removed, deseeded and flesh cut into roughly 3cm pieces<br>

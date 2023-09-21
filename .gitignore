@@ -7,8 +7,10 @@ server.pid
 target
 /node_modules
 /.cache
+/.parcel-cache
 /public/recipes-client
 logs
 .metals/
 .bloop/
+.bsp
 recipes.conf

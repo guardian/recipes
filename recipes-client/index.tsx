@@ -1,8 +1,7 @@
-/** @jsx jsx */
-import { jsx } from "@emotion/core";
+/** @jsxImportSource @emotion/react */
 import { createRoot } from "react-dom/client";
-import Curation from "~pages/curation";
-import Home from "~pages/home";
+import Curation from "./pages/curation";
+import Home from "./pages/home";
 
 import {
   BrowserRouter as Router,

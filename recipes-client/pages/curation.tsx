@@ -1,20 +1,20 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { space } from "@guardian/src-foundations";
-import { background, text } from "@guardian/src-foundations/palette";
-import RecipeComponent from "~components/recipe-component";
-import GuCAPIFrame from "~/components/gu-capi-frame";
-import ImagePicker from "~components/image-picker";
-import Footer from "~components/footer";
-import Header from "~components/header";
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
+import { space, background, text } from '@guardian/source-foundations';
+import RecipeComponent from "../components/recipe-component";
+import GuCAPIFrame from "../components/gu-capi-frame";
+import ImagePicker from "../components/image-picker";
+import Footer from "../components/footer";
+import Header from "../components/header";
 
 import { useParams } from "react-router-dom";
-import { recipeReducer, defaultState } from "~reducers/recipe-reducer";
-import { actions } from "~actions/recipeActions";
-import { apiURL, capiProxy, schemaEndpoint } from "~consts/index";
+
+import { recipeReducer, defaultState } from "../reducers/recipe-reducer";
+import { actions } from "../actions/recipeActions";
+import { apiURL, capiProxy, schemaEndpoint } from "../consts/index";
 import { useEffect } from "react";
 import { useImmerReducer } from "use-immer";
-import { fetchAndDispatch, setLoadingFinished } from "~utils/requests";
+import { fetchAndDispatch, setLoadingFinished } from "../utils/requests";
 
 // Styles
 

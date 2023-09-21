@@ -1,4 +1,4 @@
-import { excludeInForm } from "~consts";
+import { excludeInForm } from "../consts";
 
 export function createColourMap(
   keyList: string[],

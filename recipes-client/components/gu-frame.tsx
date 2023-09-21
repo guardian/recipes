@@ -1,7 +1,6 @@
-/** @jsx jsx */
-import { jsx } from "@emotion/core";
+/** @jsxImportSource @emotion/react */
 
-import { getProxyPath } from "~utils/proxy";
+import { getProxyPath } from "../utils/proxy";
 
 export default (props: { articlePath: string }): JSX.Element => {
   const proxyPath = getProxyPath(props.articlePath);

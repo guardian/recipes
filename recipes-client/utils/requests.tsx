@@ -1,11 +1,6 @@
-import { actions } from "~actions/recipeActions";
+import { actions } from "../actions/recipeActions";
 import { Dispatch } from "react";
-import {
-  ActionType,
-  AddRemoveItemType,
-  AppDataState,
-  ErrorItemType,
-} from "~interfaces/main";
+import { ActionType, AddRemoveItemType, AppDataState, ErrorItemType } from "../interfaces/main";
 
 export async function fetchAndDispatch(
   url: string,
