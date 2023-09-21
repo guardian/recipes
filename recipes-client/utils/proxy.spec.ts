@@ -1,4 +1,4 @@
-import { getProxyPath } from "~utils/proxy";
+import { getProxyPath } from "../utils/proxy";
 
 test("getProxyPath without a leading slash", () => {
   const input = "foo/bar";

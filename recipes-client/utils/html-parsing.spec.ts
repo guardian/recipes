@@ -1,8 +1,10 @@
-import { findTextinHTML, DOMParse, extractCommonText } from "~utils/html-parsing";
-import { ResourceRange } from "~interfaces/main";
+import { findTextinHTML, DOMParse, extractCommonText } from "../utils/html-parsing";
+import { ResourceRange } from "../interfaces/main";
 import { HTMLElement } from 'node-html-parser';
-import { testRecipeHTML, testIngredSpaceCaseHTML, testIngListnonBreakingSpaceHTML,
-         testHtmlDuplication, testHtmlDuplication2, testHtmlDuplicationWithMissingIngredient } from "~utils/test-fixtures";
+import {
+  testRecipeHTML, testIngredSpaceCaseHTML, testIngListnonBreakingSpaceHTML,
+  testHtmlDuplication, testHtmlDuplication2, testHtmlDuplicationWithMissingIngredient
+} from "../utils/test-fixtures";
 
 test("findTextinHTML correctly finds full text containing HTML '&nbsp;' ", () => {
   const htmlEl: HTMLElement = DOMParse(testIngredSpaceCaseHTML)
@@ -13,7 +15,7 @@ test("findTextinHTML correctly finds full text containing HTML '&nbsp;' ", () =>
   expect(output.length).toEqual(1)
   // Check if extraction has properly worked (= includes HTML space)
   expect((htmlEl.childNodes[output[0].elementNumber] as HTMLElement).innerHTML.slice(output[0].startCharacter, output[0].endCharacter)
-        ).toEqual("350g cherry tomatoes (a mix of&nbsp;colours, if possible)");
+  ).toEqual("350g cherry tomatoes (a mix of&nbsp;colours, if possible)");
 });
 
 test("findTextinHTML correctly ignores empty text ('') ", () => {
@@ -36,7 +38,7 @@ test("findTextinHTML correctly finds text in simple <h2>", () => {
 
   // Check if extracted text is correct
   expect((htmlEl.childNodes[output[0].elementNumber] as HTMLElement).innerHTML.slice(output[0].startCharacter, output[0].endCharacter)
-        ).toEqual(text);
+  ).toEqual(text);
 });
 
 test("findTextinHTML correctly finds text in nested <figure>", () => {
@@ -49,12 +51,12 @@ test("findTextinHTML correctly finds text in nested <figure>", () => {
 
   // Check if extracted text is correct
   expect((htmlEl.childNodes[output[0].elementNumber] as HTMLElement).innerHTML.slice(output[0].startCharacter, output[0].endCharacter)
-        ).toEqual(text);
+  ).toEqual(text);
 });
 
 test("findTextinHTML correctly finds text (with markup) in simple steps <p>", () => {
   const htmlEl: HTMLElement = DOMParse(testRecipeHTML)
-  
+
   const text = "Prep 20 min";
   const output: ResourceRange[] = findTextinHTML(text, htmlEl)
   const desiredOutput = "Prep<strong> 20 min</strong>";

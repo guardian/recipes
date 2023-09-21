@@ -1,7 +1,6 @@
-/** @jsx jsx */
-import { Component } from "react";
-import { jsx, css } from "@emotion/core";
-import { body } from '@guardian/src-foundations/typography';
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
+import { body } from '@guardian/source-foundations';
 
 const headingStyles = css`
   display: inline-flex;
@@ -10,31 +9,24 @@ const headingStyles = css`
   margin: 0;
 `;
 
-const articleInfoStyles = css`
-  /* display: block; */
-`;
-
 interface HeaderProps {
   recipeUrl: string
-  recipeNumber: number|null
-  }
+  recipeNumber: number | null
+}
 
-class Header extends Component<HeaderProps> {
-    constructor(props: HeaderProps) {
-      super(props);
-    }
-    render(): React.Component|JSX.Element{
-        const {recipeUrl} = this.props;
-        const recipeNumber =  this.props.recipeNumber === null ? '' : this.props.recipeNumber.toString()
-        return (
-            <h4 css={headingStyles}>
-              Article URL:&nbsp; {recipeUrl}<br />
+const Header = ({
+  recipeUrl,
+  recipeNumber
+}: HeaderProps): JSX.Element => {
+  const recipeNumberString = recipeNumber === null ? '' : recipeNumber.toString()
+  return (
+    <header>
+      <h2>Recipe Curator</h2>
+      <h4 css={headingStyles}>Article URL: {recipeUrl}</h4>
+      <h4>Recipe Number: {recipeNumberString}</h4>
+    </header>
 
-              {/* <input type="text" id="articlePath" name="Article Path" value={recipeUrl} readOnly></input> */}
-              {/* Recipe Number: <input type="text" id="recipeId" name="Recipe Id" value={recipeNumber} readOnly></input> */}
-              Recipe Number:&nbsp;{recipeNumber}
-            </h4>
-        )
-    }
-  }
-  export default Header;
+  );
+};
+
+export default Header;

@@ -1,6 +1,5 @@
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import { Component } from "react";
-import { jsx } from "@emotion/core";
 
 interface RecipeProps {
   url: string;

@@ -1,4 +1,4 @@
-import { excludeInForm } from "~consts";
+import { excludeInForm } from "../consts";
 
 export function createColourMap(keyList: string[], colours: string[], excludeItems?: string[]): Record<string, string> {
   const excluded = excludeItems === undefined ? [] : excludeItems

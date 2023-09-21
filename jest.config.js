@@ -9,7 +9,7 @@ module.exports = {
   },
   transformIgnorePatterns: [
     "<rootDir>/node_modules/(?!lodash-es|lodash)"
-  ],  
+  ],
   testMatch: [
     "<rootDir>/recipes-client/**/*.spec.+(ts|tsx|js)"
   ],
@@ -19,7 +19,6 @@ module.exports = {
     "js"
   ],
   moduleNameMapper: {
-    ...pathsToModuleNameMapper(compilerOptions.paths, {prefix: "<rootDir>/recipes-client/"}),
-    "^@guardian/src-foundations/(.*)(?<!cjs)$": "@guardian/src-foundations/$1/cjs"
+    ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/recipes-client/" })
   }
 };
