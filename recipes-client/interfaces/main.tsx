@@ -19,51 +19,58 @@ export function isSchemaArray(obj: schemaItem): obj is schemaArrayItem {
 }
 
 export interface schemaType {
-  "properties": {
+  properties: {
     [key in keyof allRecipeFields]: allRecipeFields[key];
-  }
+  };
 }
 
-export function isschemaType(obj: schemaType | allRecipeFields | ingredientListFields): obj is schemaType {
-  if ((typeof obj !== 'object') || (obj === null)) return false;
+export function isschemaType(
+  obj: schemaType | allRecipeFields | ingredientListFields,
+): obj is schemaType {
+  if (typeof obj !== "object" || obj === null) return false;
   const wObj: { [k: string]: unknown } = obj;
   // const wObj: {[obj['properties']]?: unknown} = obj;
   // console.log(Object.keys(wObj))
   return isallRecipeFields(wObj.properties); // Improve this, ends up being called twice sometimes from isingredientListFields
 }
 
-export function isingredientListFields(obj: schemaType | allRecipeFields | ingredientListFields | undefined): obj is ingredientListFields {
-  if ((obj === undefined) || (obj === null)) return false;
+export function isingredientListFields(
+  obj: schemaType | allRecipeFields | ingredientListFields | undefined,
+): obj is ingredientListFields {
+  if (obj === undefined || obj === null) return false;
   if (isschemaType(obj) || isallRecipeFields(obj)) return false;
-  return Object.keys(obj).includes("ingredients")
+  return Object.keys(obj).includes("ingredients");
 }
 
-export interface allRecipeFields extends recipeMetaFields, recipeFields { };
+export interface allRecipeFields extends recipeMetaFields, recipeFields {}
 
-export function isallRecipeFields(obj: undefined | null | allRecipeFields | UIschemaItem): obj is allRecipeFields {
-  if ((obj === undefined) || (obj === null)) return false;
+export function isallRecipeFields(
+  obj: undefined | null | allRecipeFields | UIschemaItem,
+): obj is allRecipeFields {
+  if (obj === undefined || obj === null) return false;
   const keys = Object.keys(obj);
   return keys.includes("path") && keys.includes("credit");
 }
 
 export interface recipeMetaFields {
-  "path": string;
-  "recipeId": string;
-  "occasion": string[] | null;
-  "cuisines": string[] | null;
+  path: string;
+  recipeId: string;
+  occasion: string[] | null;
+  cuisines: string[] | null;
 }
 
 export interface recipeFields {
-  "recipes_title": string | null;
-  "serves": string | null;
-  "time": timeField[] | null;
-  "steps": string[] | null;
-  "credit": string[] | string | null;
-  "ingredients_lists": ingredientListFields[];
-  "image": string | null;
+  recipes_title: string | null;
+  serves: string | null;
+  time: timeField[] | null;
+  steps: string[] | null;
+  credit: string[] | string | null;
+  ingredients_lists: ingredientListFields[];
+  image: string | null;
 }
 
-export type recipeItem = null
+export type recipeItem =
+  | null
   | string
   | string[]
   | ingredientListFields[]
@@ -76,12 +83,12 @@ export type ingredientListFields = {
 };
 
 export type ingredientField = {
-  "text": string;
-  "item": string;
-  "unit": string;
-  "comment": string;
-  "quantity": ingredientQuantityField;
-}
+  text: string;
+  item: string;
+  unit: string;
+  comment: string;
+  quantity: ingredientQuantityField;
+};
 
 export type ingredientQuantityField = {
   absolute: string;
@@ -89,23 +96,29 @@ export type ingredientQuantityField = {
   to: string;
 };
 
-export function isingredientQuantityField(obj: ingredientQuantityField | ingredientQuantityField | Record<string, unknown>): obj is ingredientQuantityField {
-  if ((typeof obj !== 'object') || (obj === null)) return false;
+export function isingredientQuantityField(
+  obj:
+    | ingredientQuantityField
+    | ingredientQuantityField
+    | Record<string, unknown>,
+): obj is ingredientQuantityField {
+  if (typeof obj !== "object" || obj === null) return false;
   return Object.keys(obj).includes("absolute");
 }
 
-
-export function isingredientField(obj: schemaItem | ingredientField): obj is ingredientField {
-  if ((typeof obj !== 'object') || (obj === null)) return false;
+export function isingredientField(
+  obj: schemaItem | ingredientField,
+): obj is ingredientField {
+  if (typeof obj !== "object" || obj === null) return false;
   return Object.keys(obj).includes("quantity");
 }
 
 export type timeField = {
-  "instruction": string;
-  "quantity": string;
-  "unit": string;
-  "text": string;
-}
+  instruction: string;
+  quantity: string;
+  unit: string;
+  text: string;
+};
 
 export interface ActionType {
   payload: AppDataState | AddRemoveItemType | ErrorItemType;
@@ -123,26 +136,32 @@ export interface GuCAPIProps {
   colours?: string[] | null;
 }
 
-export function isCurationState(payload: keyof typeof ActionType.payload): payload is CurationState {
-  const cs = (payload as CurationState);
+export function isCurationState(
+  payload: keyof typeof ActionType.payload,
+): payload is CurationState {
+  const cs = payload as CurationState;
   if (cs.body || cs.schema || cs.html) {
-    return true
+    return true;
   }
   return false;
 }
 
-export function isLoadingState(payload: keyof typeof ActionType.payload): payload is LoadingState {
-  const ls = (payload as LoadingState);
+export function isLoadingState(
+  payload: keyof typeof ActionType.payload,
+): payload is LoadingState {
+  const ls = payload as LoadingState;
   if (ls.isLoading !== undefined) {
-    return true
+    return true;
   }
   return false;
 }
 
-export function isAddRemoveItemType(payload: keyof typeof ActionType.payload): payload is AddRemoveItemType {
-  const p = (payload as AddRemoveItemType);
+export function isAddRemoveItemType(
+  payload: keyof typeof ActionType.payload,
+): payload is AddRemoveItemType {
+  const p = payload as AddRemoveItemType;
   if (p.objId !== undefined) {
-    return true
+    return true;
   }
   return false;
 }
@@ -173,7 +192,7 @@ export type Highlight = {
 };
 
 export type ResourceRange = {
-  elementNumber: number,
-  startCharacter: number,
-  endCharacter: number
-}
+  elementNumber: number;
+  startCharacter: number;
+  endCharacter: number;
+};

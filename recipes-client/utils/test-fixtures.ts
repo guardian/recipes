@@ -3,7 +3,7 @@
   STRONG DEPENDENCY OF MARKUP STYLING
   TODO: de-couple this dependency better.
 */
-import { body } from '@guardian/source-foundations';
+import { body } from "@guardian/source-foundations";
 
 export const testRecipeHTML = `
 <p>All food is a celebration of something, but some dishes are especially celebratory. What makes them so? For me, they

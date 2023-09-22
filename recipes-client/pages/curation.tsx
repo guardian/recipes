@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { space, background, text } from '@guardian/source-foundations';
+import { space, background, text } from "@guardian/source-foundations";
 import RecipeComponent from "../components/recipe-component";
 import GuCAPIFrame from "../components/gu-capi-frame";
 import ImagePicker from "../components/image-picker";
@@ -72,17 +72,22 @@ function Curation(): JSX.Element {
     section: string;
     "*": string;
   }>();
-  const articleId = (section && path) ? `/${section}/${path}` : "";
+  const articleId = section && path ? `/${section}/${path}` : "";
   const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
   const image = state.body === null ? null : state.body.image;
   const recipeId = state.body === null ? null : state.body.recipeId;
   const articlePath = state.body === null ? articleId : state.body.path;
 
   useEffect(() => {
-    const articleUrl = articleId.replace(/^\/+/, '');
+    const articleUrl = articleId.replace(/^\/+/, "");
     Promise.all([
       // Get schema
-      fetchAndDispatch(`${location.origin}${apiURL}${schemaEndpoint}`, actions.init, "schema", dispatch),
+      fetchAndDispatch(
+        `${location.origin}${apiURL}${schemaEndpoint}`,
+        actions.init,
+        "schema",
+        dispatch,
+      ),
       // Get parsed recipe items
       fetchAndDispatch(
         `${location.origin}/api/db/${articleUrl}`,
@@ -91,8 +96,17 @@ function Curation(): JSX.Element {
         dispatch,
       ),
       // Get article content
-      fetchAndDispatch(`${location.origin}${capiProxy}${articleUrl}`, actions.init, "html", dispatch)
-    ]).then(() => setLoadingFinished(dispatch)).catch((err) => { console.error(err); });
+      fetchAndDispatch(
+        `${location.origin}${capiProxy}${articleUrl}`,
+        actions.init,
+        "html",
+        dispatch,
+      ),
+    ])
+      .then(() => setLoadingFinished(dispatch))
+      .catch((err) => {
+        console.error(err);
+      });
   }, [articleId, dispatch]);
 
   return (

@@ -1,5 +1,5 @@
-import { schemaItem } from "../interfaces/main"
-import { UIschemaItem } from "../interfaces/ui"
+import { schemaItem } from "../interfaces/main";
+import { UIschemaItem } from "../interfaces/ui";
 
 /* Routing information */
 export const apiURL = "/api/curation/";
@@ -15,8 +15,24 @@ export const urls = {
 };
 
 /* UI display output config */
-export const newColours = ["aquamarine", "blue", "brown", "coral", "yellow", "chartreuse", "darkseagreen"];
-export const defaultHighlightColours = ["#E69F0090", "#56B4E990", "#009E7390", "#FEDC2A", "#0072B290", "#D55E0090", "#CC79A790"]
+export const newColours = [
+  "aquamarine",
+  "blue",
+  "brown",
+  "coral",
+  "yellow",
+  "chartreuse",
+  "darkseagreen",
+];
+export const defaultHighlightColours = [
+  "#E69F0090",
+  "#56B4E990",
+  "#009E7390",
+  "#FEDC2A",
+  "#0072B290",
+  "#D55E0090",
+  "#CC79A790",
+];
 
 export const excludeInForm = ["credit", "recipeId", "image", "path"];
 export const excludeInHighlights = excludeInForm.concat([
@@ -28,92 +44,104 @@ export const excludeInHighlights = excludeInForm.concat([
 export const bylineFields = ["credit"];
 
 export const UIschema: UIschemaItem = {
-  "ui:order": ["path", "recipeId", "recipes_title", "credit", "image", "serves", "time",
-    "steps", "ingredients_lists",
-    "occasion", "cuisines", "meal_type", "ingredient_tags", "diet_tags"
+  "ui:order": [
+    "path",
+    "recipeId",
+    "recipes_title",
+    "credit",
+    "image",
+    "serves",
+    "time",
+    "steps",
+    "ingredients_lists",
+    "occasion",
+    "cuisines",
+    "meal_type",
+    "ingredient_tags",
+    "diet_tags",
   ],
-  "path": {
+  path: {
     "ui:display": false,
     "ui:locked": true,
-    "ui:removable": false
+    "ui:removable": false,
   },
-  "recipeId": {
+  recipeId: {
     "ui:display": false,
     "ui:locked": true,
-    "ui:removable": false
+    "ui:removable": false,
   },
-  "recipes_title": {
+  recipes_title: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": false
+    "ui:removable": false,
   },
-  "serves": {
+  serves: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": false
+    "ui:removable": false,
   },
-  "image": {
+  image: {
     "ui:display": false,
     "ui:locked": false,
-    "ui:removable": false
+    "ui:removable": false,
   },
-  "time": {
+  time: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": true
+    "ui:removable": true,
   },
-  "steps": {
+  steps: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": true
+    "ui:removable": true,
   },
-  "credit": {
+  credit: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": false
+    "ui:removable": false,
   },
-  "ingredients_lists": {
+  ingredients_lists: {
     "ui:display": true,
     "ui:locked": false,
     "ui:removable": true,
     "ui:order": ["title", "ingredients"],
-    "ingredients": {
+    ingredients: {
       "ui:display": true,
       "ui:order": ["text", "item", "unit", "comment", "quantity"],
-      "quantity": {
+      quantity: {
         "ui:display": true,
-        "ui:order": ["absolute", "from", "to"]
-      }
+        "ui:order": ["absolute", "from", "to"],
+      },
     },
-    "title": {
+    title: {
       "ui:display": true,
-    }
+    },
   },
-  "occasion": {
+  occasion: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": true
+    "ui:removable": true,
   },
-  "cuisines": {
+  cuisines: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": true
+    "ui:removable": true,
   },
-  "meal_type": {
+  meal_type: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": true
+    "ui:removable": true,
   },
-  "ingredient_tags": {
+  ingredient_tags: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": true
+    "ui:removable": true,
   },
-  "diet_tags": {
+  diet_tags: {
     "ui:display": true,
     "ui:locked": false,
-    "ui:removable": true
-  }
+    "ui:removable": true,
+  },
 };
 
 // function isRemovable(key:string){
@@ -125,11 +153,11 @@ export const UIschema: UIschemaItem = {
 export function isDisplayed(key: keyof schemaItem | string): boolean {
   // const wObj: {[k: string]: unknown} = obj;
   const wUIschema: { [key: string]: { "ui:display": false } } = UIschema; // safely widen to wObj
-  return wUIschema[key]["ui:display"]
+  return wUIschema[key]["ui:display"];
 }
 export function isRemovable(key: keyof schemaItem | string): boolean {
   const wUIschema: { [key: string]: { "ui:removable": false } } = UIschema; // safely widen to wObj
-  return wUIschema[key]["ui:removable"]
+  return wUIschema[key]["ui:removable"];
 }
 
 // const filtered = Object.keys(raw)
