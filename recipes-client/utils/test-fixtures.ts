@@ -3,7 +3,7 @@
   STRONG DEPENDENCY OF MARKUP STYLING
   TODO: de-couple this dependency better.
 */
-import { body } from '@guardian/source-foundations';
+import { body } from "@guardian/source-foundations";
 
 export const testRecipeHTML = `
 <p>All food is a celebration of something, but some dishes are especially celebratory. What makes them so? For me, they
@@ -38,7 +38,7 @@ export const testRecipeHTML = `
     <strong>20g chopped spring onion</strong><br>
     <strong>Salt</strong>
   </p></p>
-`
+`;
 
 export const testIngListHTML = `
 <strong>1 medium courgette, grated (net&nbsp;weight 150g)</strong><br>
@@ -50,11 +50,11 @@ export const testIngListHTML = `
 <strong>1½ tsp lime juice</strong><br>
 <strong>1 tbsp shredded mint leaves</strong><br>
 <strong>1 clove garlic, peeled and crushed</strong>
-`.replace(/\n/g, '');
+`.replace(/\n/g, "");
 
 export const testIngredSpaceCaseHTML = `
   <strong>350g cherry tomatoes (a mix of&nbsp;colours, if possible)</strong>
-`
+`;
 
 export const testIngListnonBreakingSpaceHTML = `
 <p>
@@ -68,7 +68,7 @@ export const testIngListnonBreakingSpaceHTML = `
 <strong>1 tbsp shredded mint leaves</strong><br>
 <strong>1 clove garlic, peeled and crushed</strong>
 </p>
-`
+`;
 
 export const testHtmlDuplication = `
 <p>
@@ -81,7 +81,7 @@ Large pinch of dried oregano<br>150g small plum tomatoes, chopped <br>
 50g seasoned breadcrumbs <br>
 50ml olive oil<br>
 Salt and black pepper</p>
-`.replace(/\n/g, '');
+`.replace(/\n/g, "");
 
 export const markupHtmlDuplication = `
 <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">500g salt cod
@@ -107,7 +107,7 @@ export const markupHtmlDuplication = `
 </mark> <br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;">Salt and black pepper
 <span style="${body.small()}; font-size: 0.7em; font-weight: bold; line-height: 2; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; top: 0.5em; position: relative;">test</span>
 </mark>
-`.replace(/\n/g, '');
+`.replace(/\n/g, "");
 
 export const testHtmlDuplicationWithMissingIngredient = `
 <p>These sticky ribs are near-addictively good, and incredibly easy to make. Serves four to six.</p>
@@ -121,7 +121,7 @@ For the marinade<br><strong>4 tbsp redcurrant, plum, crab apple or other fruit j
 <strong>2 tbsp soy sauce </strong><br>
 <strong>Steamed rice and wilted greens, to&nbsp;serve </strong>
 </p>
-`.replace(/\n/g, '');
+`.replace(/\n/g, "");
 
 export const markupHtmlDuplicationWithMissingIngredient = `
 <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>1.5kg free-range pork ribs (2&nbsp;racks) </strong>
@@ -161,7 +161,7 @@ For the filing:<br>
 <strong>parsley</strong> 20g<br>
 <strong>celeriac</strong> 150g (prepared weight)<br>
 <strong>butter</strong> 30g, melted<br></p>
-`.replace(/\n/g, '');
+`.replace(/\n/g, "");
 
 export const markupHtmlDuplication2 = `
 Serves 6<br>For the pastry:<br> <mark class="test" style="${body.medium()}; background: yellow; padding: 0.25em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.15em;"><strong>butter</strong> 175g

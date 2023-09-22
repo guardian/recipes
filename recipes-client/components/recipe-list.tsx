@@ -6,9 +6,9 @@ interface RecipeListProps {
 }
 
 interface RecipeListType {
-  path: string
-  recipes_title: string | null
-  recipeId: number
+  path: string;
+  recipes_title: string | null;
+  recipeId: number;
 }
 
 // interface AggregatedRecipeNumbers {
@@ -17,15 +17,23 @@ interface RecipeListType {
 
 function formatRecipeNumberLink(recipeNumbers: number[], path: string) {
   return recipeNumbers.map((num, i) => {
-    return <a key={`${num}_${i}`} href={curationEndpoint + path + `_${num}`}> {num} </a>
-  })
+    return (
+      <a key={`${num}_${i}`} href={curationEndpoint + path + `_${num}`}>
+        {" "}
+        {num}{" "}
+      </a>
+    );
+  });
 }
 
 const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
-  const rows = list.reduce((acc, item) => {
-    const { path, recipeId } = item;
-    return { ...acc, [path]: [...(acc[path] || []), recipeId] };
-  }, {} as { [key: string]: number[] });
+  const rows = list.reduce(
+    (acc, item) => {
+      const { path, recipeId } = item;
+      return { ...acc, [path]: [...(acc[path] || []), recipeId] };
+    },
+    {} as { [key: string]: number[] },
+  );
 
   return (
     <table>
@@ -40,13 +48,16 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
           return (
             <tr key={`row_${i}`}>
               <td key={`path_${i}_title`}> {arr[0]} </td>
-              <td key={`path_${i}_links`}> {formatRecipeNumberLink(arr[1], arr[0])} </td>
+              <td key={`path_${i}_links`}>
+                {" "}
+                {formatRecipeNumberLink(arr[1], arr[0])}{" "}
+              </td>
             </tr>
-          )
+          );
         })}
       </tbody>
     </table>
-  )
+  );
 };
 
 export default RecipeList;
