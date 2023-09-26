@@ -17,6 +17,7 @@
     "since 2017-06"
   ],
   "devDependencies": {
+    "@emotion/eslint-plugin": "^11.11.0",
     "@types/file-saver": "^2.0.5",
     "@types/html-parser": "^0.11.3",
     "@types/jest": "^29.5.5",

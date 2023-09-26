@@ -116,6 +116,6 @@ const Curation = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Curation;
