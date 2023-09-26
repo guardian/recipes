@@ -4,7 +4,7 @@ import {
   ActionType,
   schemaItem,
   allRecipeFields,
-  isschemaType,
+  isSchemaType,
 } from "../interfaces/main";
 import { isDisplayed, UIschema } from "../consts/index";
 import { isUIschemaItem } from "../interfaces/ui";
@@ -33,7 +33,7 @@ function RecipeComponent(
     const recipeComponents = UIOrder ? orderComponents(body, UIOrder) : body;
     return Object.keys(recipeComponents).reduce(
       (acc, key: keyof allRecipeFields) => {
-        if (isDisplayed(key) && isschemaType(schema)) {
+        if (isDisplayed(key) && isSchemaType(schema)) {
           return [
             ...acc,
             <FormGroup

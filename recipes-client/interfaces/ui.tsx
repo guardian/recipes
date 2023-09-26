@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {
   allRecipeFields,
-  isallRecipeFields,
+  isAllRecipeFields,
   ingredientListFields,
   ingredientField,
 } from "../interfaces/main";
@@ -24,5 +24,5 @@ export type UIGeneralItem = UIItem & ingredientListFields & ingredientField;
 export function isUIschemaItem(
   obj: UIschemaItem | allRecipeFields,
 ): obj is UIschemaItem {
-  return isallRecipeFields(obj);
+  return isAllRecipeFields(obj);
 }

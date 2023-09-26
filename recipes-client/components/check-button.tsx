@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 
-function CheckButton(props: {
+const CheckButton = (props: {
   isSelected: boolean;
   hover: boolean;
-}): JSX.Element {
+}) => {
   const { isSelected, hover } = props;
   const vis = hover || isSelected ? "visible" : "hidden";
   const displayCircle = hover ? "block" : "none";

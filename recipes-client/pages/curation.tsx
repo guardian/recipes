@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { space, background, text } from "@guardian/source-foundations";
+import { space, palette } from "@guardian/source-foundations";
 import RecipeComponent from "../components/recipe-component";
 import GuCAPIFrame from "../components/gu-capi-frame";
+import GuFrame from "../components/gu-frame";
 import ImagePicker from "../components/image-picker";
 import Footer from "../components/footer";
-import Header from "../components/header";
 
 import { useParams } from "react-router-dom";
 
@@ -26,18 +26,9 @@ const gridLayout = css`
   grid-template-areas: "header header header header" "left left right right" "footer footer footer footer";
 `;
 
-const header = css`
-  grid-area: header;
-  background: ${background.ctaPrimary};
-  color: ${text.ctaPrimary};
-  display: grid;
-  align-items: center;
-  padding-left: ${space[5]}px;
-`;
-
 const articleView = css`
   grid-area: left;
-  background: ${background.primary};
+  background: ${palette.neutral[100]};
   overflow: auto;
   padding: ${space[5]}px;
 `;
@@ -51,23 +42,13 @@ const dataView = css`
 
 const footer = css`
   grid-area: footer;
-  background: ${background.ctaPrimary};
+  background: ${palette.brand[400]};
   justify-items: center;
   display: grid;
   align-items: center;
 `;
 
-// Types
-
-interface CurationProps {
-  articleId: string;
-}
-
-interface RouteParams {
-  articleId: string;
-}
-
-function Curation(): JSX.Element {
+const Curation = () => {
   const { section, "*": path } = useParams<{
     section: string;
     "*": string;
@@ -111,24 +92,8 @@ function Curation(): JSX.Element {
 
   return (
     <div css={gridLayout}>
-      <div css={header}>
-        <Header
-          recipeUrl={articlePath}
-          recipeNumber={recipeId}
-          colours={state.colours}
-          dispatcher={dispatch}
-        />
-      </div>
       <div css={articleView}>
-        {/* <GuFrame articlePath={articleId} /> */}
-        <GuCAPIFrame
-          articlePath={articlePath}
-          isLoading={state.isLoading}
-          html={state.html}
-          recipeItems={state.body}
-          schema={state.schema}
-          colours={state.colours}
-        />
+        <GuFrame articlePath={articleId} />
       </div>
       <div css={dataView}>
         <ImagePicker

@@ -18,7 +18,6 @@ function Home(): JSX.Element {
 
   return (
     <div>
-      <h1>Recipe Curator</h1>
       <h2>This is it how it works:</h2>
       <ul>
         <li>Pick a recipe.</li>
