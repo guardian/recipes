@@ -11,10 +11,6 @@ interface RecipeListType {
   recipeId: number;
 }
 
-// interface AggregatedRecipeNumbers {
-//   [key: string]: number[]}
-// }
-
 function formatRecipeNumberLink(recipeNumbers: number[], path: string) {
   return recipeNumbers.map((num, i) => {
     return (

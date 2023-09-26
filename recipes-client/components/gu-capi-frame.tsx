@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css, Global } from "@emotion/react";
-import React from "react";
 import {
   HighlightHTML,
   HighlightByLine,
