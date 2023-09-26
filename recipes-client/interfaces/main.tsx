@@ -42,7 +42,7 @@ export function isingredientListFields(
   return Object.keys(obj).includes("ingredients");
 }
 
-export interface allRecipeFields extends recipeMetaFields, recipeFields { }
+export interface allRecipeFields extends recipeMetaFields, recipeFields {}
 
 export function isAllRecipeFields(
   obj: undefined | null | allRecipeFields | UIschemaItem,

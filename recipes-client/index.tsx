@@ -8,7 +8,7 @@ import Header from "./components/layout/header";
 import { css } from "@emotion/react";
 import { textSans } from "@guardian/source-foundations";
 
-const App = () =>
+const App = () => (
   <Router>
     <div>
       <Header />
@@ -18,12 +18,13 @@ const App = () =>
       </Routes>
     </div>
   </Router>
+);
 
 const globalStyles = css`
   body {
     ${textSans.medium()};
   }
-`
+`;
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);

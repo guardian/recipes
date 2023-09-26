@@ -1,9 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-const CheckButton = (props: {
-  isSelected: boolean;
-  hover: boolean;
-}) => {
+const CheckButton = (props: { isSelected: boolean; hover: boolean }) => {
   const { isSelected, hover } = props;
   const vis = hover || isSelected ? "visible" : "hidden";
   const displayCircle = hover ? "block" : "none";
@@ -59,6 +56,6 @@ const CheckButton = (props: {
       </svg>
     </div>
   );
-}
+};
 
 export default CheckButton;

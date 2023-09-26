@@ -14,26 +14,26 @@ module.exports = {
     'react',
     'react-hooks',
     '@typescript-eslint',
-    'emotion'
+    '@emotion'
   ],
   settings: {
     react: { version: 'detect' }
   },
   extends: [
     'eslint:recommended',
+    'prettier',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-    'prettier/@typescript-eslint',
+    'plugin:react-hooks/recommended'
   ],
   env: {
     browser: true,
     es6: true
   },
   rules: {
-    "emotion/jsx-import": 2,
+    "@emotion/jsx-import": 2,
 
     // Enforcing this rule creates verbose function components.
     // As `displayName` is just for debugging, we've chosen to disable it.
