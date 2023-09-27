@@ -18,7 +18,6 @@
   ],
   "devDependencies": {
     "@emotion/eslint-plugin": "^11.11.0",
-    "@guardian/eslint-config": "^5.0.0",
     "@guardian/eslint-config-typescript": "^7.0.0",
     "@guardian/eslint-plugin-source-foundations": "^15.0.0",
     "@guardian/eslint-plugin-source-react-components": "^19.0.0",

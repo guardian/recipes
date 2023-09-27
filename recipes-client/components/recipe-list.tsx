@@ -11,7 +11,7 @@ interface RecipeListType {
 	recipeId: number;
 }
 
-function formatRecipeNumberLink(recipeNumbers: number[], path: string) {
+const formatRecipeNumberLink = (recipeNumbers: number[], path: string) => {
 	return recipeNumbers.map((num, i) => {
 		return (
 			<a key={`${num}_${i}`} href={curationEndpoint + path + `_${num}`}>
@@ -20,7 +20,7 @@ function formatRecipeNumberLink(recipeNumbers: number[], path: string) {
 			</a>
 		);
 	});
-}
+};
 
 const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 	const rows = list.reduce(
