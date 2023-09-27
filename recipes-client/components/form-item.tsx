@@ -2,35 +2,37 @@
 import { actions } from '../actions/recipeActions';
 import { Dispatch } from '@reduxjs/toolkit';
 import { ActionType } from '../interfaces/main';
-import React = require('react');
 import { formatTitle } from './form-group';
 
-function handleChange(
+const handleChange = (
 	event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 	dispatcher: Dispatch<ActionType>,
-): void {
+): void => {
 	const objId = event.target.id;
 	const objVal = event.target.value;
 	dispatcher({
 		type: actions.change,
 		payload: { [objId]: objVal },
 	});
-}
+};
 
-function handleRemoveField(id: string, dispatcher: Dispatch<ActionType>): void {
+const handleRemoveField = (
+	id: string,
+	dispatcher: Dispatch<ActionType>,
+): void => {
 	dispatcher({
 		type: actions.delete,
 		payload: { objId: id },
 	});
-}
+};
 
-function renderInput(
+const renderInput = (
 	text: string,
 	key: string,
 	choices: Array<string> | null,
 	dispatcher?: Dispatch<ActionType> | null,
 	removable?: boolean,
-) {
+) => {
 	const removeId = `${key}`;
 	const rmAllowed = removable !== undefined ? removable : false;
 
@@ -90,7 +92,7 @@ function renderInput(
 			</>
 		);
 	}
-}
+};
 
 interface FormItemProps {
 	label: string;

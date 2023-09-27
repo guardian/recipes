@@ -48,73 +48,73 @@ const footer = css`
 `;
 
 const Curation = () => {
-  const { section, '*': path } = useParams<{
-    section: string;
-    '*': string;
-  }>();
-  const articleId = section && path ? `/${section}/${path}` : '';
-  const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
-  const image = state.body === null ? null : state.body.image;
-  const recipeId = state.body === null ? null : state.body.recipeId;
-  const articlePath = state.body === null ? articleId : state.body.path;
+	const { section, '*': path } = useParams<{
+		section: string;
+		'*': string;
+	}>();
+	const articleId = section && path ? `/${section}/${path}` : '';
+	const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
+	const image = state.body === null ? null : state.body.image;
+	const recipeId = state.body === null ? null : state.body.recipeId;
+	const articlePath = state.body === null ? articleId : state.body.path;
 
-  useEffect(() => {
-    const articleUrl = articleId.replace(/^\/+/, '');
-    Promise.all([
-      // Get schema
-      fetchAndDispatch(
-        `${location.origin}${apiURL}${schemaEndpoint}`,
-        actions.init,
-        'schema',
-        dispatch,
-      ),
-      // Get parsed recipe items
-      fetchAndDispatch(
-        `${location.origin}/api/db/${articleUrl}`,
-        actions.init,
-        'body',
-        dispatch,
-      ),
-      // Get article content
-      fetchAndDispatch(
-        `${location.origin}${capiProxy}${articleUrl}`,
-        actions.init,
-        'html',
-        dispatch,
-      ),
-    ])
-      .then(() => setLoadingFinished(dispatch))
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [articleId, dispatch]);
+	useEffect(() => {
+		const articleUrl = articleId.replace(/^\/+/, '');
+		Promise.all([
+			// Get schema
+			fetchAndDispatch(
+				`${location.origin}${apiURL}${schemaEndpoint}`,
+				actions.init,
+				'schema',
+				dispatch,
+			),
+			// Get parsed recipe items
+			fetchAndDispatch(
+				`${location.origin}/api/db/${articleUrl}`,
+				actions.init,
+				'body',
+				dispatch,
+			),
+			// Get article content
+			fetchAndDispatch(
+				`${location.origin}${capiProxy}${articleUrl}`,
+				actions.init,
+				'html',
+				dispatch,
+			),
+		])
+			.then(() => setLoadingFinished(dispatch))
+			.catch((err) => {
+				console.error(err);
+			});
+	}, [articleId, dispatch]);
 
-  return (
-    <div css={gridLayout}>
-      <div css={articleView}>
-        <GuFrame articlePath={articleId} />
-      </div>
-      <div css={dataView}>
-        <ImagePicker
-          html={state.html}
-          selected={image}
-          isLoading={state.isLoading}
-          dispatcher={dispatch}
-        />
-        <form>
-          <RecipeComponent
-            isLoading={state.isLoading}
-            body={state.body}
-            schema={state.schema}
-            dispatcher={dispatch}
-          />
-        </form>
-      </div>
-      <div css={footer}>
-        <Footer articleId={articleId} body={state.body} dispatcher={dispatch} />
-      </div>
-    </div>
-  );
+	return (
+		<div css={gridLayout}>
+			<div css={articleView}>
+				<GuFrame articlePath={articleId} />
+			</div>
+			<div css={dataView}>
+				<ImagePicker
+					html={state.html}
+					selected={image}
+					isLoading={state.isLoading}
+					dispatcher={dispatch}
+				/>
+				<form>
+					<RecipeComponent
+						isLoading={state.isLoading}
+						body={state.body}
+						schema={state.schema}
+						dispatcher={dispatch}
+					/>
+				</form>
+			</div>
+			<div css={footer}>
+				<Footer articleId={articleId} body={state.body} dispatcher={dispatch} />
+			</div>
+		</div>
+	);
 };
 
 export default Curation;

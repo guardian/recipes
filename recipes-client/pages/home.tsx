@@ -3,13 +3,14 @@ import { useState } from 'react';
 import RecipeList from '../components/recipe-list';
 import { listEndpoint } from '../consts/index';
 
-function Home(): JSX.Element {
+const Home = (): JSX.Element => {
 	const [recipeList, setList] = useState(null);
 	fetch(listEndpoint)
 		.then((response) => {
 			return response.json();
 		})
 		.then((data) => {
+			console.log(data);
 			setList(data);
 		})
 		.catch(() => {
@@ -28,5 +29,5 @@ function Home(): JSX.Element {
 			{recipeList !== null && <RecipeList list={recipeList} />}
 		</div>
 	);
-}
+};
 export default Home;
