@@ -1,86 +1,85 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { space, palette } from "@guardian/source-foundations";
-import RecipeComponent from "../components/recipe-component";
-import GuCAPIFrame from "../components/gu-capi-frame";
-import GuFrame from "../components/gu-frame";
-import ImagePicker from "../components/image-picker";
-import Footer from "../components/footer";
+import { css } from '@emotion/react';
+import { space, palette } from '@guardian/source-foundations';
+import RecipeComponent from '../components/recipe-component';
+import GuFrame from '../components/gu-frame';
+import ImagePicker from '../components/image-picker';
+import Footer from '../components/footer';
 
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
-import { recipeReducer, defaultState } from "../reducers/recipe-reducer";
-import { actions } from "../actions/recipeActions";
-import { apiURL, capiProxy, schemaEndpoint } from "../consts/index";
-import { useEffect } from "react";
-import { useImmerReducer } from "use-immer";
-import { fetchAndDispatch, setLoadingFinished } from "../utils/requests";
+import { recipeReducer, defaultState } from '../reducers/recipe-reducer';
+import { actions } from '../actions/recipeActions';
+import { apiURL, capiProxy, schemaEndpoint } from '../consts/index';
+import { useEffect } from 'react';
+import { useImmerReducer } from 'use-immer';
+import { fetchAndDispatch, setLoadingFinished } from '../utils/requests';
 
 // Styles
 
 const gridLayout = css`
-  display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-  height: 100vh;
-  grid-template-rows: 70px 1fr 50px;
-  grid-template-areas: "header header header header" "left left right right" "footer footer footer footer";
+	display: grid;
+	grid-template-columns: 25% 25% 25% 25%;
+	height: 100vh;
+	grid-template-rows: 70px 1fr 50px;
+	grid-template-areas: 'header header header header' 'left left right right' 'footer footer footer footer';
 `;
 
 const articleView = css`
-  grid-area: left;
-  background: ${palette.neutral[100]};
-  overflow: auto;
-  padding: ${space[5]}px;
+	grid-area: left;
+	background: ${palette.neutral[100]};
+	overflow: auto;
+	padding: ${space[5]}px;
 `;
 
 const dataView = css`
-  grid-area: right;
-  background: grey;
-  overflow: auto;
-  padding: 5px;
+	grid-area: right;
+	background: grey;
+	overflow: auto;
+	padding: 5px;
 `;
 
 const footer = css`
-  grid-area: footer;
-  background: ${palette.brand[400]};
-  justify-items: center;
-  display: grid;
-  align-items: center;
+	grid-area: footer;
+	background: ${palette.brand[400]};
+	justify-items: center;
+	display: grid;
+	align-items: center;
 `;
 
 const Curation = () => {
-  const { section, "*": path } = useParams<{
+  const { section, '*': path } = useParams<{
     section: string;
-    "*": string;
+    '*': string;
   }>();
-  const articleId = section && path ? `/${section}/${path}` : "";
+  const articleId = section && path ? `/${section}/${path}` : '';
   const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
   const image = state.body === null ? null : state.body.image;
   const recipeId = state.body === null ? null : state.body.recipeId;
   const articlePath = state.body === null ? articleId : state.body.path;
 
   useEffect(() => {
-    const articleUrl = articleId.replace(/^\/+/, "");
+    const articleUrl = articleId.replace(/^\/+/, '');
     Promise.all([
       // Get schema
       fetchAndDispatch(
         `${location.origin}${apiURL}${schemaEndpoint}`,
         actions.init,
-        "schema",
+        'schema',
         dispatch,
       ),
       // Get parsed recipe items
       fetchAndDispatch(
         `${location.origin}/api/db/${articleUrl}`,
         actions.init,
-        "body",
+        'body',
         dispatch,
       ),
       // Get article content
       fetchAndDispatch(
         `${location.origin}${capiProxy}${articleUrl}`,
         actions.init,
-        "html",
+        'html',
         dispatch,
       ),
     ])
