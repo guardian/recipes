@@ -8,6 +8,9 @@ export default {
 		recipes_title: {
 			type: 'string',
 		},
+		description: {
+			type: 'string',
+		},
 		serves: {
 			type: 'string',
 		},

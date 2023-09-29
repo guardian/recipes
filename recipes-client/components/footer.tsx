@@ -26,7 +26,7 @@ const cleanRecipe = (data: recipeMetaFields | null) => {
 	// const nullableFields = ['cuisines', 'occasion'] as Array<keyof recipeMetaFields>
 	if (data !== null) {
 		const out = Object.keys(data).map((field: keyof recipeMetaFields) => {
-			if (['serves', 'image', 'recipes_title'].includes(field)) {
+			if (['serves', 'image', 'recipes_title', 'description'].includes(field)) {
 				return [field, data[field] ? data[field] : ''];
 			} else {
 				return [field, data[field] ? data[field] : []];

@@ -24,23 +24,23 @@ export interface schemaType {
 	};
 }
 
-export function isSchemaType(
+export const isSchemaType = (
 	obj: schemaType | allRecipeFields | ingredientListFields,
-): obj is schemaType {
+): obj is schemaType => {
 	if (typeof obj !== 'object' || obj === null) return false;
 	const wObj: { [k: string]: unknown } = obj;
 	// const wObj: {[obj['properties']]?: unknown} = obj;
 	// console.log(Object.keys(wObj))
 	return isAllRecipeFields(wObj.properties); // Improve this, ends up being called twice sometimes from isingredientListFields
-}
+};
 
-export function isingredientListFields(
+export const isingredientListFields = (
 	obj: schemaType | allRecipeFields | ingredientListFields | undefined,
-): obj is ingredientListFields {
+): obj is ingredientListFields => {
 	if (obj === undefined || obj === null) return false;
 	if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
 	return Object.keys(obj).includes('ingredients');
-}
+};
 
 export interface allRecipeFields extends recipeMetaFields, recipeFields {}
 
@@ -54,13 +54,14 @@ export function isAllRecipeFields(
 
 export interface recipeMetaFields {
 	path: string;
-	recipeId: string;
+	id: string;
 	occasion: string[] | null;
 	cuisines: string[] | null;
 }
 
 export interface recipeFields {
 	recipes_title: string | null;
+	description: string | null;
 	serves: string | null;
 	time: timeField[] | null;
 	steps: string[] | null;

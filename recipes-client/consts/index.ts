@@ -48,6 +48,7 @@ export const UIschema: UIschemaItem = {
 		'path',
 		'recipeId',
 		'recipes_title',
+		'description',
 		'credit',
 		'image',
 		'serves',
@@ -61,8 +62,8 @@ export const UIschema: UIschemaItem = {
 		'diet_tags',
 	],
 	path: {
-		'ui:display': false,
-		'ui:locked': true,
+		'ui:display': true,
+		'ui:locked': false,
 		'ui:removable': false,
 	},
 	recipeId: {
@@ -71,6 +72,11 @@ export const UIschema: UIschemaItem = {
 		'ui:removable': false,
 	},
 	recipes_title: {
+		'ui:display': true,
+		'ui:locked': false,
+		'ui:removable': false,
+	},
+	description: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': false,
@@ -150,15 +156,15 @@ export const UIschema: UIschemaItem = {
 // function isLocked(key:string){
 
 // }
-export function isDisplayed(key: keyof schemaItem | string): boolean {
+export const isDisplayed = (key: keyof schemaItem | string): boolean => {
 	// const wObj: {[k: string]: unknown} = obj;
 	const wUIschema: { [key: string]: { 'ui:display': false } } = UIschema; // safely widen to wObj
 	return wUIschema[key]['ui:display'];
-}
-export function isRemovable(key: keyof schemaItem | string): boolean {
+};
+export const isRemovable = (key: keyof schemaItem | string): boolean => {
 	const wUIschema: { [key: string]: { 'ui:removable': false } } = UIschema; // safely widen to wObj
 	return wUIschema[key]['ui:removable'];
-}
+};
 
 // const filtered = Object.keys(raw)
 //   .filter(key => allowed.includes(key))

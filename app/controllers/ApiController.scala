@@ -103,6 +103,7 @@ class ApiController (
     "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
     "recipeId": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding_STUB",
     "recipes_title": "Grilled pepper salad with fresh cucumber and herbs",
+    "description": "A simple, fresh salad that can be served as a side or a main",
     "serves": "Serves 4",
     "time": [
       {
@@ -307,6 +308,9 @@ class ApiController (
             "type": "string"
         },
         "recipes_title": {
+            "type": ["string", "null"]
+        },
+        "description": {
             "type": ["string", "null"]
         },
         "serves": {

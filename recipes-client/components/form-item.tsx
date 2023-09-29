@@ -103,12 +103,12 @@ interface FormItemProps {
 	removable?: boolean;
 }
 
-function FormItem(prop: FormItemProps): JSX.Element {
+const FormItem = (prop: FormItemProps): JSX.Element => {
 	const { label } = prop;
 	const text = prop.text === null ? 'None' : prop.text;
 	const choices = prop.choices || null;
 	const dispatch = prop.dispatcher || null;
 
 	return renderInput(text, label, choices, dispatch, prop.removable);
-}
+};
 export default FormItem;
