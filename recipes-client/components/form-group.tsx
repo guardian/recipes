@@ -18,16 +18,16 @@ import { UIItem, UIschemaItem } from '../interfaces/ui';
 import { isRemovable } from '../consts';
 import { orderComponents } from '../utils/ordering';
 
-function isStringOrNumber(
+const isStringOrNumber = (
 	item:
 		| string
 		| Array<string | Record<string, unknown>>
 		| Record<string, unknown>,
-) {
+) => {
 	return typeof item === 'string' || typeof item === 'number';
-}
+};
 
-export function formatTitle(text: string | null): JSX.Element | null {
+export const formatTitle = (text: string | null): JSX.Element | null => {
 	// Reformat title with first letter uppercase
 	if (text === null) {
 		return null;
@@ -35,9 +35,9 @@ export function formatTitle(text: string | null): JSX.Element | null {
 		const title = text.replace('_', ' ');
 		return <legend> {title[0].toUpperCase() + title.slice(1)} </legend>;
 	}
-}
+};
 
-function getLabel(lab: string): string {
+const getLabel = (lab: string): string => {
 	// Utility to get text label removing any numbers
 	return lab
 		.split('.')
@@ -49,37 +49,37 @@ function getLabel(lab: string): string {
 				return isFinite(l) ? acc : l;
 			}
 		}, '');
-}
+};
 
-function handleAddField(
+const handleAddField = (
 	objId: string,
 	schemaItem: schemaItem,
 	dispatcher: Dispatch<ActionType>,
-): void {
+): void => {
 	dispatcher({
 		type: actions.add,
 		payload: { objId: objId },
 		schemaItem: schemaItem,
 	});
-}
+};
 
-function handleRemoveField(
+const handleRemoveField = (
 	objId: string,
 	dispatcher: Dispatch<ActionType>,
-): void {
+): void => {
 	dispatcher({
 		type: actions.delete,
 		payload: { objId: objId },
 	});
-}
+};
 
-export function getItemButtons(
+export const getItemButtons = (
 	key: string,
 	formItemAddId: string,
 	formItemRemoveLastId: string,
 	formFieldsSchema: schemaItem,
 	dispatcher: Dispatch<ActionType> | null,
-): JSX.Element {
+): JSX.Element => {
 	return (
 		<div css={{ marginTop: '5px' }}>
 			<button
@@ -100,7 +100,7 @@ export function getItemButtons(
 			</button>
 		</div>
 	);
-}
+};
 
 interface FormGroupProps {
 	formItems:
@@ -114,7 +114,7 @@ interface FormGroupProps {
 	dispatcher?: Dispatch<ActionType> | null;
 }
 
-function getFormFields(
+const getFormFields = (
 	formItems:
 		| string
 		| Array<string | Record<string, unknown>>
@@ -124,8 +124,9 @@ function getFormFields(
 	UIschema: UIschemaItem,
 	key: string,
 	dispatcher: Dispatch<ActionType>,
-): JSX.Element[] {
+): JSX.Element[] => {
 	// Get form components for each item in `formItems`
+	console.log('Schema: ' + JSON.stringify(schema));
 	const choices = schema.enum || null;
 	// Recursively parse all elements in JSON tree
 	if (getSchemaType(schema.type).includes('null') && formItems === null) {
@@ -250,7 +251,7 @@ function getFormFields(
 		console.warn(`Cannot get item '${key}' in formItems, leaving field empty.`);
 		return [] as JSX.Element[];
 	}
-}
+};
 
 function renderIngredientField(
 	formItems: ingredientField,

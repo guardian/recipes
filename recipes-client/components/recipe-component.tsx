@@ -19,9 +19,9 @@ interface RecipeComponentProps {
 	dispatcher: Dispatch<ActionType>;
 }
 
-function RecipeComponent(
+const RecipeComponent = (
 	props: RecipeComponentProps,
-): JSX.Element | JSX.Element[] {
+): JSX.Element | JSX.Element[] => {
 	const { body, isLoading, schema, dispatcher } = props;
 	const UIOrder = isUIschemaItem(UIschema) ? UIschema['ui:order'] : null;
 
@@ -36,6 +36,8 @@ function RecipeComponent(
 		return Object.keys(recipeComponents).reduce(
 			(acc, key: keyof allRecipeFields) => {
 				if (isDisplayed(key) && isSchemaType(schema)) {
+					// Log UI schema
+					console.log(`Schema for '${key}' key` + schema.properties[key]);
 					return [
 						...acc,
 						<FormGroup
@@ -55,6 +57,6 @@ function RecipeComponent(
 			[] as JSX.Element[],
 		);
 	}
-}
+};
 
 export default RecipeComponent;
