@@ -21,7 +21,7 @@ const gridLayout = css`
 	display: grid;
 	grid-template-columns: 25% 25% 25% 25%;
 	height: 100vh;
-	grid-template-rows: 70px 1fr 50px;
+	grid-template-rows: 30px 1fr 50px;
 	grid-template-areas: 'header header header header' 'left left right right' 'footer footer footer footer';
 `;
 
@@ -29,7 +29,7 @@ const articleView = css`
 	grid-area: left;
 	background: ${palette.neutral[100]};
 	overflow: auto;
-	padding: ${space[5]}px;
+	padding: 0 ${space[5]}px;
 `;
 
 const dataView = css`
