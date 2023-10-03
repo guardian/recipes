@@ -102,6 +102,7 @@ class ApiController (
     val data: String = """{
     "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
     "recipeId": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding_STUB",
+    "canonicalArticle": "food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding"
     "title": "Grilled pepper salad with fresh cucumber and herbs",
     "description": "A simple, fresh salad that can be served as a side or a main",
     "serves": "Serves 4",
@@ -306,6 +307,9 @@ class ApiController (
         },
         "recipeId": {
             "type": "string"
+        },
+        "canonicalArticle": {
+            "type": ["string", "null"]
         },
         "title": {
             "type": ["string", "null"]
