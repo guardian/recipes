@@ -37,7 +37,7 @@ export const defaultHighlightColours = [
 export const excludeInForm = ['credit', 'recipeId', 'image', 'path'];
 export const excludeInHighlights = excludeInForm.concat([
 	'ingredient_tag',
-	'cuisines',
+	'cuisineIds',
 	'meal_type',
 	'occasion',
 ]);
@@ -56,7 +56,7 @@ export const UIschema: UIschemaItem = {
 		'steps',
 		'ingredients_lists',
 		'occasion',
-		'cuisines',
+		'cuisineIds',
 		'meal_type',
 		'ingredient_tags',
 		'diet_tags',
@@ -128,7 +128,7 @@ export const UIschema: UIschemaItem = {
 		'ui:locked': false,
 		'ui:removable': true,
 	},
-	cuisines: {
+	cuisineIds: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': true,
