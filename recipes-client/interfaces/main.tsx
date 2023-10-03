@@ -60,7 +60,7 @@ export interface recipeMetaFields {
 }
 
 export interface recipeFields {
-	recipes_title: string | null;
+	title: string | null;
 	description: string | null;
 	serves: string | null;
 	time: timeField[] | null;

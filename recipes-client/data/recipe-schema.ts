@@ -5,7 +5,7 @@ export default {
 		path: {
 			type: 'string',
 		},
-		recipes_title: {
+		title: {
 			type: 'string',
 		},
 		description: {

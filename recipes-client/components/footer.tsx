@@ -26,7 +26,7 @@ const cleanRecipe = (data: recipeMetaFields | null) => {
 	// const nullableFields = ['cuisineIds', 'occasion'] as Array<keyof recipeMetaFields>
 	if (data !== null) {
 		const out = Object.keys(data).map((field: keyof recipeMetaFields) => {
-			if (['serves', 'image', 'recipes_title', 'description'].includes(field)) {
+			if (['serves', 'image', 'title', 'description'].includes(field)) {
 				return [field, data[field] ? data[field] : ''];
 			} else {
 				return [field, data[field] ? data[field] : []];
@@ -103,13 +103,13 @@ function formatCSV(
 		},
 	);
 	const fields = {
-			title: 'recipes_title',
+			title: 'title',
 			list_title: 'list_title',
 			list_number: 'list_number',
 			ingredient: 'ingredient',
 		},
 		dataFormatted = flatten(ingreds).map((ing) => {
-			return { title: data['recipes_title'], ...ing };
+			return { title: data['title'], ...ing };
 		});
 
 	return [dataFormatted, fields];
