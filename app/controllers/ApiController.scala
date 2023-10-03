@@ -283,12 +283,6 @@ class ApiController (
       "indian"
     ],
     "mealTypeIds": "main-course",
-    "ingredient_tags": [
-      "meat",
-      "fruit",
-      "cheese",
-      "seafood"
-    ],
     "image": "https://media.guim.co.uk/5eb266e966f8aa7c74f449804d13ee3b57eb81d6/1_0_3356_3355/1000.jpg"
   }"""
     Ok(Json.parse(data))
@@ -465,35 +459,6 @@ class ApiController (
                   "side-dishes",
                   "soup"
               ]
-            }
-        },
-        "ingredient_tags": {
-            "type": ["array", "null"],
-            "items": {
-                "type": ["string", "null"],
-                "enum": [
-                    "AVOCADOS",
-                    "BEEF",
-                    "BREAD",
-                    "CHEESE",
-                    "CHICKEN",
-                    "CHOCOLATE",
-                    "DUCK",
-                    "EGGS",
-                    "FRUIT",
-                    "LAMB",
-                    "MEAT",
-                    "OYSTERS",
-                    "PORK",
-                    "POTATOES",
-                    "PUMPKIN",
-                    "RICE",
-                    "SAUSAGES",
-                    "SEAFOOD",
-                    "SHELLFISH",
-                    "TOMATOES",
-                    "WINE"
-                ]
             }
         },
         "suitableForDietIds": {
