@@ -47,6 +47,7 @@ export const UIschema: UIschemaItem = {
 	'ui:order': [
 		'path',
 		'recipeId',
+		'canonicalArticle',
 		'title',
 		'description',
 		'credit',
@@ -68,6 +69,11 @@ export const UIschema: UIschemaItem = {
 	},
 	recipeId: {
 		'ui:display': false,
+		'ui:locked': true,
+		'ui:removable': false,
+	},
+	canonicalArticle: {
+		'ui:display': true,
 		'ui:locked': true,
 		'ui:removable': false,
 	},
