@@ -275,7 +275,7 @@ class ApiController (
         }
       ]
     }],
-    "occasion": "summer-food-and-drink",
+    "celebrationIds": "summer-food-and-drink",
     "cuisineIds": [
       "north-african/moroccan",
       "middleeastern",
@@ -384,7 +384,7 @@ class ApiController (
                 }
             }
         },
-        "occasion": {
+        "celebrationIds": {
             "type": [
                 "array",
                 "null"

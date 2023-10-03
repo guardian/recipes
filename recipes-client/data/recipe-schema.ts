@@ -89,7 +89,7 @@ export default {
 				},
 			},
 		},
-		occasion: {
+		celebrationIds: {
 			type: 'string',
 		},
 		cuisineIds: {
