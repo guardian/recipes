@@ -59,7 +59,7 @@ export const UIschema: UIschemaItem = {
 		'cuisineIds',
 		'mealTypeIds',
 		'ingredient_tags',
-		'diet_tags',
+		'suitableForDietIds',
 	],
 	path: {
 		'ui:display': true,
@@ -143,7 +143,7 @@ export const UIschema: UIschemaItem = {
 		'ui:locked': false,
 		'ui:removable': true,
 	},
-	diet_tags: {
+	suitableForDietIds: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': true,
