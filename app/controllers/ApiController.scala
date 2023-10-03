@@ -492,7 +492,7 @@ class ApiController (
                 ]
             }
         },
-        "diet_tags": {
+        "suitableForDietIds": {
             "type": ["array", "null"],
             "items": {
                 "type": ["string", "null"],
