@@ -281,7 +281,7 @@ class ApiController (
       "middleeastern",
       "indian"
     ],
-    "meal_type": "main-course",
+    "mealTypeIds": "main-course",
     "ingredient_tags": [
       "meat",
       "fruit",
@@ -443,7 +443,7 @@ class ApiController (
                 ]
             }
         },
-        "meal_type": {
+        "mealTypeIds": {
           "type": ["array", "null"],
           "items": {
               "type": [

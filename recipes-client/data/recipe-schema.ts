@@ -125,7 +125,7 @@ export default {
 				],
 			},
 		},
-		meal_type: {
+		mealTypeIds: {
 			type: ['string', 'null'],
 			enum: [
 				'starter',
