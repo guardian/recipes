@@ -24,6 +24,7 @@ case class Recipe(
   mealTypeIds: List[String],
   utensilsAndApplianceIds: List[String],
   techniquesUsedIds: List[String],
+  difficultyLevel: Option[String],
 )
 
 object Quantity {
@@ -92,6 +93,7 @@ object Recipe extends Logging {
         "mealTypeIds" -> recipe.mealTypeIds,
         "utensilsAndApplianceIds" -> recipe.utensilsAndApplianceIds,
         "techniquesUsedIds" -> recipe.techniquesUsedIds,
+        "difficultyLevel" -> recipe.difficultyLevel,
     )
   }
 

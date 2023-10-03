@@ -61,6 +61,7 @@ export const UIschema: UIschemaItem = {
 		'celebrationIds',
 		'utensilsAndApplianceIds',
 		'techniquesUsedIds',
+		'difficultyLevel',
 	],
 	path: {
 		'ui:display': true,
@@ -155,6 +156,11 @@ export const UIschema: UIschemaItem = {
 		'ui:removable': true,
 	},
 	techniquesUsedIds: {
+		'ui:display': true,
+		'ui:locked': false,
+		'ui:removable': true,
+	},
+	difficultyLevel: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': true,
