@@ -21,7 +21,9 @@ case class Recipe(
   time: List[String], //List[Time],
   credit: Option[String],
   celebrationIds: List[String],
-  mealTypeIds: List[String])
+  mealTypeIds: List[String],
+  utensilsAndApplianceIds: List[String]
+)
 
 object Quantity {
   implicit val formats: OFormat[Quantity] = Json.format[Quantity]
@@ -87,6 +89,7 @@ object Recipe extends Logging {
         "credit" -> recipe.credit,
         "celebrationIds" -> recipe.celebrationIds,
         "mealTypeIds" -> recipe.mealTypeIds,
+        "utensilsAndApplianceIds" -> recipe.utensilsAndApplianceIds,
     )
   }
 

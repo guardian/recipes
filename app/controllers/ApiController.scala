@@ -471,6 +471,16 @@ class ApiController (
                     "meat"
                 ]
             }
+        },
+        "utensilsAndApplianceIds": {
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "air fryer",
+                    "blender"
+                ]
+            }
         }
     }
 }
