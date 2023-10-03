@@ -491,6 +491,17 @@ class ApiController (
                     "marinating"
                 ]
             }
+        },
+        "difficultyLevel": {
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "easy",
+                    "medium",
+                    "hard"
+                ]
+            }
         }
     }
 }
