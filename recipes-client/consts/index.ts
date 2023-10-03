@@ -47,7 +47,7 @@ export const UIschema: UIschemaItem = {
 	'ui:order': [
 		'path',
 		'recipeId',
-		'recipes_title',
+		'title',
 		'description',
 		'credit',
 		'image',
@@ -71,7 +71,7 @@ export const UIschema: UIschemaItem = {
 		'ui:locked': true,
 		'ui:removable': false,
 	},
-	recipes_title: {
+	title: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': false,

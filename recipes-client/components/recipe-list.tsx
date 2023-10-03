@@ -7,7 +7,7 @@ interface RecipeListProps {
 
 interface RecipeListType {
 	path: string;
-	recipes_title: string | null;
+	title: string | null;
 	recipeId: number;
 }
 
