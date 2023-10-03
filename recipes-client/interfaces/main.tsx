@@ -56,7 +56,7 @@ export interface recipeMetaFields {
 	path: string;
 	id: string;
 	occasion: string[] | null;
-	cuisines: string[] | null;
+	cuisineIds: string[] | null;
 }
 
 export interface recipeFields {

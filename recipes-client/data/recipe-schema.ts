@@ -92,7 +92,7 @@ export default {
 		occasion: {
 			type: 'string',
 		},
-		cuisines: {
+		cuisineIds: {
 			type: 'array',
 			items: {
 				type: 'string',
