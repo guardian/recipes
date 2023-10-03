@@ -180,5 +180,4 @@ export default {
 	celebrationIds: 'summer-food-and-drink',
 	cuisineIds: ['north-african/moroccan', 'middleeastern', 'indian'],
 	mealTypeIds: 'main-course',
-	ingredient_tags: ['meat', 'fruit', 'cheese', 'seafood'],
 };
