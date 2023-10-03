@@ -177,7 +177,7 @@ export default {
 			],
 		},
 	],
-	occasion: 'summer-food-and-drink',
+	celebrationIds: 'summer-food-and-drink',
 	cuisineIds: ['north-african/moroccan', 'middleeastern', 'indian'],
 	mealTypeIds: 'main-course',
 	ingredient_tags: ['meat', 'fruit', 'cheese', 'seafood'],

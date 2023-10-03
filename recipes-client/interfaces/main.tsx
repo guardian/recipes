@@ -55,7 +55,7 @@ export function isAllRecipeFields(
 export interface recipeMetaFields {
 	path: string;
 	id: string;
-	occasion: string[] | null;
+	celebrationIds: string[] | null;
 	cuisineIds: string[] | null;
 }
 

@@ -20,7 +20,7 @@ case class Recipe(
   time: List[String], //List[Time],
   credit: Option[String],
   ingredient_tags: List[String],
-  occasion: List[String],
+  celebrationIds: List[String],
   mealTypeIds: List[String])
 
 object Quantity {
@@ -66,7 +66,7 @@ object Recipe extends Logging {
   //     "time" -> new AttributeValue(recipe.time),
   //     "credit" -> new AttributeValue(recipe.credit),
   //     "ingredient_tags" -> new AttributeValue(recipe.ingredient_tags),
-  //     "occasion" -> new AttributeValue(recipe.occasion),
+  //     "celebrationIds" -> new AttributeValue(recipe.celebrationIds),
   //     "mealTypeIds" -> new AttributeValue(recipe.mealTypeIds),
   //     ).asJava;
   // }
@@ -87,7 +87,7 @@ object Recipe extends Logging {
         "time" -> recipe.time,
         "credit" -> recipe.credit,
         "ingredient_tags" -> recipe.ingredient_tags,
-        "occasion" -> recipe.occasion,
+        "celebrationIds" -> recipe.celebrationIds,
         "mealTypeIds" -> recipe.mealTypeIds,
     )
   }

@@ -39,7 +39,7 @@ export const excludeInHighlights = excludeInForm.concat([
 	'ingredient_tag',
 	'cuisineIds',
 	'mealTypeIds',
-	'occasion',
+	'celebrationIds',
 ]);
 export const bylineFields = ['credit'];
 
@@ -55,7 +55,7 @@ export const UIschema: UIschemaItem = {
 		'time',
 		'steps',
 		'ingredients_lists',
-		'occasion',
+		'celebrationIds',
 		'cuisineIds',
 		'mealTypeIds',
 		'ingredient_tags',
@@ -123,7 +123,7 @@ export const UIschema: UIschemaItem = {
 			'ui:display': true,
 		},
 	},
-	occasion: {
+	celebrationIds: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': true,
