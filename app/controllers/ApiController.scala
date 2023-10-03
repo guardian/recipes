@@ -481,6 +481,16 @@ class ApiController (
                     "blender"
                 ]
             }
+        },
+        "techniquesUsedIds": {
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "baking",
+                    "marinating"
+                ]
+            }
         }
     }
 }
