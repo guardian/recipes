@@ -55,10 +55,11 @@ export const UIschema: UIschemaItem = {
 		'time',
 		'steps',
 		'ingredients_lists',
-		'celebrationIds',
+		'suitableForDietIds',
 		'cuisineIds',
 		'mealTypeIds',
-		'suitableForDietIds',
+		'celebrationIds',
+		'utensilsAndApplianceIds',
 	],
 	path: {
 		'ui:display': true,
@@ -143,6 +144,11 @@ export const UIschema: UIschemaItem = {
 		'ui:removable': true,
 	},
 	suitableForDietIds: {
+		'ui:display': true,
+		'ui:locked': false,
+		'ui:removable': true,
+	},
+	utensilsAndApplianceIds: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': true,
