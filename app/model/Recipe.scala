@@ -21,7 +21,7 @@ case class Recipe(
   credit: Option[String],
   ingredient_tags: List[String],
   occasion: List[String],
-  meal_type: List[String])
+  mealTypeIds: List[String])
 
 object Quantity {
   implicit val formats: OFormat[Quantity] = Json.format[Quantity]
@@ -67,7 +67,7 @@ object Recipe extends Logging {
   //     "credit" -> new AttributeValue(recipe.credit),
   //     "ingredient_tags" -> new AttributeValue(recipe.ingredient_tags),
   //     "occasion" -> new AttributeValue(recipe.occasion),
-  //     "meal_type" -> new AttributeValue(recipe.meal_type),
+  //     "mealTypeIds" -> new AttributeValue(recipe.mealTypeIds),
   //     ).asJava;
   // }
    //   for (String[] field : extra_fields) {
@@ -88,7 +88,7 @@ object Recipe extends Logging {
         "credit" -> recipe.credit,
         "ingredient_tags" -> recipe.ingredient_tags,
         "occasion" -> recipe.occasion,
-        "meal_type" -> recipe.meal_type,
+        "mealTypeIds" -> recipe.mealTypeIds,
     )
   }
 
