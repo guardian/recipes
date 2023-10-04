@@ -17,6 +17,7 @@ import { getSchemaType } from '../utils/schema';
 import { UIItem, UIschemaItem } from '../interfaces/ui';
 import { isRemovable } from '../consts';
 import { orderComponents } from '../utils/ordering';
+import FormButton from './reusables/FormButton';
 
 const isStringOrNumber = (
 	item:
@@ -82,22 +83,18 @@ export const getItemButtons = (
 ): JSX.Element => {
 	return (
 		<div css={{ marginTop: '5px' }}>
-			<button
-				type="button"
-				id={`${key}.add`}
+			<FormButton
+				text={`+ ${key.split('.').slice(-1)[0]}`}
+				buttonId={`${key}.add`}
 				onClick={() =>
 					handleAddField(formItemAddId, formFieldsSchema, dispatcher)
 				}
-			>
-				+ {key.split('.').slice(-1)[0]}
-			</button>
-			<button
-				type="button"
-				id={`${key}.remove`}
+			/>
+			<FormButton
+				text={`- ${key.split('.').slice(-1)[0]}`}
+				buttonId={`${key}.add`}
 				onClick={() => handleRemoveField(formItemRemoveLastId, dispatcher)}
-			>
-				- {key.split('.').slice(-1)[0]}
-			</button>
+			/>
 		</div>
 	);
 };
@@ -126,7 +123,7 @@ const getFormFields = (
 	dispatcher: Dispatch<ActionType>,
 ): JSX.Element[] => {
 	// Get form components for each item in `formItems`
-	console.log('Schema: ' + JSON.stringify(schema));
+	// console.log('Schema: ' + JSON.stringify(schema));
 	const choices = schema.enum || null;
 	// Recursively parse all elements in JSON tree
 	if (getSchemaType(schema.type).includes('null') && formItems === null) {
