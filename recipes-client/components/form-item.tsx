@@ -4,6 +4,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { ActionType } from '../interfaces/main';
 import { formatTitle } from './form-group';
 import FormButton from './reusables/FormButton';
+import { Option, Select, TextInput } from '@guardian/source-react-components';
 
 const handleChange = (
 	event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -41,15 +42,14 @@ const renderInput = (
 	if (choices === null || choices === undefined) {
 		return (
 			<div css={{ display: 'grid' }}>
-				<label key={key + '.label'}>{formatTitle(key)}</label>
-				<input
+				<TextInput
 					css={{ minWidth: '500px' }}
-					type="text"
-					value={text}
 					key={key}
 					id={key}
+					label={key}
+					value={text}
 					onChange={(event) => handleChange(event, dispatcher)}
-				></input>
+				/>
 				{rmAllowed && (
 					<FormButton
 						text="-"
@@ -64,7 +64,8 @@ const renderInput = (
 		choices_.unshift('None');
 		return (
 			<>
-				<select
+				<Select
+					label="Select an option"
 					css={{ minWidth: '500px', display: 'grid' }}
 					value={text}
 					key={key}
@@ -73,12 +74,12 @@ const renderInput = (
 				>
 					{choices_.map((item) => {
 						return (
-							<option key={`${key}.${String(item)}`} value={item}>
+							<Option key={`${key}.${String(item)}`} value={item}>
 								{item}
-							</option>
+							</Option>
 						);
 					})}
-				</select>
+				</Select>
 				{rmAllowed && (
 					<FormButton
 						text="-"
