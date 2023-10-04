@@ -49,6 +49,7 @@ export const UIschema: UIschemaItem = {
 		'canonicalArticle',
 		'title',
 		'description',
+		'contributors',
 		'byline',
 		'image',
 		'serves',
@@ -104,6 +105,11 @@ export const UIschema: UIschemaItem = {
 		'ui:removable': true,
 	},
 	steps: {
+		'ui:display': true,
+		'ui:locked': false,
+		'ui:removable': true,
+	},
+	contributors: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': true,

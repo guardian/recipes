@@ -331,6 +331,12 @@ class ApiController (
                 "type": "string"
             }
         },
+        "contributors": {
+            "type": ["array", "null"],
+            "items": {
+                "type": "string"
+            }
+        },
         "byline": {
             "type": ["null", "string", "array"]
         },
