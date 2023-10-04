@@ -34,7 +34,7 @@ const articleView = css`
 
 const dataView = css`
 	grid-area: right;
-	background: grey;
+	background: lightgray;
 	overflow: auto;
 	padding: 5px;
 `;

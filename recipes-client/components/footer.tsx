@@ -149,7 +149,7 @@ function Footer(props: FooterProps): JSX.Element | JSX.Element[] {
 			<Button priority="secondary" size="xsmall" onClick={reset}>
 				Reset
 			</Button>
-			<Button priority="tertiary" size="xsmall" onClick={downloadCSV}>
+			<Button priority="secondary" size="xsmall" onClick={downloadCSV}>
 				Download as CSV
 			</Button>
 		</form>

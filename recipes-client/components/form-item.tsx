@@ -3,6 +3,7 @@ import { actions } from '../actions/recipeActions';
 import { Dispatch } from '@reduxjs/toolkit';
 import { ActionType } from '../interfaces/main';
 import { formatTitle } from './form-group';
+import FormButton from './reusables/FormButton';
 
 const handleChange = (
 	event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -50,13 +51,11 @@ const renderInput = (
 					onChange={(event) => handleChange(event, dispatcher)}
 				></input>
 				{rmAllowed && (
-					<button
-						type="button"
-						id={removeId}
+					<FormButton
+						text="-"
+						buttonId={removeId}
 						onClick={() => handleRemoveField(removeId, dispatcher)}
-					>
-						-
-					</button>
+					/>
 				)}
 			</div>
 		);
@@ -81,13 +80,11 @@ const renderInput = (
 					})}
 				</select>
 				{rmAllowed && (
-					<button
-						type="button"
-						id={removeId}
+					<FormButton
+						text="-"
+						buttonId={removeId}
 						onClick={() => handleRemoveField(removeId, dispatcher)}
-					>
-						-
-					</button>
+					/>
 				)}
 			</>
 		);
