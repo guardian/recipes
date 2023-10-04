@@ -89,7 +89,7 @@
 //               fontSize: "14px",
 //               display: "block",
 //             },
-//             "span.element-image__credit": {
+//             "span.element-image__byline": {
 //               fontFamily: "arial",
 //               fontSize: "14px",
 //               display: "block",

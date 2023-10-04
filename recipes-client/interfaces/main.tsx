@@ -49,7 +49,7 @@ export function isAllRecipeFields(
 ): obj is allRecipeFields {
 	if (obj === undefined || obj === null) return false;
 	const keys = Object.keys(obj);
-	return keys.includes('path') && keys.includes('credit');
+	return keys.includes('path') && keys.includes('byline');
 }
 
 export interface recipeMetaFields {
@@ -65,7 +65,7 @@ export interface recipeFields {
 	serves: string | null;
 	time: timeField[] | null;
 	steps: string[] | null;
-	credit: string[] | string | null;
+	byline: string[] | string | null;
 	ingredients_lists: ingredientListFields[];
 	image: string | null;
 }

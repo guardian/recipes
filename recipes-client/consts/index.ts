@@ -34,13 +34,13 @@ export const defaultHighlightColours = [
 	'#CC79A790',
 ];
 
-export const excludeInForm = ['credit', 'recipeId', 'image', 'path'];
+export const excludeInForm = ['byline', 'recipeId', 'image', 'path'];
 export const excludeInHighlights = excludeInForm.concat([
 	'cuisineIds',
 	'mealTypeIds',
 	'celebrationIds',
 ]);
-export const bylineFields = ['credit'];
+export const bylineFields = ['byline'];
 
 export const UIschema: UIschemaItem = {
 	'ui:order': [
@@ -49,7 +49,7 @@ export const UIschema: UIschemaItem = {
 		'canonicalArticle',
 		'title',
 		'description',
-		'credit',
+		'byline',
 		'image',
 		'serves',
 		'time',
@@ -108,7 +108,7 @@ export const UIschema: UIschemaItem = {
 		'ui:locked': false,
 		'ui:removable': true,
 	},
-	credit: {
+	byline: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': false,

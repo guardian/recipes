@@ -24,7 +24,7 @@ export default {
 		'In a second bowl, toss the cucumber with the remaining two tablespoons of oil, a quarter-teaspoon of salt and a grind of pepper.',
 		'To serve, spread the roast pepper mixture over a plate, pile the cucumber in the middle and sprinkle with the urfa chilli.',
 	],
-	credit: 'Yotam Ottolenghi',
+	byline: 'Yotam Ottolenghi',
 	ingredients_lists: [
 		{
 			title: '',

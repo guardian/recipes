@@ -38,7 +38,7 @@ export default {
 				type: 'string',
 			},
 		},
-		credit: {
+		byline: {
 			type: 'string',
 		},
 		ingredients_lists: {
