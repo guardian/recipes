@@ -18,6 +18,7 @@ import { UIItem, UIschemaItem } from '../interfaces/ui';
 import { isRemovable } from '../consts';
 import { orderComponents } from '../utils/ordering';
 import FormButton from './reusables/FormButton';
+import { Legend } from '@guardian/source-react-components';
 
 const isStringOrNumber = (
 	item:
@@ -28,13 +29,13 @@ const isStringOrNumber = (
 	return typeof item === 'string' || typeof item === 'number';
 };
 
-export const formatTitle = (text: string | null): JSX.Element | null => {
+export const formatTitle = (text: string | null) => {
 	// Reformat title with first letter uppercase
 	if (text === null) {
 		return null;
 	} else {
 		const title = text.replace('_', ' ');
-		return <legend> {title[0].toUpperCase() + title.slice(1)} </legend>;
+		return title[0].toUpperCase() + title.slice(1);
 	}
 };
 
@@ -233,7 +234,7 @@ const getFormFields = (
 		});
 		return [
 			<fieldset key={`${key}.fieldset`} css={{}}>
-				<legend key={`${key}.legend`}>{formatTitle(key)}</legend>
+				<Legend key={`${key}.legend`} text={key}></Legend>
 				{fields}
 				{getItemButtons(
 					key,
@@ -284,7 +285,7 @@ function renderIngredientField(
 	});
 	return [
 		<fieldset key={`${key}.fieldset`} css={{}}>
-			<legend key={`${key}.legend`}>{formatTitle(key)}</legend>
+			<Legend key={`${key}.legend`} text={key}></Legend>
 			{fields}
 			{getItemButtons(
 				key,
@@ -362,7 +363,7 @@ export class FormGroup extends Component<FormGroupProps> {
 
 		return (
 			<fieldset key={`${key}.fieldset`} css={{}}>
-				<legend key={`${key}.legend`}>{formatTitle(title)}</legend>
+				<Legend key={`${key}.legend`} text={key}></Legend>
 				{formFields}
 				{isFormItemRemovable && formItemButtons}
 			</fieldset>
