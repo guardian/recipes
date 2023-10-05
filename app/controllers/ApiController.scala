@@ -100,6 +100,7 @@ class ApiController (
 
   def index(id: String) = Action {
     val data: String = """{
+    "id": "superUniqueRecipeId1",
     "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
     "recipeId": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding_STUB",
     "canonicalArticle": "food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding"
@@ -298,10 +299,14 @@ class ApiController (
     val schema: String = """{
     "type": "object",
     "required": [
+        "id",
         "path",
         "recipeId"
     ],
     "properties": {
+        "id": {
+            "type": "string"
+        },
         "path": {
             "type": "string"
         },

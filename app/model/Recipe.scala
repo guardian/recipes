@@ -12,6 +12,7 @@ case class Range(min: Int, max: Int)
 case class Serves(amount: Range, unit: String)
 
 case class Recipe(
+  id: String,
   recipeId: Long,
   path: String,
   canonicalArticle: Option[String],
@@ -91,6 +92,7 @@ object Recipe extends Logging {
 
   implicit val recipeWrites = new Writes[Recipe] {
     def writes(recipe: Recipe) = Json.obj(
+        "id" -> recipe.id,
         "recipeId" -> recipe.recipeId,
         "path" -> recipe.path,
         "serves" -> recipe.serves,
