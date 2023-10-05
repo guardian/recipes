@@ -127,14 +127,26 @@ class ApiController (
         "text": "Cook 40 min"
       }
     ],
-    "steps": [
-      "Heat the oven to 250 C (230 C fan)/480 F/gas 9.",
-      "In a large bowl, toss together all the peppers, tomatoes, onions, chilli, garlic, four tablespoons of oil, three-quarters of a teaspoon of salt and a good grind of pepper.",
-      "Spread out on two large oven trays lined with greaseproof paper and roast for about 35 minutes, stirring once or twice, or until softened and charred in places.",
-      "Remove the trays from the oven and, once they\\u2019re cool enough to handle, coarsely chop the vegetables into a chunky mash and transfer to a bowl with the lemon juice, herbs, half a teaspoon of salt and a good grind of pepper.",
-      "In a second bowl, toss the cucumber with the remaining two tablespoons of oil, a quarter-teaspoon of salt and a grind of pepper.",
-      "To serve, spread the roast pepper mixture over a plate, pile the cucumber in the middle and sprinkle with the urfa chilli."
-    ],
+    "instructions": [
+			{
+				"stepNumber": 1,
+				"description": "Espresso is ideal, because you want the coffee to have as intense a flavour as possible, but if you don’t have the wherewithal at home, a strongly brewed cafetiere, moka or filter pot, or even a cup of instant, will do, as will a takeaway from your favourite coffee shop if you don’t.",
+				"images": [
+					"https://i.guim.co.uk/img/media/d16236d4a8333e1ee2aeba3d6d551e6b2a36bf82/874_952_5055_5052/master/5055.jpg?width=620&quality=85&fit=max&s=772c5a231bb63bab36fa26e5491ea6b5"
+				]
+			},
+			{
+				"stepNumber": 2,
+				"description": "Separate the eggs into two large, clean bowls – you’ll be beating the whites into a foam, so it’s important they’re not contaminated with any yolk, which might interfere with the process. As such, I’d advise cracking each white into a small bowl first, so you can make sure of this before you add it to the larger bowl."
+			},
+			{
+				"stepNumber": 3,
+				"description": "Whisk the whites until they form stiff, rather than droopy peaks – you should be able to hold the bowl upside down with confidence, though be careful when testing this. (Don’t be tempted to keep whisking after they reach this stage, because they’ll quickly start to break down into a watery mess, and you’ll need to whisk in a fresh white to get them back.) Set aside.",
+				"images": [
+					"https://i.guim.co.uk/img/media/73469f6ffea172d74eaee006493540b9e4253879/0_633_7442_6217/master/7442.jpg?width=620&quality=85&fit=max&s=b5579f9f24abb11a26d03c72359c6b3e"
+				]
+			}
+		],
     "byline": "Yotam Ottolenghi",
     "ingredients_lists": [{
       "title": "",
@@ -360,11 +372,33 @@ class ApiController (
                 "type": ["string", "null"]
             }
         },
-        "steps": {
-            "type": ["array", "null"],
-            "items": {
-                "type": "string"
+        "instructions": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "stepNumber": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "images": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "stepNumber",
+                "description"
+              ]
             }
+          ]
         },
         "contributors": {
             "type": ["array", "null"],

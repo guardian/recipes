@@ -129,7 +129,7 @@ const getFormFields = (
 	// Recursively parse all elements in JSON tree
 	if (getSchemaType(schema.type).includes('null') && formItems === null) {
 		return [] as JSX.Element[];
-	} else if (key === 'serves') {
+	} else if (key === 'serves' || key === 'instructions') {
 		return [
 			<FormItem
 				text={formItems}

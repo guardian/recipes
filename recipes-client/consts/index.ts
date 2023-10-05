@@ -55,7 +55,7 @@ export const UIschema: UIschemaItem = {
 		'image',
 		'serves',
 		'time',
-		'steps',
+		'instructions',
 		'ingredients_lists',
 		'suitableForDietIds',
 		'cuisineIds',
@@ -110,7 +110,7 @@ export const UIschema: UIschemaItem = {
 		'ui:locked': false,
 		'ui:removable': true,
 	},
-	steps: {
+	instructions: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': true,

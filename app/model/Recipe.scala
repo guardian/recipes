@@ -10,6 +10,7 @@ case class IngredientsList(ingredients: List[Ingredient], title: String)
 case class Time(instruction: String, quantity: String, unit: String)
 case class Range(min: Int, max: Int)
 case class Serves(amount: Range, unit: String)
+case class Instruction(stepNumber: Int, description: String, images: Option[List[String]])
 
 case class Recipe(
   id: String,
@@ -20,7 +21,7 @@ case class Recipe(
   description: Option[String],
   serves: Option[Serves],
   ingredients_lists: List[IngredientsList],
-  steps: List[String],
+  instructions: List[Instruction],
   cuisineIds: List[String],
   time: List[String], //List[Time],
   contributors: List[String],
@@ -54,6 +55,10 @@ object IngredientsList {
 
 object Time {
   implicit val formats: OFormat[Time] = Json.format[Time]
+}
+
+object Instruction {
+  implicit val formats: OFormat[Instruction] = Json.format[Instruction]
 }
 
 object Recipe extends Logging {
@@ -97,7 +102,7 @@ object Recipe extends Logging {
         "path" -> recipe.path,
         "serves" -> recipe.serves,
         "ingredients_lists" -> recipe.ingredients_lists,
-        "steps" -> recipe.steps,
+        "instructions" -> recipe.instructions,
         "cuisineIds" -> recipe.cuisineIds,
         "title" -> recipe.title,
         "description" -> recipe.description,
