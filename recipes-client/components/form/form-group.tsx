@@ -11,13 +11,13 @@ import {
 	schemaItem,
 	schemaType,
 	ingredientQuantityField,
-} from '../interfaces/main';
-import { actions } from '../actions/recipeActions';
-import { getSchemaType } from '../utils/schema';
-import { UIItem, UIschemaItem } from '../interfaces/ui';
-import { isRemovable } from '../consts';
-import { orderComponents } from '../utils/ordering';
-import FormButton from './reusables/FormButton';
+} from '../../interfaces/main';
+import { actions } from '../../actions/recipeActions';
+import { getSchemaType } from '../../utils/schema';
+import { UIItem, UIschemaItem } from '../../interfaces/ui';
+import { isRemovable } from '../../consts';
+import { orderComponents } from '../../utils/ordering';
+import FormButton from './form-button';
 import { Legend } from '@guardian/source-react-components';
 
 const isStringOrNumber = (
@@ -100,11 +100,14 @@ export const getItemButtons = (
 	);
 };
 
+type FormItems =
+	| string
+	| Array<string | Record<string, unknown>>
+	| Record<string, unknown>
+	| ingredientListFields;
+
 interface FormGroupProps {
-	formItems:
-		| string
-		| Array<string | Record<string, unknown>>
-		| Record<string, unknown>;
+	formItems: FormItems;
 	schema: schemaItem;
 	UIschema: UIItem;
 	title: string;
@@ -113,11 +116,7 @@ interface FormGroupProps {
 }
 
 const getFormFields = (
-	formItems:
-		| string
-		| Array<string | Record<string, unknown>>
-		| Record<string, unknown>
-		| ingredientListFields,
+	formItems: FormItems,
 	schema: schemaItem,
 	UIschema: UIschemaItem,
 	key: string,
@@ -311,10 +310,7 @@ function renderIngredientField(
 }
 
 function getFormFieldsSchema(
-	formItems:
-		| string
-		| Array<string | Record<string, unknown>>
-		| Record<string, unknown>,
+	formItems: FormItems,
 	schema: schemaItem,
 ): schemaItem {
 	// Get schema for contents of given formItem

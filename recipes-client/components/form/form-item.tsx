@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { actions } from '../actions/recipeActions';
+import { actions } from '../../actions/recipeActions';
 import { Dispatch } from '@reduxjs/toolkit';
-import { ActionType } from '../interfaces/main';
+import { ActionType } from '../../interfaces/main';
 import { formatTitle } from './form-group';
-import FormButton from './reusables/FormButton';
+import FormButton from './form-button';
 import { Option, Select, TextInput } from '@guardian/source-react-components';
 import { keyframes } from '@emotion/react';
 

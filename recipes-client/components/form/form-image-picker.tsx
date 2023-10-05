@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
 import { Dispatch } from 'react';
-import CheckButton from './check-button';
-import { ActionType } from '../interfaces/main';
+import CheckButton from '../check-button';
+import { ActionType } from '../../interfaces/main';
 import minBy from 'lodash-es/minBy';
-import { actions } from '../actions/recipeActions';
+import { actions } from '../../actions/recipeActions';
 
 interface ImagePickerProps {
 	isLoading: boolean;
@@ -27,12 +27,12 @@ type typeDataTypes = {
 	width: string;
 };
 
-function findSmallestVersion(assets: imageInfo[]): imageInfo {
+const findSmallestVersion = (assets: imageInfo[]): imageInfo => {
 	/* Return asset with smallest 'width' */
 	return minBy(assets, ({ typeData }) => typeData.width);
-}
+};
 
-function getPictureUrls(elems: assetsInfo[] | undefined): string[] {
+const getPictureUrls = (elems: assetsInfo[] | undefined): string[] => {
 	if (elems === undefined) {
 		return [];
 	} else {
@@ -46,9 +46,9 @@ function getPictureUrls(elems: assetsInfo[] | undefined): string[] {
 			}, new Set<string>()),
 		);
 	}
-}
+};
 
-function getPictureIds(elems: assetsInfo[] | undefined): string[] {
+const getPictureIds = (elems: assetsInfo[] | undefined): string[] => {
 	if (elems === undefined) {
 		return [];
 	} else {
@@ -61,30 +61,30 @@ function getPictureIds(elems: assetsInfo[] | undefined): string[] {
 			}, new Set<string>()),
 		);
 	}
-}
+};
 // function getSelectedPic(body: Record<string, string>): string {
 //   return body['picture']
 // }
 
-function select(
+const select = (
 	objId: string,
 	isSelected: boolean,
 	dispatcher: Dispatch<ActionType>,
-): void {
+): void => {
 	console.log(`Object ID: ${objId}`);
 	const obj = isSelected ? null : objId;
 	dispatcher({
 		type: actions.selectImg,
 		payload: obj,
 	});
-}
+};
 
-function PictureGrid(props: {
+const PictureGrid = (props: {
 	pics: string[];
 	picIds: string[];
 	selected: string | null;
 	dispatcher: Dispatch<ActionType>;
-}) {
+}) => {
 	const { pics, picIds, selected, dispatcher } = props;
 	const [picHovered, setHover] = useState(-1);
 	return (
@@ -151,9 +151,9 @@ function PictureGrid(props: {
 			</div>
 		</>
 	);
-}
+};
 
-function ImagePicker(props: ImagePickerProps): JSX.Element {
+const ImagePicker = (props: ImagePickerProps): JSX.Element => {
 	const { isLoading, html, selected, dispatcher } = props;
 	if (isLoading || html === null) {
 		return <h3> Loading pictures... </h3>;
@@ -170,6 +170,6 @@ function ImagePicker(props: ImagePickerProps): JSX.Element {
 			/>
 		);
 	}
-}
+};
 
 export default ImagePicker;
