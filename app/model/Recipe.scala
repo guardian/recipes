@@ -8,13 +8,16 @@ case class Quantity(absolute: Option[String], from: Option[String], to: Option[S
 case class Ingredient(item: String, unit: String, quantity: Quantity, comment: Option[String], text: String)
 case class IngredientsList(ingredients: List[Ingredient], title: String)
 case class Time(instruction: String, quantity: String, unit: String)
+case class Range(min: Int, max: Int)
+case class Serves(amount: Range, unit: String)
+
 case class Recipe(
   recipeId: Long,
   path: String,
   canonicalArticle: Option[String],
   title: Option[String],
   description: Option[String],
-  serves: String,
+  serves: Option[Serves],
   ingredients_lists: List[IngredientsList],
   steps: List[String],
   cuisineIds: List[String],
@@ -34,6 +37,14 @@ object Quantity {
 
 object Ingredient {
   implicit val formats: OFormat[Ingredient] = Json.format[Ingredient]
+}
+
+object Range {
+  implicit val formats: OFormat[Range] = Json.format[Range]
+}
+
+object Serves {
+  implicit val formats: OFormat[Serves] = Json.format[Serves]
 }
 
 object IngredientsList {
