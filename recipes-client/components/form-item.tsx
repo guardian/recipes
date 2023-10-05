@@ -5,6 +5,7 @@ import { ActionType } from '../interfaces/main';
 import { formatTitle } from './form-group';
 import FormButton from './reusables/FormButton';
 import { Option, Select, TextInput } from '@guardian/source-react-components';
+import { keyframes } from '@emotion/react';
 
 const handleChange = (
 	event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -41,6 +42,20 @@ const renderInput = (
 	console.debug(`${text} ${key}`);
 
 	console.log(`key: ${key}`);
+
+	if (key === 'instructions') {
+		return (
+			<>
+				<TextInput
+					css={{ minWidth: '500px' }}
+					key={key}
+					id={key}
+					label={key}
+					onChange={(event) => handleChange(event, dispatcher)}
+				/>
+			</>
+		);
+	}
 
 	if (key === 'serves') {
 		return (
