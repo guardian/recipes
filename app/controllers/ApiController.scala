@@ -105,7 +105,13 @@ class ApiController (
     "canonicalArticle": "food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding"
     "title": "Grilled pepper salad with fresh cucumber and herbs",
     "description": "A simple, fresh salad that can be served as a side or a main",
-    "serves": "Serves 4",
+    "serves": {
+      "amount": {
+        "min": 4,
+        "max": 4
+      },
+      "unit": "people"
+    },
     "time": [
       {
       "instruction": "Prep",
@@ -312,7 +318,31 @@ class ApiController (
             "type": ["string", "null"]
         },
         "serves": {
-            "type": ["string", "null"]
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "object",
+              "properties": {
+                "min": {
+                  "type": "integer"
+                },
+                "max": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "min",
+                "max"
+              ]
+            },
+            "unit": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "amount",
+            "unit"
+          ]
         },
         "image": {
             "type": ["string", "null"]

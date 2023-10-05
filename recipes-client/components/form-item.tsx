@@ -39,6 +39,27 @@ const renderInput = (
 	const rmAllowed = removable !== undefined ? removable : false;
 
 	console.debug(`${text} ${key}`);
+
+	console.log(`key: ${key}`);
+
+	if (key === 'serves') {
+		return (
+			<>
+				<>
+					<label htmlFor="min">Min</label>
+					<input type="number" id="min" min="1" />
+					<label htmlFor="max">Max</label>
+					<input type="number" id="max" />
+					<label htmlFor="unit">Unit</label>
+					<select id="unit">
+						<option value="people">People</option>
+						<option value="units">Units</option>
+					</select>
+				</>
+			</>
+		);
+	}
+
 	if (choices === null || choices === undefined) {
 		return (
 			<div css={{ display: 'grid' }}>

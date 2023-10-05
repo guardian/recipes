@@ -129,6 +129,18 @@ const getFormFields = (
 	// Recursively parse all elements in JSON tree
 	if (getSchemaType(schema.type).includes('null') && formItems === null) {
 		return [] as JSX.Element[];
+	} else if (key === 'serves') {
+		return [
+			<FormItem
+				text={formItems}
+				choices={choices}
+				label={key}
+				key={`${key}.formItem`}
+				dispatcher={dispatcher}
+			>
+				{' '}
+			</FormItem>,
+		];
 	} else if (
 		getSchemaType(schema.type).includes('string') &&
 		isStringOrNumber(formItems)
