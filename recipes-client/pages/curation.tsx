@@ -54,7 +54,7 @@ const Curation = () => {
 	}>();
 	const articleId = section && path ? `/${section}/${path}` : '';
 	const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
-	const image = state.body === null ? null : state.body.image;
+	const image = state.body === null ? null : state.body.featuredImage;
 	const recipeId = state.body === null ? null : state.body.recipeId;
 	const articlePath = state.body === null ? articleId : state.body.path;
 

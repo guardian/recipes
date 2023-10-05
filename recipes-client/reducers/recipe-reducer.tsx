@@ -212,7 +212,7 @@ export const recipeReducer = produce(
 				break;
 			}
 			case actions.selectImg: {
-				updateStateItem(draft.body, ['image'], action.payload);
+				updateStateItem(draft.body, ['featuredImage'], action.payload);
 				break;
 			}
 			case actions.error: {

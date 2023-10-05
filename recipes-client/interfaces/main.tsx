@@ -67,7 +67,7 @@ export interface recipeFields {
 	steps: string[] | null;
 	byline: string[] | string | null;
 	ingredients_lists: ingredientListFields[];
-	image: string | null;
+	featuredImage: string | null;
 }
 
 export type recipeItem =
