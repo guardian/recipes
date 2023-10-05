@@ -302,7 +302,7 @@ class ApiController (
       "indian"
     ],
     "mealTypeIds": "main-course",
-    "image": "https://media.guim.co.uk/5eb266e966f8aa7c74f449804d13ee3b57eb81d6/1_0_3356_3355/1000.jpg"
+    "featuredImage": "https://media.guim.co.uk/5eb266e966f8aa7c74f449804d13ee3b57eb81d6/1_0_3356_3355/1000.jpg"
   }"""
     Ok(Json.parse(data))
   }
@@ -361,7 +361,7 @@ class ApiController (
             "unit"
           ]
         },
-        "image": {
+        "featuredImage": {
             "type": ["string", "null"]
         },
         "time": {
