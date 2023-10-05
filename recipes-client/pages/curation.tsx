@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { space, palette } from '@guardian/source-foundations';
 import RecipeComponent from '../components/recipe-component';
 import GuFrame from '../components/gu-frame';
-import ImagePicker from '../components/image-picker';
+import ImagePicker from '../components/form/form-image-picker';
 import Footer from '../components/footer';
 
 import { useParams } from 'react-router-dom';

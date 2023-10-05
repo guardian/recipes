@@ -6,7 +6,7 @@ import {
 	allRecipeFields,
 	isSchemaType,
 } from '../interfaces/main';
-import { FormGroup } from '../components/form-group';
+import { FormGroup } from './form/form-group';
 import { isDisplayed, UIschema } from '../consts/index';
 import { isUIschemaItem } from '../interfaces/ui';
 import { orderComponents } from '../utils/ordering';
