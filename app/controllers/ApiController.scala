@@ -148,153 +148,25 @@ class ApiController (
 			}
 		],
     "byline": "Yotam Ottolenghi",
-    "ingredients_lists": [{
-      "title": "",
-      "ingredients": [{
-          "text": "4 green peppers, stems removed, deseeded and flesh cut into roughly 3 cm pieces",
-          "item": "green peppers",
-          "unit": "",
-          "comment": "stems removed deseeded and flesh cut into roughly 3 cm pieces",
-          "quantity": {
-            "absolute": "4",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "2 red peppers, stems removed, deseeded and flesh cut into roughly 3 cm pieces",
-          "item": "red peppers",
-          "unit": "",
-          "comment": "stems removed deseeded and flesh cut into roughly 3 cm pieces",
-          "quantity": {
-            "absolute": "2",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "4 medium vine tomatoes (400 g), each cut into 4 wedges",
-          "item": "medium vine tomatoes",
-          "unit": "",
-          "comment": "400 g each cut into  wedges",
-          "quantity": {
-            "absolute": "4",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "2 small red onions, peeled and cut into roughly 3 cm pieces",
-          "item": "small red onions",
-          "unit": "",
-          "comment": "peeled and cut into roughly 3 cm pieces",
-          "quantity": {
-            "absolute": "2",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "1 green chilli, roughly sliced, seeds and all",
-          "item": "green chilli",
-          "unit": "",
-          "comment": "roughly sliced seeds and all",
-          "quantity": {
-            "absolute": "1",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "6 large garlic cloves, peeled",
-          "item": "garlic",
-          "unit": "cloves",
-          "comment": "large   peeled",
-          "quantity": {
-            "absolute": "6",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "90 ml olive oil",
-          "item": "olive oil",
-          "unit": "ml",
-          "comment": "",
-          "quantity": {
-            "absolute": "90",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "Salt and black pepper",
-          "item": "black pepper",
-          "unit": "",
-          "comment": "Salt and",
-          "quantity": {
-            "absolute": "",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "1\\u00bd tbsp lemon juice",
-          "item": "lemon juice",
-          "unit": "tbsp",
-          "comment": "",
-          "quantity": {
-            "absolute": "1.5",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "10 g parsley leaves, roughly chopped",
-          "item": "parsley leaves",
-          "unit": "g",
-          "comment": "roughly chopped",
-          "quantity": {
-            "absolute": "10",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "10 g coriander leaves, roughly chopped",
-          "item": "coriander leaves",
-          "unit": "g",
-          "comment": "roughly chopped",
-          "quantity": {
-            "absolute": "10",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "1 cucumber, peeled, deseeded and cut into 1 cm cubes",
-          "item": "cucumber",
-          "unit": "",
-          "comment": "peeled deseeded and cut into  cm cubes",
-          "quantity": {
-            "absolute": "1",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "\\u00be tsp urfa chilli",
-          "item": "urfa chilli",
-          "unit": "tsp",
-          "comment": "",
-          "quantity": {
-            "absolute": "0.75",
-            "from": "",
-            "to": ""
-          }
-        }
-      ]
-    }],
+    "ingredients": [
+    	{
+			"recipeSection": "Sauce",
+          	"ingredientsList": [
+          		{
+        			"name": "Carrot",
+          			"amount": {
+                    	"min": 2,
+                        "max": 2
+                    },
+          			"unit": "items",
+          			"ingredientId": "carrot",
+          			"prefix": "large",
+          			"suffix": "chopped",
+          			"optional": false
+        		}
+          ]
+		  }
+    ],
     "celebrationIds": "summer-food-and-drink",
     "cuisineIds": [
       "north-african/moroccan",
@@ -421,54 +293,71 @@ class ApiController (
         "byline": {
             "type": ["null", "string", "array"]
         },
-        "ingredients_lists": {
-            "type": ["array", "null"],
-            "items": {
-                "type": ["object", "null"],
-                "required": [],
+        "ingredients": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
                 "properties": {
-                    "title": {
-                        "type": "string"
-                    },
-                    "ingredients": {
-                        "type": "array",
-                        "items": {
+                  "recipeSection": {
+                    "type": "string"
+                  },
+                  "ingredientsList": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "amount": {
                             "type": "object",
-                            "required": [],
                             "properties": {
-                                "text": {
-                                    "type": "string"
-                                },
-                                "item": {
-                                    "type": "string"
-                                },
-                                "unit": {
-                                    "type": "string"
-                                },
-                                "comment": {
-                                    "type": "string"
-                                },
-                                "quantity": {
-                                    "type": "object",
-                                    "required": [],
-                                    "properties": {
-                                        "absolute": {
-                                            "type": "string"
-                                        },
-                                        "from": {
-                                            "type": "string"
-                                        },
-                                        "to": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
+                              "min": {
+                                "type": "integer"
+                              },
+                              "max": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "min",
+                              "max"
+                            ]
+                          },
+                          "unit": {
+                            "type": "string"
+                          },
+                          "ingredientId": {
+                            "type": "string"
+                          },
+                          "prefix": {
+                            "type": "string"
+                          },
+                          "suffix": {
+                            "type": "string"
+                          },
+                          "optional": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "amount",
+                          "unit"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "recipeSection",
+                  "ingredientsList"
+                ]
+              }
+            ]
+          },
         "celebrationIds": {
             "type": [
                 "array",

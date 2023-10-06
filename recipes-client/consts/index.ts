@@ -56,7 +56,7 @@ export const UIschema: UIschemaItem = {
 		'serves',
 		'timings',
 		'instructions',
-		'ingredients_lists',
+		'ingredients',
 		'suitableForDietIds',
 		'cuisineIds',
 		'mealTypeIds',
@@ -125,20 +125,28 @@ export const UIschema: UIschemaItem = {
 		'ui:locked': false,
 		'ui:removable': false,
 	},
-	ingredients_lists: {
+	ingredients: {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': true,
-		'ui:order': ['title', 'ingredients'],
-		ingredients: {
+		'ui:order': ['recipeSection', 'ingredientsList'],
+		ingredientsList: {
 			'ui:display': true,
-			'ui:order': ['text', 'item', 'unit', 'comment', 'quantity'],
-			quantity: {
+			'ui:order': [
+				'name',
+				'amount',
+				'unit',
+				'ingredientId',
+				'prefix',
+				'suffix',
+				'optional',
+			],
+			amount: {
 				'ui:display': true,
-				'ui:order': ['absolute', 'from', 'to'],
+				'ui:order': ['min', 'max'],
 			},
 		},
-		title: {
+		recipeSection: {
 			'ui:display': true,
 		},
 	},

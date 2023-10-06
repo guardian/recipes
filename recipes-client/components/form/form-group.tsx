@@ -258,6 +258,7 @@ const getFormFields = (
 		];
 	} else {
 		console.warn(`Cannot get item '${key}' in formItems, leaving field empty.`);
+		console.log(`Form items: ${JSON.stringify(formItems)}`);
 		return [] as JSX.Element[];
 	}
 };

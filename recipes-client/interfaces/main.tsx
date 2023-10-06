@@ -72,7 +72,7 @@ export interface recipeFields {
 	timings: timeField[] | null;
 	steps: string[] | null;
 	byline: string[] | string | null;
-	ingredients_lists: ingredientListFields[];
+	ingredients: ingredientListFields[];
 	featuredImage: string | null;
 }
 
@@ -85,16 +85,18 @@ export type recipeItem =
 	| ingredientField[];
 
 export type ingredientListFields = {
-	title: string | null;
+	recipeSection: string | null;
 	ingredients: ingredientField[];
 };
 
 export type ingredientField = {
-	text: string;
-	item: string;
+	name: string;
+	amount: string;
 	unit: string;
-	comment: string;
-	quantity: ingredientQuantityField;
+	ingredientId?: string;
+	prefix?: string;
+	suffix?: string;
+	optional?: boolean;
 };
 
 export type ingredientQuantityField = {
@@ -117,7 +119,7 @@ export function isingredientField(
 	obj: schemaItem | ingredientField,
 ): obj is ingredientField {
 	if (typeof obj !== 'object' || obj === null) return false;
-	return Object.keys(obj).includes('quantity');
+	return Object.keys(obj).includes('amount');
 }
 
 export type timeField = {
