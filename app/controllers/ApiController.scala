@@ -113,7 +113,7 @@ class ApiController (
       },
       "unit": "people"
     },
-    "time": [
+    "timings": [
       {
       "instruction": "Prep",
       "quantity": "20",
@@ -364,13 +364,25 @@ class ApiController (
         "featuredImage": {
             "type": ["string", "null"]
         },
-        "time": {
-            "type": ["array", "null"],
-            "items": {
-                "maxItems": 1,
-                "minItems": 0,
-                "type": ["string", "null"]
+        "timings": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "qualifier": {
+                  "type": "string"
+                },
+                "durationInMins": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "qualifier",
+                "durationInMins"
+              ]
             }
+          ]
         },
         "instructions": {
           "type": "array",
