@@ -62,8 +62,14 @@ export interface recipeMetaFields {
 export interface recipeFields {
 	title: string | null;
 	description: string | null;
-	serves: string | null;
-	time: timeField[] | null;
+	serves: {
+		amount: {
+			min: number | null;
+			max: number | null;
+		};
+		unit: string | null;
+	} | null;
+	timings: timeField[] | null;
 	steps: string[] | null;
 	byline: string[] | string | null;
 	ingredients_lists: ingredientListFields[];
@@ -115,10 +121,8 @@ export function isingredientField(
 }
 
 export type timeField = {
-	instruction: string;
-	quantity: string;
-	unit: string;
-	text: string;
+	qualifier: string;
+	durationInMins: number;
 };
 
 export interface ActionType {

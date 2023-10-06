@@ -7,10 +7,10 @@ import scala.collection.immutable.{Map => MMap}
 case class Quantity(absolute: Option[String], from: Option[String], to: Option[String])
 case class Ingredient(item: String, unit: String, quantity: Quantity, comment: Option[String], text: String)
 case class IngredientsList(ingredients: List[Ingredient], title: String)
-case class Time(instruction: String, quantity: String, unit: String)
 case class Range(min: Int, max: Int)
 case class Serves(amount: Range, unit: String)
 case class Instruction(stepNumber: Int, description: String, images: Option[List[String]])
+case class Timing(qualifier: String, durationInMins: Int)
 
 case class Recipe(
   id: String,
@@ -23,7 +23,7 @@ case class Recipe(
   ingredients_lists: List[IngredientsList],
   instructions: List[Instruction],
   cuisineIds: List[String],
-  time: List[String], //List[Time],
+  timings: List[Timing],
   contributors: List[String],
   byline: Option[String],
   celebrationIds: List[String],
@@ -53,8 +53,8 @@ object IngredientsList {
   implicit val formats: OFormat[IngredientsList] = Json.format[IngredientsList]
 }
 
-object Time {
-  implicit val formats: OFormat[Time] = Json.format[Time]
+object Timing {
+  implicit val formats: OFormat[Timing] = Json.format[Timing]
 }
 
 object Instruction {
@@ -106,7 +106,7 @@ object Recipe extends Logging {
         "cuisineIds" -> recipe.cuisineIds,
         "title" -> recipe.title,
         "description" -> recipe.description,
-        "time" -> recipe.time,
+        "timings" -> recipe.timings,
         "contributors" -> recipe.contributors,
         "byline" -> recipe.byline,
         "celebrationIds" -> recipe.celebrationIds,
