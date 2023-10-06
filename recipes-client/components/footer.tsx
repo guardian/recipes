@@ -91,9 +91,9 @@ function resetRecipe(
 function formatCSV(
 	data: allRecipeFields,
 ): [Record<string, string>[], Record<string, string>] {
-	const ingreds = data['ingredients_lists'].map(
+	const ingreds = data['ingredients'].map(
 		(ingL: ingredientListFields, i: number) => {
-			return ingL['ingredients'].map((ingred) => {
+			return ingL['ingredientsList'].map((ingred) => {
 				return {
 					list_number: i,
 					list_title: ingL['title'],

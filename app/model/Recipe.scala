@@ -5,9 +5,9 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import scala.collection.immutable.{Map => MMap}
 
 case class Quantity(absolute: Option[String], from: Option[String], to: Option[String])
-case class Ingredient(item: String, unit: String, quantity: Quantity, comment: Option[String], text: String)
-case class IngredientsList(ingredients: List[Ingredient], title: String)
 case class Range(min: Int, max: Int)
+case class Ingredient(name: String, amount: Range, unit: Int, ingredientId: Option[String], prefix: Option[String], suffix: Option[String], optional: Option[Boolean])
+case class IngredientsList(recipeSection: String, ingredients: List[Ingredient])
 case class Serves(amount: Range, unit: String)
 case class Instruction(stepNumber: Int, description: String, images: Option[List[String]])
 case class Timing(qualifier: String, durationInMins: Int)
@@ -20,7 +20,7 @@ case class Recipe(
   title: Option[String],
   description: Option[String],
   serves: Option[Serves],
-  ingredients_lists: List[IngredientsList],
+  ingredients: List[IngredientsList],
   instructions: List[Instruction],
   cuisineIds: List[String],
   timings: List[Timing],
@@ -81,7 +81,7 @@ object Recipe extends Logging {
   //     "recipeId" -> new AttributeValue(Recipe.recipeId),
   //     "path" -> new AttributeValue(Recipe.path),
   //     "serves" -> new AttributeValue(Recipe.serves),
-  //     "ingredients_lists" -> new AttributeValue(recipe.ingredients_lists),
+  //     "ingredients" -> new AttributeValue(recipe.ingredients),
   //     "steps" -> new AttributeValue(recipe.steps),
   //     "cuisineIds" -> new AttributeValue(recipe.cuisineIds),
   //     "title" -> new AttributeValue(recipe.title),
@@ -101,7 +101,7 @@ object Recipe extends Logging {
         "recipeId" -> recipe.recipeId,
         "path" -> recipe.path,
         "serves" -> recipe.serves,
-        "ingredients_lists" -> recipe.ingredients_lists,
+        "ingredients" -> recipe.ingredients,
         "instructions" -> recipe.instructions,
         "cuisineIds" -> recipe.cuisineIds,
         "title" -> recipe.title,

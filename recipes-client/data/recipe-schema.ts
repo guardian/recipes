@@ -41,53 +41,51 @@ export default {
 		byline: {
 			type: 'string',
 		},
-		ingredients_lists: {
+		ingredients: {
 			type: 'array',
-			items: {
-				type: 'object',
-				required: [],
-				properties: {
-					title: {
-						type: 'string',
-					},
-					ingredients: {
-						type: 'array',
-						items: {
-							type: 'object',
-							required: [],
-							properties: {
-								text: {
-									type: 'string',
-								},
-								item: {
-									type: 'string',
-								},
-								unit: {
-									type: 'string',
-								},
-								comment: {
-									type: 'string',
-								},
-								quantity: {
+			items: [
+				{
+					type: 'object',
+					properties: {
+						recipeSection: {
+							type: 'string',
+						},
+						ingredientsList: {
+							type: 'array',
+							items: [
+								{
 									type: 'object',
-									required: [],
 									properties: {
-										absolute: {
+										name: {
 											type: 'string',
 										},
-										from: {
+										amount: {
+											type: 'integer',
+										},
+										unit: {
 											type: 'string',
 										},
-										to: {
+										ingredientId: {
 											type: 'string',
+										},
+										prefix: {
+											type: 'string',
+										},
+										suffix: {
+											type: 'string',
+										},
+										optional: {
+											type: 'boolean',
 										},
 									},
+									required: ['name', 'amount', 'unit'],
 								},
-							},
+							],
 						},
 					},
+					required: ['recipeSection', 'ingredientsList'],
 				},
-			},
+			],
 		},
 		celebrationIds: {
 			type: 'string',
