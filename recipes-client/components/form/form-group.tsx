@@ -3,14 +3,10 @@ import { Component, Dispatch } from 'react';
 import FormItem from './form-item';
 import {
 	ActionType,
-	ingredientField,
-	ingredientListFields,
-	isingredientQuantityField,
-	isingredientField,
-	isingredientListFields,
+	Ingredient,
+	IngredientsGroup,
 	schemaItem,
 	schemaType,
-	ingredientQuantityField,
 } from '../../interfaces/main';
 import { actions } from '../../actions/recipeActions';
 import { getSchemaType } from '../../utils/schema';
@@ -19,6 +15,11 @@ import { isRemovable } from '../../consts';
 import { orderComponents } from '../../utils/ordering';
 import FormButton from './form-button';
 import { Legend } from '@guardian/source-react-components';
+import {
+	isIngredientField,
+	isIngredientsListField,
+	isTimingsField,
+} from 'utils/recipe-field-checkers';
 
 const isStringOrNumber = (
 	item:
@@ -104,7 +105,7 @@ type FormItems =
 	| string
 	| Array<string | Record<string, unknown>>
 	| Record<string, unknown>
-	| ingredientListFields;
+	| IngredientsGroup;
 
 interface FormGroupProps {
 	formItems: FormItems;
@@ -174,7 +175,7 @@ const getFormFields = (
 			);
 		});
 	} else if (
-		isingredientListFields(formItems) &&
+		isIngredientsListField(formItems) &&
 		getSchemaType(schema.type).includes('object')
 	) {
 		// ingredient list object
@@ -200,27 +201,12 @@ const getFormFields = (
 				)
 			);
 		});
-	} else if (isingredientQuantityField(formItems)) {
-		// ingredient quantity object
-		return Object.keys(formItems).map((k: keyof ingredientQuantityField) => {
-			return (
-				<FormItem
-					text={formItems[k]}
-					choices={choices}
-					label={`Quantity:${k}`}
-					key={`${key}.${k}`}
-					dispatcher={dispatcher}
-				>
-					{' '}
-				</FormItem>
-			);
-		});
-	} else if (isingredientField(formItems)) {
+	} else if (isIngredientField(formItems)) {
 		// ingredient field object
 		// return renderIngredientField(formItems, schema, key, dispatcher);
 		const formItemAddId = `${key}`;
 		const formItemRemoveLastId = `${key}`;
-		const fields = Object.keys(formItems).map((k: keyof ingredientField) => {
+		const fields = Object.keys(formItems).map((k: keyof Ingredient) => {
 			if (k === 'quantity') {
 				return getFormFields(
 					formItems.quantity,
@@ -256,6 +242,25 @@ const getFormFields = (
 				)}
 			</fieldset>,
 		];
+	} else if (isTimingsField(formItems)) {
+		// Map over timings object
+		const fields = Object.keys(formItems).map((k: keyof Timings) => {
+			return (
+				<FormItem
+					text={formItems[k]}
+					choices={choices}
+					label={k}
+					key={`${key}.${k}`}
+					dispatcher={dispatcher}
+				/>
+			);
+		});
+		return [
+			<fieldset key={`${key}.fieldset`} css={{}}>
+				<Legend key={`${key}.legend`} text={key}></Legend>
+				{fields}
+			</fieldset>,
+		];
 	} else {
 		console.warn(`Cannot get item '${key}' in formItems, leaving field empty.`);
 		console.log(`Form items: ${JSON.stringify(formItems)}`);
@@ -264,7 +269,7 @@ const getFormFields = (
 };
 
 function renderIngredientField(
-	formItems: ingredientField,
+	formItems: Ingredient,
 	schema: schemaType,
 	UIschema: UIschemaItem,
 	key: string,
@@ -272,7 +277,7 @@ function renderIngredientField(
 ): JSX.Element[] {
 	const formItemAddId = `${key}`;
 	const formItemRemoveLastId = `${key}`;
-	const fields = Object.keys(formItems).map((k: keyof ingredientField) => {
+	const fields = Object.keys(formItems).map((k: keyof Ingredient) => {
 		if (k === 'quantity') {
 			return getFormFields(
 				formItems.quantity,

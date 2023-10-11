@@ -3,8 +3,8 @@ import { Dispatch } from 'react';
 import {
 	ActionType,
 	allRecipeFields,
-	ingredientListFields,
-	recipeMetaFields,
+	IngredientsGroup,
+	lingeringFields,
 	schemaType,
 } from '../interfaces/main';
 import { apiURL } from '../consts';
@@ -22,10 +22,10 @@ interface FooterProps {
 }
 
 // replace nulls with empty list
-const cleanRecipe = (data: recipeMetaFields | null) => {
+const cleanRecipe = (data: lingeringFields | null) => {
 	// const nullableFields = ['cuisineIds', 'celebrationIds'] as Array<keyof recipeMetaFields>
 	if (data !== null) {
-		const out = Object.keys(data).map((field: keyof recipeMetaFields) => {
+		const out = Object.keys(data).map((field: keyof lingeringFields) => {
 			if (['serves', 'image', 'title', 'description'].includes(field)) {
 				return [field, data[field] ? data[field] : ''];
 			} else {
@@ -92,7 +92,7 @@ function formatCSV(
 	data: allRecipeFields,
 ): [Record<string, string>[], Record<string, string>] {
 	const ingreds = data['ingredients'].map(
-		(ingL: ingredientListFields, i: number) => {
+		(ingL: IngredientsGroup, i: number) => {
 			return ingL['ingredientsList'].map((ingred) => {
 				return {
 					list_number: i,

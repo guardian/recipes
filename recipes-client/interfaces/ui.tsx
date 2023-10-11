@@ -2,8 +2,8 @@
 import {
 	allRecipeFields,
 	isAllRecipeFields,
-	ingredientListFields,
-	ingredientField,
+	IngredientsGroup,
+	Ingredient,
 } from '../interfaces/main';
 
 export type UIschemaItem = {
@@ -19,10 +19,10 @@ export interface UIItem {
 	'ui:order'?: string[];
 }
 
-export type UIGeneralItem = UIItem & ingredientListFields & ingredientField;
+export type UIGeneralItem = UIItem & IngredientsGroup & Ingredient;
 
-export function isUIschemaItem(
+export const isUIschemaItem = (
 	obj: UIschemaItem | allRecipeFields,
-): obj is UIschemaItem {
+): obj is UIschemaItem => {
 	return isAllRecipeFields(obj);
-}
+};
