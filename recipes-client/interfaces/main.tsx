@@ -5,7 +5,7 @@ import { UIschemaItem } from './ui';
 export interface schemaItem {
 	type: string | string[];
 	items?: schemaItem;
-	properties?: allRecipeFields | ingredientListFields;
+	properties?: allRecipeFields | IngredientsGroup;
 	enum?: Array<string>;
 }
 
@@ -25,7 +25,7 @@ export interface schemaType {
 }
 
 export const isSchemaType = (
-	obj: schemaType | allRecipeFields | ingredientListFields,
+	obj: schemaType | allRecipeFields | IngredientsGroup,
 ): obj is schemaType => {
 	if (typeof obj !== 'object' || obj === null) return false;
 	const wObj: { [k: string]: unknown } = obj;
@@ -34,29 +34,19 @@ export const isSchemaType = (
 	return isAllRecipeFields(wObj.properties); // Improve this, ends up being called twice sometimes from isingredientListFields
 };
 
-export const isingredientListFields = (
-	obj: schemaType | allRecipeFields | ingredientListFields | undefined,
-): obj is ingredientListFields => {
-	if (obj === undefined || obj === null) return false;
-	if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
-	return Object.keys(obj).includes('ingredients');
-};
+export interface allRecipeFields extends lingeringFields, recipeFields {}
 
-export interface allRecipeFields extends recipeMetaFields, recipeFields {}
-
-export function isAllRecipeFields(
+export const isAllRecipeFields = (
 	obj: undefined | null | allRecipeFields | UIschemaItem,
-): obj is allRecipeFields {
+): obj is allRecipeFields => {
 	if (obj === undefined || obj === null) return false;
 	const keys = Object.keys(obj);
 	return keys.includes('path') && keys.includes('byline');
-}
+};
 
-export interface recipeMetaFields {
+export interface lingeringFields {
 	path: string;
 	id: string;
-	celebrationIds: string[] | null;
-	cuisineIds: string[] | null;
 }
 
 export interface recipeFields {
@@ -69,10 +59,13 @@ export interface recipeFields {
 		};
 		unit: string | null;
 	} | null;
-	timings: timeField[] | null;
+	timings: Timing[] | null;
 	steps: string[] | null;
-	byline: string[] | string | null;
-	ingredients: ingredientListFields[];
+	byline: string[] | null;
+	contributors: string[];
+	celebrationIds: string[] | null;
+	cuisineIds: string[] | null;
+	ingredients: IngredientsGroup[];
 	featuredImage: string | null;
 }
 
@@ -80,18 +73,23 @@ export type recipeItem =
 	| null
 	| string
 	| string[]
-	| ingredientListFields[]
-	| timeField[]
-	| ingredientField[];
+	| IngredientsGroup[]
+	| Timing[]
+	| Ingredient[];
 
-export type ingredientListFields = {
+interface Range {
+	min: number; // Minimum value
+	max: number; // Maximum value
+}
+
+export type IngredientsGroup = {
 	recipeSection: string | null;
-	ingredients: ingredientField[];
+	ingredients: Ingredient[];
 };
 
-export type ingredientField = {
+export type Ingredient = {
 	name: string;
-	amount: string;
+	amount: Range;
 	unit: string;
 	ingredientId?: string;
 	prefix?: string;
@@ -99,30 +97,7 @@ export type ingredientField = {
 	optional?: boolean;
 };
 
-export type ingredientQuantityField = {
-	absolute: string;
-	from: string;
-	to: string;
-};
-
-export function isingredientQuantityField(
-	obj:
-		| ingredientQuantityField
-		| ingredientQuantityField
-		| Record<string, unknown>,
-): obj is ingredientQuantityField {
-	if (typeof obj !== 'object' || obj === null) return false;
-	return Object.keys(obj).includes('absolute');
-}
-
-export function isingredientField(
-	obj: schemaItem | ingredientField,
-): obj is ingredientField {
-	if (typeof obj !== 'object' || obj === null) return false;
-	return Object.keys(obj).includes('amount');
-}
-
-export type timeField = {
+export type Timing = {
 	qualifier: string;
 	durationInMins: number;
 };

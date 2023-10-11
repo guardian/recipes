@@ -1,4 +1,4 @@
-export interface IdealRecipeObject {
+export interface RecipeFields {
 	id: string; // Unique identifier
 	canonicalArticle: string; // ID of recipe in Content API
 	title: string; // Name of the recipe

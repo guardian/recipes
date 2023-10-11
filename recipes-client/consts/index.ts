@@ -99,6 +99,18 @@ export const UIschema: UIschemaItem = {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': false,
+		'ui:order': ['amount', 'unit'],
+		amount: {
+			'ui:display': true,
+			'ui:locked': false,
+			'ui:removable': false,
+			'ui:order': ['min', 'max'],
+		},
+		unit: {
+			'ui:display': true,
+			'ui:locked': false,
+			'ui:removable': false,
+		},
 	},
 	featuredImage: {
 		'ui:display': false,
@@ -109,6 +121,17 @@ export const UIschema: UIschemaItem = {
 		'ui:display': true,
 		'ui:locked': false,
 		'ui:removable': true,
+		'ui:order': ['qualifier', 'durationInMins'],
+		qualifier: {
+			'ui:display': true,
+			'ui:locked': false,
+			'ui:removable': true,
+		},
+		durationInMins: {
+			'ui:display': true,
+			'ui:locked': false,
+			'ui:removable': true,
+		},
 	},
 	instructions: {
 		'ui:display': true,

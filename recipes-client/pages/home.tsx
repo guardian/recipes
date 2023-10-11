@@ -21,8 +21,8 @@ const Home = (): JSX.Element => {
 			<h2>This is it how it works:</h2>
 			<ul>
 				<li>Pick a recipe.</li>
-				<li> Edit it. </li>
-				<li> Save it. </li>
+				<li>Edit it.</li>
+				<li>Save it.</li>
 			</ul>
 			<h3>Why not try one of these?</h3>
 			{recipeList !== null && <RecipeList list={recipeList} />}

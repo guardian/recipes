@@ -1,11 +1,11 @@
 import {
 	Highlight,
-	ingredientField,
+	Ingredient,
 	recipeFields,
 	recipeItem,
 	ResourceRange,
-	timeField,
-	ingredientListFields,
+	Timing,
+	IngredientsGroup,
 } from '../interfaces/main';
 import { HTMLElement, parse } from 'node-html-parser';
 import flatten from 'lodash-es/flatten';
@@ -78,8 +78,8 @@ export function getUniqueHighlightTypes(highlights: Highlight[][]): string[] {
 }
 
 function isIngredientList(
-	arg: null | string | ingredientListFields,
-): arg is ingredientListFields {
+	arg: null | string | IngredientsGroup,
+): arg is IngredientsGroup {
 	if (arg === null || typeof arg === 'string') {
 		return false;
 	} else {
@@ -88,8 +88,8 @@ function isIngredientList(
 }
 
 function isIngredientFieldsArray(
-	arg: Array<string | ingredientListFields | ingredientField | timeField>,
-): arg is ingredientListFields[] {
+	arg: Array<string | IngredientsGroup | Ingredient | Timing>,
+): arg is IngredientsGroup[] {
 	if (typeof arg[0] === 'string' || arg.length === 0 || arg[0] === null) {
 		return false;
 	} else {
@@ -105,7 +105,7 @@ function isStringArray(arg: Array<unknown>): arg is string[] {
 
 export function getTextfromRecipeItem(item: recipeItem | string): string[] {
 	/* Extract text from recipe item
-     Select relevant field (item if array of strings, 'text' if object)
+	 Select relevant field (item if array of strings, 'text' if object)
   */
 	if (typeof item === 'string') {
 		// Plain string, wrap up as array
@@ -129,7 +129,7 @@ export function getTextfromRecipeItem(item: recipeItem | string): string[] {
 		} else {
 			// Parse each entry in time/ingredient array
 			return flatten(
-				(item as Array<timeField | ingredientField>).map((i) => {
+				(item as Array<Timing | Ingredient>).map((i) => {
 					return getTextfromRecipeItem(i['text']);
 				}),
 			);

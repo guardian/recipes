@@ -30,7 +30,7 @@ const handleRemoveField = (
 };
 
 const renderInput = (
-	text: string,
+	value: string,
 	key: string,
 	choices: Array<string> | null,
 	dispatcher?: Dispatch<ActionType> | null,
@@ -39,7 +39,7 @@ const renderInput = (
 	const removeId = `${key}`;
 	const rmAllowed = removable !== undefined ? removable : false;
 
-	console.debug(`${text} ${key}`);
+	console.debug(`${value} ${key}`);
 
 	console.log(`key: ${key}`);
 
@@ -82,8 +82,9 @@ const renderInput = (
 					css={{ minWidth: '500px' }}
 					key={key}
 					id={key}
+					type={typeof value === 'number' ? 'number' : 'text'}
 					label={key}
-					value={text}
+					value={value}
 					onChange={(event) => handleChange(event, dispatcher)}
 				/>
 				{rmAllowed && (
@@ -103,7 +104,7 @@ const renderInput = (
 				<Select
 					label="Select an option"
 					css={{ minWidth: '500px', display: 'grid' }}
-					value={text}
+					value={value}
 					key={key}
 					id={key}
 					onChange={(event) => handleChange(event, dispatcher)}
