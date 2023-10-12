@@ -122,7 +122,7 @@ export function getTextfromRecipeItem(item: recipeItem | string): string[] {
 				item.map((i) => {
 					return getTextfromRecipeItem([
 						...getTextfromRecipeItem(i['title']),
-						...getTextfromRecipeItem(i['ingredients']),
+						...getTextfromRecipeItem(i['ingredientsList']),
 					]);
 				}),
 			);

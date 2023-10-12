@@ -3,7 +3,7 @@
 import { UIschemaItem } from './ui';
 
 export interface schemaItem {
-	type: string | string[];
+	type: string | string[] | number;
 	items?: schemaItem;
 	properties?: allRecipeFields | IngredientsGroup;
 	enum?: Array<string>;
@@ -14,9 +14,9 @@ export interface schemaArrayItem {
 	items: Array<Record<string, unknown>>;
 }
 
-export function isSchemaArray(obj: schemaItem): obj is schemaArrayItem {
+export const isSchemaArray = (obj: schemaItem): obj is schemaArrayItem => {
 	return Object.keys(obj).includes('items');
-}
+};
 
 export interface schemaType {
 	properties: {
@@ -84,7 +84,7 @@ interface Range {
 
 export type IngredientsGroup = {
 	recipeSection: string | null;
-	ingredients: Ingredient[];
+	ingredientsList: Ingredient[];
 };
 
 export type Ingredient = {

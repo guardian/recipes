@@ -16,6 +16,13 @@ export const isTimingsField = (
 	return Object.keys(obj).includes('qualifier');
 };
 
+export const isIngredientsField = (
+	obj: IngredientsGroup | Record<string, unknown>,
+): obj is Ingredient => {
+	if (typeof obj !== 'object' || obj === null) return false;
+	return Object.keys(obj).includes('ingredientsList');
+};
+
 export const isIngredientField = (
 	obj: schemaItem | Ingredient,
 ): obj is Ingredient => {

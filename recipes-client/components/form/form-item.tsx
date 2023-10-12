@@ -39,9 +39,9 @@ const renderInput = (
 	const removeId = `${key}`;
 	const rmAllowed = removable !== undefined ? removable : false;
 
-	console.debug(`${value} ${key}`);
+	// console.debug(`${value} ${key}`);
 
-	console.log(`key: ${key}`);
+	// console.log(`key: ${key}`);
 
 	if (key === 'instructions') {
 		return (
@@ -53,24 +53,6 @@ const renderInput = (
 					label={key}
 					onChange={(event) => handleChange(event, dispatcher)}
 				/>
-			</>
-		);
-	}
-
-	if (key === 'serves') {
-		return (
-			<>
-				<>
-					<label htmlFor="min">Min</label>
-					<input type="number" id="min" min="1" />
-					<label htmlFor="max">Max</label>
-					<input type="number" id="max" />
-					<label htmlFor="unit">Unit</label>
-					<select id="unit">
-						<option value="people">People</option>
-						<option value="units">Units</option>
-					</select>
-				</>
 			</>
 		);
 	}
