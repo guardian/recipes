@@ -6,7 +6,6 @@ import {
 	Ingredient,
 	IngredientsGroup,
 	schemaItem,
-	schemaType,
 } from '../../interfaces/main';
 import { actions } from '../../actions/recipeActions';
 import { getSchemaType } from '../../utils/schema';
@@ -17,9 +16,12 @@ import FormButton from './form-button';
 import { Legend } from '@guardian/source-react-components';
 import {
 	isIngredientField,
+	isIngredientsField,
 	isIngredientsListField,
 	isTimingsField,
 } from 'utils/recipe-field-checkers';
+import { renderTimingsFormGroup } from './inputs/timings';
+import { renderIngredientsFormGroup } from './inputs/ingredients';
 
 const isStringOrNumber = (
 	item:
@@ -174,146 +176,16 @@ const getFormFields = (
 				dispatcher,
 			);
 		});
-	} else if (
-		isIngredientsListField(formItems) &&
-		getSchemaType(schema.type).includes('object')
-	) {
-		// ingredient list object
-		const rComponents = UIschema['ui:order']
-			? orderComponents(formItems, UIschema['ui:order'])
-			: formItems;
-		return Object.keys(rComponents).map((cKey) => {
-			return cKey === 'title' ? (
-				<FormItem
-					text={rComponents[cKey]}
-					choices={choices}
-					label={cKey}
-					key={`${cKey}.formItem`}
-					dispatcher={dispatcher}
-				/>
-			) : (
-				getFormFields(
-					rComponents[cKey],
-					schema.properties[cKey],
-					UIschema[cKey],
-					`${key}.${cKey}`,
-					dispatcher,
-				)
-			);
-		});
-	} else if (isIngredientField(formItems)) {
-		// ingredient field object
-		// return renderIngredientField(formItems, schema, key, dispatcher);
-		const formItemAddId = `${key}`;
-		const formItemRemoveLastId = `${key}`;
-		const fields = Object.keys(formItems).map((k: keyof Ingredient) => {
-			if (k === 'quantity') {
-				return getFormFields(
-					formItems.quantity,
-					schema.properties.quantity,
-					UIschema.quantity,
-					`${key}.quantity`,
-					dispatcher,
-				);
-			} else {
-				return (
-					<FormItem
-						text={formItems[k]}
-						choices={choices}
-						label={k}
-						key={`${key}.${k}`}
-						dispatcher={dispatcher}
-					>
-						{' '}
-					</FormItem>
-				);
-			}
-		});
-		return [
-			<fieldset key={`${key}.fieldset`} css={{}}>
-				<Legend key={`${key}.legend`} text={key}></Legend>
-				{fields}
-				{getItemButtons(
-					key,
-					formItemAddId,
-					formItemRemoveLastId,
-					schema,
-					dispatcher,
-				)}
-			</fieldset>,
-		];
 	} else if (isTimingsField(formItems)) {
-		// Map over timings object
-		const fields = Object.keys(formItems).map((k: keyof Timings) => {
-			return (
-				<FormItem
-					text={formItems[k]}
-					choices={choices}
-					label={k}
-					key={`${key}.${k}`}
-					dispatcher={dispatcher}
-				/>
-			);
-		});
-		return [
-			<fieldset key={`${key}.fieldset`} css={{}}>
-				<Legend key={`${key}.legend`} text={key}></Legend>
-				{fields}
-			</fieldset>,
-		];
+		return renderTimingsFormGroup(formItems, choices, key, dispatcher);
+	} else if (isIngredientsField(formItems)) {
+		return renderIngredientsFormGroup(formItems, choices, key, dispatcher);
 	} else {
 		console.warn(`Cannot get item '${key}' in formItems, leaving field empty.`);
 		console.log(`Form items: ${JSON.stringify(formItems)}`);
 		return [] as JSX.Element[];
 	}
 };
-
-function renderIngredientField(
-	formItems: Ingredient,
-	schema: schemaType,
-	UIschema: UIschemaItem,
-	key: string,
-	dispatcher: Dispatch<ActionType>,
-): JSX.Element[] {
-	const formItemAddId = `${key}`;
-	const formItemRemoveLastId = `${key}`;
-	const fields = Object.keys(formItems).map((k: keyof Ingredient) => {
-		if (k === 'quantity') {
-			return getFormFields(
-				formItems.quantity,
-				schema.properties.quantity,
-				UIschema.quantity,
-				`${key}.quantity`,
-				dispatcher,
-			);
-		} else {
-			return (
-				<FormItem
-					text={formItems[k]}
-					choices={null}
-					label={k}
-					key={`${key}.${k}`}
-					dispatcher={dispatcher}
-				>
-					{' '}
-				</FormItem>
-			);
-		}
-	});
-	return [
-		<fieldset key={`${key}.fieldset`} css={{}}>
-			<Legend key={`${key}.legend`} text={key}></Legend>
-			{fields}
-			{getItemButtons(
-				key,
-				formItemAddId,
-				formItemRemoveLastId,
-				schema,
-				dispatcher,
-			)}
-		</fieldset>,
-	];
-}
 
 function getFormFieldsSchema(
 	formItems: FormItems,
@@ -367,13 +239,6 @@ export class FormGroup extends Component<FormGroupProps> {
 			formFieldsSchema,
 			dispatcher,
 		);
-
-		const formFieldStyle = {
-			minWidth: '500px',
-			gridArea: 'field',
-			display: 'grid',
-			width: 'max-content',
-		};
 
 		return (
 			<fieldset key={`${key}.fieldset`} css={{}}>
