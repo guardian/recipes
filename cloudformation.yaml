@@ -37,11 +37,11 @@ Parameters:
   RecipesTable:
     Description: Name of table to store recipes in.
     Type: String
-    Default: recipes
+    Default: recipes_v2
   EditedRecipesTable:
     Description: Name of table to store edited recipes in.
     Type: String
-    Default: recipes-edited
+    Default: recipes_v2-edited
 
 Mappings:
   StageVariables:
@@ -375,15 +375,11 @@ Resources:
     Properties:
       TableName: !Ref RecipesTable
       AttributeDefinitions:
-      - AttributeName: path
+      - AttributeName: uniqueId
         AttributeType: S
-      - AttributeName: recipeId
-        AttributeType: N
       KeySchema:
-      - AttributeName: path
+      - AttributeName: uniqueId
         KeyType: HASH
-      - AttributeName: recipeId
-        KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
@@ -394,15 +390,11 @@ Resources:
     Properties:
       TableName: !Ref EditedRecipesTable
       AttributeDefinitions:
-        - AttributeName: path
-          AttributeType: S
-        - AttributeName: recipeId
-          AttributeType: N
+      - AttributeName: uniqueId
+        AttributeType: S
       KeySchema:
-        - AttributeName: path
-          KeyType: HASH
-        - AttributeName: recipeId
-          KeyType: RANGE
+      - AttributeName: uniqueId
+        KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
