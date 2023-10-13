@@ -16,7 +16,7 @@ module.exports = {
   plugins: [
     'react',
     'react-hooks',
-    '@emotion'
+    '@emotion',
   ],
   settings: {
     react: { version: 'detect' }
