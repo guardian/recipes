@@ -1,4 +1,5 @@
 import com.gu.riffraff.artifact.BuildInfo
+import com.typesafe.sbt.packager.archetypes.systemloader.ServerLoader.Systemd
 
 val enumeratumVersion = "1.6.1"
 val jacksonVersion = "2.11.4"
@@ -75,5 +76,22 @@ lazy val root = (project in file("."))
       s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
       "-Dconfig.file=/etc/gu/recipes.conf"
     ),
-    Test / javaOptions += "-Dconfig.file=conf/application.test.conf"
-  ))
+    Test / javaOptions += "-Dconfig.file=conf/application.test.conf",
+        /* A debian package needs some mandatory settings to be valid */
+    maintainer := "Basecamp",
+    Debian / packageSummary := "Recipes UI play app",
+    Debian / packageDescription := "Recipes UI play app",
+    Debian / packageBin := (Debian / packageBin)
+      .dependsOn(Assets / packageBin)
+      .value,
+    /* While not mandatory it is still highly recommended to add relevant JRE package as a dependency */
+    Debian / debianPackageDependencies := Seq("java17-runtime-headless"),
+    /* Use systemd to load this service */
+    Debian / serverLoading := Some(Systemd),
+    Debian / serviceAutostart := true,
+    /* Configure the Java options with which the executable will be launched */
+    Universal / javaOptions ++= Seq(
+      // Remove the PID file
+      "-Dpidfile.path=/dev/null"
+    )
+))
