@@ -3,7 +3,6 @@ import { Component, Dispatch } from 'react';
 import FormItem from './form-item';
 import {
 	ActionType,
-	Ingredient,
 	IngredientsGroup,
 	schemaItem,
 } from '../../interfaces/main';
@@ -18,10 +17,12 @@ import {
 	isIngredientField,
 	isIngredientsField,
 	isIngredientsListField,
+	isInstructionsField,
 	isTimingsField,
 } from 'utils/recipe-field-checkers';
 import { renderTimingsFormGroup } from './inputs/timings';
 import { renderIngredientsFormGroup } from './inputs/ingredients';
+import { renderInstructionsFormGroup } from './inputs/instructions';
 
 const isStringOrNumber = (
 	item:
@@ -131,18 +132,6 @@ const getFormFields = (
 	// Recursively parse all elements in JSON tree
 	if (getSchemaType(schema.type).includes('null') && formItems === null) {
 		return [] as JSX.Element[];
-	} else if (key === 'serves' || key === 'instructions') {
-		return [
-			<FormItem
-				text={formItems}
-				choices={choices}
-				label={key}
-				key={`${key}.formItem`}
-				dispatcher={dispatcher}
-			>
-				{' '}
-			</FormItem>,
-		];
 	} else if (
 		getSchemaType(schema.type).includes('string') &&
 		isStringOrNumber(formItems)
@@ -180,6 +169,8 @@ const getFormFields = (
 		return renderTimingsFormGroup(formItems, choices, key, dispatcher);
 	} else if (isIngredientsField(formItems)) {
 		return renderIngredientsFormGroup(formItems, choices, key, dispatcher);
+	} else if (isInstructionsField(formItems)) {
+		return renderInstructionsFormGroup(formItems, choices, key, dispatcher);
 	} else {
 		console.warn(`Cannot get item '${key}' in formItems, leaving field empty.`);
 		console.log(`Form items: ${JSON.stringify(formItems)}`);

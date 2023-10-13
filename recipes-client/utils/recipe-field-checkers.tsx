@@ -2,6 +2,7 @@ import {
 	allRecipeFields,
 	Ingredient,
 	IngredientsGroup,
+	Instruction,
 	isAllRecipeFields,
 	isSchemaType,
 	schemaItem,
@@ -36,4 +37,12 @@ export const isIngredientsListField = (
 	if (obj === undefined || obj === null) return false;
 	if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
 	return Object.keys(obj).includes('ingredientsList');
+};
+
+export const isInstructionsField = (
+	obj: schemaType | allRecipeFields | IngredientsGroup | undefined,
+): obj is Instruction[] => {
+	if (obj === undefined || obj === null) return false;
+	if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
+	return Object.keys(obj).includes('stepNumber');
 };

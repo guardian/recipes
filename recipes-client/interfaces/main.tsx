@@ -60,13 +60,19 @@ export interface recipeFields {
 		unit: string | null;
 	} | null;
 	timings: Timing[] | null;
-	steps: string[] | null;
+	instructions: Instruction[];
 	byline: string[] | null;
 	contributors: string[];
 	celebrationIds: string[] | null;
 	cuisineIds: string[] | null;
 	ingredients: IngredientsGroup[];
 	featuredImage: string | null;
+}
+
+export interface Instruction {
+	stepNumber: number; // Order of the step
+	description: string; // Detailed description of step
+	images?: string[]; // Actually capiImage[]
 }
 
 export type recipeItem =
