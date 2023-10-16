@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-set -e
-
-npm ci
-# npm run lint
-npm run build
-sbt clean compile test Debian/packageBin riffRaffPackageName
