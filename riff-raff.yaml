@@ -6,7 +6,7 @@ deployments:
   recipes:
     type: autoscaling
     parameters:
-      bucket: composer-dist
+      bucketSsmLookup: true
     dependencies:
       - cloudformation
   cloudformation:
