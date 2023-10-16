@@ -18,5 +18,5 @@ deployments:
         AmigoStage: PROD
         BuiltBy: amigo
       amiEncrypted: true
-      templatePath: recipes.cfn.yaml
+      templatePath: cloudformation.yaml
       prependStackToCloudFormationStackName: false
