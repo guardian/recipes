@@ -1,4 +1,3 @@
-import com.gu.riffraff.artifact.BuildInfo
 import com.typesafe.sbt.packager.archetypes.systemloader.ServerLoader.Systemd
 
 val enumeratumVersion = "1.6.1"
@@ -7,19 +6,13 @@ val logstashLogbackVersion = "7.0.1"
 val awsSdkVersion = "1.11.851"
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, RiffRaffArtifact, JDebPackaging, SystemdPlugin, BuildInfoPlugin)
+  .enablePlugins(PlayScala, JDebPackaging, SystemdPlugin, BuildInfoPlugin)
   .settings(Seq(
     name := """recipes""",
     version := "1.0-SNAPSHOT",
     scalaVersion := "2.13.1",
 
     PlayKeys.playDefaultPort := 9090,
-
-    riffRaffArtifactResources := Seq(
-      (Debian / packageBin).value -> s"${name.value}/${name.value}.deb",
-      baseDirectory.value / "riff-raff.yaml" -> "riff-raff.yaml",
-      baseDirectory.value / "cloudformation.yaml" -> "cloudformation/recipes.cfn.yaml"
-    ),
 
     buildInfoPackage := "recipes",
     buildInfoKeys := {
