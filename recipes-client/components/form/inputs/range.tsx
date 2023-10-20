@@ -1,24 +1,29 @@
 import { Legend } from '@guardian/source-react-components';
+import { ActionType } from 'interfaces/main';
+import { Dispatch } from 'react';
+import FormItem from '../form-item';
 
-export const renderRangeInput = (
-	// formItems: Range,
+export const renderRangeFormGroup = (
+	formItems: Range,
+	choices: string[] | null,
 	key: string,
-	// dispatcher: Dispatch<ActionType>,
-): JSX.Element[] => {
+	dispatcher: Dispatch<ActionType>,
+) => {
+	const fields = Object.keys(formItems).map((k: keyof Range) => {
+		return (
+			<FormItem
+				text={formItems[k]}
+				choices={choices}
+				label={k}
+				key={`${key}.${k}`}
+				dispatcher={dispatcher}
+			/>
+		);
+	});
 	return [
 		<fieldset key={`${key}.fieldset`}>
 			<Legend key={`${key}.legend`} text={key}></Legend>
-			<>
-				<label htmlFor="min">Min</label>
-				<input type="number" id="min" min="1" />
-				<label htmlFor="max">Max</label>
-				<input type="number" id="max" />
-				<label htmlFor="unit">Unit</label>
-				<select id="unit">
-					<option value="people">People</option>
-					<option value="units">Units</option>
-				</select>
-			</>
+			{fields}
 		</fieldset>,
 	];
 };

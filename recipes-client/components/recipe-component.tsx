@@ -35,8 +35,6 @@ const RecipeComponent = (
 		return Object.keys(recipeComponents).reduce(
 			(acc, key: keyof allRecipeFields) => {
 				if (isDisplayed(key) && isSchemaType(schema)) {
-					// Log UI schema
-					// console.log(`Schema for '${key}' key` + schema.properties[key]);
 					return [
 						...acc,
 						<FormGroup

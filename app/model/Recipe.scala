@@ -13,9 +13,9 @@ case class Instruction(stepNumber: Int, description: String, images: Option[List
 case class Timing(qualifier: String, durationInMins: Int)
 
 case class Recipe(
-  id: String,
   recipeId: Long,
   path: String,
+  id: String,
   canonicalArticle: Option[String],
   title: Option[String],
   description: Option[String],
@@ -25,7 +25,7 @@ case class Recipe(
   cuisineIds: List[String],
   timings: List[Timing],
   contributors: List[String],
-  byline: Option[String],
+  byline: List[String],
   celebrationIds: List[String],
   mealTypeIds: List[String],
   utensilsAndApplianceIds: List[String],
@@ -75,25 +75,6 @@ object Recipe extends Logging {
         None
     }
   }
-
-  // def toMMap(): MMap[String, AttributeValue] = {
-  //     return MMap(
-  //     "recipeId" -> new AttributeValue(Recipe.recipeId),
-  //     "path" -> new AttributeValue(Recipe.path),
-  //     "serves" -> new AttributeValue(Recipe.serves),
-  //     "ingredients" -> new AttributeValue(recipe.ingredients),
-  //     "steps" -> new AttributeValue(recipe.steps),
-  //     "cuisineIds" -> new AttributeValue(recipe.cuisineIds),
-  //     "title" -> new AttributeValue(recipe.title),
-  //     "time" -> new AttributeValue(recipe.time),
-  //     "byline" -> new AttributeValue(recipe.byline),
-  //     "celebrationIds" -> new AttributeValue(recipe.celebrationIds),
-  //     "mealTypeIds" -> new AttributeValue(recipe.mealTypeIds),
-  //     ).asJava;
-  // }
-   //   for (String[] field : extra_fields) {
-      //       item_values.put(field[0], new AttributeValue(field[1]));
-      //   }
 
   implicit val recipeWrites = new Writes[Recipe] {
     def writes(recipe: Recipe) = Json.obj(

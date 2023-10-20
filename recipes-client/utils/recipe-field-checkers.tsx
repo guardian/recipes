@@ -1,48 +1,55 @@
 import {
-	allRecipeFields,
-	Ingredient,
-	IngredientsGroup,
-	Instruction,
-	isAllRecipeFields,
-	isSchemaType,
-	schemaItem,
-	schemaType,
-	Timing,
+  allRecipeFields,
+  Ingredient,
+  IngredientsGroup,
+  Instruction,
+  isAllRecipeFields,
+  isSchemaType,
+  schemaItem,
+  schemaType,
+  Timing,
 } from 'interfaces/main';
 
 export const isTimingsField = (
-	obj: Timing | Record<string, unknown>,
+  obj: Timing | Record<string, unknown>,
 ): obj is Timing => {
-	if (typeof obj !== 'object' || obj === null) return false;
-	return Object.keys(obj).includes('qualifier');
+  if (typeof obj !== 'object' || obj === null) return false;
+  return Object.keys(obj).includes('qualifier');
 };
 
 export const isIngredientsField = (
-	obj: IngredientsGroup | Record<string, unknown>,
+  obj: IngredientsGroup | Record<string, unknown>,
 ): obj is Ingredient => {
-	if (typeof obj !== 'object' || obj === null) return false;
-	return Object.keys(obj).includes('ingredientsList');
+  if (typeof obj !== 'object' || obj === null) return false;
+  return Object.keys(obj).includes('ingredientsList');
 };
 
 export const isIngredientField = (
-	obj: schemaItem | Ingredient,
+  obj: schemaItem | Ingredient,
 ): obj is Ingredient => {
-	if (typeof obj !== 'object' || obj === null) return false;
-	return Object.keys(obj).includes('amount');
+  if (typeof obj !== 'object' || obj === null) return false;
+  return Object.keys(obj).includes('amount');
 };
 
 export const isIngredientsListField = (
-	obj: schemaType | allRecipeFields | IngredientsGroup | undefined,
+  obj: schemaType | allRecipeFields | IngredientsGroup | undefined,
 ): obj is IngredientsGroup => {
-	if (obj === undefined || obj === null) return false;
-	if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
-	return Object.keys(obj).includes('ingredientsList');
+  if (obj === undefined || obj === null) return false;
+  if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
+  return Object.keys(obj).includes('ingredientsList');
 };
 
 export const isInstructionsField = (
-	obj: schemaType | allRecipeFields | IngredientsGroup | undefined,
+  obj: schemaType | allRecipeFields | IngredientsGroup | undefined,
 ): obj is Instruction[] => {
-	if (obj === undefined || obj === null) return false;
-	if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
-	return Object.keys(obj).includes('stepNumber');
+  if (obj === undefined || obj === null) return false;
+  if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
+  return Object.keys(obj).includes('stepNumber');
 };
+
+export const isRangeField = (
+  obj: schemaItem | Record<string, unknown>,
+): obj is Range => {
+  if (typeof obj !== 'object' || obj === null) return false;
+  return Object.keys(obj).includes('min');
+}

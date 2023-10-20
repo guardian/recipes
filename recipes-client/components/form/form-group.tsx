@@ -14,15 +14,14 @@ import { orderComponents } from '../../utils/ordering';
 import FormButton from './form-button';
 import { Legend } from '@guardian/source-react-components';
 import {
-	isIngredientField,
 	isIngredientsField,
-	isIngredientsListField,
 	isInstructionsField,
 	isTimingsField,
 } from 'utils/recipe-field-checkers';
 import { renderTimingsFormGroup } from './inputs/timings';
 import { renderIngredientsFormGroup } from './inputs/ingredients';
 import { renderInstructionsFormGroup } from './inputs/instructions';
+import { renderServesFormGroup } from './inputs/serves';
 
 const isStringOrNumber = (
 	item:
@@ -171,6 +170,8 @@ const getFormFields = (
 		return renderIngredientsFormGroup(formItems, choices, key, dispatcher);
 	} else if (isInstructionsField(formItems)) {
 		return renderInstructionsFormGroup(formItems, choices, key, dispatcher);
+	} else if (key === 'serves') {
+		return renderServesFormGroup(formItems, choices, key, dispatcher);
 	} else {
 		console.warn(`Cannot get item '${key}' in formItems, leaving field empty.`);
 		console.log(`Form items: ${JSON.stringify(formItems)}`);
