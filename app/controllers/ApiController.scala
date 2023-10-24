@@ -469,15 +469,12 @@ class ApiController (
             }
         },
         "difficultyLevel": {
-            "type": ["array", "null"],
-            "items": {
-                "type": ["string", "null"],
-                "enum": [
+            "type": ["string", "null"],
+            "enum": [
                     "easy",
                     "medium",
                     "hard"
                 ]
-            }
         }
     }
 }
