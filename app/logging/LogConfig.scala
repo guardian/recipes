@@ -32,8 +32,7 @@ object LogConfig {
       "stack" -> config.stack,
       "stage" -> config.stage.toString.toUpperCase,
       "app" -> config.app,
-      "region" -> config.awsRegion.getName,
-      "buildNumber" -> recipes.BuildInfo.buildNumber
+      "region" -> config.awsRegion.getName
     )).toString()
   }
 

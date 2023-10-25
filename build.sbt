@@ -6,30 +6,13 @@ val logstashLogbackVersion = "7.0.1"
 val awsSdkVersion = "1.11.851"
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, JDebPackaging, SystemdPlugin, BuildInfoPlugin)
+  .enablePlugins(PlayScala, JDebPackaging, SystemdPlugin)
   .settings(Seq(
     name := """recipes""",
     version := "1.0-SNAPSHOT",
     scalaVersion := "2.13.1",
 
     PlayKeys.playDefaultPort := 9090,
-
-    buildInfoPackage := "recipes",
-    buildInfoKeys := {
-      lazy val buildInfo = BuildInfo(baseDirectory.value)
-      Seq[BuildInfoKey](
-        BuildInfoKey.sbtbuildinfoConstantEntry("buildNumber", buildInfo.buildIdentifier),
-        // so this next one is constant to avoid it always recompiling on dev machines.
-        // we only really care about build time on teamcity, when a constant based on when
-        // it was loaded is just fine
-        BuildInfoKey.sbtbuildinfoConstantEntry("buildTime", System.currentTimeMillis),
-        BuildInfoKey.sbtbuildinfoConstantEntry("gitCommitId", buildInfo.revision)
-      )
-    },
-    buildInfoOptions:= Seq(
-      BuildInfoOption.Traits("management.BuildInfo"),
-      BuildInfoOption.ToJson
-    ),
 
     libraryDependencies ++= Seq(
       ws,
