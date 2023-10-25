@@ -8,12 +8,8 @@ jobs:
   js-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Set BUILD_NUMBER environment variable
-        run: |
-          LAST_TEAMCITY_BUILD=215
-          echo "BUILD_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))" >> $GITHUB_ENV
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: '.node-version'
@@ -39,7 +35,6 @@ jobs:
       - uses: guardian/actions-riff-raff@v2
         with:
           projectName: editorial-tools::recipes
-          buildNumber: ${{ env.BUILD_NUMBER }}
           configPath: riff-raff.yaml
           contentDirectories: |
             cloudformation:
