@@ -6,7 +6,7 @@ deployments:
   recipes:
     type: autoscaling
     parameters:
-      bucket: composer-dist
+      bucketSsmLookup: true
     dependencies:
       - cloudformation
   cloudformation:
@@ -18,5 +18,5 @@ deployments:
         AmigoStage: PROD
         BuiltBy: amigo
       amiEncrypted: true
-      templatePath: recipes.cfn.yaml
+      templatePath: cloudformation.yaml
       prependStackToCloudFormationStackName: false
