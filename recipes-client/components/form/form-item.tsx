@@ -2,10 +2,8 @@
 import { actions } from '../../actions/recipeActions';
 import { Dispatch } from '@reduxjs/toolkit';
 import { ActionType } from '../../interfaces/main';
-import { formatTitle } from './form-group';
 import FormButton from './form-button';
 import { Option, Select, TextInput } from '@guardian/source-react-components';
-import { keyframes } from '@emotion/react';
 
 const handleChange = (
 	event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -36,26 +34,8 @@ const renderInput = (
 	dispatcher?: Dispatch<ActionType> | null,
 	removable?: boolean,
 ) => {
-	const removeId = `${key}`;
+	const removeId = key;
 	const rmAllowed = removable !== undefined ? removable : false;
-
-	// console.debug(`${value} ${key}`);
-
-	// console.log(`key: ${key}`);
-
-	if (key === 'instructions') {
-		return (
-			<>
-				<TextInput
-					css={{ minWidth: '500px' }}
-					key={key}
-					id={key}
-					label={key}
-					onChange={(event) => handleChange(event, dispatcher)}
-				/>
-			</>
-		);
-	}
 
 	if (choices === null || choices === undefined) {
 		return (
@@ -64,7 +44,7 @@ const renderInput = (
 					css={{ minWidth: '500px' }}
 					key={key}
 					id={key}
-					type={typeof value === 'number' ? 'number' : 'text'}
+					type={typeof value}
 					label={key}
 					value={value}
 					onChange={(event) => handleChange(event, dispatcher)}
@@ -121,11 +101,11 @@ interface FormItemProps {
 }
 
 const FormItem = (prop: FormItemProps): JSX.Element => {
-	const { label } = prop;
+	const { label, removable } = prop;
 	const text = prop.text === null ? 'None' : prop.text;
 	const choices = prop.choices || null;
 	const dispatch = prop.dispatcher || null;
 
-	return renderInput(text, label, choices, dispatch, prop.removable);
+	return renderInput(text, label, choices, dispatch, removable);
 };
 export default FormItem;

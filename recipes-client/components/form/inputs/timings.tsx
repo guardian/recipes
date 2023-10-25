@@ -15,7 +15,7 @@ export const renderTimingsFormGroup = (
 			<FormItem
 				text={formItems[k]}
 				choices={choices}
-				label={k}
+				label={`${key}.${k}`}
 				key={`${key}.${k}`}
 				dispatcher={dispatcher}
 			/>

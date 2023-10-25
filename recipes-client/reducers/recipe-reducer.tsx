@@ -126,7 +126,6 @@ function getSchemaItem(
 		getSchemaType(schemaI.type).includes('object') ||
 		typeof schemaI === 'object'
 	) {
-		console.log(schemaI[0].properties);
 		const schemaPropKeys = Object.keys(schemaI.properties);
 		const item = schemaI.properties;
 		const outputArray = schemaPropKeys.map<

@@ -17,31 +17,37 @@ export const renderIngredientsFormGroup = (
 				<FormItem
 					text={formItems[k]}
 					choices={choices}
-					label={k}
+					label={`${key}.${k}`}
 					key={`${key}.${k}`}
 					dispatcher={dispatcher}
 				/>
 			);
 		else {
 			const ingredientsList = formItems[k] as Ingredient[];
-			const listInputs = ingredientsList.map((ingredient) => {
+			const prefix = `${key}.${k}`;
+			const listInputs = ingredientsList.map((ingredient, i) => {
 				const fields = Object.keys(ingredient).map((k: keyof Ingredient) => {
 					if (isRangeField(ingredient[k])) {
-						return renderRangeFormGroup(ingredient[k], choices, k, dispatcher);
+						return renderRangeFormGroup(
+							ingredient[k],
+							choices,
+							`${prefix}.${i}.${k}`,
+							dispatcher,
+						);
 					} else
 						return (
 							<FormItem
 								text={ingredient[k]}
 								choices={choices}
-								label={k}
-								key={`${key}.${k}`}
+								label={`${prefix}.${i}.${k}`}
+								key={`${prefix}.${i}.${k}`}
 								dispatcher={dispatcher}
 							/>
 						);
 				});
 				return [
 					<fieldset key={`${key}.fieldset`}>
-						<Legend key={`${key}.legend`} text={key}></Legend>
+						<Legend key={`${key}.legend`} text={`${key}.${k}`}></Legend>
 						{fields}
 					</fieldset>,
 				];

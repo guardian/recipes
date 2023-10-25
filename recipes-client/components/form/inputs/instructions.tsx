@@ -20,7 +20,7 @@ export const renderInstructionsFormGroup = (
 					<FormItem
 						text={image}
 						choices={choices}
-						label={k}
+						label={`${key}.${k}`}
 						key={`${key}.${k}`}
 						dispatcher={dispatcher}
 					/>
@@ -37,7 +37,7 @@ export const renderInstructionsFormGroup = (
 			<FormItem
 				text={formItems[k]}
 				choices={choices}
-				label={k}
+				label={`${key}.${k}`}
 				key={`${key}.${k}`}
 				dispatcher={dispatcher}
 			/>
