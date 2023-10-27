@@ -103,10 +103,13 @@ function initStateItem(
 
 function getSchemaItem(
 	schemaI: schemaItem,
-): string | Record<string, unknown> | Array<Record<string, unknown>> {
+): string | number | Record<string, unknown> | Array<Record<string, unknown>> {
 	// Function returning "default" values for new item of type schemaItem.
 	if (getSchemaType(schemaI.type).includes('string')) {
+		console.log(JSON.stringify(schemaI));
 		return '';
+	} else if (getSchemaType(schemaI.type).includes('integer')) {
+		return 1;
 	} else if (
 		getSchemaType(schemaI.type).includes('array') &&
 		isSchemaArray(schemaI)
@@ -119,13 +122,15 @@ function getSchemaItem(
 		} else {
 			// More complex object like ingredient lists
 			const items = schemaI.items;
+			console.log('Items: ' + items);
 			return [getSchemaItem(items)];
 			// })
 		}
 	} else if (
 		getSchemaType(schemaI.type).includes('object') ||
-		typeof schemaI === 'object'
+		isSchemaObject(schemaI)
 	) {
+		console.log(JSON.stringify(schemaI));
 		const schemaPropKeys = Object.keys(schemaI.properties);
 		const item = schemaI.properties;
 		const outputArray = schemaPropKeys.map<
@@ -226,3 +231,6 @@ export const recipeReducer = produce(
 	},
 	{},
 );
+function isSchemaObject(schemaI: schemaItem): boolean {
+	return schemaI.type === 'object' && schemaI.properties !== undefined;
+}

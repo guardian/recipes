@@ -120,7 +120,7 @@ export const UIschema: UIschemaItem = {
 	timings: {
 		'ui:display': true,
 		'ui:locked': false,
-		'ui:removable': true,
+		'ui:removable': false,
 		'ui:order': ['qualifier', 'durationInMins'],
 		qualifier: {
 			'ui:display': true,

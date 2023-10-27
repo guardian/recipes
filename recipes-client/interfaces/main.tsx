@@ -5,9 +5,16 @@ import { UIschemaItem } from './ui';
 export interface schemaItem {
 	type: string | string[] | number;
 	items?: schemaItem;
-	properties?: allRecipeFields | IngredientsGroup;
+	properties?: allRecipeFields | ComplexRecipeFields;
 	enum?: Array<string>;
 }
+
+export type ComplexRecipeFields =
+	| IngredientsGroup
+	| Timing
+	| IngredientsGroup[]
+	| Ingredient
+	| Instruction;
 
 export interface schemaArrayItem {
 	type: string | string[];
@@ -25,7 +32,7 @@ export interface schemaType {
 }
 
 export const isSchemaType = (
-	obj: schemaType | allRecipeFields | IngredientsGroup,
+	obj: schemaType | allRecipeFields | IngredientsGroup | Timing,
 ): obj is schemaType => {
 	if (typeof obj !== 'object' || obj === null) return false;
 	const wObj: { [k: string]: unknown } = obj;

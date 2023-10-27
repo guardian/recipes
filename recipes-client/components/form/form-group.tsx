@@ -165,7 +165,7 @@ const getFormFields = (
 			);
 		});
 	} else if (isTimingsField(formItems)) {
-		return renderTimingsFormGroup(formItems, choices, key, dispatcher);
+		return renderTimingsFormGroup(formItems, schema, choices, key, dispatcher);
 	} else if (isIngredientsField(formItems)) {
 		return renderIngredientsFormGroup(formItems, choices, key, dispatcher);
 	} else if (isInstructionsField(formItems)) {
@@ -179,7 +179,7 @@ const getFormFields = (
 	}
 };
 
-function getFormFieldsSchema(
+export function getFormFieldsSchema(
 	formItems: FormItems,
 	schema: schemaItem,
 ): schemaItem {
