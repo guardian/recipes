@@ -12,20 +12,8 @@ export const renderTimingsFormGroup = (
 	key: string,
 	dispatcher: Dispatch<ActionType>,
 ) => {
-	const formFieldsSchema = {
-		type: 'object',
-		properties: {
-			qualifier: {
-				type: 'string',
-			},
-			durationInMins: {
-				type: 'integer',
-			},
-		},
-		required: ['qualifier', 'durationInMins'],
-	};
+	const formFieldsSchema = getFormFieldsSchema(formItems, schema);
 	const formItemAddId = key;
-	// Same as formItemAddId but convert last char to int and subtract 1
 	const formItemRemoveLastId =
 		key.slice(0, -1) + (parseInt(key.slice(-1)) - 1).toString();
 

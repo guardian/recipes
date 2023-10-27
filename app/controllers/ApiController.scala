@@ -238,8 +238,7 @@ class ApiController (
         },
         "timings": {
           "type": "array",
-          "items": [
-            {
+          "items": {
               "type": "object",
               "properties": {
                 "qualifier": {
@@ -254,7 +253,6 @@ class ApiController (
                 "durationInMins"
               ]
             }
-          ]
         },
         "instructions": {
           "type": "array",

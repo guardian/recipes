@@ -128,15 +128,13 @@ function getSchemaItem(
 		}
 	} else if (
 		getSchemaType(schemaI.type).includes('object') ||
-		isSchemaObject(schemaI)
+		typeof schemaI === 'object'
 	) {
-		console.log(JSON.stringify(schemaI));
-		const schemaPropKeys = Object.keys(schemaI.properties);
-		const item = schemaI.properties;
+		const schemaPropKeys = Object.keys(schemaI);
 		const outputArray = schemaPropKeys.map<
 			Array<string | Record<string, unknown>>
 		>((key) => {
-			return [key, getSchemaItem(item[key])];
+			return [key, getSchemaItem(schemaI[key])];
 		}, []);
 		return Entries2Object(outputArray);
 	} else {
