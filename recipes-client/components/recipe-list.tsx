@@ -8,9 +8,9 @@ interface RecipeListProps {
 }
 
 interface RecipeListType {
-  path: string
-  recipes_title: string|null
-  recipeId: number
+  path: string;
+  recipes_title: string | null;
+  recipeId: number;
 }
 
 // interface AggregatedRecipeNumbers {
@@ -19,8 +19,13 @@ interface RecipeListType {
 
 function formatRecipeNumberLink(recipeNumbers: number[], path: string) {
   return recipeNumbers.map((num, i) => {
-    return <a key={`${num}_${i}`} href={curationEndpoint + path+`_${num}`}> {num} </a>
-  })
+    return (
+      <a key={`${num}_${i}`} href={curationEndpoint + path + `_${num}`}>
+        {" "}
+        {num}{" "}
+      </a>
+    );
+  });
 }
 
 class RecipeList extends Component<RecipeListProps> {
@@ -28,11 +33,13 @@ class RecipeList extends Component<RecipeListProps> {
     super(props);
   }
   render(): JSX.Element {
-
-    const rows = this.props.list.reduce((acc, item) => {
-      const {path, recipeId} = item;
-      return {...acc, [path]: [...(acc[path] || []), recipeId]};
-    }, {} as {[key: string]: number[]});
+    const rows = this.props.list.reduce(
+      (acc, item) => {
+        const { path, recipeId } = item;
+        return { ...acc, [path]: [...(acc[path] || []), recipeId] };
+      },
+      {} as { [key: string]: number[] },
+    );
 
     return (
       <table>
@@ -43,15 +50,18 @@ class RecipeList extends Component<RecipeListProps> {
           </tr>
         </thead>
         <tbody>
-        {Object.entries(rows).map((arr, i) => {
-          return (
-            <tr key={`row_${i}`}> 
-              <td key={`path_${i}`}> {arr[0]} </td>
-              <td key={`path_${i}`}> {formatRecipeNumberLink(arr[1], arr[0])} </td>
-            </tr>
-          )
-        })}
-      </tbody>
+          {Object.entries(rows).map((arr, i) => {
+            return (
+              <tr key={`row_${i}`}>
+                <td key={`path_${i}`}> {arr[0]} </td>
+                <td key={`path_${i}`}>
+                  {" "}
+                  {formatRecipeNumberLink(arr[1], arr[0])}{" "}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     );
   }
