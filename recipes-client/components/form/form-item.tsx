@@ -3,14 +3,22 @@ import { actions } from '../../actions/recipeActions';
 import { Dispatch } from '@reduxjs/toolkit';
 import { ActionType } from '../../interfaces/main';
 import FormButton from './form-button';
-import { Option, Select, TextInput } from '@guardian/source-react-components';
+import {
+	Checkbox,
+	Option,
+	Select,
+	TextInput,
+} from '@guardian/source-react-components';
 
 const handleChange = (
 	event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 	dispatcher: Dispatch<ActionType>,
 ): void => {
 	const objId = event.target.id;
-	const objVal = event.target.value;
+	const objVal =
+		event.target.type === 'checkbox'
+			? event.target.checked
+			: event.target.value;
 	dispatcher({
 		type: actions.change,
 		payload: { [objId]: objVal },
@@ -36,6 +44,18 @@ const renderInput = (
 ) => {
 	const removeId = key;
 	const rmAllowed = removable !== undefined ? removable : false;
+
+	if (typeof value === 'boolean') {
+		return (
+			<Checkbox
+				label={key}
+				checked={value}
+				id={key}
+				key={key}
+				onChange={(event) => handleChange(event, dispatcher)}
+			/>
+		);
+	}
 
 	if (choices === null || choices === undefined) {
 		return (

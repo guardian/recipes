@@ -12,7 +12,7 @@ import { UIItem, UIschemaItem } from '../../interfaces/ui';
 import { isRemovable } from '../../consts';
 import { orderComponents } from '../../utils/ordering';
 import FormButton from './form-button';
-import { Legend } from '@guardian/source-react-components';
+import { Checkbox, Legend } from '@guardian/source-react-components';
 import {
 	isIngredientsField,
 	isInstructionsField,
@@ -23,13 +23,17 @@ import { renderIngredientsFormGroup } from './inputs/ingredients';
 import { renderInstructionsFormGroup } from './inputs/instructions';
 import { renderServesFormGroup } from './inputs/serves';
 
-const isStringOrNumber = (
+const isStringNumberOrBoolean = (
 	item:
 		| string
 		| Array<string | Record<string, unknown>>
 		| Record<string, unknown>,
 ) => {
-	return typeof item === 'string' || typeof item === 'number';
+	return (
+		typeof item === 'string' ||
+		typeof item === 'number' ||
+		typeof item === 'boolean'
+	);
 };
 
 export const formatTitle = (text: string | null) => {
@@ -135,9 +139,21 @@ const getFormFields = (
 		return [] as JSX.Element[];
 	} else if (
 		getSchemaType(schema.type).includes('string') &&
-		isStringOrNumber(formItems)
+		isStringNumberOrBoolean(formItems)
 	) {
 		// String -> single form field
+		return [
+			<FormItem
+				text={formItems}
+				choices={choices}
+				label={key}
+				key={`${key}.formItem`}
+				dispatcher={dispatcher}
+			>
+				{' '}
+			</FormItem>,
+		];
+	} else if (getSchemaType(schema.type).includes('boolean')) {
 		return [
 			<FormItem
 				text={formItems}

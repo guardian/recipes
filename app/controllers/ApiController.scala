@@ -188,6 +188,9 @@ class ApiController (
         "recipeId"
     ],
     "properties": {
+        "isAppReady": {
+            "type": "boolean"
+        },
         "id": {
             "type": "string"
         },

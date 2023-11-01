@@ -26,7 +26,7 @@ export const defaultState: AppDataState = {
 function updateStateItem(
 	obj: Record<string, unknown>,
 	keyPath: Array<string>,
-	value: string | number | AppDataState,
+	value: string | number | boolean | AppDataState,
 ): void {
 	const lastKeyIndex = keyPath.length - 1;
 	for (let i = 0; i < lastKeyIndex; ++i) {

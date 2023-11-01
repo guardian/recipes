@@ -44,6 +44,7 @@ export const bylineFields = ['byline'];
 
 export const UIschema: UIschemaItem = {
 	'ui:order': [
+		'isAppReady',
 		'id',
 		'path',
 		'recipeId',
@@ -65,6 +66,11 @@ export const UIschema: UIschemaItem = {
 		'techniquesUsedIds',
 		'difficultyLevel',
 	],
+	isAppReady: {
+		'ui:display': true,
+		'ui:locked': false,
+		'ui:removable': false,
+	},
 	id: {
 		'ui:display': true,
 		'ui:locked': true,

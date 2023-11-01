@@ -13,6 +13,7 @@ case class Instruction(stepNumber: Int, description: String, images: Option[List
 case class Timing(qualifier: String, durationInMins: Int)
 
 case class Recipe(
+  isAppReady: Boolean,
   recipeId: Long,
   path: String,
   id: String,
@@ -78,6 +79,7 @@ object Recipe extends Logging {
 
   implicit val recipeWrites = new Writes[Recipe] {
     def writes(recipe: Recipe) = Json.obj(
+        "isAppReady" -> recipe.isAppReady,
         "id" -> recipe.id,
         "recipeId" -> recipe.recipeId,
         "path" -> recipe.path,
