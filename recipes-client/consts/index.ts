@@ -136,7 +136,7 @@ export const UIschema: UIschemaItem = {
 	instructions: {
 		'ui:display': true,
 		'ui:locked': false,
-		'ui:removable': true,
+		'ui:removable': false,
 	},
 	contributors: {
 		'ui:display': true,

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Component, Dispatch } from 'react';
+import { Dispatch } from 'react';
 import FormItem from './form-item';
 import {
 	ActionType,
@@ -61,6 +61,8 @@ const handleAddField = (
 	schemaItem: schemaItem,
 	dispatcher: Dispatch<ActionType>,
 ): void => {
+	console.log('objId', objId);
+	console.log('schemaItem', schemaItem);
 	dispatcher({
 		type: actions.add,
 		payload: { objId: objId },
@@ -167,9 +169,21 @@ const getFormFields = (
 	} else if (isTimingsField(formItems)) {
 		return renderTimingsFormGroup(formItems, schema, choices, key, dispatcher);
 	} else if (isIngredientsField(formItems)) {
-		return renderIngredientsFormGroup(formItems, choices, key, dispatcher);
+		return renderIngredientsFormGroup(
+			formItems,
+			schema,
+			choices,
+			key,
+			dispatcher,
+		);
 	} else if (isInstructionsField(formItems)) {
-		return renderInstructionsFormGroup(formItems, choices, key, dispatcher);
+		return renderInstructionsFormGroup(
+			formItems,
+			schema,
+			choices,
+			key,
+			dispatcher,
+		);
 	} else if (key === 'serves') {
 		return renderServesFormGroup(formItems, choices, key, dispatcher);
 	} else {
@@ -195,49 +209,49 @@ export function getFormFieldsSchema(
 	}
 }
 
-export class FormGroup extends Component<FormGroupProps> {
-	constructor(props: FormGroupProps) {
-		super(props);
-	}
+export const FormGroup = ({
+	formItems,
+	schema,
+	UIschema,
+	title,
+	key_,
+	dispatcher,
+}: FormGroupProps): JSX.Element => {
+	// const  choices = schema.enum || null;
+	const key = key_ || title;
+	const formDispatcher = dispatcher || null;
 
-	render(): React.Component | JSX.Element {
-		const { formItems, schema, title, UIschema } = this.props;
-		// const  choices = schema.enum || null;
-		const key = this.props.key_ || title;
-		const dispatcher = this.props.dispatcher || null;
+	// Set up form group
+	const rComponents =
+		UIschema['ui:order'] && !Array.isArray(formItems)
+			? orderComponents(formItems, UIschema['ui:order'])
+			: formItems;
+	const formFields = getFormFields(
+		rComponents,
+		schema,
+		UIschema,
+		key,
+		dispatcher,
+	);
+	const isFormItemRemovable = isRemovable(getLabel(key));
 
-		// Set up form group
-		const rComponents =
-			UIschema['ui:order'] && !Array.isArray(formItems)
-				? orderComponents(formItems, UIschema['ui:order'])
-				: formItems;
-		const formFields = getFormFields(
-			rComponents,
-			schema,
-			UIschema,
-			key,
-			dispatcher,
-		);
-		const isFormItemRemovable = isRemovable(getLabel(key));
+	// Set up buttons under form group
+	const formFieldsSchema = getFormFieldsSchema(rComponents, schema);
+	const formItemAddId = `${key}.${formFields.length}`;
+	const formItemRemoveLastId = `${key}.${formFields.length - 1}`;
+	const formItemButtons = getItemButtons(
+		key,
+		formItemAddId,
+		formItemRemoveLastId,
+		formFieldsSchema,
+		formDispatcher,
+	);
 
-		// Set up buttons under form group
-		const formFieldsSchema = getFormFieldsSchema(rComponents, schema);
-		const formItemAddId = `${key}.${formFields.length}`;
-		const formItemRemoveLastId = `${key}.${formFields.length - 1}`;
-		const formItemButtons = getItemButtons(
-			key,
-			formItemAddId,
-			formItemRemoveLastId,
-			formFieldsSchema,
-			dispatcher,
-		);
-
-		return (
-			<fieldset key={`${key}.fieldset`} css={{}}>
-				<Legend key={`${key}.legend`} text={key}></Legend>
-				{formFields}
-				{isFormItemRemovable && formItemButtons}
-			</fieldset>
-		);
-	}
-}
+	return (
+		<fieldset key={`${key}.fieldset`} css={{}}>
+			<Legend key={`${key}.legend`} text={key}></Legend>
+			{formFields}
+			{isFormItemRemovable && formItemButtons}
+		</fieldset>
+	);
+};

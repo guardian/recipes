@@ -256,8 +256,7 @@ class ApiController (
         },
         "instructions": {
           "type": "array",
-          "items": [
-            {
+          "items": {
               "type": "object",
               "properties": {
                 "stepNumber": {
@@ -280,7 +279,6 @@ class ApiController (
                 "description"
               ]
             }
-          ]
         },
         "contributors": {
             "type": ["array", "null"],
@@ -293,7 +291,7 @@ class ApiController (
         },
         "ingredients": {
             "type": "array",
-            "items": [
+            "items":
               {
                 "type": "object",
                 "properties": {
@@ -302,7 +300,7 @@ class ApiController (
                   },
                   "ingredientsList": {
                     "type": "array",
-                    "items": [
+                    "items":
                       {
                         "type": "object",
                         "properties": {
@@ -346,7 +344,7 @@ class ApiController (
                           "unit"
                         ]
                       }
-                    ]
+
                   }
                 },
                 "required": [
@@ -354,7 +352,6 @@ class ApiController (
                   "ingredientsList"
                 ]
               }
-            ]
           },
         "celebrationIds": {
             "type": [
