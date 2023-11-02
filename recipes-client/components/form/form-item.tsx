@@ -104,7 +104,7 @@ const renderInput = (
 			</div>
 		);
 	} else {
-		const choices_ = choices.slice();
+		const choices_ = choices.slice().sort((a, b) => a.localeCompare(b));
 		choices_.unshift('None');
 		return (
 			<>
