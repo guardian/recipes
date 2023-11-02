@@ -14,14 +14,14 @@ export const renderTimingsFormGroup = (
 	dispatcher: Dispatch<ActionType>,
 ) => {
 	const formFieldsSchema = getFormFieldsSchema(formItems, schema);
-	const formItemAddId = key;
-	const formItemRemoveLastId =
-		key.slice(0, -1) + (parseInt(key.slice(-1)) - 1).toString();
+	const formItemAddId =
+		key.slice(0, -1) + (parseInt(key.slice(-1)) + 1).toString();
+	const formItemRemoveId = key;
 
 	const formItemButtons = getItemButtons(
 		key,
 		formItemAddId,
-		formItemRemoveLastId,
+		formItemRemoveId,
 		formFieldsSchema,
 		dispatcher,
 	);

@@ -23,13 +23,13 @@ export const renderIngredientsFormGroup = (
 	dispatcher: Dispatch<ActionType>,
 ) => {
 	const formFieldsSchema = ingredientGroupSchema;
-	const formItemAddId = key;
-	const formItemRemoveLastId =
-		key.slice(0, -1) + (parseInt(key.slice(-1)) - 1).toString();
+	const formItemAddId =
+		key.slice(0, -1) + (parseInt(key.slice(-1)) + 1).toString();
+	const formItemRemoveId = key;
 	const formItemButtons = getItemButtons(
 		key,
 		formItemAddId,
-		formItemRemoveLastId,
+		formItemRemoveId,
 		formFieldsSchema,
 		dispatcher,
 	);
@@ -49,13 +49,12 @@ export const renderIngredientsFormGroup = (
 			const prefix = `${key}.${k}`;
 			const listInputs = ingredientsList.map((ingredient, i) => {
 				const formFieldsSchema = ingredientSchema;
-				const formItemAddId = `${prefix}.${i}`;
-				const formItemRemoveLastId =
-					formItemAddId.slice(0, -1) + (parseInt(key.slice(-1)) - 1).toString();
+				const formItemAddId = `${prefix}.${i + 1}`;
+				const formItemRemove = `${prefix}.${i}`;
 				const formItemButtons = getItemButtons(
 					`${prefix}.${i}`,
 					formItemAddId,
-					formItemRemoveLastId,
+					formItemRemove,
 					formFieldsSchema,
 					dispatcher,
 				);

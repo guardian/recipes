@@ -199,11 +199,11 @@ export const FormGroup = ({
 	// Set up buttons under form group
 	const formFieldsSchema = getFormFieldsSchema(rComponents, schema);
 	const formItemAddId = `${key}.${formFields.length}`;
-	const formItemRemoveLastId = `${key}.${formFields.length - 1}`;
+	const formItemRemoveId = `${key}.${formFields.length - 1}`;
 	const formItemButtons = getItemButtons(
 		key,
 		formItemAddId,
-		formItemRemoveLastId,
+		formItemRemoveId,
 		formFieldsSchema,
 		formDispatcher,
 	);
