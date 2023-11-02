@@ -37,7 +37,6 @@ export const isSchemaType = (
 	if (typeof obj !== 'object' || obj === null) return false;
 	const wObj: { [k: string]: unknown } = obj;
 	// const wObj: {[obj['properties']]?: unknown} = obj;
-	// console.log(Object.keys(wObj))
 	return isAllRecipeFields(wObj.properties); // Improve this, ends up being called twice sometimes from isingredientListFields
 };
 

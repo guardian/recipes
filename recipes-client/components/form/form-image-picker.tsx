@@ -71,7 +71,6 @@ const select = (
 	isSelected: boolean,
 	dispatcher: Dispatch<ActionType>,
 ): void => {
-	console.log(`Object ID: ${objId}`);
 	const obj = isSelected ? null : objId;
 	dispatcher({
 		type: actions.selectImg,

@@ -65,8 +65,6 @@ const handleAddField = (
 	schemaItem: schemaItem,
 	dispatcher: Dispatch<ActionType>,
 ): void => {
-	console.log('objId', objId);
-	console.log('schemaItem', schemaItem);
 	dispatcher({
 		type: actions.add,
 		payload: { objId: objId },
@@ -132,7 +130,6 @@ const getFormFields = (
 	dispatcher: Dispatch<ActionType>,
 ): JSX.Element[] => {
 	// Get form components for each item in `formItems`
-	// console.log('Schema: ' + JSON.stringify(schema));
 	const choices = schema.enum || null;
 	// Recursively parse all elements in JSON tree
 	if (getSchemaType(schema.type).includes('null') && formItems === null) {

@@ -13,8 +13,6 @@ export function orderComponents<
 	return fromPairs(
 		sortOrder.reduce(
 			(acc, key: keyof allRecipeFields | ComplexRecipeFields) => {
-				// console.log('Key: ', key);
-				// console.log('RC: ', rc);
 				if (Object.keys(rc).includes(key)) {
 					return [...acc, [key, rc[key]]];
 				} else {

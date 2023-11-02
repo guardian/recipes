@@ -106,7 +106,6 @@ function getSchemaItem(
 ): string | number | Record<string, unknown> | Array<Record<string, unknown>> {
 	// Function returning "default" values for new item of type schemaItem.
 	if (getSchemaType(schemaI.type).includes('string')) {
-		console.log(JSON.stringify(schemaI));
 		return '';
 	} else if (getSchemaType(schemaI.type).includes('integer')) {
 		return 1;
@@ -122,7 +121,6 @@ function getSchemaItem(
 		} else {
 			// More complex object like ingredient lists
 			const items = schemaI.items;
-			console.log('Items: ' + items);
 			return [getSchemaItem(items)];
 			// })
 		}
