@@ -5,6 +5,10 @@ import {
 	IngredientsGroup,
 	schemaItem,
 } from 'interfaces/main';
+import {
+	ingredientGroupSchema,
+	ingredientSchema,
+} from 'interfaces/nastyHardcodedSchemas';
 import { Dispatch } from 'react';
 import { isRangeField } from 'utils/recipe-field-checkers';
 import { getFormFieldsSchema, getItemButtons } from '../form-group';
@@ -18,6 +22,18 @@ export const renderIngredientsFormGroup = (
 	key: string,
 	dispatcher: Dispatch<ActionType>,
 ) => {
+	console.log('schema', getFormFieldsSchema(formItems, schema));
+	const formFieldsSchema = ingredientGroupSchema;
+	const formItemAddId = key;
+	const formItemRemoveLastId =
+		key.slice(0, -1) + (parseInt(key.slice(-1)) - 1).toString();
+	const formItemButtons = getItemButtons(
+		key,
+		formItemAddId,
+		formItemRemoveLastId,
+		formFieldsSchema,
+		dispatcher,
+	);
 	const fields = Object.keys(formItems).map((k: keyof IngredientsGroup) => {
 		if (k === 'recipeSection')
 			return (
@@ -33,12 +49,12 @@ export const renderIngredientsFormGroup = (
 			const ingredientsList = formItems[k] as Ingredient[];
 			const prefix = `${key}.${k}`;
 			const listInputs = ingredientsList.map((ingredient, i) => {
-				const formFieldsSchema = getFormFieldsSchema(formItems, schema);
-				const formItemAddId = key;
+				const formFieldsSchema = ingredientSchema;
+				const formItemAddId = `${prefix}.${i}`;
 				const formItemRemoveLastId =
-					key.slice(0, -1) + (parseInt(key.slice(-1)) - 1).toString();
+					formItemAddId.slice(0, -1) + (parseInt(key.slice(-1)) - 1).toString();
 				const formItemButtons = getItemButtons(
-					key,
+					`${prefix}.${i}`,
 					formItemAddId,
 					formItemRemoveLastId,
 					formFieldsSchema,
@@ -78,6 +94,7 @@ export const renderIngredientsFormGroup = (
 		<fieldset key={`${key}.fieldset`}>
 			<Legend key={`${key}.legend`} text={key}></Legend>
 			{fields}
+			{formItemButtons}
 		</fieldset>,
 	];
 };

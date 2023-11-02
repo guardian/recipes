@@ -157,7 +157,7 @@ export const UIschema: UIschemaItem = {
 	ingredients: {
 		'ui:display': true,
 		'ui:locked': false,
-		'ui:removable': true,
+		'ui:removable': false,
 		'ui:order': ['recipeSection', 'ingredientsList'],
 		ingredientsList: {
 			'ui:display': true,
