@@ -284,13 +284,25 @@ class ApiController (
             }
         },
         "contributors": {
-            "type": ["array", "null"],
+            "type": "array",
             "items": {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                  "Felicity Cloake",
+                  "Meera Sodha",
+                  "Holly O'Neill",
+                  "Andrei Lussmann",
+                  "Yotam Ottolenghi",
+                  "Nigel Slater",
+                  "Jack Monroe"
+                ]
             }
         },
         "byline": {
-            "type": ["null", "string", "array"]
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         },
         "ingredients": {
             "type": "array",

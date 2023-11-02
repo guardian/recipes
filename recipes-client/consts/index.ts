@@ -152,7 +152,7 @@ export const UIschema: UIschemaItem = {
 	byline: {
 		'ui:display': true,
 		'ui:locked': false,
-		'ui:removable': false,
+		'ui:removable': true,
 	},
 	ingredients: {
 		'ui:display': true,
