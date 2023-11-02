@@ -10,15 +10,36 @@ import {
 	TextInput,
 } from '@guardian/source-react-components';
 
-const handleChange = (
+const handleChangeText = (
 	event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 	dispatcher: Dispatch<ActionType>,
 ): void => {
 	const objId = event.target.id;
-	const objVal =
-		event.target.type === 'checkbox'
-			? event.target.checked
-			: event.target.value;
+	const objVal = event.target.value;
+	dispatcher({
+		type: actions.change,
+		payload: { [objId]: objVal },
+	});
+};
+
+const handleChangeNumber = (
+	event: React.ChangeEvent<HTMLInputElement>,
+	dispatcher: Dispatch<ActionType>,
+): void => {
+	const objId = event.target.id;
+	const objVal = Number(event.target.value);
+	dispatcher({
+		type: actions.change,
+		payload: { [objId]: objVal },
+	});
+};
+
+const handleChangeBoolean = (
+	event: React.ChangeEvent<HTMLInputElement>,
+	dispatcher: Dispatch<ActionType>,
+): void => {
+	const objId = event.target.id;
+	const objVal = event.target.checked;
 	dispatcher({
 		type: actions.change,
 		payload: { [objId]: objVal },
@@ -52,7 +73,7 @@ const renderInput = (
 				checked={value}
 				id={key}
 				key={key}
-				onChange={(event) => handleChange(event, dispatcher)}
+				onChange={(event) => handleChangeBoolean(event, dispatcher)}
 			/>
 		);
 	}
@@ -67,7 +88,11 @@ const renderInput = (
 					type={typeof value}
 					label={key}
 					value={value}
-					onChange={(event) => handleChange(event, dispatcher)}
+					onChange={(event) => {
+						typeof value === 'number'
+							? handleChangeNumber(event, dispatcher)
+							: handleChangeText(event, dispatcher);
+					}}
 				/>
 				{rmAllowed && (
 					<FormButton
@@ -89,7 +114,7 @@ const renderInput = (
 					value={value}
 					key={key}
 					id={key}
-					onChange={(event) => handleChange(event, dispatcher)}
+					onChange={(event) => handleChangeText(event, dispatcher)}
 				>
 					{choices_.map((item) => {
 						return (
