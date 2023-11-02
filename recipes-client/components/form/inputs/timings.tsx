@@ -28,7 +28,9 @@ export const renderTimingsFormGroup = (
 		return (
 			<FormItem
 				text={formItems[k]}
-				choices={choices}
+				choices={
+					k === 'qualifier' ? ['prep-time', 'cook-time', 'set-time'] : null
+				}
 				label={`${key}.${k}`}
 				key={`${key}.${k}`}
 				dispatcher={dispatcher}

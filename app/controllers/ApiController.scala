@@ -245,7 +245,12 @@ class ApiController (
               "type": "object",
               "properties": {
                 "qualifier": {
-                  "type": "string"
+                  "type": "string",
+                  "enum": [
+                    "prep-time",
+                    "cook-time",
+                    "set-time"
+                  ]
                 },
                 "durationInMins": {
                   "type": "integer"

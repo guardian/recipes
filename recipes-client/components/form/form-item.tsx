@@ -105,7 +105,7 @@ const renderInput = (
 		);
 	} else {
 		const choices_ = choices.slice().sort((a, b) => a.localeCompare(b));
-		choices_.unshift('None');
+		// choices_.unshift('None');
 		return (
 			<>
 				<Select
@@ -145,12 +145,15 @@ interface FormItemProps {
 	removable?: boolean;
 }
 
-const FormItem = (prop: FormItemProps): JSX.Element => {
-	const { label, removable } = prop;
-	const text = prop.text === null ? 'None' : prop.text;
-	const choices = prop.choices || null;
-	const dispatch = prop.dispatcher || null;
+const FormItem = ({
+	label,
+	removable,
+	text,
+	choices,
+	dispatcher,
+}: FormItemProps): JSX.Element => {
+	const itemText = text === null ? 'None' : text;
 
-	return renderInput(text, label, choices, dispatch, removable);
+	return renderInput(itemText, label, choices, dispatcher, removable);
 };
 export default FormItem;
