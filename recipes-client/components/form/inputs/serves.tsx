@@ -23,7 +23,7 @@ export const renderServesFormGroup = (
 		return (
 			<FormItem
 				text={formItems[k]}
-				choices={choices}
+				choices={['people', 'items']}
 				label={`${key}.${k}`}
 				key={`${key}.${k}`}
 				dispatcher={dispatcher}

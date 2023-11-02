@@ -228,7 +228,11 @@ class ApiController (
               ]
             },
             "unit": {
-              "type": "string"
+              "type": "string",
+                  "enum": [
+                    "people",
+                    "items"
+                  ]
             }
           },
           "required": [
