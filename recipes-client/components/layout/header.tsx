@@ -7,16 +7,24 @@ const Header = (): JSX.Element => (
 		css={css`
 			${headline.small()};
 			text-align: center;
-			padding: 0.5rem;
+			padding: 2rem 0;
 			background-color: ${palette.brand[400]};
 			a {
 				text-decoration: none;
 				color: ${palette.neutral[100]};
+				padding: 2rem 0;
+				:hover {
+					opacity: 0.8;
+				}
+			}
+			h2 {
+				margin: 0;
 			}
 		`}
 	>
 		<a href="/">
-			<h2>Recipe Curator</h2>
+			<h2>Hatch</h2>
+			<span>A (temporary) recipe data curation tool</span>
 		</a>
 	</header>
 );
