@@ -3,7 +3,7 @@
 import { UIschemaItem } from './ui';
 
 export interface schemaItem {
-	type: string | string[] | number;
+	type: string | string[];
 	items?: schemaItem;
 	properties?: allRecipeFields | ComplexRecipeFields;
 	enum?: Array<string>;
@@ -14,7 +14,8 @@ export type ComplexRecipeFields =
 	| Timing
 	| IngredientsGroup[]
 	| Ingredient
-	| Instruction;
+	| Instruction
+	| Range;
 
 export interface schemaArrayItem {
 	type: string | string[];

@@ -2,7 +2,8 @@
 import { Legend } from '@guardian/source-react-components';
 import { ActionType, schemaItem, Timing } from 'interfaces/main';
 import { Dispatch } from 'react';
-import { getFormFieldsSchema, getItemButtons } from '../form-group';
+import { getItemButtons } from '../form-buttons';
+import { getFormFieldsSchema } from '../form-group';
 import FormItem from '../form-item';
 
 export const renderTimingsFormGroup = (

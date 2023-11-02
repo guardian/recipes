@@ -1,66 +1,23 @@
 /** @jsxImportSource @emotion/react */
-import { actions } from '../../actions/recipeActions';
 import { Dispatch } from '@reduxjs/toolkit';
 import { ActionType } from '../../interfaces/main';
-import FormButton from './form-button';
 import {
 	Checkbox,
 	Option,
 	Select,
 	TextInput,
 } from '@guardian/source-react-components';
-
-const handleChangeText = (
-	event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-	dispatcher: Dispatch<ActionType>,
-): void => {
-	const objId = event.target.id;
-	const objVal = event.target.value;
-	dispatcher({
-		type: actions.change,
-		payload: { [objId]: objVal },
-	});
-};
-
-const handleChangeNumber = (
-	event: React.ChangeEvent<HTMLInputElement>,
-	dispatcher: Dispatch<ActionType>,
-): void => {
-	const objId = event.target.id;
-	const objVal = Number(event.target.value);
-	dispatcher({
-		type: actions.change,
-		payload: { [objId]: objVal },
-	});
-};
-
-const handleChangeBoolean = (
-	event: React.ChangeEvent<HTMLInputElement>,
-	dispatcher: Dispatch<ActionType>,
-): void => {
-	const objId = event.target.id;
-	const objVal = event.target.checked;
-	dispatcher({
-		type: actions.change,
-		payload: { [objId]: objVal },
-	});
-};
-
-const handleRemoveField = (
-	id: string,
-	dispatcher: Dispatch<ActionType>,
-): void => {
-	dispatcher({
-		type: actions.delete,
-		payload: { objId: id },
-	});
-};
+import {
+	handleChangeBoolean,
+	handleChangeNumber,
+	handleChangeText,
+} from './form-input-handlers';
 
 const renderInput = (
 	value: string,
 	key: string,
 	choices: Array<string> | null,
-	dispatcher?: Dispatch<ActionType> | null,
+	dispatcher?: Dispatch<ActionType>,
 	removable?: boolean,
 ) => {
 	const removeId = key;
@@ -94,18 +51,11 @@ const renderInput = (
 							: handleChangeText(event, dispatcher);
 					}}
 				/>
-				{rmAllowed && (
-					<FormButton
-						text="-"
-						buttonId={removeId}
-						onClick={() => handleRemoveField(removeId, dispatcher)}
-					/>
-				)}
 			</div>
 		);
 	} else {
 		const choices_ = choices.slice().sort((a, b) => a.localeCompare(b));
-		// choices_.unshift('None');
+		choices_.unshift('');
 		return (
 			<>
 				<Select
@@ -124,13 +74,6 @@ const renderInput = (
 						);
 					})}
 				</Select>
-				{rmAllowed && (
-					<FormButton
-						text="-"
-						buttonId={removeId}
-						onClick={() => handleRemoveField(removeId, dispatcher)}
-					/>
-				)}
 			</>
 		);
 	}

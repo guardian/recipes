@@ -6,13 +6,11 @@ import {
 	IngredientsGroup,
 	schemaItem,
 } from '../../interfaces/main';
-import { actions } from '../../actions/recipeActions';
 import { getSchemaType } from '../../utils/schema';
 import { UIItem, UIschemaItem } from '../../interfaces/ui';
 import { isRemovable } from '../../consts';
 import { orderComponents } from '../../utils/ordering';
-import FormButton from './form-button';
-import { Checkbox, Legend } from '@guardian/source-react-components';
+import { Legend } from '@guardian/source-react-components';
 import {
 	isIngredientsField,
 	isInstructionsField,
@@ -22,6 +20,7 @@ import { renderTimingsFormGroup } from './inputs/timings';
 import { renderIngredientsFormGroup } from './inputs/ingredients';
 import { renderInstructionsFormGroup } from './inputs/instructions';
 import { renderServesFormGroup } from './inputs/serves';
+import { getItemButtons } from './form-buttons';
 
 const isStringNumberOrBoolean = (
 	item:
@@ -58,53 +57,6 @@ const getLabel = (lab: string): string => {
 				return isFinite(l) ? acc : l;
 			}
 		}, '');
-};
-
-const handleAddField = (
-	objId: string,
-	schemaItem: schemaItem,
-	dispatcher: Dispatch<ActionType>,
-): void => {
-	dispatcher({
-		type: actions.add,
-		payload: { objId: objId },
-		schemaItem: schemaItem,
-	});
-};
-
-const handleRemoveField = (
-	objId: string,
-	dispatcher: Dispatch<ActionType>,
-): void => {
-	dispatcher({
-		type: actions.delete,
-		payload: { objId: objId },
-	});
-};
-
-export const getItemButtons = (
-	key: string,
-	formItemAddId: string,
-	formItemRemoveLastId: string,
-	formFieldsSchema: schemaItem,
-	dispatcher: Dispatch<ActionType> | null,
-): JSX.Element => {
-	return (
-		<div css={{ marginTop: '5px' }}>
-			<FormButton
-				text={`+ ${key.split('.').slice(-1)[0]}`}
-				buttonId={`${key}.add`}
-				onClick={() =>
-					handleAddField(formItemAddId, formFieldsSchema, dispatcher)
-				}
-			/>
-			<FormButton
-				text={`- ${key.split('.').slice(-1)[0]}`}
-				buttonId={`${key}.add`}
-				onClick={() => handleRemoveField(formItemRemoveLastId, dispatcher)}
-			/>
-		</div>
-	);
 };
 
 type FormItems =
@@ -146,9 +98,7 @@ const getFormFields = (
 				label={key}
 				key={`${key}.formItem`}
 				dispatcher={dispatcher}
-			>
-				{' '}
-			</FormItem>,
+			/>,
 		];
 	} else if (getSchemaType(schema.type).includes('boolean')) {
 		return [
@@ -158,9 +108,7 @@ const getFormFields = (
 				label={key}
 				key={`${key}.formItem`}
 				dispatcher={dispatcher}
-			>
-				{' '}
-			</FormItem>,
+			/>,
 		];
 	} else if (
 		getSchemaType(schema.type).includes('array') &&

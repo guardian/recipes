@@ -11,7 +11,7 @@ import {
 } from 'interfaces/nastyHardcodedSchemas';
 import { Dispatch } from 'react';
 import { isRangeField } from 'utils/recipe-field-checkers';
-import { getFormFieldsSchema, getItemButtons } from '../form-group';
+import { getItemButtons } from '../form-buttons';
 import FormItem from '../form-item';
 import { renderRangeFormGroup } from './range';
 
@@ -22,7 +22,6 @@ export const renderIngredientsFormGroup = (
 	key: string,
 	dispatcher: Dispatch<ActionType>,
 ) => {
-	console.log('schema', getFormFieldsSchema(formItems, schema));
 	const formFieldsSchema = ingredientGroupSchema;
 	const formItemAddId = key;
 	const formItemRemoveLastId =
