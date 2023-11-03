@@ -47,12 +47,12 @@ class Config(playConfig: Configuration) extends Logging {
   val panDomainConfig: PanDomainConfig = PanDomainConfig(stage)
 
   lazy val awsCredentials: AWSCredentialsProvider = stage match {
-    case Dev => new ProfileCredentialsProvider("composer")
+    case Dev => new ProfileCredentialsProvider("developerPlayground")
     case _ => DefaultAWSCredentialsProviderChain.getInstance
   }
 
   lazy val awsCredentialsV2: AwsCredentialsProviderV2 = stage match {
-     case _: DevIdentity => ProfileCredentialsProviderV2.create("composer")
+     case _: DevIdentity => ProfileCredentialsProviderV2.create("developerPlayground")
       case _ => DefaultCredentialsProviderV2.create()
   }
 
@@ -69,7 +69,7 @@ class Config(playConfig: Configuration) extends Logging {
   // val identity = AppIdentity.whoAmI(defaultAppName = "recipes")
   lazy val home = System getProperty "user.home"
   val config: Config_ = ConfigurationLoader.load(identity, credentials = awsCredentialsV2) {
-    case AwsIdentity(app, stack, stage, _) => S3ConfigurationLocation("recipes-dist", s"$stage/$stack/$app.conf", "eu-west-1")
+    case AwsIdentity(app, stack, stage, _) => S3ConfigurationLocation("developer-playground-dist", s"$stage/$stack/$app.conf", "eu-west-1")
     case _ => FileConfigurationLocation( new File(s"$home/.gu/$app.conf"))
   }
   // logger.info(config.toString())

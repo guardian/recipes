@@ -17,7 +17,7 @@ export class Recipes extends GuStack {
     const ec2App = new GuEc2App(this, {
       applicationPort: 9000,
       app: appName,
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
+      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
       access: { scope: AccessScope.PUBLIC },
       userData: [
         ' #!/bin/bash -ev',
@@ -25,8 +25,8 @@ export class Recipes extends GuStack {
         "cat > /etc/gu/stage <<'EOF'",
         this.stage,
         'EOF',
-        `aws --quiet --region ${this.region} s3 cp s3://${artifactBucketName}/${this.stack}/${this.stage}/${appName}/${appName}.conf /etc/gu/recipes.conf`,
-        `aws --quiet --region ${this.region} s3 cp s3://${artifactBucketName}/${this.stack}/${this.stage}/${appName}/${appName}.deb /tmp/package.deb`,
+        `aws --region ${this.region} s3 cp s3://${artifactBucketName}/${this.stack}/${this.stage}/${appName}/${appName}.conf /etc/gu/recipes.conf`,
+        `aws --region ${this.region} s3 cp s3://${artifactBucketName}/${this.stack}/${this.stage}/${appName}/${appName}.deb /tmp/package.deb`,
         'dpkg -i /tmp/package.deb',
       ].join('\n'),
       certificateProps: {

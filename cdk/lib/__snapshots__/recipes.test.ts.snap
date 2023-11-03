@@ -876,7 +876,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           "ImageId": {
             "Ref": "AMIRecipes",
           },
-          "InstanceType": "t4g.micro",
+          "InstanceType": "t3.micro",
           "MetadataOptions": {
             "HttpTokens": "required",
           },
@@ -956,7 +956,7 @@ mkdir /etc/gu
 cat > /etc/gu/stage <<'EOF'
 TEST
 EOF
-aws --quiet --region ",
+aws --region ",
                   {
                     "Ref": "AWS::Region",
                   },
@@ -965,7 +965,7 @@ aws --quiet --region ",
                     "Ref": "DistributionBucketName",
                   },
                   "/playground/TEST/recipes/recipes.conf /etc/gu/recipes.conf
-aws --quiet --region ",
+aws --region ",
                   {
                     "Ref": "AWS::Region",
                   },

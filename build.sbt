@@ -60,8 +60,6 @@ lazy val root = (project in file("."))
     Debian / packageBin := (Debian / packageBin)
       .dependsOn(Assets / packageBin)
       .value,
-    /* While not mandatory it is still highly recommended to add relevant JRE package as a dependency */
-    Debian / debianPackageDependencies := Seq("java17-runtime-headless"),
     /* Use systemd to load this service */
     Debian / serverLoading := Some(Systemd),
     Debian / serviceAutostart := true,

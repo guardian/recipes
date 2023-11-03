@@ -5,8 +5,13 @@ on:
     branches:
       - main
 jobs:
-  js-build:
+  build:
     runs-on: ubuntu-latest
+    # See https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token
+    permissions:
+      # required by aws-actions/configure-aws-credentials
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
@@ -14,19 +19,18 @@ jobs:
         with:
           node-version-file: '.node-version'
       - run: ./scripts/ci-js
-  sbt-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 1.8
+      - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
           java-version: '8'
       - run: ./scripts/ci-sbt
+      - name: Rename files for easy finding by guardian/actions-riff-raff
+        run: |
+          mv target/recipes_1.0-SNAPSHOT_all.deb target/recipes.deb
 
       # Fetch AWS credentials, allowing us to upload to Riff-Raff (well, S3)
-      - uses: aws-actions/configure-aws-credentials@v2
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
@@ -34,10 +38,10 @@ jobs:
       # Upload our build artifacts to Riff-Raff (well, S3)
       - uses: guardian/actions-riff-raff@v2
         with:
-          projectName: editorial-tools::recipes
-          configPath: riff-raff.yaml
+          projectName: basecamp::recipes
+          configPath: cdk/cdk.out/riff-raff.yaml
           contentDirectories: |
-            cloudformation:
-              - cloudformation.yaml
+            cdk.out:
+              - cdk/cdk.out/
             recipes:
-              - target/recipes_1.0-SNAPSHOT_all.deb
+              - target/recipes.deb
