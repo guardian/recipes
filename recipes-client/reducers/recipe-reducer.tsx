@@ -103,12 +103,19 @@ function initStateItem(
 
 function getSchemaItem(
 	schemaI: schemaItem,
-): string | number | Record<string, unknown> | Array<Record<string, unknown>> {
+):
+	| string
+	| number
+	| boolean
+	| Record<string, unknown>
+	| Array<Record<string, unknown>> {
 	// Function returning "default" values for new item of type schemaItem.
 	if (getSchemaType(schemaI.type).includes('string')) {
 		return '';
 	} else if (getSchemaType(schemaI.type).includes('integer')) {
 		return 1;
+	} else if (getSchemaType(schemaI.type).includes('boolean')) {
+		return false;
 	} else if (
 		getSchemaType(schemaI.type).includes('array') &&
 		isSchemaArray(schemaI)

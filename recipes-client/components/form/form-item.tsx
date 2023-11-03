@@ -55,7 +55,7 @@ const renderInput = (
 		);
 	} else {
 		const choices_ = choices.slice().sort((a, b) => a.localeCompare(b));
-		choices_.unshift('');
+		// choices_.unshift('');
 		return (
 			<>
 				<Select
