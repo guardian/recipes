@@ -1,8 +1,9 @@
 import { AccessScope } from "@guardian/cdk/lib/constants";
 import { GuDistributionBucketParameter, type GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
+import { GuCname } from "@guardian/cdk/lib/constructs/dns";
 import { GuEc2App } from "@guardian/cdk/lib/patterns/";
-import type { App } from "aws-cdk-lib";
+import { type App, Duration } from "aws-cdk-lib";
 import { AttributeType, Table, TableEncryption } from "aws-cdk-lib/aws-dynamodb";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { Bucket } from 'aws-cdk-lib/aws-s3';
@@ -63,5 +64,11 @@ export class Recipes extends GuStack {
     curatedRecipesTable.grantReadWriteData(ec2App.autoScalingGroup.role);
     const bucket = Bucket.fromBucketName(this, 'pan-domain-auth-settings', 'pan-domain-auth-settings');
     bucket.grantRead(ec2App.autoScalingGroup.role, '*public');
+    new GuCname(this, 'DNS', {
+      app: appName,
+      ttl: Duration.hours(1),
+      domainName: appDomainName,
+      resourceRecord: ec2App.loadBalancer.loadBalancerDnsName,
+    });
   }
 }

@@ -23,6 +23,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
+      "GuCname",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -170,6 +171,23 @@ exports[`The Recipes stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Retain",
+    },
+    "DNS": {
+      "Properties": {
+        "Name": "recipes.gutools.co.uk",
+        "RecordType": "CNAME",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "LoadBalancerRecipes4B5DADFD",
+              "DNSName",
+            ],
+          },
+        ],
+        "Stage": "TEST",
+        "TTL": 3600,
+      },
+      "Type": "Guardian::DNS::RecordSet",
     },
     "DescribeEC2PolicyFF5F9295": {
       "Properties": {
