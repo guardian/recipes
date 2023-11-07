@@ -13,4 +13,5 @@ logs
 .metals/
 .bloop/
 .bsp
+.idea
 recipes.conf
