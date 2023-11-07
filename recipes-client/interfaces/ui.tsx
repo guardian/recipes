@@ -1,11 +1,16 @@
 /** @jsx jsx */
-import { allRecipeFields, isallRecipeFields, ingredientListFields, ingredientField } from "~interfaces/main"
+import {
+  allRecipeFields,
+  isallRecipeFields,
+  ingredientListFields,
+  ingredientField,
+} from "~interfaces/main";
 
 export type UIschemaItem = {
-  [key in keyof allRecipeFields]: UIItem
+  [key in keyof allRecipeFields]: UIItem;
 } & {
-  "ui:order"?: string[]
-}
+  "ui:order"?: string[];
+};
 
 export interface UIItem {
   "ui:display": boolean;
@@ -14,8 +19,10 @@ export interface UIItem {
   "ui:order"?: string[];
 }
 
-export type UIGeneralItem = UIItem & ingredientListFields & ingredientField
+export type UIGeneralItem = UIItem & ingredientListFields & ingredientField;
 
-export function isUIschemaItem(obj: UIschemaItem|allRecipeFields): obj is UIschemaItem {
-  return isallRecipeFields(obj)
+export function isUIschemaItem(
+  obj: UIschemaItem | allRecipeFields,
+): obj is UIschemaItem {
+  return isallRecipeFields(obj);
 }
