@@ -21,11 +21,9 @@ export class Recipes extends GuStack {
       instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
       access: { scope: AccessScope.PUBLIC },
       userData: [
-        ' #!/bin/bash -ev',
+        '#!/bin/bash -ev',
         'mkdir /etc/gu',
-        "cat > /etc/gu/stage <<'EOF'",
-        this.stage,
-        'EOF',
+        `echo '${this.stage}' > /etc/gu/stage`,
         `aws --region ${this.region} s3 cp s3://${artifactBucketName}/${this.stack}/${this.stage}/${appName}/${appName}.conf /etc/gu/recipes.conf`,
         `aws --region ${this.region} s3 cp s3://${artifactBucketName}/${this.stack}/${this.stage}/${appName}/${appName}.deb /tmp/package.deb`,
         'dpkg -i /tmp/package.deb',

@@ -969,11 +969,9 @@ exports[`The Recipes stack matches the snapshot 1`] = `
               "Fn::Join": [
                 "",
                 [
-                  " #!/bin/bash -ev
+                  "#!/bin/bash -ev
 mkdir /etc/gu
-cat > /etc/gu/stage <<'EOF'
-TEST
-EOF
+echo 'TEST' > /etc/gu/stage
 aws --region ",
                   {
                     "Ref": "AWS::Region",
