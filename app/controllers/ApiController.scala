@@ -52,17 +52,6 @@ class ApiController (
   // Utility functions
   def isEmpty(x: String) = x == null || x.isEmpty
 
-  def getPathRecipeId(x: String): (String, String) = {
-    // Attempt to split input into `path`_`id`
-    // If it fails, `id` is set to 1 and `path` is unchanged
-    // Returns path, id [string, number]
-    val pathMatch = "(.*)_(\\d+)$".r
-    x match {
-        case pathMatch(first, second) => return (first, second)
-        case _ => return (x, "1")
-    }
-  }
-
   // Endpoint functions
   def postId(id: String): Action[AnyContent] = Action { implicit request =>
     val recipe = for {
@@ -93,7 +82,7 @@ class ApiController (
       .withItem(item);
 
       val response = dbClient.putItem(request);
-      Ok(s"Recipe ${r.path} #${r.recipeId} succesfully parsed")
+      Ok(s"Recipe ${r.id} successfully parsed")
     }
 
   }
@@ -101,8 +90,6 @@ class ApiController (
   def index(id: String) = Action {
     val data: String = """{
     "id": "superUniqueRecipeId1",
-    "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
-    "recipeId": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding_STUB",
     "canonicalArticle": "food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding"
     "title": "Grilled pepper salad with fresh cucumber and herbs",
     "description": "A simple, fresh salad that can be served as a side or a main",
@@ -183,21 +170,13 @@ class ApiController (
     val schema: String = """{
     "type": "object",
     "required": [
-        "id",
-        "path",
-        "recipeId"
+        "id"
     ],
     "properties": {
         "isAppReady": {
             "type": "boolean"
         },
         "id": {
-            "type": "string"
-        },
-        "path": {
-            "type": "string"
-        },
-        "recipeId": {
             "type": "string"
         },
         "canonicalArticle": {
@@ -502,7 +481,6 @@ class ApiController (
   }
 
   def db(id: String) = Action {
-    val (path, recipId) = getPathRecipeId(id);
 
     val dbClient = config.dbUrl match {
       case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
@@ -514,9 +492,7 @@ class ApiController (
                   .build()
     }
 
-    val key_to_get = MMap(config.hashKey -> new AttributeValue("/"+path),
-                          config.rangeKey -> new AttributeValue().withN(recipId)
-                        ).asJava;
+    val key_to_get = MMap(config.hashKey -> new AttributeValue(id)).asJava;
 
     val request: GetItemRequest = new GetItemRequest()
       .withKey(key_to_get)
@@ -524,7 +500,7 @@ class ApiController (
 
     val data = dbClient.getItem(request).getItem();
     if (data == null) {
-      NotFound("No recipe with %s: '%s' and id: '%s'.".format(config.hashKey, path, recipId))
+      NotFound("No recipe with %s: '%s'.".format(config.hashKey, id))
     } else {
       Ok(Json.parse(ItemUtils.toItem(data).toJSON()));
     }
@@ -543,14 +519,11 @@ class ApiController (
     }
 
     val partition_alias = "#p";
-    val range_alias = "#r";
-    val expressionAttributeValues = MMap(partition_alias -> config.hashKey,
-                          range_alias -> config.rangeKey
-                        ).asJava;
+    val expressionAttributeValues = MMap(partition_alias -> config.hashKey).asJava;
 
     val scanRequest = new ScanRequest()
         .withTableName(config.rawRecipesTableName)
-        .withProjectionExpression("%s, %s, title".format(partition_alias, range_alias))
+        .withProjectionExpression("%s, title, contributors, canonicalArticle".format(partition_alias))
         .withExpressionAttributeNames(expressionAttributeValues)
         .withLimit(60);
 
@@ -578,13 +551,12 @@ class ApiController (
                   .build()
     }
     val partition_alias = "#p";
-    val range_alias = ":r";
     val recipes_key = MMap(partition_alias -> config.hashKey).asJava;
     val recipes_to_get = MMap(":"+config.hashKey -> new AttributeValue("/"+id)).asJava;
 
     val queryExpression = new QueryRequest()
       .withTableName(config.rawRecipesTableName)
-      .withKeyConditionExpression(partition_alias+ " = :path")
+      .withKeyConditionExpression(partition_alias+ " = :id")
       .withExpressionAttributeNames(recipes_key)
       .withExpressionAttributeValues(recipes_to_get)
 

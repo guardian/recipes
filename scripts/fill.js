@@ -26,22 +26,14 @@ var ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 var params = {
   AttributeDefinitions: [
     {
-      AttributeName: 'path',
+      AttributeName: 'id',
       AttributeType: 'S'
-    },
-    {
-      AttributeName: 'recipeId',
-      AttributeType: 'N'
     }
   ],
   KeySchema: [
     {
-      AttributeName: 'path',
+      AttributeName: 'id',
       KeyType: 'HASH'
-    },
-    {
-      AttributeName: 'recipeId',
-      KeyType: 'Range'
     }
   ],
   ProvisionedThroughput: {
@@ -79,9 +71,9 @@ ddb.createTable(params, function (err, data) {
 
       ddb.putItem(params, function (err, data) {
         if (err) {
-          console.error(`Unable to add item: ${item.path}#${item.recipeId}`, ". Error JSON:", JSON.stringify(err, null, 2));
+          console.error(`Unable to add item: ${item.id}#${item.title}`, ". Error JSON:", JSON.stringify(err, null, 2));
         } else {
-          console.log(`PutItem succeeded: ${item.path}#${item.recipeId}`);
+          console.log(`PutItem succeeded: ${item.title} (${item.id})`);
         }
       })
     });

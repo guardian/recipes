@@ -48,18 +48,15 @@ const footer = css`
 `;
 
 const Curation = () => {
-	const { section, '*': path } = useParams<{
-		section: string;
-		'*': string;
-	}>();
-	const articleId = section && path ? `/${section}/${path}` : '';
+	const { section: id } = useParams();
+	const urlParams = new URLSearchParams(window.location.search);
+	const capiId = urlParams.get('capiId');
+	const articleId = id ? `/${id}` : '';
 	const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
 	const image = state.body === null ? null : state.body.featuredImage;
-	const recipeId = state.body === null ? null : state.body.recipeId;
-	const articlePath = state.body === null ? articleId : state.body.path;
 
 	useEffect(() => {
-		const articleUrl = articleId.replace(/^\/+/, '');
+		const scrubbedId = articleId.replace(/^\/+/, '');
 		Promise.all([
 			// Get schema
 			fetchAndDispatch(
@@ -70,14 +67,14 @@ const Curation = () => {
 			),
 			// Get parsed recipe items
 			fetchAndDispatch(
-				`${location.origin}/api/db/${articleUrl}`,
+				`${location.origin}/api/db/${scrubbedId}`,
 				actions.init,
 				'body',
 				dispatch,
 			),
 			// Get article content
 			fetchAndDispatch(
-				`${location.origin}${capiProxy}${articleUrl}`,
+				`${location.origin}${capiProxy}/${capiId}`,
 				actions.init,
 				'html',
 				dispatch,
@@ -92,7 +89,7 @@ const Curation = () => {
 	return (
 		<div css={gridLayout}>
 			<div css={articleView}>
-				<GuFrame articlePath={articleId} />
+				<GuFrame articlePath={capiId} />
 			</div>
 			<div css={dataView}>
 				<ImagePicker

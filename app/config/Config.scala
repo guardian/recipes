@@ -28,7 +28,6 @@ class Config(playConfig: Configuration) extends Logging {
   lazy val rawRecipesTableName: String = playConfig.get[String]("rawRecipesTableName")
   lazy val curatedRecipesTableName: String = playConfig.get[String]("curatedRecipesTableName")
   lazy val hashKey: String = playConfig.get[String]("hashKey")
-  lazy val rangeKey: String = playConfig.get[String]("rangeKey")
 
   final lazy val stage: Stage = {
     val stageFilePath: String = "/etc/gu/stage"

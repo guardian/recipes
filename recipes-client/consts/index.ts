@@ -34,7 +34,7 @@ export const defaultHighlightColours = [
 	'#CC79A790',
 ];
 
-export const excludeInForm = ['byline', 'recipeId', 'featuredImage', 'path'];
+export const excludeInForm = ['byline', 'featuredImage'];
 export const excludeInHighlights = excludeInForm.concat([
 	'cuisineIds',
 	'mealTypeIds',
@@ -46,8 +46,6 @@ export const UIschema: UIschemaItem = {
 	'ui:order': [
 		'isAppReady',
 		'id',
-		'path',
-		'recipeId',
 		'canonicalArticle',
 		'title',
 		'description',
@@ -73,16 +71,6 @@ export const UIschema: UIschemaItem = {
 	},
 	id: {
 		'ui:display': true,
-		'ui:locked': true,
-		'ui:removable': false,
-	},
-	path: {
-		'ui:display': false,
-		'ui:locked': true,
-		'ui:removable': false,
-	},
-	recipeId: {
-		'ui:display': false,
 		'ui:locked': true,
 		'ui:removable': false,
 	},

@@ -14,8 +14,6 @@ case class Timing(qualifier: String, durationInMins: Int)
 
 case class Recipe(
   isAppReady: Boolean,
-  recipeId: Long,
-  path: String,
   id: String,
   canonicalArticle: Option[String],
   title: Option[String],
@@ -81,8 +79,6 @@ object Recipe extends Logging {
     def writes(recipe: Recipe) = Json.obj(
         "isAppReady" -> recipe.isAppReady,
         "id" -> recipe.id,
-        "recipeId" -> recipe.recipeId,
-        "path" -> recipe.path,
         "serves" -> recipe.serves,
         "ingredients" -> recipe.ingredients,
         "instructions" -> recipe.instructions,

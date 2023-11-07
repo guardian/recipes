@@ -2,10 +2,12 @@
 
 import { getProxyPath } from '../utils/proxy';
 
-export default (props: { articlePath: string }): JSX.Element => {
-	// Workaround until we remove recipe number from path
-	const trimmedPath = props.articlePath.slice(0, -2);
-	const proxyPath = getProxyPath(trimmedPath);
+export default ({
+	articlePath: capiId,
+}: {
+	articlePath: string;
+}): JSX.Element => {
+	const proxyPath = getProxyPath('/' + capiId);
 	return (
 		<iframe
 			css={{

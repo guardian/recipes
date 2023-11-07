@@ -41,20 +41,15 @@ export const isSchemaType = (
 	return isAllRecipeFields(wObj.properties); // Improve this, ends up being called twice sometimes from isingredientListFields
 };
 
-export interface allRecipeFields extends lingeringFields, recipeFields {}
+export interface allRecipeFields extends recipeFields {}
 
 export const isAllRecipeFields = (
 	obj: undefined | null | allRecipeFields | UIschemaItem,
 ): obj is allRecipeFields => {
 	if (obj === undefined || obj === null) return false;
 	const keys = Object.keys(obj);
-	return keys.includes('path') && keys.includes('byline');
+	return keys.includes('canonicalArticle') && keys.includes('byline');
 };
-
-export interface lingeringFields {
-	path: string;
-	recipeId: string;
-}
 
 export interface recipeFields {
 	id: string; // Unique identifier
