@@ -894,7 +894,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           "ImageId": {
             "Ref": "AMIRecipes",
           },
-          "InstanceType": "t3.micro",
+          "InstanceType": "t3.small",
           "MetadataOptions": {
             "HttpTokens": "required",
           },
