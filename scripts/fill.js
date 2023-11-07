@@ -7,11 +7,11 @@
 var AWS = require('aws-sdk');
 
 // Load credentials
-var credentials = new AWS.SharedIniFileCredentials({profile: 'composer'});
+var credentials = new AWS.SharedIniFileCredentials({ profile: 'developerPlayground' });
 AWS.config.credentials = credentials;
 
 // Set the region
-AWS.config.update({region: 'eu-west-1', 'endpoint': 'http://localhost:8000'});
+AWS.config.update({ region: 'eu-west-1', 'endpoint': 'http://localhost:8000' });
 
 // How many items to insert in database
 var numItems = 150
@@ -21,7 +21,7 @@ const fs = require('fs');
 let rawdata = JSON.parse(fs.readFileSync('db/data.json'));
 
 // Create the DynamoDB service object
-var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+var ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
 var params = {
   AttributeDefinitions: [
@@ -48,7 +48,7 @@ var params = {
     ReadCapacityUnits: 5,
     WriteCapacityUnits: 5
   },
-  TableName: 'recipes',
+  TableName: 'rawRecipesTable',
   StreamSpecification: {
     StreamEnabled: false
   }
@@ -59,13 +59,13 @@ function formatData(dat, tableName) {
   return dat.map((item) => {
     return {
       TableName: tableName,
-      Item: {...item}
+      Item: { ...item }
     }
   });
 };
 
 // Call DynamoDB to create the table
-ddb.createTable(params, function(err, data) {
+ddb.createTable(params, function (err, data) {
   if (err) {
     console.log("Error", err);
   } else {
@@ -73,17 +73,17 @@ ddb.createTable(params, function(err, data) {
 
     rawdata.slice(-(numItems)).forEach((item) => {
       let params = {
-        TableName: "recipes",
+        TableName: "rawRecipesTable",
         Item: AWS.DynamoDB.Converter.marshall(item)
       }
 
-      ddb.putItem(params, function(err, data) {
+      ddb.putItem(params, function (err, data) {
         if (err) {
-            console.error(`Unable to add item: ${item.path}#${item.recipeId}`, ". Error JSON:", JSON.stringify(err, null, 2));
+          console.error(`Unable to add item: ${item.path}#${item.recipeId}`, ". Error JSON:", JSON.stringify(err, null, 2));
         } else {
-            console.log(`PutItem succeeded: ${item.path}#${item.recipeId}`);
+          console.log(`PutItem succeeded: ${item.path}#${item.recipeId}`);
         }
       })
-   });
+    });
   }
 });

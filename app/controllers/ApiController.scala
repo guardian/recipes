@@ -89,7 +89,7 @@ class ApiController (
       );
 
       val request: PutItemRequest = new PutItemRequest()
-      .withTableName(config.tableNameEditedRecipes)
+      .withTableName(config.curatedRecipesTableName)
       .withItem(item);
 
       val response = dbClient.putItem(request);
@@ -520,7 +520,7 @@ class ApiController (
 
     val request: GetItemRequest = new GetItemRequest()
       .withKey(key_to_get)
-      .withTableName(config.tableName);
+      .withTableName(config.rawRecipesTableName);
 
     val data = dbClient.getItem(request).getItem();
     if (data == null) {
@@ -549,7 +549,7 @@ class ApiController (
                         ).asJava;
 
     val scanRequest = new ScanRequest()
-        .withTableName(config.tableName)
+        .withTableName(config.rawRecipesTableName)
         .withProjectionExpression("%s, %s, title".format(partition_alias, range_alias))
         .withExpressionAttributeNames(expressionAttributeValues)
         .withLimit(60);
@@ -583,7 +583,7 @@ class ApiController (
     val recipes_to_get = MMap(":"+config.hashKey -> new AttributeValue("/"+id)).asJava;
 
     val queryExpression = new QueryRequest()
-      .withTableName(config.tableName)
+      .withTableName(config.rawRecipesTableName)
       .withKeyConditionExpression(partition_alias+ " = :path")
       .withExpressionAttributeNames(recipes_key)
       .withExpressionAttributeValues(recipes_to_get)

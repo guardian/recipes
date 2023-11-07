@@ -25,8 +25,8 @@ class Config(playConfig: Configuration) extends Logging {
 
   lazy val stack: String = playConfig.get[String]("stack")
   lazy val app: String = playConfig.get[String]("app")
-  lazy val tableName: String = playConfig.get[String]("tableName")
-  lazy val tableNameEditedRecipes: String = playConfig.get[String]("tableNameEditedRecipes")
+  lazy val rawRecipesTableName: String = playConfig.get[String]("rawRecipesTableName")
+  lazy val curatedRecipesTableName: String = playConfig.get[String]("curatedRecipesTableName")
   lazy val hashKey: String = playConfig.get[String]("hashKey")
   lazy val rangeKey: String = playConfig.get[String]("rangeKey")
 
@@ -70,7 +70,7 @@ class Config(playConfig: Configuration) extends Logging {
   lazy val home = System getProperty "user.home"
   val config: Config_ = ConfigurationLoader.load(identity, credentials = awsCredentialsV2) {
     case AwsIdentity(app, stack, stage, _) => S3ConfigurationLocation("developer-playground-dist", s"$stack/$stage/${app}/$app.conf", "eu-west-1")
-    case _ => FileConfigurationLocation( new File(s"$home/.gu/$app.conf"))
+    case _ => FileConfigurationLocation( new File(s"$home/code/${app}/$app.conf"))
   }
   // logger.info(config.toString())
   final lazy val capiApiKey: String =  config.getString("capiKey")
