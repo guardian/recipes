@@ -69,7 +69,7 @@ class Config(playConfig: Configuration) extends Logging {
   // val identity = AppIdentity.whoAmI(defaultAppName = "recipes")
   lazy val home = System getProperty "user.home"
   val config: Config_ = ConfigurationLoader.load(identity, credentials = awsCredentialsV2) {
-    case AwsIdentity(app, stack, stage, _) => S3ConfigurationLocation("developer-playground-dist", s"$stage/$stack/$app.conf", "eu-west-1")
+    case AwsIdentity(app, stack, stage, _) => S3ConfigurationLocation("developer-playground-dist", s"$stack/$stage/${app}/$app.conf", "eu-west-1")
     case _ => FileConfigurationLocation( new File(s"$home/.gu/$app.conf"))
   }
   // logger.info(config.toString())
