@@ -25,8 +25,6 @@ class Config(playConfig: Configuration) extends Logging {
 
   lazy val stack: String = playConfig.get[String]("stack")
   lazy val app: String = playConfig.get[String]("app")
-  lazy val rawRecipesTableName: String = playConfig.get[String]("rawRecipesTableName")
-  lazy val curatedRecipesTableName: String = playConfig.get[String]("curatedRecipesTableName")
   lazy val hashKey: String = playConfig.get[String]("hashKey")
 
   final lazy val stage: Stage = {
@@ -42,6 +40,9 @@ class Config(playConfig: Configuration) extends Logging {
       Stage.Dev
     }
   }
+
+  lazy val rawRecipesTableName: String = playConfig.get[String]("rawRecipesTableBaseName") + stage.toString().toUpperCase()
+  lazy val curatedRecipesTableName: String = playConfig.get[String]("curatedRecipesTableBaseName") + stage.toString().toUpperCase()
 
   val panDomainConfig: PanDomainConfig = PanDomainConfig(stage)
 

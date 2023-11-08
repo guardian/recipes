@@ -854,7 +854,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
         "SSESpecification": {
           "SSEEnabled": true,
         },
-        "TableName": "curatedRecipesTable",
+        "TableName": "curatedRecipesTableTEST",
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -1060,7 +1060,7 @@ dpkg -i /tmp/package.deb",
         "SSESpecification": {
           "SSEEnabled": true,
         },
-        "TableName": "rawRecipesTable",
+        "TableName": "rawRecipesTableTEST",
         "Tags": [
           {
             "Key": "gu:cdk:version",

@@ -40,7 +40,7 @@ var params = {
     ReadCapacityUnits: 5,
     WriteCapacityUnits: 5
   },
-  TableName: 'rawRecipesTable',
+  TableName: 'rawRecipesTableDEV',
   StreamSpecification: {
     StreamEnabled: false
   }
@@ -65,7 +65,7 @@ ddb.createTable(params, function (err, data) {
 
     rawdata.slice(-(numItems)).forEach((item) => {
       let params = {
-        TableName: "rawRecipesTable",
+        TableName: "rawRecipesTableDEV",
         Item: AWS.DynamoDB.Converter.marshall(item)
       }
 

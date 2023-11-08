@@ -49,40 +49,38 @@ class ApiController (
    * a path of `/`.
    */
 
-  // Utility functions
-  def isEmpty(x: String) = x == null || x.isEmpty
+  val dbClient = if (config.dbUrl == null || config.dbUrl.isEmpty) {
+    AmazonDynamoDBClientBuilder.standard()
+      .withCredentials(config.awsCredentials)
+      .build()
+  } else {
+    AmazonDynamoDBClientBuilder.standard()
+      .withCredentials(config.awsCredentials)
+      .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
+      .build()
+  }
 
   // Endpoint functions
   def postId(id: String): Action[AnyContent] = Action { implicit request =>
-    val recipe = for {
+    (for {
       json <- request.body.asJson
-      recipe <- Recipe.parseRecipe(json)
-      } yield recipe
+      maybeRecipe <- Recipe.parseRecipe(json)
+      } yield maybeRecipe
+    ) match {
+      case None =>
+        logger.error(s"Failed to parse recipe ${id}")
+        InternalServerError("Failed to parse recipe")
+      case Some(recipe) =>
+        val item = ItemUtils.fromSimpleMap(
+          Item.fromJSON(Json.toJson(recipe).toString()).asMap()
+        );
 
-    recipe.fold{
-      logger.error(s"Failed to parse recipe ${id}")
-      InternalServerError("Failed to parse recipe")
-    }{r =>
-      val dbClient = config.dbUrl match {
-        case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
-                    .withCredentials(config.awsCredentials)
-                    .build()
-        case _ => AmazonDynamoDBClientBuilder.standard()
-                    .withCredentials(config.awsCredentials)
-                    .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
-                    .build()
-      }
+        val request: PutItemRequest = new PutItemRequest()
+          .withTableName(config.curatedRecipesTableName)
+          .withItem(item);
 
-      val item = ItemUtils.fromSimpleMap(
-        Item.fromJSON(Json.toJson(r).toString()).asMap()
-      );
-
-      val request: PutItemRequest = new PutItemRequest()
-      .withTableName(config.curatedRecipesTableName)
-      .withItem(item);
-
-      val response = dbClient.putItem(request);
-      Ok(s"Recipe ${r.id} successfully parsed")
+        val response = dbClient.putItem(request);
+        Ok(s"Recipe ${recipe.id} successfully parsed")
     }
 
   }
@@ -482,16 +480,6 @@ class ApiController (
 
   def db(id: String) = Action {
 
-    val dbClient = config.dbUrl match {
-      case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
-                  .withCredentials(config.awsCredentials)
-                  .build()
-      case _ => AmazonDynamoDBClientBuilder.standard()
-                  .withCredentials(config.awsCredentials)
-                  .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
-                  .build()
-    }
-
     val key_to_get = MMap(config.hashKey -> new AttributeValue(id)).asJava;
 
     val request: GetItemRequest = new GetItemRequest()
@@ -508,15 +496,6 @@ class ApiController (
 
   def get_list() = Action {
     // Get a list of recipes
-    val dbClient = config.dbUrl match {
-    case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
-                .withCredentials(config.awsCredentials)
-                .build()
-    case _ => AmazonDynamoDBClientBuilder.standard()
-                .withCredentials(config.awsCredentials)
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
-                .build()
-    }
 
     val partition_alias = "#p";
     val expressionAttributeValues = MMap(partition_alias -> config.hashKey).asJava;
@@ -540,16 +519,7 @@ class ApiController (
 
 
   def list(id: String) = Action {
-    // List all recipes available for `path`
-    val dbClient = config.dbUrl match {
-      case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
-                  .withCredentials(config.awsCredentials)
-                  .build()
-      case _ => AmazonDynamoDBClientBuilder.standard()
-                  .withCredentials(config.awsCredentials)
-                  .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
-                  .build()
-    }
+    // List all recipes available for `id`
     val partition_alias = "#p";
     val recipes_key = MMap(partition_alias -> config.hashKey).asJava;
     val recipes_to_get = MMap(":"+config.hashKey -> new AttributeValue("/"+id)).asJava;
