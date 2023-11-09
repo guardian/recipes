@@ -23,28 +23,31 @@ let rawdata = JSON.parse(fs.readFileSync('db/data.json'));
 // Create the DynamoDB service object
 var ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
-var params = {
-  AttributeDefinitions: [
-    {
-      AttributeName: 'id',
-      AttributeType: 'S'
+const makeParams = (tableName) => {
+  return {
+    AttributeDefinitions: [
+      {
+        AttributeName: 'id',
+        AttributeType: 'S'
+      }
+    ],
+    KeySchema: [
+      {
+        AttributeName: 'id',
+        KeyType: 'HASH'
+      }
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 5,
+      WriteCapacityUnits: 5
+    },
+    TableName: tableName,
+    StreamSpecification: {
+      StreamEnabled: false
     }
-  ],
-  KeySchema: [
-    {
-      AttributeName: 'id',
-      KeyType: 'HASH'
-    }
-  ],
-  ProvisionedThroughput: {
-    ReadCapacityUnits: 5,
-    WriteCapacityUnits: 5
-  },
-  TableName: 'rawRecipesTableDEV',
-  StreamSpecification: {
-    StreamEnabled: false
   }
 };
+
 
 // Format data
 function formatData(dat, tableName) {
@@ -56,8 +59,8 @@ function formatData(dat, tableName) {
   });
 };
 
-// Call DynamoDB to create the table
-ddb.createTable(params, function (err, data) {
+// Call DynamoDB to create the raw table
+ddb.createTable(makeParams('rawRecipesTableDEV'), function (err, data) {
   if (err) {
     console.log("Error", err);
   } else {
@@ -77,5 +80,14 @@ ddb.createTable(params, function (err, data) {
         }
       })
     });
+  }
+});
+
+// Create an empty curated table
+ddb.createTable(makeParams('curatedRecipesTableDEV'), function (err, data) {
+  if (err) {
+    console.log("Error", err);
+  } else {
+    console.log("Curated table created");
   }
 });
