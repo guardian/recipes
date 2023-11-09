@@ -51,8 +51,8 @@ async function postRecipe(
 		console.warn('No data provided!');
 		return { error: 'No data provided.' };
 	}
-	const articleUrl = aId.replace(/^\/+/, '');
-	const response = await fetch(`${location.origin}${apiURL}${articleUrl}`, {
+	const recipeId = aId.replace(/^\/+/, '');
+	const response = await fetch(`${location.origin}${apiURL}${recipeId}`, {
 		method: 'POST', // *GET, POST, PUT, DELETE, etc.
 		mode: 'cors', // no-cors, *cors, same-origin
 		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -62,15 +62,15 @@ async function postRecipe(
 		},
 		redirect: 'follow', // manual, *follow, error
 		referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-		body: JSON.stringify(cleanRecipe(data)), // body data type must match "Content-Type" header
+		body: JSON.stringify(data), // body data type must match "Content-Type" header
 	});
 	return { status: response.status }; //.json(); // parses JSON response into native JavaScript objects
 }
 
-function resetRecipe(
+const resetRecipe = (
 	aId: string | null,
 	dispatcher: Dispatch<ActionType>,
-): void {
+): void => {
 	if (aId === null) {
 		console.warn('No url provided!');
 		dispatcher({
@@ -86,11 +86,11 @@ function resetRecipe(
 			dispatcher,
 		);
 	}
-}
+};
 
-function formatCSV(
+const formatCSV = (
 	data: allRecipeFields,
-): [Record<string, string>[], Record<string, string>] {
+): [Record<string, string>[], Record<string, string>] => {
 	const ingreds = data['ingredients'].map(
 		(ingL: IngredientsGroup, i: number) => {
 			return ingL['ingredientsList'].map((ingred) => {
@@ -113,22 +113,22 @@ function formatCSV(
 		});
 
 	return [dataFormatted, fields];
-}
+};
 
-function Footer(props: FooterProps): JSX.Element | JSX.Element[] {
+const Footer = (props: FooterProps): JSX.Element | JSX.Element[] => {
 	const { articleId, body, dispatcher } = props;
 
-	function submit(event: React.MouseEvent<HTMLInputElement>): void {
+	const submit = (event: React.MouseEvent<HTMLInputElement>): void => {
 		event.preventDefault();
 		postRecipe(articleId, body).catch((err) => console.error(err));
-	}
+	};
 
-	function reset(event: React.MouseEvent<HTMLInputElement>): void {
+	const reset = (event: React.MouseEvent<HTMLInputElement>): void => {
 		event.preventDefault();
 		resetRecipe(articleId, dispatcher);
-	}
+	};
 
-	function downloadCSV(event: React.MouseEvent<HTMLInputElement>): void {
+	const downloadCSV = (event: React.MouseEvent<HTMLInputElement>): void => {
 		event.preventDefault();
 		const [data, fields] = formatCSV(body);
 		const aId = articleId !== null ? articleId : undefined;
@@ -139,7 +139,7 @@ function Footer(props: FooterProps): JSX.Element | JSX.Element[] {
 			filename: aId,
 			separator: ';',
 		});
-	}
+	};
 
 	return (
 		<form>
@@ -149,10 +149,10 @@ function Footer(props: FooterProps): JSX.Element | JSX.Element[] {
 			<Button priority="secondary" size="xsmall" onClick={reset}>
 				Reset
 			</Button>
-			<Button priority="secondary" size="xsmall" onClick={downloadCSV}>
+			{/* <Button priority="secondary" size="xsmall" onClick={downloadCSV}>
 				Download as CSV
-			</Button>
+			</Button> */}
 		</form>
 	);
-}
+};
 export default Footer;
