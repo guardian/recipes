@@ -1,25 +1,22 @@
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
-const { compilerOptions } = require('./tsconfig');
+import { pathsToModuleNameMapper } from 'ts-jest';
 
-module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
-  transform: {
-    "^.+\\.(t|j)sx?$": "ts-jest"
-  },
-  transformIgnorePatterns: [
-    "<rootDir>/node_modules/(?!lodash-es|lodash)"
-  ],  
-  testMatch: [
-    "<rootDir>/recipes-client/**/*.spec.+(ts|tsx|js)"
-  ],
-  moduleFileExtensions: [
-    "ts",
-    "tsx",
-    "js"
-  ],
-  moduleNameMapper: {
-    ...pathsToModuleNameMapper(compilerOptions.paths, {prefix: "<rootDir>/recipes-client/"}),
-    "^@guardian/src-foundations/(.*)(?<!cjs)$": "@guardian/src-foundations/$1/cjs"
-  }
+export const preset = "ts-jest";
+export const testEnvironment = "node";
+export const transform = {
+  "^.+\\.(t|j)sx?$": "ts-jest"
+};
+export const transformIgnorePatterns = [
+  "<rootDir>/node_modules/(?!lodash-es|lodash)"
+];
+export const testMatch = [
+  "<rootDir>/recipes-client/**/*.spec.+(ts|tsx|js)"
+];
+export const moduleFileExtensions = [
+  "ts",
+  "tsx",
+  "js"
+];
+export const moduleDirectories = ['node_modules', '.'];
+export const moduleNameMapper = {
+  ...pathsToModuleNameMapper([], { prefix: "<rootDir>/recipes-client/" })
 };

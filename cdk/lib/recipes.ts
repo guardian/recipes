@@ -43,6 +43,7 @@ export class Recipes extends GuStack {
       imageRecipe: 'editorial-tools-focal-java8',
     })
     const rawRecipesTable = new Table(this, 'rawRecipesTable', {
+      tableName: `rawRecipesTable${this.stage}`,
       partitionKey: {
         name: 'id',
         type: AttributeType.STRING,
@@ -52,6 +53,7 @@ export class Recipes extends GuStack {
     });
     rawRecipesTable.grantReadData(ec2App.autoScalingGroup.role);
     const curatedRecipesTable = new Table(this, 'curatedRecipesTable', {
+      tableName: `curatedRecipesTable${this.stage}`,
       partitionKey: {
         name: 'id',
         type: AttributeType.STRING,

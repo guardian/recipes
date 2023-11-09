@@ -1,24 +1,22 @@
-/** @jsx jsx */
-import { jsx } from "@emotion/core";
-import { render } from "react-dom";
-import Curation from "~pages/curation";
-import Home from "~pages/home";
+/** @jsxImportSource @emotion/react */
+import { createRoot } from 'react-dom/client';
+import Curation from './pages/curation';
+import Home from './pages/home';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/layout/header';
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+const App = () => (
+	<Router>
+		<div>
+			<Header />
+			<Routes>
+				<Route path="/curation/:section/*" element={<Curation />} />
+				<Route path="/" element={<Home />} />
+			</Routes>
+		</div>
+	</Router>
+);
 
-// import { text, background } from "@guardian/src-foundations/palette";
-
-function App() {
-  return (
-    <Router>
-      <div>
-        <Switch>
-          <Route path="/curation/:articleId*" component={Curation} />
-          <Route path="/" component={Home} />
-        </Switch>
-      </div>
-    </Router>
-  );
-}
-
-render(<App />, document.getElementById("root"));
+const container = document.getElementById('root')!;
+const root = createRoot(container);
+root.render(<App />);

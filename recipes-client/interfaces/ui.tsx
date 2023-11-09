@@ -1,28 +1,28 @@
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import {
-  allRecipeFields,
-  isallRecipeFields,
-  ingredientListFields,
-  ingredientField,
-} from "~interfaces/main";
+	allRecipeFields,
+	isAllRecipeFields,
+	IngredientsGroup,
+	Ingredient,
+} from '../interfaces/main';
 
 export type UIschemaItem = {
-  [key in keyof allRecipeFields]: UIItem;
+	[key in keyof allRecipeFields]: UIItem;
 } & {
-  "ui:order"?: string[];
+	'ui:order'?: string[];
 };
 
 export interface UIItem {
-  "ui:display": boolean;
-  "ui:locked"?: boolean;
-  "ui:removable"?: boolean;
-  "ui:order"?: string[];
+	'ui:display': boolean;
+	'ui:locked'?: boolean;
+	'ui:removable'?: boolean;
+	'ui:order'?: string[];
 }
 
-export type UIGeneralItem = UIItem & ingredientListFields & ingredientField;
+export type UIGeneralItem = UIItem & IngredientsGroup & Ingredient;
 
-export function isUIschemaItem(
-  obj: UIschemaItem | allRecipeFields,
-): obj is UIschemaItem {
-  return isallRecipeFields(obj);
-}
+export const isUIschemaItem = (
+	obj: UIschemaItem | allRecipeFields,
+): obj is UIschemaItem => {
+	return isAllRecipeFields(obj);
+};

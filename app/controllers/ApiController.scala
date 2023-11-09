@@ -49,62 +49,56 @@ class ApiController (
    * a path of `/`.
    */
 
-  // Utility functions
-  def isEmpty(x: String) = x == null || x.isEmpty
-
-  def getPathRecipeId(x: String): (String, String) = {
-    // Attempt to split input into `path`_`id`
-    // If it fails, `id` is set to 1 and `path` is unchanged
-    // Returns path, id [string, number]
-    val pathMatch = "(.*)_(\\d+)$".r
-    x match {
-        case pathMatch(first, second) => return (first, second)
-        case _ => return (x, "1")
-    }
+  val dbClient = if (config.dbUrl == null || config.dbUrl.isEmpty) {
+    AmazonDynamoDBClientBuilder.standard()
+      .withCredentials(config.awsCredentials)
+      .build()
+  } else {
+    AmazonDynamoDBClientBuilder.standard()
+      .withCredentials(config.awsCredentials)
+      .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
+      .build()
   }
 
   // Endpoint functions
   def postId(id: String): Action[AnyContent] = Action { implicit request =>
-    val recipe = for {
+    (for {
       json <- request.body.asJson
-      recipe <- Recipe.parseRecipe(json)
-      } yield recipe
+      maybeRecipe <- Recipe.parseRecipe(json)
+      } yield maybeRecipe
+    ) match {
+      case None =>
+        logger.error(s"Failed to parse recipe ${id}")
+        InternalServerError("Failed to parse recipe")
+      case Some(recipe) =>
+        val item = ItemUtils.fromSimpleMap(
+          Item.fromJSON(Json.toJson(recipe).toString()).asMap()
+        );
 
-    recipe.fold{
-      logger.error(s"Failed to parse recipe ${id}")
-      InternalServerError("Failed to parse recipe")
-    }{r =>
-      val dbClient = config.dbUrl match {
-        case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
-                    .withCredentials(config.awsCredentials)
-                    .build()
-        case _ => AmazonDynamoDBClientBuilder.standard()
-                    .withCredentials(config.awsCredentials)
-                    .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
-                    .build()
-      }
+        val request: PutItemRequest = new PutItemRequest()
+          .withTableName(config.curatedRecipesTableName)
+          .withItem(item);
 
-      val item = ItemUtils.fromSimpleMap(
-        Item.fromJSON(Json.toJson(r).toString()).asMap()
-      );
-
-      val request: PutItemRequest = new PutItemRequest()
-      .withTableName(config.tableNameEditedRecipes)
-      .withItem(item);
-
-      val response = dbClient.putItem(request);
-      Ok(s"Recipe ${r.path} #${r.recipeId} succesfully parsed")
+        val response = dbClient.putItem(request);
+        Ok(s"Recipe ${recipe.id} successfully parsed")
     }
 
   }
 
   def index(id: String) = Action {
     val data: String = """{
-    "path": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding",
-    "recipeId": "/food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding_STUB",
-    "recipes_title": "Grilled pepper salad with fresh cucumber and herbs",
-    "serves": "Serves 4",
-    "time": [
+    "id": "superUniqueRecipeId1",
+    "canonicalArticle": "food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding"
+    "title": "Grilled pepper salad with fresh cucumber and herbs",
+    "description": "A simple, fresh salad that can be served as a side or a main",
+    "serves": {
+      "amount": {
+        "min": 4,
+        "max": 4
+      },
+      "unit": "people"
+    },
+    "timings": [
       {
       "instruction": "Prep",
       "quantity": "20",
@@ -118,176 +112,54 @@ class ApiController (
         "text": "Cook 40 min"
       }
     ],
-    "steps": [
-      "Heat the oven to 250 C (230 C fan)/480 F/gas 9.",
-      "In a large bowl, toss together all the peppers, tomatoes, onions, chilli, garlic, four tablespoons of oil, three-quarters of a teaspoon of salt and a good grind of pepper.",
-      "Spread out on two large oven trays lined with greaseproof paper and roast for about 35 minutes, stirring once or twice, or until softened and charred in places.",
-      "Remove the trays from the oven and, once they\\u2019re cool enough to handle, coarsely chop the vegetables into a chunky mash and transfer to a bowl with the lemon juice, herbs, half a teaspoon of salt and a good grind of pepper.",
-      "In a second bowl, toss the cucumber with the remaining two tablespoons of oil, a quarter-teaspoon of salt and a grind of pepper.",
-      "To serve, spread the roast pepper mixture over a plate, pile the cucumber in the middle and sprinkle with the urfa chilli."
+    "instructions": [
+			{
+				"stepNumber": 1,
+				"description": "Espresso is ideal, because you want the coffee to have as intense a flavour as possible, but if you don’t have the wherewithal at home, a strongly brewed cafetiere, moka or filter pot, or even a cup of instant, will do, as will a takeaway from your favourite coffee shop if you don’t.",
+				"images": [
+					"https://i.guim.co.uk/img/media/d16236d4a8333e1ee2aeba3d6d551e6b2a36bf82/874_952_5055_5052/master/5055.jpg?width=620&quality=85&fit=max&s=772c5a231bb63bab36fa26e5491ea6b5"
+				]
+			},
+			{
+				"stepNumber": 2,
+				"description": "Separate the eggs into two large, clean bowls – you’ll be beating the whites into a foam, so it’s important they’re not contaminated with any yolk, which might interfere with the process. As such, I’d advise cracking each white into a small bowl first, so you can make sure of this before you add it to the larger bowl."
+			},
+			{
+				"stepNumber": 3,
+				"description": "Whisk the whites until they form stiff, rather than droopy peaks – you should be able to hold the bowl upside down with confidence, though be careful when testing this. (Don’t be tempted to keep whisking after they reach this stage, because they’ll quickly start to break down into a watery mess, and you’ll need to whisk in a fresh white to get them back.) Set aside.",
+				"images": [
+					"https://i.guim.co.uk/img/media/73469f6ffea172d74eaee006493540b9e4253879/0_633_7442_6217/master/7442.jpg?width=620&quality=85&fit=max&s=b5579f9f24abb11a26d03c72359c6b3e"
+				]
+			}
+		],
+    "byline": "Yotam Ottolenghi",
+    "ingredients": [
+    	{
+			"recipeSection": "Sauce",
+          	"ingredientsList": [
+          		{
+        			"name": "Carrot",
+          			"amount": {
+                    	"min": 2,
+                        "max": 2
+                    },
+          			"unit": "items",
+          			"ingredientId": "carrot",
+          			"prefix": "large",
+          			"suffix": "chopped",
+          			"optional": false
+        		}
+          ]
+		  }
     ],
-    "credit": "Yotam Ottolenghi",
-    "ingredients_lists": [{
-      "title": "",
-      "ingredients": [{
-          "text": "4 green peppers, stems removed, deseeded and flesh cut into roughly 3 cm pieces",
-          "item": "green peppers",
-          "unit": "",
-          "comment": "stems removed deseeded and flesh cut into roughly 3 cm pieces",
-          "quantity": {
-            "absolute": "4",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "2 red peppers, stems removed, deseeded and flesh cut into roughly 3 cm pieces",
-          "item": "red peppers",
-          "unit": "",
-          "comment": "stems removed deseeded and flesh cut into roughly 3 cm pieces",
-          "quantity": {
-            "absolute": "2",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "4 medium vine tomatoes (400 g), each cut into 4 wedges",
-          "item": "medium vine tomatoes",
-          "unit": "",
-          "comment": "400 g each cut into  wedges",
-          "quantity": {
-            "absolute": "4",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "2 small red onions, peeled and cut into roughly 3 cm pieces",
-          "item": "small red onions",
-          "unit": "",
-          "comment": "peeled and cut into roughly 3 cm pieces",
-          "quantity": {
-            "absolute": "2",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "1 green chilli, roughly sliced, seeds and all",
-          "item": "green chilli",
-          "unit": "",
-          "comment": "roughly sliced seeds and all",
-          "quantity": {
-            "absolute": "1",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "6 large garlic cloves, peeled",
-          "item": "garlic",
-          "unit": "cloves",
-          "comment": "large   peeled",
-          "quantity": {
-            "absolute": "6",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "90 ml olive oil",
-          "item": "olive oil",
-          "unit": "ml",
-          "comment": "",
-          "quantity": {
-            "absolute": "90",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "Salt and black pepper",
-          "item": "black pepper",
-          "unit": "",
-          "comment": "Salt and",
-          "quantity": {
-            "absolute": "",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "1\\u00bd tbsp lemon juice",
-          "item": "lemon juice",
-          "unit": "tbsp",
-          "comment": "",
-          "quantity": {
-            "absolute": "1.5",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "10 g parsley leaves, roughly chopped",
-          "item": "parsley leaves",
-          "unit": "g",
-          "comment": "roughly chopped",
-          "quantity": {
-            "absolute": "10",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "10 g coriander leaves, roughly chopped",
-          "item": "coriander leaves",
-          "unit": "g",
-          "comment": "roughly chopped",
-          "quantity": {
-            "absolute": "10",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "1 cucumber, peeled, deseeded and cut into 1 cm cubes",
-          "item": "cucumber",
-          "unit": "",
-          "comment": "peeled deseeded and cut into  cm cubes",
-          "quantity": {
-            "absolute": "1",
-            "from": "",
-            "to": ""
-          }
-        },
-        {
-          "text": "\\u00be tsp urfa chilli",
-          "item": "urfa chilli",
-          "unit": "tsp",
-          "comment": "",
-          "quantity": {
-            "absolute": "0.75",
-            "from": "",
-            "to": ""
-          }
-        }
-      ]
-    }],
-    "occasion": "summer-food-and-drink",
-    "cuisines": [
+    "celebrationIds": "summer-food-and-drink",
+    "cuisineIds": [
       "north-african/moroccan",
       "middleeastern",
       "indian"
     ],
-    "meal_type": "main-course",
-    "ingredient_tags": [
-      "meat",
-      "fruit",
-      "cheese",
-      "seafood"
-    ],
-    "image": "https://media.guim.co.uk/5eb266e966f8aa7c74f449804d13ee3b57eb81d6/1_0_3356_3355/1000.jpg"
+    "mealTypeIds": "main-course",
+    "featuredImage": "https://media.guim.co.uk/5eb266e966f8aa7c74f449804d13ee3b57eb81d6/1_0_3356_3355/1000.jpg"
   }"""
     Ok(Json.parse(data))
   }
@@ -296,91 +168,193 @@ class ApiController (
     val schema: String = """{
     "type": "object",
     "required": [
-        "path",
-        "recipeId"
+        "id"
     ],
     "properties": {
-        "path": {
+        "isAppReady": {
+            "type": "boolean"
+        },
+        "id": {
             "type": "string"
         },
-        "recipeId": {
-            "type": "string"
+        "canonicalArticle": {
+            "type": ["string", "null"]
         },
-        "recipes_title": {
+        "title": {
+            "type": ["string", "null"]
+        },
+        "description": {
             "type": ["string", "null"]
         },
         "serves": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "object",
+              "properties": {
+                "min": {
+                  "type": "integer"
+                },
+                "max": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "min",
+                "max"
+              ]
+            },
+            "unit": {
+              "type": "string",
+                  "enum": [
+                    "people",
+                    "items"
+                  ]
+            }
+          },
+          "required": [
+            "amount",
+            "unit"
+          ]
+        },
+        "featuredImage": {
             "type": ["string", "null"]
         },
-        "image": {
-            "type": ["string", "null"]
-        },
-        "time": {
-            "type": ["array", "null"],
-            "items": {
-                "maxItems": 1,
-                "minItems": 0,
-                "type": ["string", "null"]
+        "timings": {
+          "type": "array",
+          "items": {
+              "type": "object",
+              "properties": {
+                "qualifier": {
+                  "type": "string",
+                  "enum": [
+                    "prep-time",
+                    "cook-time",
+                    "set-time"
+                  ]
+                },
+                "durationInMins": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "qualifier",
+                "durationInMins"
+              ]
             }
         },
-        "steps": {
-            "type": ["array", "null"],
+        "instructions": {
+          "type": "array",
+          "items": {
+              "type": "object",
+              "properties": {
+                "stepNumber": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "images": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "stepNumber",
+                "description"
+              ]
+            }
+        },
+        "contributors": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "enum": [
+                  "Felicity Cloake",
+                  "Meera Sodha",
+                  "Holly O'Neill",
+                  "Andrei Lussmann",
+                  "Yotam Ottolenghi",
+                  "Nigel Slater",
+                  "Jack Monroe"
+                ]
+            }
+        },
+        "byline": {
+            "type": "array",
             "items": {
                 "type": "string"
             }
         },
-        "credit": {
-            "type": ["null", "string", "array"]
-        },
-        "ingredients_lists": {
-            "type": ["array", "null"],
-            "items": {
-                "type": ["object", "null"],
-                "required": [],
+        "ingredients": {
+            "type": "array",
+            "items":
+              {
+                "type": "object",
                 "properties": {
-                    "title": {
-                        "type": "string"
-                    },
-                    "ingredients": {
-                        "type": "array",
-                        "items": {
+                  "recipeSection": {
+                    "type": "string"
+                  },
+                  "ingredientsList": {
+                    "type": "array",
+                    "items":
+                      {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "amount": {
                             "type": "object",
-                            "required": [],
                             "properties": {
-                                "text": {
-                                    "type": "string"
-                                },
-                                "item": {
-                                    "type": "string"
-                                },
-                                "unit": {
-                                    "type": "string"
-                                },
-                                "comment": {
-                                    "type": "string"
-                                },
-                                "quantity": {
-                                    "type": "object",
-                                    "required": [],
-                                    "properties": {
-                                        "absolute": {
-                                            "type": "string"
-                                        },
-                                        "from": {
-                                            "type": "string"
-                                        },
-                                        "to": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "occasion": {
+                              "min": {
+                                "type": "integer"
+                              },
+                              "max": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "min",
+                              "max"
+                            ]
+                          },
+                          "unit": {
+                            "type": "string"
+                          },
+                          "ingredientId": {
+                            "type": "string"
+                          },
+                          "prefix": {
+                            "type": "string"
+                          },
+                          "suffix": {
+                            "type": "string"
+                          },
+                          "optional": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "amount",
+                          "unit"
+                        ]
+                      }
+
+                  }
+                },
+                "required": [
+                  "recipeSection",
+                  "ingredientsList"
+                ]
+              }
+          },
+        "celebrationIds": {
             "type": [
                 "array",
                 "null"
@@ -404,7 +378,7 @@ class ApiController (
                 ]
             }
         },
-        "cuisines": {
+        "cuisineIds": {
             "type": ["array", "null"],
             "items": {
                 "minItems": 1,
@@ -439,7 +413,7 @@ class ApiController (
                 ]
             }
         },
-        "meal_type": {
+        "mealTypeIds": {
           "type": ["array", "null"],
           "items": {
               "type": [
@@ -459,36 +433,7 @@ class ApiController (
               ]
             }
         },
-        "ingredient_tags": {
-            "type": ["array", "null"],
-            "items": {
-                "type": ["string", "null"],
-                "enum": [
-                    "AVOCADOS",
-                    "BEEF",
-                    "BREAD",
-                    "CHEESE",
-                    "CHICKEN",
-                    "CHOCOLATE",
-                    "DUCK",
-                    "EGGS",
-                    "FRUIT",
-                    "LAMB",
-                    "MEAT",
-                    "OYSTERS",
-                    "PORK",
-                    "POTATOES",
-                    "PUMPKIN",
-                    "RICE",
-                    "SAUSAGES",
-                    "SEAFOOD",
-                    "SHELLFISH",
-                    "TOMATOES",
-                    "WINE"
-                ]
-            }
-        },
-        "diet_tags": {
+        "suitableForDietIds": {
             "type": ["array", "null"],
             "items": {
                 "type": ["string", "null"],
@@ -498,6 +443,34 @@ class ApiController (
                     "meat"
                 ]
             }
+        },
+        "utensilsAndApplianceIds": {
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "air fryer",
+                    "blender"
+                ]
+            }
+        },
+        "techniquesUsedIds": {
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "baking",
+                    "marinating"
+                ]
+            }
+        },
+        "difficultyLevel": {
+            "type": ["string", "null"],
+            "enum": [
+                    "easy",
+                    "medium",
+                    "hard"
+                ]
         }
     }
 }
@@ -506,29 +479,16 @@ class ApiController (
   }
 
   def db(id: String) = Action {
-    val (path, recipId) = getPathRecipeId(id);
 
-    val dbClient = config.dbUrl match {
-      case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
-                  .withCredentials(config.awsCredentials)
-                  .build()
-      case _ => AmazonDynamoDBClientBuilder.standard()
-                  .withCredentials(config.awsCredentials)
-                  .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
-                  .build()
-    }
-
-    val key_to_get = MMap(config.hashKey -> new AttributeValue("/"+path),
-                          config.rangeKey -> new AttributeValue().withN(recipId)
-                        ).asJava;
+    val key_to_get = MMap(config.hashKey -> new AttributeValue(id)).asJava;
 
     val request: GetItemRequest = new GetItemRequest()
       .withKey(key_to_get)
-      .withTableName(config.tableName);
+      .withTableName(config.rawRecipesTableName);
 
     val data = dbClient.getItem(request).getItem();
     if (data == null) {
-      NotFound("No recipe with %s: '%s' and id: '%s'.".format(config.hashKey, path, recipId))
+      NotFound("No recipe with %s: '%s'.".format(config.hashKey, id))
     } else {
       Ok(Json.parse(ItemUtils.toItem(data).toJSON()));
     }
@@ -536,25 +496,13 @@ class ApiController (
 
   def get_list() = Action {
     // Get a list of recipes
-    val dbClient = config.dbUrl match {
-    case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
-                .withCredentials(config.awsCredentials)
-                .build()
-    case _ => AmazonDynamoDBClientBuilder.standard()
-                .withCredentials(config.awsCredentials)
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
-                .build()
-    }
 
     val partition_alias = "#p";
-    val range_alias = "#r";
-    val expressionAttributeValues = MMap(partition_alias -> config.hashKey,
-                          range_alias -> config.rangeKey
-                        ).asJava;
+    val expressionAttributeValues = MMap(partition_alias -> config.hashKey).asJava;
 
     val scanRequest = new ScanRequest()
-        .withTableName(config.tableName)
-        .withProjectionExpression("%s, %s, recipes_title".format(partition_alias, range_alias))
+        .withTableName(config.rawRecipesTableName)
+        .withProjectionExpression("%s, title, contributors, canonicalArticle".format(partition_alias))
         .withExpressionAttributeNames(expressionAttributeValues)
         .withLimit(60);
 
@@ -571,24 +519,14 @@ class ApiController (
 
 
   def list(id: String) = Action {
-    // List all recipes available for `path`
-    val dbClient = config.dbUrl match {
-      case _ if isEmpty(config.dbUrl) => AmazonDynamoDBClientBuilder.standard()
-                  .withCredentials(config.awsCredentials)
-                  .build()
-      case _ => AmazonDynamoDBClientBuilder.standard()
-                  .withCredentials(config.awsCredentials)
-                  .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(config.dbUrl, "eu-west-1"))
-                  .build()
-    }
+    // List all recipes available for `id`
     val partition_alias = "#p";
-    val range_alias = ":r";
     val recipes_key = MMap(partition_alias -> config.hashKey).asJava;
     val recipes_to_get = MMap(":"+config.hashKey -> new AttributeValue("/"+id)).asJava;
 
     val queryExpression = new QueryRequest()
-      .withTableName(config.tableName)
-      .withKeyConditionExpression(partition_alias+ " = :path")
+      .withTableName(config.rawRecipesTableName)
+      .withKeyConditionExpression(partition_alias+ " = :id")
       .withExpressionAttributeNames(recipes_key)
       .withExpressionAttributeValues(recipes_to_get)
 
