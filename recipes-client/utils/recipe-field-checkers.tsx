@@ -7,6 +7,7 @@ import {
 	isSchemaType,
 	schemaItem,
 	schemaType,
+	Serves,
 	Timing,
 } from 'interfaces/main';
 
@@ -14,7 +15,7 @@ export const isTimingsField = (
 	obj: Timing | Record<string, unknown>,
 ): obj is Timing => {
 	if (typeof obj !== 'object' || obj === null) return false;
-	return Object.keys(obj).includes('qualifier');
+	return Object.keys(obj).includes('durationInMins');
 };
 
 export const isIngredientsField = (
@@ -45,6 +46,13 @@ export const isInstructionsField = (
 	if (obj === undefined || obj === null) return false;
 	if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
 	return Object.keys(obj).includes('stepNumber');
+};
+
+export const isServesField = (obj: Serves): obj is Serves => {
+	if (typeof obj !== 'object' || obj === null) return false;
+	return (
+		Object.keys(obj).includes('amount') && Object.keys(obj).includes('unit')
+	);
 };
 
 export const isRangeField = (

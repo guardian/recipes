@@ -1,16 +1,32 @@
 import { Legend } from '@guardian/source-react-components';
-import { ActionType, Serves } from 'interfaces/main';
+import { ActionType, schemaItem, Serves } from 'interfaces/main';
 import { Dispatch } from 'react';
 import { isRangeField } from 'utils/recipe-field-checkers';
+import { getItemButtons } from '../form-buttons';
+import { getFormFieldsSchema } from '../form-group';
 import FormItem from '../form-item';
 import { renderRangeFormGroup } from './range';
 
 export const renderServesFormGroup = (
 	formItems: Serves,
+	schema: schemaItem,
 	choices: string[] | null,
 	key: string,
 	dispatcher: Dispatch<ActionType>,
 ) => {
+	const formFieldsSchema = getFormFieldsSchema(formItems, schema);
+	const formItemAddId =
+		key.slice(0, -1) + (parseInt(key.slice(-1)) + 1).toString();
+	const formItemRemoveId = key;
+
+	const formItemButtons = getItemButtons(
+		key,
+		formItemAddId,
+		formItemRemoveId,
+		formFieldsSchema,
+		dispatcher,
+	);
+
 	const fields = Object.keys(formItems).map((k: keyof Serves) => {
 		if (isRangeField(formItems[k])) {
 			return renderRangeFormGroup(
@@ -34,6 +50,7 @@ export const renderServesFormGroup = (
 		<fieldset key={`${key}.fieldset`}>
 			<Legend key={`${key}.legend`} text={key}></Legend>
 			{fields}
+			{formItemButtons}
 		</fieldset>,
 	];
 };

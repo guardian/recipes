@@ -187,35 +187,34 @@ class ApiController (
             "type": ["string", "null"]
         },
         "serves": {
-          "type": "object",
-          "properties": {
-            "amount": {
+          "type": "array",
+          "items": {
               "type": "object",
               "properties": {
-                "min": {
-                  "type": "integer"
+                "amount": {
+                  "type": "object",
+                  "properties": {
+                    "min": {
+                      "type": "integer"
+                    },
+                    "max": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "min",
+                    "max"
+                  ]
                 },
-                "max": {
-                  "type": "integer"
+                "unit": {
+                  "type": "string"
                 }
               },
               "required": [
-                "min",
-                "max"
+                "amount",
+                "unit"
               ]
-            },
-            "unit": {
-              "type": "string",
-                  "enum": [
-                    "people",
-                    "items"
-                  ]
             }
-          },
-          "required": [
-            "amount",
-            "unit"
-          ]
         },
         "featuredImage": {
             "type": ["string", "null"]
