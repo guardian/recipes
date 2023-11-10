@@ -502,7 +502,7 @@ class ApiController (
 
     val scanRequest = new ScanRequest()
         .withTableName(config.rawRecipesTableName)
-        .withProjectionExpression("%s, title, contributors, canonicalArticle".format(partition_alias))
+        .withProjectionExpression("%s, title, contributors, canonicalArticle, isAppReady".format(partition_alias))
         .withExpressionAttributeNames(expressionAttributeValues)
         .withLimit(60);
 
