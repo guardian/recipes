@@ -14,6 +14,7 @@ import { Legend } from '@guardian/source-react-components';
 import {
 	isIngredientsField,
 	isInstructionsField,
+	isServesField,
 	isTimingsField,
 } from 'utils/recipe-field-checkers';
 import { renderTimingsFormGroup } from './inputs/timings';
@@ -145,8 +146,8 @@ const getFormFields = (
 			key,
 			dispatcher,
 		);
-	} else if (key === 'serves') {
-		return renderServesFormGroup(formItems, choices, key, dispatcher);
+	} else if (isServesField(formItems)) {
+		return renderServesFormGroup(formItems, schema, choices, key, dispatcher);
 	} else {
 		console.warn(`Cannot get item '${key}' in formItems, leaving field empty.`);
 		console.log(`Form items: ${JSON.stringify(formItems)}`);

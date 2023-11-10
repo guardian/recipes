@@ -70,12 +70,12 @@ export const UIschema: UIschemaItem = {
 		'ui:removable': false,
 	},
 	id: {
-		'ui:display': true,
+		'ui:display': false,
 		'ui:locked': true,
 		'ui:removable': false,
 	},
 	canonicalArticle: {
-		'ui:display': true,
+		'ui:display': false,
 		'ui:locked': true,
 		'ui:removable': false,
 	},
@@ -193,12 +193,12 @@ export const UIschema: UIschemaItem = {
 		'ui:removable': true,
 	},
 	techniquesUsedIds: {
-		'ui:display': true,
+		'ui:display': false,
 		'ui:locked': false,
 		'ui:removable': true,
 	},
 	difficultyLevel: {
-		'ui:display': true,
+		'ui:display': false,
 		'ui:locked': false,
 		'ui:removable': true,
 	},

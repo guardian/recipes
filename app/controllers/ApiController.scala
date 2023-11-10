@@ -187,35 +187,34 @@ class ApiController (
             "type": ["string", "null"]
         },
         "serves": {
-          "type": "object",
-          "properties": {
-            "amount": {
+          "type": "array",
+          "items": {
               "type": "object",
               "properties": {
-                "min": {
-                  "type": "integer"
+                "amount": {
+                  "type": "object",
+                  "properties": {
+                    "min": {
+                      "type": "integer"
+                    },
+                    "max": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "min",
+                    "max"
+                  ]
                 },
-                "max": {
-                  "type": "integer"
+                "unit": {
+                  "type": "string"
                 }
               },
               "required": [
-                "min",
-                "max"
+                "amount",
+                "unit"
               ]
-            },
-            "unit": {
-              "type": "string",
-                  "enum": [
-                    "people",
-                    "items"
-                  ]
             }
-          },
-          "required": [
-            "amount",
-            "unit"
-          ]
         },
         "featuredImage": {
             "type": ["string", "null"]
@@ -280,7 +279,11 @@ class ApiController (
                   "Andrei Lussmann",
                   "Yotam Ottolenghi",
                   "Nigel Slater",
-                  "Jack Monroe"
+                  "Jack Monroe",
+                  "Thomasina Miers",
+                  "Rukmini Iyer",
+                  "Ed Cumming",
+                  "Andrei Lussman"
                 ]
             }
         },
@@ -367,14 +370,31 @@ class ApiController (
                 ],
                 "enum": [
                     null,
+                    "christmas",
+                    "boxing-day",
+                    "new-years-eve",
+                    "thanksgiving",
+                    "veganuary",
                     "burns-night",
-                    "christmas-food-and-drink",
-                    "christmas-food-and-drink-2018",
-                    "christmas-food-and-drink-2019",
-                    "winter-food-and-drink",
-                    "summer-food-and-drink",
-                    "spring-food-and-drink",
-                    "autumn-food-and-drink"
+                    "chinese-new-year",
+                    "valentines-day",
+                    "pancake-day",
+                    "mothers-day",
+                    "holi",
+                    "ramadan",
+                    "easter",
+                    "st-patricks-day",
+                    "eid",
+                    "passover",
+                    "birthday",
+                    "bank-holiday",
+                    "fathers-day",
+                    "halloween",
+                    "diwali",
+                    "bonfire-night",
+                    "hanukkah",
+                    "rosh-hashanah",
+                    "yom-kippur"
                 ]
             }
         },
@@ -385,31 +405,35 @@ class ApiController (
                 "type": ["string", "null"],
                 "enum": [
                     null,
+                    "nordic",
                     "italian",
                     "mexican",
-                    "southern_us",
                     "indian",
                     "french",
                     "chinese",
                     "thai",
-                    "cajun_creole",
                     "japanese",
                     "british",
                     "greek",
                     "spanish",
-                    "middleeastern",
+                    "middle-eastern",
                     "eastern-european",
-                    "north-african/moroccan",
+                    "african",
                     "vietnamese",
                     "korean",
                     "filipino",
                     "irish",
                     "jamaican",
                     "brazilian",
-                    "pan-african",
                     "scandinavian",
                     "australian",
-                    "turkish"
+                    "turkish",
+                    "south-east-asian",
+                    "sri-lankan",
+                    "american",
+                    "south-american",
+                    "caribbean",
+                    "portuguese"
                 ]
             }
         },
@@ -421,15 +445,14 @@ class ApiController (
                   "null"
               ],
               "enum": [
-                  "starter",
-                  "main-course",
-                  "dessert",
-                  "snacks",
                   "breakfast",
-                  "baking",
-                  "barbecue",
-                  "side-dishes",
-                  "soup"
+                  "brunch",
+                  "lunch",
+                  "dinner",
+                  "snack",
+                  "dessert",
+                  "drink",
+                  "starter"
               ]
             }
         },
@@ -440,7 +463,9 @@ class ApiController (
                 "enum": [
                     "vegetarian",
                     "vegan",
-                    "meat"
+                    "pescatarian",
+                    "gluten-free",
+                    "dairy-free"
                 ]
             }
         },
@@ -449,8 +474,7 @@ class ApiController (
             "items": {
                 "type": ["string", "null"],
                 "enum": [
-                    "air fryer",
-                    "blender"
+                    "air-fryer"
                 ]
             }
         },
