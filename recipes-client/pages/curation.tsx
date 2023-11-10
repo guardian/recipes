@@ -21,8 +21,9 @@ const gridLayout = css`
 	display: grid;
 	grid-template-columns: 25% 25% 25% 25%;
 	height: 100vh;
-	grid-template-rows: 30px 1fr 50px;
-	grid-template-areas: 'header header header header' 'left left right right' 'footer footer footer footer';
+	grid-template-rows: 50px 1fr;
+	grid-template-areas: 'footer footer footer footer' 'left left right right';
+	row-gap: 30px;
 `;
 
 const articleView = css`
@@ -45,6 +46,7 @@ const footer = css`
 	justify-items: center;
 	display: grid;
 	align-items: center;
+	border-top: 1px solid ${palette.neutral[86]};
 `;
 
 const Curation = () => {
@@ -105,6 +107,9 @@ const Curation = () => {
 
 	return (
 		<div css={gridLayout}>
+			<div css={footer}>
+				<Footer articleId={articleId} body={state.body} dispatcher={dispatch} />
+			</div>
 			<div css={articleView}>
 				<GuFrame articlePath={capiId} />
 			</div>
@@ -123,9 +128,6 @@ const Curation = () => {
 						dispatcher={dispatch}
 					/>
 				</form>
-			</div>
-			<div css={footer}>
-				<Footer articleId={articleId} body={state.body} dispatcher={dispatch} />
 			</div>
 		</div>
 	);

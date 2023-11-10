@@ -5,7 +5,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import scala.collection.immutable.{Map => MMap}
 
 case class Quantity(absolute: Option[String], from: Option[String], to: Option[String])
-case class Range(min: Int, max: Int)
+case class Range(min: Double, max: Double)
 case class Ingredient(name: String, amount: Range, unit: String, ingredientId: Option[String], prefix: Option[String], suffix: Option[String], optional: Option[Boolean])
 case class IngredientsList(recipeSection: String, ingredientsList: List[Ingredient])
 case class Serves(amount: Range, unit: String)
