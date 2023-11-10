@@ -482,15 +482,23 @@ class ApiController (
 
     val key_to_get = MMap(config.hashKey -> new AttributeValue(id)).asJava;
 
-    val request: GetItemRequest = new GetItemRequest()
-      .withKey(key_to_get)
-      .withTableName(config.rawRecipesTableName);
+    def request(tableName: String) = new GetItemRequest()
+        .withKey(key_to_get)
+        .withTableName(tableName);
 
-    val data = dbClient.getItem(request).getItem();
-    if (data == null) {
+    val rawData = dbClient.getItem(request(config.rawRecipesTableName)).getItem();
+    val curatedData = dbClient.getItem(request(config.curatedRecipesTableName)).getItem();
+
+    val dataToReturn = if (curatedData != null) {
+      curatedData
+    } else {
+      rawData
+    }
+
+    if (dataToReturn == null) {
       NotFound("No recipe with %s: '%s'.".format(config.hashKey, id))
     } else {
-      Ok(Json.parse(ItemUtils.toItem(data).toJSON()));
+      Ok(Json.parse(ItemUtils.toItem(dataToReturn).toJSON()));
     }
   }
 
@@ -500,17 +508,21 @@ class ApiController (
     val partition_alias = "#p";
     val expressionAttributeValues = MMap(partition_alias -> config.hashKey).asJava;
 
-    val scanRequest = new ScanRequest()
-        .withTableName(config.rawRecipesTableName)
-        .withProjectionExpression("%s, title, contributors, canonicalArticle".format(partition_alias))
+    def scanRequest(tableName: String) = new ScanRequest()
+        .withTableName(tableName)
+        .withProjectionExpression("%s, title, contributors, canonicalArticle, isAppReady".format(partition_alias))
         .withExpressionAttributeNames(expressionAttributeValues)
         .withLimit(60);
 
+    val rawResult = dbClient.scan(scanRequest( config.rawRecipesTableName ));
+    val rawResultData = ItemUtils.toItemList(rawResult.getItems()).asScala
 
-    val result = dbClient.scan(scanRequest);
-    val data = ItemUtils.toItemList(result.getItems()).asScala
+    val curatedResult = dbClient.scan(scanRequest( config.curatedRecipesTableName ));
+    val curatedResultData = ItemUtils.toItemList(curatedResult.getItems()).asScala
 
-      val response = Json.toJson(data.map(
+    val combinedData = rawResultData.filter( i => !curatedResultData.exists( _.getString(config.hashKey) == i.getString(config.hashKey) ) ) ++ curatedResultData
+
+      val response = Json.toJson(combinedData.map(
         i => Json.parse(i.toJSON())
       ))
       Ok(response);

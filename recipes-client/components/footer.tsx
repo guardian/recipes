@@ -4,7 +4,7 @@ import {
 	ActionType,
 	allRecipeFields,
 	IngredientsGroup,
-	lingeringFields,
+	recipeFields,
 	schemaType,
 } from '../interfaces/main';
 import { apiURL } from '../consts';
@@ -22,10 +22,10 @@ interface FooterProps {
 }
 
 // replace nulls with empty list
-const cleanRecipe = (data: lingeringFields | null) => {
+const cleanRecipe = (data: recipeFields | null) => {
 	// const nullableFields = ['cuisineIds', 'celebrationIds'] as Array<keyof recipeMetaFields>
 	if (data !== null) {
-		const out = Object.keys(data).map((field: keyof lingeringFields) => {
+		const out = Object.keys(data).map((field: keyof recipeFields) => {
 			if (['serves', 'image', 'title', 'description'].includes(field)) {
 				return [field, data[field] ? data[field] : ''];
 			} else {
@@ -39,11 +39,12 @@ const cleanRecipe = (data: lingeringFields | null) => {
 	}
 };
 
-async function postRecipe(
+export async function postRecipe(
 	aId: string | null,
 	data: allRecipeFields | null,
 ): Promise<Record<string, unknown>> {
 	// async function postRecipe(aId: string|null, data: Record<string, unknown>|null): Promise<Record<string, unknown>>{
+	console.log('Data: ' + JSON.stringify(data));
 	if (aId === null) {
 		console.warn('No url provided!');
 		return { error: 'No url provided.' };
