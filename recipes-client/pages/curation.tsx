@@ -4,7 +4,7 @@ import { space, palette } from '@guardian/source-foundations';
 import RecipeComponent from '../components/recipe-component';
 import GuFrame from '../components/gu-frame';
 import ImagePicker from '../components/form/form-image-picker';
-import Footer from '../components/footer';
+import Footer, { postRecipe } from '../components/footer';
 
 import { useParams } from 'react-router-dom';
 
@@ -54,9 +54,26 @@ const Curation = () => {
 	const articleId = id ? `/${id}` : '';
 	const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
 	const image = state.body === null ? null : state.body.featuredImage;
+	const scrubbedId = articleId.replace(/^\/+/, '');
+
+	// Console log every 10 seconds
+	useEffect(() => {
+		const interval = setInterval(() => {
+			postRecipe(articleId, state.body)
+				.catch((err) => console.error(err))
+				.then(() =>
+					fetchAndDispatch(
+						`${location.origin}/api/db/${scrubbedId}`,
+						actions.init,
+						'body',
+						dispatch,
+					),
+				);
+		}, 10000);
+		return () => clearInterval(interval);
+	}, [state]);
 
 	useEffect(() => {
-		const scrubbedId = articleId.replace(/^\/+/, '');
 		Promise.all([
 			// Get schema
 			fetchAndDispatch(

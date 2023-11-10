@@ -39,11 +39,12 @@ const cleanRecipe = (data: lingeringFields | null) => {
 	}
 };
 
-async function postRecipe(
+export async function postRecipe(
 	aId: string | null,
 	data: allRecipeFields | null,
 ): Promise<Record<string, unknown>> {
 	// async function postRecipe(aId: string|null, data: Record<string, unknown>|null): Promise<Record<string, unknown>>{
+	console.log('Data: ' + JSON.stringify(data));
 	if (aId === null) {
 		console.warn('No url provided!');
 		return { error: 'No url provided.' };
