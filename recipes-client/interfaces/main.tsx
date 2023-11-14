@@ -52,6 +52,7 @@ export const isAllRecipeFields = (
 };
 
 export interface recipeFields {
+	isAppReady: boolean;
 	id: string; // Unique identifier
 	canonicalArticle: string; // ID of recipe in Content API
 	title: string; // Name of the recipe
@@ -63,11 +64,11 @@ export interface recipeFields {
 	suitableForDietIds: string[]; // List of diets recipe is suitable for (e.g. vegetarian, vegan, kosher, halal, etc.)
 	cuisineIds: string[]; // Cuisine type(s) of recipe (e.g. Italian, Mexican, etc.)
 	mealTypeIds: string[]; // Categories of recipe (e.g. breakfast, lunch, dinner, dessert)
-	celebrationsIds: string[]; // Celebration(s) associated with recipe (e.g. Christmas, Thanksgiving, etc.)
+	celebrationIds: string[]; // Celebration(s) associated with recipe (e.g. Christmas, Thanksgiving, etc.)
 	utensilsAndApplianceIds: string[]; // List of equipment needed for recipe (e.g. hob, frying pan, air fryer)
 	techniquesUsedIds: string[]; // List of cooking techniques used (e.g. deep frying, baking)
 	difficultyLevel: DifficultyLevel;
-	serves?: Serves; // Number of servings
+	serves?: Serves[]; // Number of servings
 	timings: Timing[];
 	instructions: Instruction[]; // Steps breaking down the recipe. For recipes that can't be stepified this would just be one big 'step' containing the method
 }
@@ -87,7 +88,7 @@ export type recipeItem =
 	| Timing[]
 	| Ingredient[];
 
-interface Range {
+export interface Range {
 	min: number; // Minimum value
 	max: number; // Maximum value
 }

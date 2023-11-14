@@ -188,7 +188,7 @@ export const UIschema: UIschemaItem = {
 		'ui:removable': true,
 	},
 	utensilsAndApplianceIds: {
-		'ui:display': true,
+		'ui:display': false,
 		'ui:locked': false,
 		'ui:removable': true,
 	},

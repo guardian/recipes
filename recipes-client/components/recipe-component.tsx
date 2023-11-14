@@ -18,10 +18,12 @@ interface RecipeComponentProps {
 	dispatcher: Dispatch<ActionType>;
 }
 
-const RecipeComponent = (
-	props: RecipeComponentProps,
-): JSX.Element | JSX.Element[] => {
-	const { body, isLoading, schema, dispatcher } = props;
+const RecipeComponent = ({
+	body,
+	schema,
+	isLoading,
+	dispatcher,
+}: RecipeComponentProps): JSX.Element | JSX.Element[] => {
 	const UIOrder = isUIschemaItem(UIschema) ? UIschema['ui:order'] : null;
 
 	if (isLoading) {
