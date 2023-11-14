@@ -24,6 +24,8 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '8'
+      - name: Write the current GIT hash to public/prout.html
+        run: git rev-parse HEAD > public/prout.html
       - run: ./scripts/ci-sbt
       - name: Rename files for easy finding by guardian/actions-riff-raff
         run: |

@@ -1,0 +1,8 @@
+{
+  "checkpoints": {
+    "PROD": {
+      "url": "https://recipes.gutools.co.uk/assets/prout.html",
+      "overdue": "10M"
+    }
+  }
+}
