@@ -7,6 +7,7 @@ import {
 	SvgExternal,
 } from '@guardian/source-react-components';
 import { curationEndpoint } from '../consts/index';
+import { AppReadyStatus } from './app-ready-status';
 
 interface RecipeListProps {
 	list: RecipeListType[];
@@ -47,15 +48,7 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 								</td>
 								<td key={`path_${i}_author`}> {contributors.join(', ')} </td>
 								<td key={`path_${i}_app`}>
-									{isAppReady ? (
-										<span css={tickStyles}>
-											<SvgTickRound isAnnouncedByScreenReader size="small" />
-										</span>
-									) : (
-										<span css={crossStyles}>
-											<SvgCrossRound isAnnouncedByScreenReader size="small" />
-										</span>
-									)}
+									<AppReadyStatus isAppReady={isAppReady} />
 								</td>
 								<td key={`path_${i}_links`}>
 									<a
@@ -92,18 +85,6 @@ const tableStyles = css`
 	th {
 		font-weight: bold;
 		background-color: #eee;
-	}
-`;
-
-const tickStyles = css`
-	svg {
-		fill: ${palette.success[500]};
-	}
-`;
-
-const crossStyles = css`
-	svg {
-		fill: ${palette.error[500]};
 	}
 `;
 

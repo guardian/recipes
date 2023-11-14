@@ -112,7 +112,6 @@ const PictureGrid = (props: {
 							}
 							css={{
 								gridArea: `${Math.floor(i / 5 + 1)}`,
-								background: 'lightgrey',
 								justifyItems: 'center',
 								display: 'grid',
 								align: 'center',

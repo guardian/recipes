@@ -11,43 +11,11 @@ import { useParams } from 'react-router-dom';
 import { recipeReducer, defaultState } from '../reducers/recipe-reducer';
 import { actions } from '../actions/recipeActions';
 import { apiURL, capiProxy, schemaEndpoint } from '../consts/index';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useImmerReducer } from 'use-immer';
 import { fetchAndDispatch, setLoadingFinished } from '../utils/requests';
-
-// Styles
-
-const gridLayout = css`
-	display: grid;
-	grid-template-columns: 25% 25% 25% 25%;
-	height: 100vh;
-	grid-template-rows: 50px 1fr;
-	grid-template-areas: 'footer footer footer footer' 'left left right right';
-	row-gap: 30px;
-`;
-
-const articleView = css`
-	grid-area: left;
-	background: ${palette.neutral[100]};
-	overflow: auto;
-	padding: 0 ${space[5]}px;
-`;
-
-const dataView = css`
-	grid-area: right;
-	background: lightgray;
-	overflow: auto;
-	padding: 5px;
-`;
-
-const footer = css`
-	grid-area: footer;
-	background: ${palette.brand[400]};
-	justify-items: center;
-	display: grid;
-	align-items: center;
-	border-top: 1px solid ${palette.neutral[86]};
-`;
+import { Tabs } from '@guardian/source-react-components-development-kitchen';
+import { DataPreview } from 'components/preview/data-preview';
 
 const Curation = () => {
 	const { section: id } = useParams();
@@ -58,7 +26,8 @@ const Curation = () => {
 	const image = state.body === null ? null : state.body.featuredImage;
 	const scrubbedId = articleId.replace(/^\/+/, '');
 
-	// Console log every 10 seconds
+	const [selectedTab, setSelectedTab] = useState('summary');
+
 	useEffect(() => {
 		const interval = setInterval(() => {
 			postRecipe(articleId, state.body)
@@ -105,6 +74,36 @@ const Curation = () => {
 			});
 	}, [articleId, dispatch]);
 
+	const tabsContent = [
+		{
+			id: 'summary',
+			text: 'Summary',
+			content: <DataPreview recipeData={state.body} />,
+		},
+		{
+			id: 'edit',
+			text: 'Edit',
+			content: (
+				<>
+					<ImagePicker
+						html={state.html}
+						selected={image}
+						isLoading={state.isLoading}
+						dispatcher={dispatch}
+					/>
+					<form>
+						<RecipeComponent
+							isLoading={state.isLoading}
+							body={state.body}
+							schema={state.schema}
+							dispatcher={dispatch}
+						/>
+					</form>
+				</>
+			),
+		},
+	];
+
 	return (
 		<div css={gridLayout}>
 			<div css={footer}>
@@ -114,23 +113,51 @@ const Curation = () => {
 				<GuFrame articlePath={capiId} />
 			</div>
 			<div css={dataView}>
-				<ImagePicker
-					html={state.html}
-					selected={image}
-					isLoading={state.isLoading}
-					dispatcher={dispatch}
-				/>
-				<form>
-					<RecipeComponent
-						isLoading={state.isLoading}
-						body={state.body}
-						schema={state.schema}
-						dispatcher={dispatch}
-					/>
-				</form>
+				<Tabs
+					tabsLabel="Toggle between form and preview"
+					tabElement="button"
+					tabs={tabsContent}
+					selectedTab={selectedTab}
+					onTabChange={(tabId: string): void => {
+						setSelectedTab(tabId);
+					}}
+				></Tabs>
 			</div>
 		</div>
 	);
 };
 
 export default Curation;
+
+// Styles
+
+const gridLayout = css`
+	display: grid;
+	grid-template-columns: 25% 25% 25% 25%;
+	height: 100vh;
+	grid-template-rows: 50px 1fr;
+	grid-template-areas: 'footer footer footer footer' 'left left right right';
+	row-gap: 30px;
+`;
+
+const articleView = css`
+	grid-area: left;
+	background: ${palette.neutral[100]};
+	overflow: auto;
+	padding: 0 ${space[5]}px;
+`;
+
+const dataView = css`
+	grid-area: right;
+	overflow: auto;
+	padding: 5px;
+`;
+
+const footer = css`
+	grid-area: footer;
+	background: ${palette.brand[400]};
+	justify-items: center;
+	display: grid;
+	align-items: center;
+	border-top: 1px solid ${palette.neutral[86]};
+`;
