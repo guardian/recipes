@@ -67,5 +67,6 @@ lazy val root = (project in file("."))
     Universal / javaOptions ++= Seq(
       // Remove the PID file
       "-Dpidfile.path=/dev/null"
-    )
+    ),
+    Assets / pipelineStages := Seq(digest)
 ))
