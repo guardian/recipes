@@ -208,6 +208,9 @@ class ApiController (
                 },
                 "unit": {
                   "type": "string"
+                },
+                "text": {
+                  "type": "string"
                 }
               },
               "required": [
@@ -340,12 +343,13 @@ class ApiController (
                           },
                           "optional": {
                             "type": "boolean"
+                          },
+                          "text": {
+                            "type": "string"
                           }
                         },
                         "required": [
-                          "name",
-                          "amount",
-                          "unit"
+                          "name"
                         ]
                       }
 
