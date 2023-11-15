@@ -286,7 +286,8 @@ class ApiController (
                   "Thomasina Miers",
                   "Rukmini Iyer",
                   "Ed Cumming",
-                  "Andrei Lussman"
+                  "Andrei Lussman",
+                  "Anna Jones"
                 ]
             }
         },
