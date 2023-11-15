@@ -27,9 +27,10 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 		prefix,
 		suffix,
 	}: Ingredient) => {
-		return `${prettifyRange(amount)} ${unit ? unit : ''} ${
-			prefix ? prefix : ''
-		} ${name} ${suffix ? suffix : ''}`;
+		const concernsTins = unit?.includes('tin');
+		return `${prettifyRange(amount)}${concernsTins ? ' x ' : ''}${
+			unit ? unit : ''
+		} ${prefix ? prefix : ''} ${name} ${suffix ? suffix : ''}`;
 	};
 
 	return recipeData === null ? (
