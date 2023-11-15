@@ -25,6 +25,9 @@ export const ingredientSchema = {
 	optional: {
 		type: 'boolean',
 	},
+	text: {
+		type: 'string',
+	},
 };
 
 export const ingredientGroupSchema = {
@@ -34,6 +37,6 @@ export const ingredientGroupSchema = {
 	ingredientsList: {
 		type: 'array',
 		items: ingredientSchema,
-		required: ['name', 'amount', 'unit'],
+		required: ['name'],
 	},
 };

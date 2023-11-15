@@ -6,9 +6,9 @@ import scala.collection.immutable.{Map => MMap}
 
 case class Quantity(absolute: Option[String], from: Option[String], to: Option[String])
 case class Range(min: Double, max: Double)
-case class Ingredient(name: String, amount: Range, unit: Option[String], ingredientId: Option[String], prefix: Option[String], suffix: Option[String], optional: Option[Boolean])
+case class Ingredient(name: String, amount: Option[Range], unit: Option[String], ingredientId: Option[String], prefix: Option[String], suffix: Option[String], optional: Option[Boolean], text: Option[String])
 case class IngredientsList(recipeSection: String, ingredientsList: List[Ingredient])
-case class Serves(amount: Range, unit: String)
+case class Serves(amount: Range, unit: String, text: Option[String])
 case class Instruction(stepNumber: Int, description: String, images: Option[List[String]])
 case class Timing(qualifier: String, durationInMins: Int)
 

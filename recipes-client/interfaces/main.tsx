@@ -106,6 +106,7 @@ export interface Ingredient {
 	prefix?: string; // Type of
 	suffix?: string; // Any pre-cooking preparation needed (e.g. finely chopped, drained)
 	optional: boolean; // Whether ingredient is optional
+	text?: string; // Original text
 }
 
 export type Timing = {
@@ -116,6 +117,7 @@ export type Timing = {
 export interface Serves {
 	amount: Range; // Number of servings
 	unit: string; // Unit of measurement, 'people' of 'units'
+	text?: string; // Original text
 }
 
 export type BylineEntry =
