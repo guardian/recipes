@@ -29,7 +29,7 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 	}: Ingredient) => {
 		const concernsTins = unit?.includes('tin');
 		const tbsOrTsp = unit?.includes('tbsp') || unit?.includes('tsp');
-		return `${prettifyRange(amount)}${tbsOrTsp ? ' ' : ''}${
+		return `${amount ? prettifyRange(amount) : ''}${tbsOrTsp ? ' ' : ''}${
 			concernsTins ? ' x ' : ''
 		}${unit ? unit : ''} ${prefix ? prefix : ''} ${name} ${
 			suffix ? suffix : ''
