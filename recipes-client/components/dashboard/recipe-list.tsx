@@ -1,19 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { palette } from '@guardian/source-foundations';
-import {
-	SvgCrossRound,
-	SvgTickRound,
-	SvgExternal,
-} from '@guardian/source-react-components';
-import { curationEndpoint } from '../consts/index';
-import { AppReadyStatus } from './app-ready-status';
+import { SvgExternal } from '@guardian/source-react-components';
+import { curationEndpoint } from '../../consts/index';
+import { AppReadyStatus } from '../app-ready-status';
 
 interface RecipeListProps {
 	list: RecipeListType[];
 }
 
-interface RecipeListType {
+export interface RecipeListType {
 	id: string;
 	title: string;
 	contributors: string[];
@@ -24,6 +19,12 @@ interface RecipeListType {
 const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 	return (
 		<table css={tableStyles}>
+			<colgroup>
+				<col style={{ width: '60%' }} />
+				<col style={{ width: '20%' }} />
+				<col style={{ width: '10%' }} />
+				<col style={{ width: '10%' }} />
+			</colgroup>
 			<thead>
 				<tr>
 					<th>Recipe</th>
