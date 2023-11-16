@@ -5,7 +5,6 @@ import {
 	Checkbox,
 	Option,
 	Select,
-	TextInput,
 } from '@guardian/source-react-components';
 import {
 	handleChangeBoolean,
@@ -37,9 +36,9 @@ const renderInput = (
 
 	if (choices === null || choices === undefined) {
 		return (
-			<div css={{ display: 'grid' }}>
-				<TextInput
-					css={{ minWidth: '500px' }}
+			<div css={{ display: 'grid'}}>
+				<input
+					css={{ height: '25px', padding: '8px', fontFamily: 'GuardianTextSans', fontSize: '1.0625rem'}}
 					key={key}
 					id={key}
 					type={typeof value}

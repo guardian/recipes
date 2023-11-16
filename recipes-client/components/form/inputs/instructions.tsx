@@ -37,10 +37,10 @@ export const renderInstructionsFormGroup = (
 		);
 	});
 	return [
-		<fieldset key={`${key}.fieldset`}>
+    <div>
 			<Legend key={`${key}.legend`} text={key}></Legend>
 			{fields}
 			{formItemButtons}
-		</fieldset>,
+      </div>
 	];
 };
