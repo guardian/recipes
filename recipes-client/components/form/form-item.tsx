@@ -23,6 +23,17 @@ const renderInput = (
 	const rmAllowed = removable !== undefined ? removable : false;
 
 	if (typeof value === 'boolean') {
+    if (key.includes('ingredients')) {
+      return (
+        <Checkbox
+          label={'optional'}
+          checked={value}
+          id={key}
+          key={key}
+          onChange={(event) => handleChangeBoolean(event, dispatcher)}
+        />
+      )
+    } else {
 		return (
 			<Checkbox
 				label={key}
@@ -32,13 +43,14 @@ const renderInput = (
 				onChange={(event) => handleChangeBoolean(event, dispatcher)}
 			/>
 		);
+  }
 	}
 
 	if (choices === null || choices === undefined) {
 		return (
 			<div css={{ display: 'grid'}}>
 				<input
-					css={{ height: '25px', padding: '8px', fontFamily: 'GuardianTextSans', fontSize: '1.0625rem'}}
+					css={{ height: '25px', padding: '8px', fontFamily: 'GuardianTextSans', fontSize: '1.0625rem', width: `${typeof value === 'number' ? '70px' : 'auto'}`}}
 					key={key}
 					id={key}
 					type={typeof value}
