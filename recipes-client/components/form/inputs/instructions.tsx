@@ -25,7 +25,7 @@ export const renderInstructionsFormGroup = (
 		formFieldsSchema,
 		dispatcher,
 	);
-	const fields = Object.keys(formItems).map((k: keyof Instruction) => {
+	const fields = Object.keys(formItems).sort((a,b) => displayOrder[a] - displayOrder[b]).map((k: keyof Instruction) => {
 		return (
 			<FormItem
 				text={formItems[k]}
@@ -37,10 +37,13 @@ export const renderInstructionsFormGroup = (
 		);
 	});
 	return [
-    <div>
-			<Legend key={`${key}.legend`} text={key}></Legend>
+    <div css={{display: 'flex !important'}}>
+			{/* <Legend key={`${key}.legend`} text={key}></Legend> */}
 			{fields}
 			{formItemButtons}
       </div>
 	];
 };
+
+const displayOrder = {"stepNumber":1, "description":2, "images":3}
+

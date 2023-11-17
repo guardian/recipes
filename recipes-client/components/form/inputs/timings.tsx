@@ -39,10 +39,12 @@ export const renderTimingsFormGroup = (
 		);
 	});
 	return [
-		<fieldset key={`${key}.fieldset`} css={{}}>
-			<Legend key={`${key}.legend`} text={key}></Legend>
-			{fields}
+		// <fieldset key={`${key}.fieldset`} css={{}}>
+    <div css={{display: 'flex !important', fontFamily: 'GuardianTextSans', fontSize: '1.0625rem'}}>
+			{/* <Legend key={`${key}.legend`} text={key}></Legend> */}
+			{fields} minutes
 			{formItemButtons}
-		</fieldset>,
+      </div>
+		// </fieldset>,
 	];
 };

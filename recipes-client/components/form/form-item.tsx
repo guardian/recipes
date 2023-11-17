@@ -47,10 +47,30 @@ const renderInput = (
 	}
 
 	if (choices === null || choices === undefined) {
+    if (key.includes('instructions') && key.includes('description')) {
+      return (
+        <div css={{ display: 'grid'}}>
+				<textarea
+					css={{ height: '25px', padding: '4px', fontFamily: 'GuardianTextSans', fontSize: '1.0625rem', width: `${key.includes('unit') ? '50px': '500px'}`, height: '50px'}}
+					key={key}
+					id={key}
+					// type={typeof value}
+					// label={key}
+					value={value || "" || 0}
+					onChange={(event) => {
+						typeof value === 'number'
+							? handleChangeNumber(event, dispatcher)
+							: handleChangeText(event, dispatcher);
+					}}
+				/>
+			</div>
+      )
+    }
+
 		return (
 			<div css={{ display: 'grid'}}>
 				<input
-					css={{ height: '25px', padding: '8px', fontFamily: 'GuardianTextSans', fontSize: '1.0625rem', width: `${typeof value === 'number' ? '70px' : 'auto'}`}}
+					css={{ height: '25px', padding: `${typeof value === 'number' ? '2px' : '8px'}`, fontFamily: 'GuardianTextSans', fontSize: '1.0625rem', width: `${typeof value === 'number' ? '50px' : key.includes('ingredients') ? '250px' : '400px'}`}}
 					key={key}
 					id={key}
 					type={typeof value}
@@ -69,9 +89,9 @@ const renderInput = (
 		// choices_.unshift('');
 		return (
 			<>
-				<Select
-					label="Select an option"
-					css={{ minWidth: '500px', display: 'grid' }}
+				<select
+					// label="Select an option"
+					css={{ minWidth: '120px', display: 'grid', fontFamily: 'GuardianTextSans', fontSize:'1.0625rem'}}
 					value={value}
 					key={key}
 					id={key}
@@ -84,7 +104,7 @@ const renderInput = (
 							</Option>
 						);
 					})}
-				</Select>
+				</select>
 			</>
 		);
 	}
