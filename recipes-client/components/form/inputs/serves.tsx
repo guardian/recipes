@@ -49,12 +49,9 @@ export const renderServesFormGroup = (
 		);
 	});
 	return [
-		// <fieldset key={`${key}.fieldset`}>
     <div css={{display: 'flex !important'}}>
-			{/* <Legend key={`${key}.legend`} text={key}></Legend> */}
 			{fields}
 			{formItemButtons}
       </div>
-		// </fieldset>,
 	];
 };

@@ -181,7 +181,6 @@ export const FormGroup = ({
 }: FormGroupProps): JSX.Element => {
   // const  choices = schema.enum || null;
   const key = key_ || title;
-  console.log('here is the key', key)
   const formDispatcher = dispatcher || null;
 
   // Set up form group
@@ -212,13 +211,11 @@ export const FormGroup = ({
 
   return (
     <div>
-      <div css={{ display: 'flex', margin: '15px 0', alignItems: 'top' }}>
         <Legend key={`${key}.legend`} text={key} css={{ width: '150px'}} />
         <div css={{ display: 'grid' }}>
           {formFields}
         </div>
-      </div>
-      <div css={{ paddingLeft: '150px' }}>{isFormItemRemovable && formItemButtons}</div>
+      <div>{isFormItemRemovable && formItemButtons}</div>
       <hr />
     </div>
   );

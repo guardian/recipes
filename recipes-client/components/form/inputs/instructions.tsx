@@ -38,7 +38,6 @@ export const renderInstructionsFormGroup = (
 	});
 	return [
     <div css={{display: 'flex !important'}}>
-			{/* <Legend key={`${key}.legend`} text={key}></Legend> */}
 			{fields}
 			{formItemButtons}
       </div>

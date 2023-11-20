@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { Legend } from '@guardian/source-react-components';
 import {
 	ActionType,
 	Ingredient,
@@ -37,8 +36,8 @@ export const renderIngredientsFormGroup = (
 	const fields = Object.keys(formItems).map((k: keyof IngredientsGroup) => {
 		if (k === 'recipeSection')
 			return (
-    <>
-    <p>RECIPE SECTION</p>
+      <div css={{display: 'flex'}}>
+      <p css={{fontFamily: 'GuardianTextSans', marginRight: '10px'}}>Recipe Section Name (if applicable): </p>
 				<FormItem
 					text={formItems[k]}
 					choices={choices}
@@ -46,7 +45,7 @@ export const renderIngredientsFormGroup = (
 					key={`${key}.${k}`}
 					dispatcher={dispatcher}
 				/>
-        </>
+        </div>
 			);
 		else {
 			const ingredientsList = formItems[k] as Ingredient[];
@@ -70,7 +69,8 @@ export const renderIngredientsFormGroup = (
 							`${prefix}.${i}.${k}`,
 							dispatcher,
 						);
-					} else
+          }
+          else
 						return (
 							<FormItem
 								text={ingredient[k]}
@@ -83,7 +83,6 @@ export const renderIngredientsFormGroup = (
 				});
 				return [
 					<div css={{display: 'flex !important'}}>
-						{/* <Legend key={`${key}.legend`} text={`${key}.${k}`}></Legend> */}
 						{fields}
 						{formItemButtons}
 					</div>,
@@ -94,7 +93,6 @@ export const renderIngredientsFormGroup = (
 	});
 	return [
 		<div>
-			{/* <Legend key={`${key}.legend`} text={key}></Legend> */}
 			{fields}
 			{formItemButtons}
 		</div>,
