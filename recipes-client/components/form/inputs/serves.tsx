@@ -49,9 +49,9 @@ export const renderServesFormGroup = (
 		);
 	});
 	return [
-    <div css={{display: 'flex !important'}}>
+		<div css={{ display: 'flex !important' }}>
 			{fields}
 			{formItemButtons}
-      </div>
+		</div>,
 	];
 };

@@ -25,24 +25,25 @@ export const renderInstructionsFormGroup = (
 		formFieldsSchema,
 		dispatcher,
 	);
-	const fields = Object.keys(formItems).sort((a,b) => displayOrder[a] - displayOrder[b]).map((k: keyof Instruction) => {
-		return (
-			<FormItem
-				text={formItems[k]}
-				choices={choices}
-				label={`${key}.${k}`}
-				key={`${key}.${k}`}
-				dispatcher={dispatcher}
-			/>
-		);
-	});
+	const fields = Object.keys(formItems)
+		.sort((a, b) => displayOrder[a] - displayOrder[b])
+		.map((k: keyof Instruction) => {
+			return (
+				<FormItem
+					text={formItems[k]}
+					choices={choices}
+					label={`${key}.${k}`}
+					key={`${key}.${k}`}
+					dispatcher={dispatcher}
+				/>
+			);
+		});
 	return [
-    <div css={{display: 'flex !important'}}>
+		<div css={{ display: 'flex !important' }}>
 			{fields}
 			{formItemButtons}
-      </div>
+		</div>,
 	];
 };
 
-const displayOrder = {"stepNumber":1, "description":2, "images":3}
-
+const displayOrder = { stepNumber: 1, description: 2, images: 3 };

@@ -12,21 +12,25 @@ export const renderRangeFormGroup = (
 ) => {
 	const fields = Object.keys(formItems).map((k: keyof Range) => {
 		return (
-      <>
-      <div css={{margin: '0 10px', fontFamily: 'GuardianTextSans', fontSize: '1.0625rem'}}>{k}</div>
-			<FormItem
-				text={formItems[k]}
-				choices={choices}
-				label={`${key}.${k}`}
-				key={`${key}.${k}`}
-				dispatcher={dispatcher}
-			/>
-      </>
+			<>
+				<div
+					css={{
+						margin: '0 10px',
+						fontFamily: 'GuardianTextSans',
+						fontSize: '1.0625rem',
+					}}
+				>
+					{k}
+				</div>
+				<FormItem
+					text={formItems[k]}
+					choices={choices}
+					label={`${key}.${k}`}
+					key={`${key}.${k}`}
+					dispatcher={dispatcher}
+				/>
+			</>
 		);
 	});
-	return [
-		<div css={{display: 'flex !important'}}>
-			{fields}
-		</div>,
-	];
+	return [<div css={{ display: 'flex !important' }}>{fields}</div>];
 };

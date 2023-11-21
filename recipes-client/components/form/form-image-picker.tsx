@@ -88,7 +88,9 @@ const PictureGrid = (props: {
 	const [picHovered, setHover] = useState(-1);
 	return (
 		<>
-			<h3 css={{fontFamily: 'GuardianTextSans'}}>Available pictures for the featured image</h3>
+			<h3 css={{ fontFamily: 'GuardianTextSans' }}>
+				Available pictures for the featured image
+			</h3>
 			<div
 				css={{
 					display: 'grid',
@@ -147,7 +149,7 @@ const PictureGrid = (props: {
 					);
 				})}
 			</div>
-      <hr />
+			<hr />
 		</>
 	);
 };

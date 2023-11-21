@@ -38,9 +38,16 @@ export const renderTimingsFormGroup = (
 		);
 	});
 	return [
-    <div css={{display: 'flex !important', fontFamily: 'GuardianTextSans', fontSize: '1.0625rem', justifyContent: 'top'}}>
+		<div
+			css={{
+				display: 'flex !important',
+				fontFamily: 'GuardianTextSans',
+				fontSize: '1.0625rem',
+				justifyContent: 'top',
+			}}
+		>
 			{fields} minutes
 			{formItemButtons}
-      </div>
+		</div>,
 	];
 };
