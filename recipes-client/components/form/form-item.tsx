@@ -43,17 +43,16 @@ const renderInput = (
 	}
 
 	if (choices === null || choices === undefined) {
-		if (key.includes('instructions')) {
+		if (key.includes('instructions') && key.includes('description')) {
 			return (
 				<div css={{ display: 'grid' }}>
 					<textarea
 						css={{
-							height: '25px',
 							padding: '4px',
 							fontFamily: 'GuardianTextSans',
 							fontSize: '1.0625rem',
-							width: `${key.includes('stepNumber') ? '50px' : '500px'}`,
-							height: '50px',
+							width: '500px',
+							height: '60px',
 							margin: '4px',
 						}}
 						key={key}
@@ -61,11 +60,7 @@ const renderInput = (
 						// type={typeof value}
 						// label={key}
 						value={value}
-						onChange={(event) => {
-							typeof value === 'number'
-								? handleChangeNumber(event, dispatcher)
-								: handleChangeText(event, dispatcher);
-						}}
+						onChange={(event) => handleChangeText(event, dispatcher)}
 					/>
 				</div>
 			);
