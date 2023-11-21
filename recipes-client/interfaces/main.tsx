@@ -53,8 +53,10 @@ export const isAllRecipeFields = (
 
 export interface recipeFields {
 	isAppReady: boolean;
+	composerId: string; // Unique identifier of canonical article in Composer
 	id: string; // Unique identifier
 	canonicalArticle: string; // ID of recipe in Content API
+	webPublicationDate: string; // Date recipe was published
 	title: string; // Name of the recipe
 	description: string; // Short description of the recipe
 	featuredImage: string; // !! Actually capiImage

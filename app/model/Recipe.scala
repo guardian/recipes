@@ -10,11 +10,13 @@ case class Ingredient(name: String, amount: Option[Range], unit: Option[String],
 case class IngredientsList(recipeSection: String, ingredientsList: List[Ingredient])
 case class Serves(amount: Range, unit: String, text: Option[String])
 case class Instruction(stepNumber: Int, description: String, images: Option[List[String]])
-case class Timing(qualifier: String, durationInMins: Int)
+case class Timing(qualifier: String, durationInMins: Int, text: Option[String])
 
 case class Recipe(
   isAppReady: Boolean,
   id: String,
+  composerId: Option[String],
+  webPublicationDate: Option[String],
   canonicalArticle: Option[String],
   title: Option[String],
   description: Option[String],
@@ -28,6 +30,7 @@ case class Recipe(
   celebrationIds: List[String],
   mealTypeIds: List[String],
   utensilsAndApplianceIds: List[String],
+  suitableForDietIds: List[String],
   techniquesUsedIds: List[String],
   difficultyLevel: Option[String],
 )
