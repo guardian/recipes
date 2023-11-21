@@ -4,7 +4,7 @@ import { produce } from 'immer';
 import {
 	ActionType,
 	AppDataState,
-	schemaItem,
+	SchemaItem,
 	isCurationState,
 	isLoadingState,
 	AddRemoveItemType,
@@ -102,7 +102,7 @@ function initStateItem(
 }
 
 function getSchemaItem(
-	schemaI: schemaItem,
+	schemaI: SchemaItem,
 ):
 	| string
 	| number
@@ -122,7 +122,7 @@ function getSchemaItem(
 	) {
 		if (schemaI.items.type === 'string') {
 			// Simple list like steps
-			return schemaI.items.map((item: schemaItem) => {
+			return schemaI.items.map((item: SchemaItem) => {
 				return getSchemaItem(item);
 			});
 		} else {
@@ -234,6 +234,6 @@ export const recipeReducer = produce(
 	},
 	{},
 );
-function isSchemaObject(schemaI: schemaItem): boolean {
+function isSchemaObject(schemaI: SchemaItem): boolean {
 	return schemaI.type === 'object' && schemaI.properties !== undefined;
 }

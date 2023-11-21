@@ -2,10 +2,10 @@
 
 import { UIschemaItem } from './ui';
 
-export interface schemaItem {
+export interface SchemaItem {
 	type: string | string[];
-	items?: schemaItem;
-	properties?: allRecipeFields | ComplexRecipeFields;
+	items?: SchemaItem;
+	properties?: AllRecipeFields | ComplexRecipeFields;
 	enum?: Array<string>;
 }
 
@@ -17,41 +17,41 @@ export type ComplexRecipeFields =
 	| Instruction
 	| Range;
 
-export interface schemaArrayItem {
+export interface SchemaArrayItem {
 	type: string | string[];
 	items: Array<Record<string, unknown>>;
 }
 
-export const isSchemaArray = (obj: schemaItem): obj is schemaArrayItem => {
+export const isSchemaArray = (obj: SchemaItem): obj is SchemaArrayItem => {
 	return Object.keys(obj).includes('items');
 };
 
-export interface schemaType {
+export interface SchemaType {
 	properties: {
-		[key in keyof allRecipeFields]: allRecipeFields[key];
+		[key in keyof AllRecipeFields]: AllRecipeFields[key];
 	};
 }
 
 export const isSchemaType = (
-	obj: schemaType | allRecipeFields | IngredientsGroup | Timing,
-): obj is schemaType => {
+	obj: SchemaType | AllRecipeFields | IngredientsGroup | Timing,
+): obj is SchemaType => {
 	if (typeof obj !== 'object' || obj === null) return false;
 	const wObj: { [k: string]: unknown } = obj;
 	// const wObj: {[obj['properties']]?: unknown} = obj;
 	return isAllRecipeFields(wObj.properties); // Improve this, ends up being called twice sometimes from isingredientListFields
 };
 
-export interface allRecipeFields extends recipeFields {}
+export interface AllRecipeFields extends RecipeFields {}
 
 export const isAllRecipeFields = (
-	obj: undefined | null | allRecipeFields | UIschemaItem,
-): obj is allRecipeFields => {
+	obj: undefined | null | AllRecipeFields | UIschemaItem,
+): obj is AllRecipeFields => {
 	if (obj === undefined || obj === null) return false;
 	const keys = Object.keys(obj);
 	return keys.includes('canonicalArticle') && keys.includes('byline');
 };
 
-export interface recipeFields {
+export interface RecipeFields {
 	isAppReady: boolean;
 	composerId: string; // Unique identifier of canonical article in Composer
 	id: string; // Unique identifier
@@ -82,7 +82,7 @@ export interface Instruction {
 	images?: string[]; // Actually capiImage[]
 }
 
-export type recipeItem =
+export type RecipeItem =
 	| null
 	| string
 	| string[]
@@ -141,8 +141,8 @@ export interface GuCAPIProps {
 	articlePath: string;
 	isLoading: boolean;
 	html: Record<string, Record<string, unknown>>;
-	recipeItems: recipeFields | null; //|Record<string, unknown>|null;
-	schema: schemaType;
+	recipeItems: RecipeFields | null; //|Record<string, unknown>|null;
+	schema: SchemaType;
 	colours?: string[] | null;
 }
 
@@ -187,7 +187,7 @@ export interface LoadingState {
 }
 
 export interface CurationState {
-	readonly body: allRecipeFields | Record<string, unknown> | null;
+	readonly body: AllRecipeFields | Record<string, unknown> | null;
 	readonly schema: Record<string, unknown> | null;
 	readonly html: Record<string, unknown> | null;
 	readonly colours?: string[] | null;

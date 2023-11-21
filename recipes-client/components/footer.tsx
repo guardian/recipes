@@ -2,10 +2,10 @@
 import { Dispatch } from 'react';
 import {
 	ActionType,
-	allRecipeFields,
+	AllRecipeFields,
 	IngredientsGroup,
-	recipeFields,
-	schemaType,
+	RecipeFields,
+	SchemaType,
 } from '../interfaces/main';
 import { apiURL } from '../consts';
 import { actions } from '../actions/recipeActions';
@@ -17,15 +17,15 @@ import flatten from 'lodash-es/flatten';
 
 interface FooterProps {
 	articleId: string | null;
-	body: schemaType | null;
+	body: SchemaType | null;
 	dispatcher: Dispatch<ActionType>;
 }
 
 // replace nulls with empty list
-const cleanRecipe = (data: recipeFields | null) => {
+const cleanRecipe = (data: RecipeFields | null) => {
 	// const nullableFields = ['cuisineIds', 'celebrationIds'] as Array<keyof recipeMetaFields>
 	if (data !== null) {
-		const out = Object.keys(data).map((field: keyof recipeFields) => {
+		const out = Object.keys(data).map((field: keyof RecipeFields) => {
 			if (['serves', 'image', 'title', 'description'].includes(field)) {
 				return [field, data[field] ? data[field] : ''];
 			} else {
@@ -41,7 +41,7 @@ const cleanRecipe = (data: recipeFields | null) => {
 
 export async function postRecipe(
 	aId: string | null,
-	data: allRecipeFields | null,
+	data: AllRecipeFields | null,
 ): Promise<Record<string, unknown>> {
 	// async function postRecipe(aId: string|null, data: Record<string, unknown>|null): Promise<Record<string, unknown>>{
 	console.log('Data: ' + JSON.stringify(data));
@@ -90,7 +90,7 @@ const resetRecipe = (
 };
 
 const formatCSV = (
-	data: allRecipeFields,
+	data: AllRecipeFields,
 ): [Record<string, string>[], Record<string, string>] => {
 	const ingreds = data['ingredients'].map(
 		(ingL: IngredientsGroup, i: number) => {

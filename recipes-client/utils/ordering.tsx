@@ -1,18 +1,18 @@
-import { allRecipeFields, ComplexRecipeFields } from '../interfaces/main';
+import { AllRecipeFields, ComplexRecipeFields } from '../interfaces/main';
 import fromPairs from 'lodash-es/fromPairs';
 
 export function orderComponents<
-	T extends allRecipeFields | ComplexRecipeFields,
+	T extends AllRecipeFields | ComplexRecipeFields,
 >(
 	rc: T,
 	sortOrder: string[],
-): T extends allRecipeFields ? allRecipeFields : ComplexRecipeFields {
+): T extends AllRecipeFields ? AllRecipeFields : ComplexRecipeFields {
 	if (rc === null) {
 		return null;
 	}
 	return fromPairs(
 		sortOrder.reduce(
-			(acc, key: keyof allRecipeFields | ComplexRecipeFields) => {
+			(acc, key: keyof AllRecipeFields | ComplexRecipeFields) => {
 				if (Object.keys(rc).includes(key)) {
 					return [...acc, [key, rc[key]]];
 				} else {

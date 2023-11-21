@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Button } from '@guardian/source-react-components';
-import { ActionType, schemaItem } from 'interfaces/main';
+import { ActionType, SchemaItem } from 'interfaces/main';
 import { Dispatch } from 'react';
 import { handleAddField, handleRemoveField } from './form-input-handlers';
 
@@ -8,7 +8,7 @@ export const getItemButtons = (
 	key: string,
 	formItemAddId: string,
 	formItemRemoveLastId: string,
-	formFieldsSchema: schemaItem,
+	formFieldsSchema: SchemaItem,
 	dispatcher: Dispatch<ActionType>,
 ): JSX.Element => {
 	return (

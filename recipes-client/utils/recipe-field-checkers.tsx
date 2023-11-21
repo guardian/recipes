@@ -1,12 +1,12 @@
 import {
-	allRecipeFields,
+	AllRecipeFields,
 	Ingredient,
 	IngredientsGroup,
 	Instruction,
 	isAllRecipeFields,
 	isSchemaType,
-	schemaItem,
-	schemaType,
+	SchemaItem,
+	SchemaType,
 	Serves,
 	Timing,
 } from 'interfaces/main';
@@ -26,14 +26,14 @@ export const isIngredientsField = (
 };
 
 export const isIngredientField = (
-	obj: schemaItem | Ingredient,
+	obj: SchemaItem | Ingredient,
 ): obj is Ingredient => {
 	if (typeof obj !== 'object' || obj === null) return false;
 	return Object.keys(obj).includes('amount');
 };
 
 export const isIngredientsListField = (
-	obj: schemaType | allRecipeFields | IngredientsGroup | undefined,
+	obj: SchemaType | AllRecipeFields | IngredientsGroup | undefined,
 ): obj is IngredientsGroup => {
 	if (obj === undefined || obj === null) return false;
 	if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
@@ -41,7 +41,7 @@ export const isIngredientsListField = (
 };
 
 export const isInstructionsField = (
-	obj: schemaType | allRecipeFields | IngredientsGroup | undefined,
+	obj: SchemaType | AllRecipeFields | IngredientsGroup | undefined,
 ): obj is Instruction[] => {
 	if (obj === undefined || obj === null) return false;
 	if (isSchemaType(obj) || isAllRecipeFields(obj)) return false;
@@ -56,7 +56,7 @@ export const isServesField = (obj: Serves): obj is Serves => {
 };
 
 export const isRangeField = (
-	obj: schemaItem | Record<string, unknown>,
+	obj: SchemaItem | Record<string, unknown>,
 ): obj is Range => {
 	if (typeof obj !== 'object' || obj === null) return false;
 	return Object.keys(obj).includes('min');

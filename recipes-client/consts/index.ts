@@ -1,4 +1,4 @@
-import { schemaItem } from '../interfaces/main';
+import { SchemaItem } from '../interfaces/main';
 import { UIschemaItem } from '../interfaces/ui';
 
 /* Routing information */
@@ -210,12 +210,12 @@ export const UIschema: UIschemaItem = {
 // function isLocked(key:string){
 
 // }
-export const isDisplayed = (key: keyof schemaItem | string): boolean => {
+export const isDisplayed = (key: keyof SchemaItem | string): boolean => {
 	// const wObj: {[k: string]: unknown} = obj;
 	const wUIschema: { [key: string]: { 'ui:display': false } } = UIschema; // safely widen to wObj
 	return wUIschema[key]['ui:display'];
 };
-export const isRemovable = (key: keyof schemaItem | string): boolean => {
+export const isRemovable = (key: keyof SchemaItem | string): boolean => {
 	const wUIschema: { [key: string]: { 'ui:removable': false } } = UIschema; // safely widen to wObj
 	return wUIschema[key]['ui:removable'];
 };

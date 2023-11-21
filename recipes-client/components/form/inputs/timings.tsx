@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Legend } from '@guardian/source-react-components';
-import { ActionType, schemaItem, Timing } from 'interfaces/main';
+import { ActionType, SchemaItem, Timing } from 'interfaces/main';
 import { Dispatch } from 'react';
 import { getItemButtons } from '../form-buttons';
 import { getFormFieldsSchema } from '../form-group';
@@ -8,7 +8,7 @@ import FormItem from '../form-item';
 
 export const renderTimingsFormGroup = (
 	formItems: Timing,
-	schema: schemaItem,
+	schema: SchemaItem,
 	choices: string[] | null,
 	key: string,
 	dispatcher: Dispatch<ActionType>,
