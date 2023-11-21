@@ -18,7 +18,7 @@ export class Recipes extends GuStack {
     const ec2App = new GuEc2App(this, {
       applicationPort: 9000,
       app: appName,
-      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.SMALL),
+      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
       access: { scope: AccessScope.PUBLIC },
       userData: [
         '#!/bin/bash -ev',
