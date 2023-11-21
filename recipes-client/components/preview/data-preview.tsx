@@ -128,6 +128,18 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 				</ul>
 			</div>
 			<div>
+				<small>Diets</small>
+				{recipeData.suitableForDietIds.length === 0 ? (
+					<div>-</div>
+				) : (
+					<ul>
+						{recipeData.suitableForDietIds.map((diet, i) => {
+							return <li key={i}>{diet}</li>;
+						})}
+					</ul>
+				)}
+			</div>
+			<div>
 				<small>Cuisines</small>
 				{recipeData.cuisineIds.length === 0 ? (
 					<div>-</div>

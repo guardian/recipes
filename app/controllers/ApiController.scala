@@ -180,6 +180,12 @@ class ApiController (
         "canonicalArticle": {
             "type": ["string", "null"]
         },
+        "composerId": {
+            "type": ["string", "null"]
+        },
+        "webPublicationDate": {
+            "type": ["string", "null"]
+        },
         "title": {
             "type": ["string", "null"]
         },
@@ -237,6 +243,9 @@ class ApiController (
                 },
                 "durationInMins": {
                   "type": "integer"
+                },
+                "text": {
+                  "type": "string"
                 }
               },
               "required": [
@@ -288,7 +297,11 @@ class ApiController (
                   "Ed Cumming",
                   "Andrei Lussman",
                   "Anna Jones",
-                  "Rachel Roddy"
+                  "Rachel Roddy",
+                  "Sally Clarke",
+                  "Nigella Lawson",
+                  "Giuseppe Dell’Anno",
+                  "Katie Cross"
                 ]
             }
         },
