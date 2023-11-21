@@ -318,7 +318,7 @@ class ApiController (
                 "type": "object",
                 "properties": {
                   "recipeSection": {
-                    "type": "string"
+                    "type": ["string", "null"]
                   },
                   "ingredientsList": {
                     "type": "array",
@@ -371,7 +371,6 @@ class ApiController (
                   }
                 },
                 "required": [
-                  "recipeSection",
                   "ingredientsList"
                 ]
               }

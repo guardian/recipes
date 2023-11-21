@@ -30,6 +30,7 @@ case class Recipe(
   celebrationIds: List[String],
   mealTypeIds: List[String],
   utensilsAndApplianceIds: List[String],
+  suitableForDietIds: List[String],
   techniquesUsedIds: List[String],
   difficultyLevel: Option[String],
 )
