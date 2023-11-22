@@ -33,16 +33,12 @@ const Home = (): JSX.Element => {
 		setDisplayedRecipes(recipes);
 	}, [recipeList, listFilter]);
 
-	fetch(listEndpoint)
-		.then((response) => {
-			return response.json();
-		})
-		.then((data) => {
-			setList(data);
-		})
-		.catch(() => {
-			return null;
-		});
+	useEffect(() => {
+		fetch(listEndpoint)
+			.then((response) => response.json())
+			.then((data) => setList(data))
+			.catch(() => null);
+	}, []);
 
 	const counterStyles = css`
 		position: fixed;

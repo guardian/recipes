@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import { Legend } from '@guardian/source-react-components';
 import { ActionType, SchemaItem, Serves } from 'interfaces/main';
 import { Dispatch } from 'react';
@@ -47,10 +49,9 @@ export const renderServesFormGroup = (
 		);
 	});
 	return [
-		<fieldset key={`${key}.fieldset`}>
-			<Legend key={`${key}.legend`} text={key}></Legend>
+		<div css={{ display: 'flex !important' }}>
 			{fields}
 			{formItemButtons}
-		</fieldset>,
+		</div>,
 	];
 };

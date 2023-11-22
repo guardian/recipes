@@ -1,12 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Dispatch } from '@reduxjs/toolkit';
 import { ActionType } from '../../interfaces/main';
-import {
-	Checkbox,
-	Option,
-	Select,
-	TextInput,
-} from '@guardian/source-react-components';
+import { Checkbox, Option, Select } from '@guardian/source-react-components';
 import {
 	handleChangeBoolean,
 	handleChangeNumber,
@@ -24,22 +19,72 @@ const renderInput = (
 	const rmAllowed = removable !== undefined ? removable : false;
 
 	if (typeof value === 'boolean') {
-		return (
-			<Checkbox
-				label={key}
-				checked={value}
-				id={key}
-				key={key}
-				onChange={(event) => handleChangeBoolean(event, dispatcher)}
-			/>
-		);
+		if (key.includes('ingredients')) {
+			return (
+				<Checkbox
+					label={'optional'}
+					checked={value}
+					id={key}
+					key={key}
+					onChange={(event) => handleChangeBoolean(event, dispatcher)}
+				/>
+			);
+		} else {
+			return (
+				<Checkbox
+					label={key}
+					checked={value}
+					id={key}
+					key={key}
+					onChange={(event) => handleChangeBoolean(event, dispatcher)}
+				/>
+			);
+		}
 	}
 
 	if (choices === null || choices === undefined) {
+		if (key.includes('instructions') && key.includes('description')) {
+			return (
+				<div css={{ display: 'grid' }}>
+					<textarea
+						css={{
+							padding: '4px',
+							fontFamily: 'GuardianTextSans',
+							fontSize: '1.0625rem',
+							width: '500px',
+							height: '60px',
+							margin: '4px',
+						}}
+						key={key}
+						id={key}
+						// type={typeof value}
+						// label={key}
+						value={value}
+						onChange={(event) => handleChangeText(event, dispatcher)}
+					/>
+				</div>
+			);
+		}
+
 		return (
 			<div css={{ display: 'grid' }}>
-				<TextInput
-					css={{ minWidth: '500px' }}
+				<input
+					css={{
+						height: '25px',
+						padding: '8px',
+						margin: '4px',
+						fontFamily: 'GuardianTextSans',
+						fontSize: '1.0625rem',
+						width: `${
+							typeof value === 'number'
+								? '50px'
+								: key.includes('unit')
+								? '80px'
+								: key.includes('ingredients')
+								? '250px'
+								: '400px'
+						}`,
+					}}
 					key={key}
 					id={key}
 					type={typeof value}
@@ -58,9 +103,14 @@ const renderInput = (
 		// choices_.unshift('');
 		return (
 			<>
-				<Select
-					label="Select an option"
-					css={{ minWidth: '500px', display: 'grid' }}
+				<select
+					css={{
+						width: '200px',
+						display: 'grid',
+						fontFamily: 'GuardianTextSans',
+						fontSize: '1.0625rem',
+						marginRight: '4px',
+					}}
 					value={value}
 					key={key}
 					id={key}
@@ -73,7 +123,7 @@ const renderInput = (
 							</Option>
 						);
 					})}
-				</Select>
+				</select>
 			</>
 		);
 	}
