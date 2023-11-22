@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { Legend } from '@guardian/source-react-components';
-import { ActionType, Instruction, schemaItem } from 'interfaces/main';
+import { ActionType, Instruction, SchemaItem } from 'interfaces/main';
 import { Dispatch } from 'react';
 import { getItemButtons } from '../form-buttons';
 import { getFormFieldsSchema } from '../form-group';
@@ -9,7 +9,7 @@ import FormItem from '../form-item';
 
 export const renderInstructionsFormGroup = (
 	formItems: Instruction[],
-	schema: schemaItem,
+	schema: SchemaItem,
 	choices: string[] | null,
 	key: string,
 	dispatcher: Dispatch<ActionType>,

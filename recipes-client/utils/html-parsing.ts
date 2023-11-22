@@ -1,8 +1,8 @@
 import {
 	Highlight,
 	Ingredient,
-	recipeFields,
-	recipeItem,
+	RecipeFields,
+	RecipeItem,
 	ResourceRange,
 	Timing,
 	IngredientsGroup,
@@ -17,16 +17,16 @@ export function DOMParse(html: string): HTMLElement {
 
 export function getHighlights(
 	doc: HTMLElement,
-	recipeItems: recipeFields,
+	recipeItems: RecipeFields,
 ): Highlight[][] {
 	/* Create array of Highlight objects from 'doc' given 'recipeItems' and optional list of keys.*/
 	const allHighlights = Object.entries(recipeItems).map((k) => {
 		const textItems: string[] = flatten(
-			getTextfromRecipeItem(k[1] as recipeItem),
+			getTextfromRecipeItem(k[1] as RecipeItem),
 		); // bit of a hack, better approach?
 		const highlights = textItems.map((text, iHlight) => {
 			const offsets = findTextinHTML(text, doc);
-			const highlightType = getHighlightType(k[0], k[1] as recipeItem, text); //k[0];
+			const highlightType = getHighlightType(k[0], k[1] as RecipeItem, text); //k[0];
 			return offsets.map((offset) => {
 				const id = `${highlightType}_${iHlight}`;
 				return {
@@ -43,7 +43,7 @@ export function getHighlights(
 
 function getHighlightType(
 	fieldName: string,
-	recipeItem: recipeItem,
+	recipeItem: RecipeItem,
 	text: string,
 ): string {
 	// Determine the type of the highlight provided
@@ -103,7 +103,7 @@ function isStringArray(arg: Array<unknown>): arg is string[] {
 
 // export function getTextfromRecipeItem(item: string | ingredientField | ingredientField[] | timeField | null): string[] {
 
-export function getTextfromRecipeItem(item: recipeItem | string): string[] {
+export function getTextfromRecipeItem(item: RecipeItem | string): string[] {
 	/* Extract text from recipe item
 	 Select relevant field (item if array of strings, 'text' if object)
   */

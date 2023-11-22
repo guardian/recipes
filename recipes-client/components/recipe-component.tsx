@@ -2,8 +2,8 @@
 import { Dispatch } from 'react';
 import {
 	ActionType,
-	schemaItem,
-	allRecipeFields,
+	SchemaItem,
+	AllRecipeFields,
 	isSchemaType,
 } from '../interfaces/main';
 import { FormGroup } from './form/form-group';
@@ -12,8 +12,8 @@ import { isUIschemaItem } from '../interfaces/ui';
 import { orderComponents } from '../utils/ordering';
 
 interface RecipeComponentProps {
-	body: allRecipeFields;
-	schema: schemaItem | null;
+	body: AllRecipeFields;
+	schema: SchemaItem | null;
 	isLoading: boolean;
 	dispatcher: Dispatch<ActionType>;
 }
@@ -35,7 +35,7 @@ const RecipeComponent = ({
 	} else {
 		const recipeComponents = UIOrder ? orderComponents(body, UIOrder) : body;
 		return Object.keys(recipeComponents).reduce(
-			(acc, key: keyof allRecipeFields) => {
+			(acc, key: keyof AllRecipeFields) => {
 				if (isDisplayed(key) && isSchemaType(schema)) {
 					return [
 						...acc,

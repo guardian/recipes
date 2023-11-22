@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { Legend } from '@guardian/source-react-components';
-import { ActionType, schemaItem, Serves } from 'interfaces/main';
+import { ActionType, SchemaItem, Serves } from 'interfaces/main';
 import { Dispatch } from 'react';
 import { isRangeField } from 'utils/recipe-field-checkers';
 import { getItemButtons } from '../form-buttons';
@@ -11,7 +11,7 @@ import { renderRangeFormGroup } from './range';
 
 export const renderServesFormGroup = (
 	formItems: Serves,
-	schema: schemaItem,
+	schema: SchemaItem,
 	choices: string[] | null,
 	key: string,
 	dispatcher: Dispatch<ActionType>,

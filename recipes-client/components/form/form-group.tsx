@@ -4,7 +4,7 @@ import FormItem from './form-item';
 import {
 	ActionType,
 	IngredientsGroup,
-	schemaItem,
+	SchemaItem,
 } from '../../interfaces/main';
 import { getSchemaType } from '../../utils/schema';
 import { UIItem, UIschemaItem } from '../../interfaces/ui';
@@ -68,7 +68,7 @@ type FormItems =
 
 interface FormGroupProps {
 	formItems: FormItems;
-	schema: schemaItem;
+	schema: SchemaItem;
 	UIschema: UIItem;
 	title: string;
 	key_?: string | null;
@@ -77,7 +77,7 @@ interface FormGroupProps {
 
 const getFormFields = (
 	formItems: FormItems,
-	schema: schemaItem,
+	schema: SchemaItem,
 	UIschema: UIschemaItem,
 	key: string,
 	dispatcher: Dispatch<ActionType>,
@@ -116,7 +116,7 @@ const getFormFields = (
 		Array.isArray(formItems)
 	) {
 		// Array -> process each element recursively
-		return formItems.map((item: schemaItem, i: int) => {
+		return formItems.map((item: SchemaItem, i: int) => {
 			const rComponents = UIschema['ui:order']
 				? orderComponents(item, UIschema['ui:order'])
 				: item;
@@ -157,11 +157,11 @@ const getFormFields = (
 
 export function getFormFieldsSchema(
 	formItems: FormItems,
-	schema: schemaItem,
-): schemaItem {
+	schema: SchemaItem,
+): SchemaItem {
 	// Get schema for contents of given formItem
 	if (getSchemaType(schema.type).includes('string')) {
-		return { type: 'string' } as schemaItem;
+		return { type: 'string' } as SchemaItem;
 	} else if (getSchemaType(schema.type).includes('array')) {
 		return schema.items;
 	} else if (getSchemaType(schema.type).includes('object')) {

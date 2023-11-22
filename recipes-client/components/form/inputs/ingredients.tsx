@@ -3,7 +3,7 @@ import {
 	ActionType,
 	Ingredient,
 	IngredientsGroup,
-	schemaItem,
+	SchemaItem,
 } from 'interfaces/main';
 import {
 	ingredientGroupSchema,
@@ -17,7 +17,7 @@ import { renderRangeFormGroup } from './range';
 
 export const renderIngredientsFormGroup = (
 	formItems: IngredientsGroup,
-	schema: schemaItem,
+	schema: SchemaItem,
 	choices: string[] | null,
 	key: string,
 	dispatcher: Dispatch<ActionType>,

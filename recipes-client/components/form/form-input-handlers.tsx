@@ -1,11 +1,11 @@
-import { ActionType, schemaItem } from 'interfaces/main';
+import { ActionType, SchemaItem } from 'interfaces/main';
 import { Dispatch } from 'react';
 import { actions } from '../../actions/recipeActions';
 
 // Additions
 export const handleAddField = (
 	objId: string,
-	schemaItem: schemaItem,
+	schemaItem: SchemaItem,
 	dispatcher: Dispatch<ActionType>,
 ): void => {
 	dispatcher({

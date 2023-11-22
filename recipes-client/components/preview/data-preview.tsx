@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { allRecipeFields, Ingredient } from 'interfaces/main';
+import { AllRecipeFields, Ingredient } from 'interfaces/main';
 import { css } from '@emotion/react';
 import { AppReadyStatus } from '../app-ready-status';
 import { Range } from 'interfaces/main';
 import { palette } from '@guardian/source-foundations';
 
 interface DataPreviewProps {
-	recipeData: allRecipeFields | null;
+	recipeData: AllRecipeFields | null;
 }
 
 const prettifyRange = (amount: Range) => {
