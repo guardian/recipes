@@ -47,6 +47,18 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 				</div>
 			</div>
 			<div>
+				<small>Featured image Grid ID</small>
+
+				<div>
+					<a
+						href={`https://media.gutools.co.uk/images/${recipeData.featuredImage}`}
+						target="_blank"
+					>
+						{recipeData.featuredImage}
+					</a>
+				</div>
+			</div>
+			<div>
 				<small>Title</small>
 				<div>{recipeData.title}</div>
 			</div>
