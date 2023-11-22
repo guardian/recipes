@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { Legend } from '@guardian/source-react-components';
 import { ActionType, schemaItem, Timing } from 'interfaces/main';
 import { Dispatch } from 'react';
 import { getItemButtons } from '../form-buttons';
@@ -39,10 +38,16 @@ export const renderTimingsFormGroup = (
 		);
 	});
 	return [
-		<fieldset key={`${key}.fieldset`} css={{}}>
-			<Legend key={`${key}.legend`} text={key}></Legend>
-			{fields}
+		<div
+			css={{
+				display: 'flex !important',
+				fontFamily: 'GuardianTextSans',
+				fontSize: '1.0625rem',
+				justifyContent: 'top',
+			}}
+		>
+			{fields} minutes
 			{formItemButtons}
-		</fieldset>,
+		</div>,
 	];
 };

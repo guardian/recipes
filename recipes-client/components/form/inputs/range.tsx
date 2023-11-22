@@ -1,4 +1,5 @@
-import { Legend } from '@guardian/source-react-components';
+/** @jsxImportSource @emotion/react */
+
 import { ActionType } from 'interfaces/main';
 import { Dispatch } from 'react';
 import FormItem from '../form-item';
@@ -11,19 +12,25 @@ export const renderRangeFormGroup = (
 ) => {
 	const fields = Object.keys(formItems).map((k: keyof Range) => {
 		return (
-			<FormItem
-				text={formItems[k]}
-				choices={choices}
-				label={`${key}.${k}`}
-				key={`${key}.${k}`}
-				dispatcher={dispatcher}
-			/>
+			<>
+				<div
+					css={{
+						margin: '0 10px',
+						fontFamily: 'GuardianTextSans',
+						fontSize: '1.0625rem',
+					}}
+				>
+					{k}
+				</div>
+				<FormItem
+					text={formItems[k]}
+					choices={choices}
+					label={`${key}.${k}`}
+					key={`${key}.${k}`}
+					dispatcher={dispatcher}
+				/>
+			</>
 		);
 	});
-	return [
-		<fieldset key={`${key}.fieldset`}>
-			<Legend key={`${key}.legend`} text={key}></Legend>
-			{fields}
-		</fieldset>,
-	];
+	return [<div css={{ display: 'flex !important' }}>{fields}</div>];
 };

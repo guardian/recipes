@@ -210,10 +210,11 @@ export const FormGroup = ({
 	);
 
 	return (
-		<fieldset key={`${key}.fieldset`} css={{}}>
-			<Legend key={`${key}.legend`} text={key}></Legend>
-			{formFields}
-			{isFormItemRemovable && formItemButtons}
-		</fieldset>
+		<div>
+			<Legend key={`${key}.legend`} text={key} css={{ width: '150px' }} />
+			<div css={{ display: 'grid' }}>{formFields}</div>
+			<div>{isFormItemRemovable && formItemButtons}</div>
+			<hr />
+		</div>
 	);
 };

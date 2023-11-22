@@ -1,4 +1,4 @@
-import { Legend } from '@guardian/source-react-components';
+/** @jsxImportSource @emotion/react */
 import {
 	ActionType,
 	Ingredient,
@@ -36,13 +36,18 @@ export const renderIngredientsFormGroup = (
 	const fields = Object.keys(formItems).map((k: keyof IngredientsGroup) => {
 		if (k === 'recipeSection')
 			return (
-				<FormItem
-					text={formItems[k]}
-					choices={choices}
-					label={`${key}.${k}`}
-					key={`${key}.${k}`}
-					dispatcher={dispatcher}
-				/>
+				<div css={{ display: 'flex' }}>
+					<p css={{ fontFamily: 'GuardianTextSans', marginRight: '10px' }}>
+						Recipe Section Name (if applicable):{' '}
+					</p>
+					<FormItem
+						text={formItems[k]}
+						choices={choices}
+						label={`${key}.${k}`}
+						key={`${key}.${k}`}
+						dispatcher={dispatcher}
+					/>
+				</div>
 			);
 		else {
 			const ingredientsList = formItems[k] as Ingredient[];
@@ -58,41 +63,51 @@ export const renderIngredientsFormGroup = (
 					formFieldsSchema,
 					dispatcher,
 				);
-				const fields = Object.keys(ingredient).map((k: keyof Ingredient) => {
-					if (isRangeField(ingredient[k])) {
-						return renderRangeFormGroup(
-							ingredient[k],
-							choices,
-							`${prefix}.${i}.${k}`,
-							dispatcher,
-						);
-					} else
-						return (
-							<FormItem
-								text={ingredient[k]}
-								choices={choices}
-								label={`${prefix}.${i}.${k}`}
-								key={`${prefix}.${i}.${k}`}
-								dispatcher={dispatcher}
-							/>
-						);
-				});
+				const fields = Object.keys(ingredient)
+					.sort((a, b) => displayOrder[a] - displayOrder[b])
+					.map((k: keyof Ingredient) => {
+						if (isRangeField(ingredient[k])) {
+							return renderRangeFormGroup(
+								ingredient[k],
+								choices,
+								`${prefix}.${i}.${k}`,
+								dispatcher,
+							);
+						} else
+							return (
+								<FormItem
+									text={ingredient[k]}
+									choices={choices}
+									label={`${prefix}.${i}.${k}`}
+									key={`${prefix}.${i}.${k}`}
+									dispatcher={dispatcher}
+								/>
+							);
+					});
 				return [
-					<fieldset key={`${key}.fieldset`}>
-						<Legend key={`${key}.legend`} text={`${key}.${k}`}></Legend>
+					<div css={{ display: 'flex !important' }}>
 						{fields}
 						{formItemButtons}
-					</fieldset>,
+					</div>,
 				];
 			});
 			return listInputs;
 		}
 	});
 	return [
-		<fieldset key={`${key}.fieldset`}>
-			<Legend key={`${key}.legend`} text={key}></Legend>
+		<div>
 			{fields}
 			{formItemButtons}
-		</fieldset>,
+		</div>,
 	];
+};
+
+const displayOrder = {
+	name: 1,
+	amount: 2,
+	prefix: 3,
+	suffix: 4,
+	unit: 5,
+	text: 6,
+	optional: 7,
 };

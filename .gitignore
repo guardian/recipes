@@ -16,3 +16,4 @@ logs
 .idea
 recipes.conf
 /public/prout.html
+.vscode/settings.json
