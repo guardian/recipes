@@ -17,27 +17,27 @@ import flatten from 'lodash-es/flatten';
 
 interface FooterProps {
 	articleId: string | null;
-	body: SchemaType | null;
+	body: AllRecipeFields | null;
 	dispatcher: Dispatch<ActionType>;
 }
 
-// replace nulls with empty list
-const cleanRecipe = (data: RecipeFields | null) => {
-	// const nullableFields = ['cuisineIds', 'celebrationIds'] as Array<keyof recipeMetaFields>
-	if (data !== null) {
-		const out = Object.keys(data).map((field: keyof RecipeFields) => {
-			if (['serves', 'image', 'title', 'description'].includes(field)) {
-				return [field, data[field] ? data[field] : ''];
-			} else {
-				return [field, data[field] ? data[field] : []];
-			}
-		});
-		return fromPairs(out);
-		// nullableFields.forEach((field: keyof recipeMetaFields) => data[field] = data[field] ? data[field] : [])
-	} else {
-		return data;
-	}
-};
+// // replace nulls with empty list
+// const cleanRecipe = (data: RecipeFields | null) => {
+//   // const nullableFields = ['cuisineIds', 'celebrationIds'] as Array<keyof recipeMetaFields>
+//   if (data !== null) {
+//     const out = Object.keys(data).map((field: keyof RecipeFields) => {
+//       if (['serves', 'image', 'title', 'description'].includes(field)) {
+//         return [field, data[field] ? data[field] : ''];
+//       } else {
+//         return [field, data[field] ? data[field] : []];
+//       }
+//     });
+//     return fromPairs(out);
+//     // nullableFields.forEach((field: keyof recipeMetaFields) => data[field] = data[field] ? data[field] : [])
+//   } else {
+//     return data;
+//   }
+// };
 
 export async function postRecipe(
 	aId: string | null,
@@ -89,36 +89,34 @@ const resetRecipe = (
 	}
 };
 
-const formatCSV = (
-	data: AllRecipeFields,
-): [Record<string, string>[], Record<string, string>] => {
-	const ingreds = data['ingredients'].map(
-		(ingL: IngredientsGroup, i: number) => {
-			return ingL['ingredientsList'].map((ingred) => {
-				return {
-					list_number: i,
-					list_title: ingL['title'],
-					ingredient: ingred['text'],
-				};
-			});
-		},
-	);
-	const fields = {
-			title: 'title',
-			list_title: 'list_title',
-			list_number: 'list_number',
-			ingredient: 'ingredient',
-		},
-		dataFormatted = flatten(ingreds).map((ing) => {
-			return { title: data['title'], ...ing };
-		});
+// const formatCSV = (
+//   data: AllRecipeFields,
+// ): [Record<string, string>[], Record<string, string>] => {
+//   const ingreds = data['ingredients'].map(
+//     (ingL: IngredientsGroup, i: number) => {
+//       return ingL['ingredientsList'].map((ingred) => {
+//         return {
+//           list_number: i,
+//           list_title: ingL['title'],
+//           ingredient: ingred['text'],
+//         };
+//       });
+//     },
+//   );
+//   const fields = {
+//     title: 'title',
+//     list_title: 'list_title',
+//     list_number: 'list_number',
+//     ingredient: 'ingredient',
+//   },
+//     dataFormatted = flatten(ingreds).map((ing) => {
+//       return { title: data['title'], ...ing };
+//     });
 
-	return [dataFormatted, fields];
-};
+//   return [dataFormatted, fields];
+// };
 
-const Footer = (props: FooterProps): JSX.Element | JSX.Element[] => {
-	const { articleId, body, dispatcher } = props;
-
+const Footer = ({ articleId, body, dispatcher }: FooterProps) => {
 	const submit = (event: React.MouseEvent<HTMLInputElement>): void => {
 		event.preventDefault();
 		postRecipe(articleId, body).catch((err) => console.error(err));
@@ -137,18 +135,18 @@ const Footer = (props: FooterProps): JSX.Element | JSX.Element[] => {
 		resetRecipe(articleId, dispatcher);
 	};
 
-	const downloadCSV = (event: React.MouseEvent<HTMLInputElement>): void => {
-		event.preventDefault();
-		const [data, fields] = formatCSV(body);
-		const aId = articleId !== null ? articleId : undefined;
-		saveAsCsv({
-			data: data,
-			fields: fields,
-			fileformat: undefined,
-			filename: aId,
-			separator: ';',
-		});
-	};
+	// const downloadCSV = (event: React.MouseEvent<HTMLInputElement>): void => {
+	//   event.preventDefault();
+	//   const [data, fields] = formatCSV(body);
+	//   const aId = articleId !== null ? articleId : undefined;
+	//   saveAsCsv({
+	//     data: data,
+	//     fields: fields,
+	//     fileformat: undefined,
+	//     filename: aId,
+	//     separator: ';',
+	//   });
+	// };
 
 	return (
 		<form>

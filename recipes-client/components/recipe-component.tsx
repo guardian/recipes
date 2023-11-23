@@ -13,7 +13,7 @@ import { orderComponents } from '../utils/ordering';
 
 interface RecipeComponentProps {
 	body: AllRecipeFields;
-	schema: SchemaItem | null;
+	schema: Record<string, unknown> | null;
 	isLoading: boolean;
 	dispatcher: Dispatch<ActionType>;
 }
@@ -23,7 +23,7 @@ const RecipeComponent = ({
 	schema,
 	isLoading,
 	dispatcher,
-}: RecipeComponentProps): JSX.Element | JSX.Element[] => {
+}: RecipeComponentProps) => {
 	const UIOrder = isUIschemaItem(UIschema) ? UIschema['ui:order'] : null;
 
 	if (isLoading) {
@@ -34,27 +34,24 @@ const RecipeComponent = ({
 		return <h3> No bodayyyyy</h3>;
 	} else {
 		const recipeComponents = UIOrder ? orderComponents(body, UIOrder) : body;
-		return Object.keys(recipeComponents).reduce(
-			(acc, key: keyof AllRecipeFields) => {
-				if (isDisplayed(key) && isSchemaType(schema)) {
-					return [
-						...acc,
-						<FormGroup
-							formItems={body[key]}
-							schema={schema.properties[key]}
-							UIschema={UIschema[key]}
-							key_={key}
-							title={key}
-							dispatcher={dispatcher}
-							key={key}
-						></FormGroup>,
-					];
-				} else {
-					return [acc];
-				}
-			},
-			[] as JSX.Element[],
-		);
+		return Object.keys(recipeComponents).reduce((acc, key) => {
+			if (isDisplayed(key) && isSchemaType(schema)) {
+				return [
+					...acc,
+					<FormGroup
+						formItems={body[key]}
+						schema={schema.properties[key]}
+						UIschema={UIschema[key]}
+						key_={key}
+						title={key}
+						dispatcher={dispatcher}
+						key={key}
+					></FormGroup>,
+				];
+			} else {
+				return acc;
+			}
+		}, [] as JSX.Element[]);
 	}
 };
 

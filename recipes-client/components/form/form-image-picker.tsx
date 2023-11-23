@@ -8,7 +8,7 @@ import { actions } from '../../actions/recipeActions';
 
 interface ImagePickerProps {
 	isLoading: boolean;
-	html: Record<string, Record<string, unknown>> | null;
+	html: Record<string, unknown> | null;
 	selected: string | null;
 	dispatcher: Dispatch<ActionType>;
 }
