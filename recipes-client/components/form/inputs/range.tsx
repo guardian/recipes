@@ -14,7 +14,6 @@ export const renderRangeFormGroup = (
     return (
       <div
         css={{
-          margin: '0 10px',
           fontFamily: 'GuardianTextSans',
           fontSize: '0.9rem',
           color: "gray"

@@ -107,10 +107,10 @@ export const renderIngredientsFormGroup = (
 
 const displayOrder = {
 	name: 1,
-	amount: 2,
-	prefix: 3,
-	suffix: 4,
-	unit: 5,
+  amount: 2,
+	unit: 3,
+	prefix: 4,
+	suffix: 5,
 	text: 6,
 	optional: 7,
 };
