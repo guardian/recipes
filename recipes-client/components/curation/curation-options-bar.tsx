@@ -16,7 +16,6 @@ export async function postRecipe(
 	aId: string | null,
 	data: AllRecipeFields | null,
 ): Promise<Record<string, unknown>> {
-	console.log('Data: ' + JSON.stringify(data));
 	if (aId === null) {
 		console.warn('No url provided!');
 		return { error: 'No url provided.' };

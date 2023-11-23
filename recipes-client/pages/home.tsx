@@ -55,7 +55,6 @@ const Home = (): JSX.Element => {
 
 	return (
 		<div css={mainContainerStyles}>
-			{/* Have mustard colour div fixed in the top right corner saying how many app-ready recipes there are */}
 			<div css={counterStyles}>
 				<div>
 					<span>{recipeList.filter((recipe) => recipe.isAppReady).length}</span>{' '}
