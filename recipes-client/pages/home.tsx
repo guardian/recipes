@@ -87,21 +87,21 @@ const Home = (): JSX.Element => {
 						name="filter"
 						value="all"
 						label="All"
-						onClick={() => setListFilter('all')}
+						onChange={() => setListFilter('all')}
 						checked={listFilter === 'all'}
 					/>
 					<Radio
 						name="filter"
 						value="curated"
 						label="Curated"
-						onClick={() => setListFilter('curated')}
+						onChange={() => setListFilter('curated')}
 						checked={listFilter === 'curated'}
 					/>
 					<Radio
 						name="filter"
 						value="non-curated"
 						label="Awaiting curation"
-						onClick={() => setListFilter('non-curated')}
+						onChange={() => setListFilter('non-curated')}
 						checked={listFilter === 'non-curated'}
 					/>
 				</RadioGroup>

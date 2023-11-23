@@ -96,7 +96,7 @@ export interface Range {
 }
 
 export type IngredientsGroup = {
-	recipeSection: string;
+	recipeSection?: string;
 	ingredientsList: Ingredient[];
 };
 

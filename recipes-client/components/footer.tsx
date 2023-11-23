@@ -79,9 +79,9 @@ const resetRecipe = (
 			payload: '[Reset] Error: No article id provided.',
 		});
 	} else {
-		const articleUrl = aId.replace(/^\/+/, '');
+		const recipeId = aId.replace(/^\/+/, '');
 		void fetchAndDispatch(
-			`${location.origin}/api/db/${articleUrl}`,
+			`${location.origin}/api/db-raw/${recipeId}`,
 			actions.init,
 			'body',
 			dispatcher,
@@ -125,6 +125,14 @@ const Footer = (props: FooterProps): JSX.Element | JSX.Element[] => {
 	};
 
 	const reset = (event: React.MouseEvent<HTMLInputElement>): void => {
+		if (
+			!window.confirm(
+				'Are you sure you want to reset? Doing so will return this recipe data to the original raw state produced by our machine learning model. Any edits you have made will be lost.',
+			)
+		) {
+			event.preventDefault();
+			return;
+		}
 		event.preventDefault();
 		resetRecipe(articleId, dispatcher);
 	};
