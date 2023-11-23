@@ -4,7 +4,9 @@ import { space, palette } from '@guardian/source-foundations';
 import RecipeComponent from '../components/recipe-component';
 import GuFrame from '../components/gu-frame';
 import ImagePicker from '../components/form/form-image-picker';
-import Footer, { postRecipe } from '../components/footer';
+import CurationOptionsBar, {
+	postRecipe,
+} from '../components/curation-options-bar';
 
 import { useParams } from 'react-router-dom';
 
@@ -114,7 +116,11 @@ const Curation = () => {
 	return (
 		<div css={gridLayout}>
 			<div css={footer}>
-				<Footer articleId={articleId} body={state.body} dispatcher={dispatch} />
+				<CurationOptionsBar
+					articleId={articleId}
+					body={state.body}
+					dispatcher={dispatch}
+				/>
 			</div>
 			<div css={articleView}>{capiId && <GuFrame articlePath={capiId} />}</div>
 			<div css={dataView}>
