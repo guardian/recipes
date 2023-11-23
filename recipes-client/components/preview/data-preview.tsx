@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { AllRecipeFields, Ingredient } from 'interfaces/main';
 import { css } from '@emotion/react';
-import { AppReadyStatus } from '../app-ready-status';
+import { AppReadyStatus } from '../reusables/app-ready-status';
 import { Range } from 'interfaces/main';
 import { palette } from '@guardian/source-foundations';
 

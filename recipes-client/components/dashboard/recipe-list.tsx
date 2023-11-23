@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { SvgExternal } from '@guardian/source-react-components';
 import { curationEndpoint } from '../../consts/index';
-import { AppReadyStatus } from '../app-ready-status';
+import { AppReadyStatus } from '../reusables/app-ready-status';
 
 interface RecipeListProps {
 	list: RecipeListType[];
@@ -52,17 +52,7 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 									<AppReadyStatus isAppReady={isAppReady} />
 								</td>
 								<td key={`path_${i}_links`}>
-									<a
-										href={
-											curationEndpoint +
-											'/' +
-											id +
-											'?capiId=' +
-											canonicalArticle
-										}
-									>
-										Edit
-									</a>
+									<a href={curationEndpoint + '/' + id}>Edit</a>
 								</td>
 							</tr>
 						);

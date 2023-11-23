@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
 import { Dispatch } from 'react';
-import CheckButton from '../check-button';
+import CheckButton from '../reusables/check-button';
 import { ActionType } from '../../interfaces/main';
 import minBy from 'lodash-es/minBy';
 import { actions } from '../../actions/recipeActions';
 
 interface ImagePickerProps {
 	isLoading: boolean;
-	html: Record<string, Record<string, unknown>> | null;
+	html: Record<string, unknown> | null;
 	selected: string | null;
 	dispatcher: Dispatch<ActionType>;
 }

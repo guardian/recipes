@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { getProxyPath } from '../utils/proxy';
+import { getProxyPath } from '../../utils/proxy';
 
 export default ({
 	articlePath: capiId,

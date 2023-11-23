@@ -1,10 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { space, palette } from '@guardian/source-foundations';
-import RecipeComponent from '../components/recipe-component';
-import GuFrame from '../components/gu-frame';
+import RecipeComponent from '../components/curation/recipe-component';
+import GuFrame from '../components/curation/gu-frame';
 import ImagePicker from '../components/form/form-image-picker';
-import Footer, { postRecipe } from '../components/footer';
+import CurationOptionsBar, {
+	postRecipe,
+} from '../components/curation/curation-options-bar';
 
 import { useParams } from 'react-router-dom';
 
@@ -19,10 +21,9 @@ import { DataPreview } from 'components/preview/data-preview';
 
 const Curation = () => {
 	const { section: id } = useParams();
-	const urlParams = new URLSearchParams(window.location.search);
-	const capiId = urlParams.get('capiId');
 	const articleId = id ? `/${id}` : '';
 	const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
+	const [capiId, setCapiId] = useState<string | null>(null);
 	const image = state.body === null ? null : state.body.featuredImage;
 	const scrubbedId = articleId.replace(/^\/+/, '');
 
@@ -60,19 +61,25 @@ const Curation = () => {
 				'body',
 				dispatch,
 			),
-			// Get article content
-			fetchAndDispatch(
-				`${location.origin}${capiProxy}/${capiId}`,
-				actions.init,
-				'html',
-				dispatch,
-			),
 		])
-			.then(() => setLoadingFinished(dispatch))
+			.then(() => {
+				// Get article content
+				if (state.body === null) {
+					return;
+				}
+				setCapiId(state.body.canonicalArticle);
+				fetchAndDispatch(
+					`${location.origin}${capiProxy}/${state.body.canonicalArticle}`,
+					actions.init,
+					'html',
+					dispatch,
+				);
+				setLoadingFinished(dispatch);
+			})
 			.catch((err) => {
 				console.error(err);
 			});
-	}, [articleId, dispatch]);
+	}, [articleId, dispatch, state?.body?.canonicalArticle]);
 
 	const tabsContent = [
 		{
@@ -92,12 +99,14 @@ const Curation = () => {
 						dispatcher={dispatch}
 					/>
 					<form>
-						<RecipeComponent
-							isLoading={state.isLoading}
-							body={state.body}
-							schema={state.schema}
-							dispatcher={dispatch}
-						/>
+						{state.body && (
+							<RecipeComponent
+								isLoading={state.isLoading}
+								body={state.body}
+								schema={state.schema}
+								dispatcher={dispatch}
+							/>
+						)}
 					</form>
 				</>
 			),
@@ -107,11 +116,13 @@ const Curation = () => {
 	return (
 		<div css={gridLayout}>
 			<div css={footer}>
-				<Footer articleId={articleId} body={state.body} dispatcher={dispatch} />
+				<CurationOptionsBar
+					articleId={articleId}
+					body={state.body}
+					dispatcher={dispatch}
+				/>
 			</div>
-			<div css={articleView}>
-				<GuFrame articlePath={capiId} />
-			</div>
+			<div css={articleView}>{capiId && <GuFrame articlePath={capiId} />}</div>
 			<div css={dataView}>
 				<Tabs
 					tabsLabel="Toggle between form and preview"
@@ -128,8 +139,6 @@ const Curation = () => {
 };
 
 export default Curation;
-
-// Styles
 
 const gridLayout = css`
 	display: grid;
