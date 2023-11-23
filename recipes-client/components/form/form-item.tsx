@@ -53,7 +53,7 @@ const renderInput = (
 							fontSize: '1.0625rem',
 							width: '500px',
 							height: '60px',
-							margin: '4px',
+							margin: '4px 4px 4px 0',
 						}}
 						key={key}
 						id={key}
@@ -72,17 +72,12 @@ const renderInput = (
 					css={{
 						height: '25px',
 						padding: '8px',
-						margin: '4px',
+						margin: '4px 4px 4px 0',
 						fontFamily: 'GuardianTextSans',
 						fontSize: '1.0625rem',
 						width: `${
 							typeof value === 'number'
-								? '50px'
-								: key.includes('unit')
-								? '80px'
-								: key.includes('ingredients')
-								? '250px'
-								: '400px'
+								? '50px' : "200px"
 						}`,
 					}}
 					key={key}

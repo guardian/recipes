@@ -75,6 +75,8 @@ export const renderIngredientsFormGroup = (
 							);
 						} else
 							return (
+                <div css={{display: "grid", fontFamily: "GuardianTextSans", color: "gray", fontSize: "0.9rem"}}>
+                {k}
 								<FormItem
 									text={ingredient[k]}
 									choices={choices}
@@ -82,6 +84,7 @@ export const renderIngredientsFormGroup = (
 									key={`${prefix}.${i}.${k}`}
 									dispatcher={dispatcher}
 								/>
+                </div>
 							);
 					});
 				return [
