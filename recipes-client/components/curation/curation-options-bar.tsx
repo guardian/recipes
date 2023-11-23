@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { Dispatch } from 'react';
-import { ActionType, AllRecipeFields } from '../interfaces/main';
-import { apiURL } from '../consts';
-import { actions } from '../actions/recipeActions';
-import { fetchAndDispatch } from '../utils/requests';
+import { ActionType, AllRecipeFields } from '../../interfaces/main';
+import { apiURL } from '../../consts';
+import { actions } from '../../actions/recipeActions';
+import { fetchAndDispatch } from '../../utils/requests';
 import { Button } from '@guardian/source-react-components';
 
 interface FooterProps {

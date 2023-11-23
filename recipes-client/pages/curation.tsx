@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { space, palette } from '@guardian/source-foundations';
-import RecipeComponent from '../components/recipe-component';
-import GuFrame from '../components/gu-frame';
+import RecipeComponent from '../components/curation/recipe-component';
+import GuFrame from '../components/curation/gu-frame';
 import ImagePicker from '../components/form/form-image-picker';
 import CurationOptionsBar, {
 	postRecipe,
-} from '../components/curation-options-bar';
+} from '../components/curation/curation-options-bar';
 
 import { useParams } from 'react-router-dom';
 

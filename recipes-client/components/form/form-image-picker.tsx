@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
 import { Dispatch } from 'react';
-import CheckButton from '../check-button';
+import CheckButton from '../reusables/check-button';
 import { ActionType } from '../../interfaces/main';
 import minBy from 'lodash-es/minBy';
 import { actions } from '../../actions/recipeActions';

@@ -5,11 +5,11 @@ import {
 	SchemaItem,
 	AllRecipeFields,
 	isSchemaType,
-} from '../interfaces/main';
-import { FormGroup } from './form/form-group';
-import { isDisplayed, UIschema } from '../consts/index';
-import { isUIschemaItem } from '../interfaces/ui';
-import { orderComponents } from '../utils/ordering';
+} from '../../interfaces/main';
+import { FormGroup } from '../form/form-group';
+import { isDisplayed, UIschema } from '../../consts/index';
+import { isUIschemaItem } from '../../interfaces/ui';
+import { orderComponents } from '../../utils/ordering';
 
 interface RecipeComponentProps {
 	body: AllRecipeFields;

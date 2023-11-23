@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { SvgExternal } from '@guardian/source-react-components';
 import { curationEndpoint } from '../../consts/index';
-import { AppReadyStatus } from '../app-ready-status';
+import { AppReadyStatus } from '../reusables/app-ready-status';
 
 interface RecipeListProps {
 	list: RecipeListType[];
