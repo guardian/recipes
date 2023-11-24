@@ -18,6 +18,7 @@ import { useImmerReducer } from 'use-immer';
 import { fetchAndDispatch, setLoadingFinished } from '../utils/requests';
 import { Tabs } from '@guardian/source-react-components-development-kitchen';
 import { DataPreview } from 'components/preview/data-preview';
+import { PinboardTrackAndPreselect } from '../components/curation/pinboard-track-and-preselect';
 
 const Curation = () => {
 	const { section: id } = useParams();
@@ -134,6 +135,10 @@ const Curation = () => {
 					}}
 				></Tabs>
 			</div>
+			<PinboardTrackAndPreselect
+				maybeComposerId={state?.body?.composerId}
+				maybeTitle={state?.body?.title}
+			/>
 		</div>
 	);
 };
