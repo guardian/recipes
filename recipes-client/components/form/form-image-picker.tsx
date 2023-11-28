@@ -6,13 +6,6 @@ import { ActionType } from '../../interfaces/main';
 import minBy from 'lodash-es/minBy';
 import { actions } from '../../actions/recipeActions';
 
-interface ImagePickerProps {
-	isLoading: boolean;
-	html: Record<string, unknown> | null;
-	selected: string | null;
-	dispatcher: Dispatch<ActionType>;
-}
-
 type assetsInfo = {
 	assets: imageInfo[];
 };
@@ -62,9 +55,6 @@ const getPictureIds = (elems: assetsInfo[] | undefined): string[] => {
 		);
 	}
 };
-// function getSelectedPic(body: Record<string, string>): string {
-//   return body['picture']
-// }
 
 const select = (
 	objId: string,
@@ -78,13 +68,19 @@ const select = (
 	});
 };
 
-const PictureGrid = (props: {
-	pics: string[];
+interface PictureGridProps {
+	picUrls: string[];
 	picIds: string[];
 	selected: string | null;
 	dispatcher: Dispatch<ActionType>;
-}) => {
-	const { pics, picIds, selected, dispatcher } = props;
+}
+
+const PictureGrid = ({
+	picUrls,
+	picIds,
+	selected,
+	dispatcher,
+}: PictureGridProps) => {
 	const [picHovered, setHover] = useState(-1);
 	return (
 		<>
@@ -104,13 +100,13 @@ const PictureGrid = (props: {
 					borderWidth: '2px',
 				}}
 			>
-				{pics.map((p, i) => {
+				{picUrls.map((p, i) => {
 					return (
 						<div
 							onMouseOver={() => setHover(i)}
 							onMouseOut={() => setHover(-1)}
 							onClick={() =>
-								select(picIds[i], picIds[i] === selected, dispatcher)
+								select(picUrls[i], picUrls[i] === selected, dispatcher)
 							}
 							css={{
 								gridArea: `${Math.floor(i / 5 + 1)}`,
@@ -139,10 +135,8 @@ const PictureGrid = (props: {
 								}}
 							>
 								<CheckButton
-									objId={picIds[i]}
-									isSelected={picIds[i] === selected}
+									isSelected={picUrls[i] === selected}
 									hover={i === picHovered}
-									dispatcher={dispatcher}
 								/>
 							</div>
 						</div>
@@ -154,8 +148,19 @@ const PictureGrid = (props: {
 	);
 };
 
-const ImagePicker = (props: ImagePickerProps): JSX.Element => {
-	const { isLoading, html, selected, dispatcher } = props;
+interface ImagePickerProps {
+	isLoading: boolean;
+	html: Record<string, unknown> | null;
+	selected: string | null;
+	dispatcher: Dispatch<ActionType>;
+}
+
+const ImagePicker = ({
+	isLoading,
+	html,
+	selected,
+	dispatcher,
+}: ImagePickerProps): JSX.Element => {
 	if (isLoading || html === null) {
 		return <h3> Loading pictures... </h3>;
 	} else {
@@ -164,7 +169,7 @@ const ImagePicker = (props: ImagePickerProps): JSX.Element => {
 
 		return (
 			<PictureGrid
-				pics={picUrls}
+				picUrls={picUrls}
 				picIds={picIds}
 				selected={selected}
 				dispatcher={dispatcher}
