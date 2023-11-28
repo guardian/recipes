@@ -9,8 +9,39 @@ interface DataPreviewProps {
 	recipeData: AllRecipeFields | null;
 }
 
+const prettifyNumber = (num: number): string => {
+	if (num % 1 === 0) {
+		return num.toString();
+	} else {
+		switch (num) {
+			case 0.25:
+				return '¼';
+			case 0.33:
+				return '⅓';
+			case 0.5:
+				return '½';
+			case 0.66:
+				return '⅔';
+			case 0.75:
+				return '¾';
+			case 1.5:
+				return '1½';
+			case 2.5:
+				return '2½';
+			case 3.5:
+				return '3½';
+			case 4.5:
+				return '4½';
+			default:
+				return num.toString();
+		}
+	}
+};
+
 const prettifyRange = (amount: Range) => {
-	return amount.min === amount.max ? amount.min : `${amount.min}-${amount.max}`;
+	return amount.min === amount.max
+		? prettifyNumber(amount.min)
+		: `${amount.min}-${amount.max}`;
 };
 
 const prettifyDurationInMins = (durationInMins: number): string => {
@@ -28,12 +59,15 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 		suffix,
 	}: Ingredient) => {
 		const concernsTins = unit?.includes('tin');
-		const tbsOrTsp = unit?.includes('tbsp') || unit?.includes('tsp');
-		return `${amount ? prettifyRange(amount) : ''}${tbsOrTsp ? ' ' : ''}${
-			concernsTins ? ' x ' : ''
-		}${unit ? unit : ''} ${prefix ? prefix : ''} ${name} ${
-			suffix ? suffix : ''
-		}`;
+		const isUnitRequiringSpace =
+			unit?.includes('tbsp') ||
+			unit?.includes('tsp') ||
+			unit?.includes('clove');
+		return `${amount ? prettifyRange(amount) : ''}${
+			isUnitRequiringSpace ? ' ' : ''
+		}${concernsTins ? ' x ' : ''}${unit ? unit : ''} ${
+			prefix ? prefix : ''
+		} ${name} ${suffix ? suffix : ''}`;
 	};
 
 	return recipeData === null ? (
