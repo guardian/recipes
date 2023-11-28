@@ -47,6 +47,18 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 				</div>
 			</div>
 			<div>
+				<small>Recipe ID</small>
+				<div>{recipeData.id}</div>
+			</div>
+			<div>
+				<small>Canonical article</small>
+				<div>
+					<a href={recipeData.canonicalArticle} target="_blank">
+						{recipeData.canonicalArticle}
+					</a>
+				</div>
+			</div>
+			<div>
 				<small>Featured image Grid ID</small>
 				<div>
 					{recipeData.featuredImage ? (
