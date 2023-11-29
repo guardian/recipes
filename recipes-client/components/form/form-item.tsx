@@ -18,7 +18,6 @@ const renderInput = (
 	const removeId = key;
 	const rmAllowed = removable !== undefined ? removable : false;
 
-	if (typeof value === 'boolean') {
 	if (typeof value === 'boolean' || key.includes('optional')) {
 		if (key.includes('ingredients')) {
 			return (
