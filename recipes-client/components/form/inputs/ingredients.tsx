@@ -41,7 +41,7 @@ export const renderIngredientsFormGroup = (
 						Recipe Section Name (if applicable):{' '}
 					</p>
 					<FormItem
-						text={formItems[k]}
+						text={formItems[ k ]}
 						choices={choices}
 						label={`${key}.${k}`}
 						key={`${key}.${k}`}
@@ -50,7 +50,7 @@ export const renderIngredientsFormGroup = (
 				</div>
 			);
 		else {
-			const ingredientsList = formItems[k] as Ingredient[];
+			let ingredientsList = formItems[ k ] as Ingredient[];
 			const prefix = `${key}.${k}`;
 			const listInputs = ingredientsList.map((ingredient, i) => {
 				const formFieldsSchema = ingredientSchema;
@@ -63,28 +63,28 @@ export const renderIngredientsFormGroup = (
 					formFieldsSchema,
 					dispatcher,
 				);
-				const fields = Object.keys(ingredient)
-					.sort((a, b) => displayOrder[a] - displayOrder[b])
+				const fields = Object.keys(displayOrder)
+					.sort((a, b) => displayOrder[ a ] - displayOrder[ b ])
 					.map((k: keyof Ingredient) => {
-						if (isRangeField(ingredient[k])) {
+						if (isRangeField(ingredient[ k ])) {
 							return renderRangeFormGroup(
-								ingredient[k],
+								ingredient[ k ],
 								choices,
 								`${prefix}.${i}.${k}`,
 								dispatcher,
 							);
 						} else
 							return (
-                <div css={{display: "grid", fontFamily: "GuardianTextSans", color: "gray", fontSize: "0.9rem"}}>
-                {k}
-								<FormItem
-									text={ingredient[k]}
-									choices={choices}
-									label={`${prefix}.${i}.${k}`}
-									key={`${prefix}.${i}.${k}`}
-									dispatcher={dispatcher}
-								/>
-                </div>
+								<div css={{ display: "grid", fontFamily: "GuardianTextSans", color: "gray", fontSize: "0.9rem" }}>
+									{k}
+									<FormItem
+										text={ingredient[ k ] || ""}
+										choices={choices}
+										label={`${prefix}.${i}.${k}`}
+										key={`${prefix}.${i}.${k}`}
+										dispatcher={dispatcher}
+									/>
+								</div>
 							);
 					});
 				return [
@@ -107,7 +107,7 @@ export const renderIngredientsFormGroup = (
 
 const displayOrder = {
 	name: 1,
-  amount: 2,
+	amount: 2,
 	unit: 3,
 	prefix: 4,
 	suffix: 5,

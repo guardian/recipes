@@ -19,10 +19,10 @@ const renderInput = (
 	const rmAllowed = removable !== undefined ? removable : false;
 
 	if (typeof value === 'boolean') {
+	if (typeof value === 'boolean' || key.includes('optional')) {
 		if (key.includes('ingredients')) {
 			return (
 				<Checkbox
-					label={'optional'}
 					checked={value}
 					id={key}
 					key={key}
@@ -41,6 +41,20 @@ const renderInput = (
 			);
 		}
 	}
+
+  if (value === null || value === undefined) {
+    return (<input css={{
+      height: '25px',
+      padding: '8px',
+      margin: '4px 4px 4px 0',
+      fontFamily: 'GuardianTextSans',
+      fontSize: '1.0625rem',
+      width: `${
+        typeof value === 'number'
+          ? '50px' : key.includes("ingredient") ? key.includes("unit") ? "50px" : "200px" : "600px"
+      }`,
+    }}value="" />)
+  }
 
 	if (choices === null || choices === undefined) {
 		if (key.includes('instructions') && key.includes('description')) {
@@ -140,7 +154,7 @@ const FormItem = ({
 	choices,
 	dispatcher,
 }: FormItemProps): JSX.Element => {
-	const itemText = text === null ? 'None' : text;
+	const itemText = text === null ? "" : text;
 
 	return renderInput(itemText, label, choices, dispatcher, removable);
 };
