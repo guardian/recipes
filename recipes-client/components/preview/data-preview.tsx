@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { AllRecipeFields, Ingredient } from 'interfaces/main';
 import { css } from '@emotion/react';
-import { AppReadyStatus } from '../app-ready-status';
+import { AppReadyStatus } from '../reusables/app-ready-status';
 import { Range } from 'interfaces/main';
 import { palette } from '@guardian/source-foundations';
 
@@ -47,15 +47,30 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 				</div>
 			</div>
 			<div>
-				<small>Featured image Grid ID</small>
-
+				<small>Recipe ID</small>
+				<div>{recipeData.id}</div>
+			</div>
+			<div>
+				<small>Canonical article</small>
 				<div>
-					<a
-						href={`https://media.gutools.co.uk/images/${recipeData.featuredImage}`}
-						target="_blank"
-					>
-						{recipeData.featuredImage}
+					<a href={recipeData.canonicalArticle} target="_blank">
+						{recipeData.canonicalArticle}
 					</a>
+				</div>
+			</div>
+			<div>
+				<small>Featured image Grid ID</small>
+				<div>
+					{recipeData.featuredImage ? (
+						<a
+							href={`https://media.gutools.co.uk/images/${recipeData.featuredImage}`}
+							target="_blank"
+						>
+							{recipeData.featuredImage}
+						</a>
+					) : (
+						'-'
+					)}
 				</div>
 			</div>
 			<div>

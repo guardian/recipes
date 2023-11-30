@@ -544,6 +544,19 @@ class ApiController (
     }
   }
 
+  def dbRaw(id: String) = Action {
+    val key_to_get = MMap(config.hashKey -> new AttributeValue(id)).asJava;
+    def request(tableName: String) = new GetItemRequest()
+        .withKey(key_to_get)
+        .withTableName(tableName);
+    val rawData = dbClient.getItem(request(config.rawRecipesTableName)).getItem();
+    if (rawData == null) {
+      NotFound("No recipe with %s: '%s'.".format(config.hashKey, id))
+    } else {
+      Ok(Json.parse(ItemUtils.toItem(rawData).toJSON()));
+    }
+  }
+
   def get_list() = Action {
     // Get a list of recipes
 

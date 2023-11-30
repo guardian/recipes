@@ -96,7 +96,7 @@ export interface Range {
 }
 
 export type IngredientsGroup = {
-	recipeSection: string;
+	recipeSection?: string;
 	ingredientsList: Ingredient[];
 };
 
@@ -187,7 +187,7 @@ export interface LoadingState {
 }
 
 export interface CurationState {
-	readonly body: AllRecipeFields | Record<string, unknown> | null;
+	readonly body: AllRecipeFields | null;
 	readonly schema: Record<string, unknown> | null;
 	readonly html: Record<string, unknown> | null;
 	readonly colours?: string[] | null;
