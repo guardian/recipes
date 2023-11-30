@@ -19,13 +19,14 @@ import { fetchAndDispatch, setLoadingFinished } from '../utils/requests';
 import { Tabs } from '@guardian/source-react-components-development-kitchen';
 import { DataPreview } from 'components/preview/data-preview';
 import { PinboardTrackAndPreselect } from '../components/curation/pinboard-track-and-preselect';
+import { ImageObject } from 'interfaces/main';
 
 const Curation = () => {
 	const { section: id } = useParams();
 	const articleId = id ? `/${id}` : '';
 	const [state, dispatch] = useImmerReducer(recipeReducer, defaultState);
 	const [capiId, setCapiId] = useState<string | null>(null);
-	const image = state.body === null ? null : state.body.featuredImage;
+	const [selectedImage, setSelectedImage] = useState<ImageObject | null>(null);
 	const scrubbedId = articleId.replace(/^\/+/, '');
 
 	const [selectedTab, setSelectedTab] = useState('summary');
@@ -68,6 +69,7 @@ const Curation = () => {
 				if (state.body === null) {
 					return;
 				}
+				setSelectedImage(state.body.featuredImage);
 				setCapiId(state.body.canonicalArticle);
 				fetchAndDispatch(
 					`${location.origin}${capiProxy}/${state.body.canonicalArticle}`,
@@ -95,7 +97,8 @@ const Curation = () => {
 				<>
 					<ImagePicker
 						html={state.html}
-						selected={image}
+						selectedImage={selectedImage}
+						setSelectedImage={setSelectedImage}
 						isLoading={state.isLoading}
 						dispatcher={dispatch}
 					/>

@@ -59,15 +59,14 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 				</div>
 			</div>
 			<div>
-				<small>Featured image Grid ID</small>
+				<small>Featured image</small>
 				<div>
 					{recipeData.featuredImage ? (
-						<a
-							href={`https://media.gutools.co.uk/images/${recipeData.featuredImage}`}
-							target="_blank"
-						>
-							{recipeData.featuredImage}
-						</a>
+						<img
+							src={recipeData.featuredImage.url}
+							alt={`Featured image of ${recipeData.title} recipe`}
+							css={imageStyles}
+						/>
 					) : (
 						'-'
 					)}
@@ -223,4 +222,9 @@ const previewStyles = css`
 	div {
 		margin-bottom: 1rem;
 	}
+`;
+
+const imageStyles = css`
+	max-width: 50%;
+	height: auto;
 `;

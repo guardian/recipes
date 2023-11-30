@@ -5,13 +5,7 @@ import CheckButton from '../reusables/check-button';
 import { ActionType } from '../../interfaces/main';
 import minBy from 'lodash-es/minBy';
 import { actions } from '../../actions/recipeActions';
-
-interface ImagePickerProps {
-	isLoading: boolean;
-	html: Record<string, unknown> | null;
-	selected: string | null;
-	dispatcher: Dispatch<ActionType>;
-}
+import { ImageObject } from '../../interfaces/main';
 
 type assetsInfo = {
 	assets: imageInfo[];
@@ -23,7 +17,16 @@ type imageInfo = {
 };
 
 type typeDataTypes = {
+	altText: string;
+	caption: string;
+	credit: string;
+	displayCredit: string;
 	height: string;
+	imageType: string;
+	mediaApiUri: string;
+	mediaId: string;
+	secureFile: string;
+	source: string;
 	width: string;
 };
 
@@ -32,59 +35,67 @@ const findSmallestVersion = (assets: imageInfo[]): imageInfo => {
 	return minBy(assets, ({ typeData }) => typeData.width);
 };
 
-const getPictureUrls = (elems: assetsInfo[] | undefined): string[] => {
-	if (elems === undefined) {
-		return [];
+const inferCropId = (url: string): string => {
+	const parts = url.split('/');
+	const cropId = parts[parts.length - 2];
+	if (cropId !== undefined) {
+		return cropId;
 	} else {
-		return Array.from(
-			elems.reduce((acc, el) => {
-				const smallestAsset = findSmallestVersion(el['assets']);
-				if ('file' in smallestAsset) {
-					acc.add(smallestAsset['file']);
-				}
-				return acc;
-			}, new Set<string>()),
-		);
+		console.error('Could not infer cropId from url: ', url);
+		return '';
 	}
 };
 
-const getPictureIds = (elems: assetsInfo[] | undefined): string[] => {
+const getPictureObjects = (elems: assetsInfo[] | undefined): ImageObject[] => {
 	if (elems === undefined) {
 		return [];
 	} else {
-		return Array.from(
-			elems.reduce((acc, el) => {
-				if ('id' in el) {
-					acc.add(el['id']);
-				}
-				return acc;
-			}, new Set<string>()),
-		);
+		return elems.reduce((acc, el) => {
+			const smallestAsset = findSmallestVersion(el.assets);
+			if (smallestAsset.file) {
+				acc.push({
+					url: smallestAsset.file,
+					mediaId: smallestAsset.typeData.mediaId,
+					cropId: inferCropId(smallestAsset.file),
+					source: smallestAsset.typeData.source,
+					photographer: smallestAsset.typeData.displayCredit,
+					imageType: smallestAsset.typeData.imageType,
+					caption: smallestAsset.typeData.caption,
+					mediaApiUri: smallestAsset.typeData.mediaApiUri,
+				});
+			}
+			return acc;
+		}, [] as ImageObject[]);
 	}
 };
-// function getSelectedPic(body: Record<string, string>): string {
-//   return body['picture']
-// }
 
 const select = (
-	objId: string,
+	imageObject: ImageObject,
 	isSelected: boolean,
+	setSelectedImage: Dispatch<ImageObject | null>,
 	dispatcher: Dispatch<ActionType>,
 ): void => {
-	const obj = isSelected ? null : objId;
+	const obj = isSelected ? null : imageObject;
+	setSelectedImage(obj);
 	dispatcher({
 		type: actions.selectImg,
 		payload: obj,
 	});
 };
 
-const PictureGrid = (props: {
-	pics: string[];
-	picIds: string[];
-	selected: string | null;
+interface PictureGridProps {
+	picObjects: ImageObject[];
+	selectedImage: ImageObject | null;
+	setSelectedImage: Dispatch<ImageObject | null>;
 	dispatcher: Dispatch<ActionType>;
-}) => {
-	const { pics, picIds, selected, dispatcher } = props;
+}
+
+const PictureGrid = ({
+	picObjects,
+	selectedImage,
+	setSelectedImage,
+	dispatcher,
+}: PictureGridProps) => {
 	const [picHovered, setHover] = useState(-1);
 	return (
 		<>
@@ -104,13 +115,18 @@ const PictureGrid = (props: {
 					borderWidth: '2px',
 				}}
 			>
-				{pics.map((p, i) => {
+				{picObjects.map((p, i) => {
 					return (
 						<div
 							onMouseOver={() => setHover(i)}
 							onMouseOut={() => setHover(-1)}
 							onClick={() =>
-								select(picIds[i], picIds[i] === selected, dispatcher)
+								select(
+									picObjects[i],
+									picObjects[i] === selectedImage,
+									setSelectedImage,
+									dispatcher,
+								)
 							}
 							css={{
 								gridArea: `${Math.floor(i / 5 + 1)}`,
@@ -126,7 +142,7 @@ const PictureGrid = (props: {
 							}}
 							key={`img_${i}`}
 						>
-							<img style={{ maxWidth: 'inherit' }} src={p} alt={p} />
+							<img style={{ maxWidth: 'inherit' }} src={p.url} alt={p.url} />
 							<div
 								key={`tile-icon-bar-${i}`}
 								style={{
@@ -139,10 +155,8 @@ const PictureGrid = (props: {
 								}}
 							>
 								<CheckButton
-									objId={picIds[i]}
-									isSelected={picIds[i] === selected}
+									isSelected={picObjects[i]?.url === selectedImage?.url}
 									hover={i === picHovered}
-									dispatcher={dispatcher}
 								/>
 							</div>
 						</div>
@@ -154,19 +168,31 @@ const PictureGrid = (props: {
 	);
 };
 
-const ImagePicker = (props: ImagePickerProps): JSX.Element => {
-	const { isLoading, html, selected, dispatcher } = props;
+interface ImagePickerProps {
+	isLoading: boolean;
+	html: Record<string, unknown> | null;
+	selectedImage: ImageObject | null;
+	setSelectedImage: (img: ImageObject | null) => void;
+	dispatcher: Dispatch<ActionType>;
+}
+
+const ImagePicker = ({
+	isLoading,
+	html,
+	selectedImage,
+	setSelectedImage,
+	dispatcher,
+}: ImagePickerProps): JSX.Element => {
 	if (isLoading || html === null) {
 		return <h3> Loading pictures... </h3>;
 	} else {
-		const picUrls = getPictureUrls(html['elements']);
-		const picIds = getPictureIds(html['elements']);
+		const picObjects = getPictureObjects(html.elements as assetsInfo[]);
 
 		return (
 			<PictureGrid
-				pics={picUrls}
-				picIds={picIds}
-				selected={selected}
+				picObjects={picObjects}
+				selectedImage={selectedImage}
+				setSelectedImage={setSelectedImage}
 				dispatcher={dispatcher}
 			/>
 		);
