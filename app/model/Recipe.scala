@@ -11,11 +11,12 @@ case class IngredientsList(recipeSection: Option[String], ingredientsList: List[
 case class Serves(amount: Range, unit: String, text: Option[String])
 case class Instruction(stepNumber: Int, description: String, images: Option[List[String]])
 case class Timing(qualifier: String, durationInMins: Int, text: Option[String])
+case class ImageObject(url: String, mediaId: String, cropId: String, source: Option[String], photographer: Option[String], imageType: Option[String], caption: Option[String], mediaApiUrl: Option[String])
 
 case class Recipe(
   isAppReady: Boolean,
   id: String,
-  featuredImage: Option[String],
+  featuredImage: Option[ImageObject],
   composerId: Option[String],
   webPublicationDate: Option[String],
   canonicalArticle: Option[String],
@@ -38,6 +39,10 @@ case class Recipe(
 
 object Quantity {
   implicit val formats: OFormat[Quantity] = Json.format[Quantity]
+}
+
+object ImageObject {
+  implicit val formats: OFormat[ImageObject] = Json.format[ImageObject]
 }
 
 object Ingredient {

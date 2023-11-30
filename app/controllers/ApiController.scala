@@ -226,7 +226,38 @@ class ApiController (
             }
         },
         "featuredImage": {
-            "type": ["string", "null"]
+            "type": ["object", "null"],
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "mediaId": {
+                    "type": "string"
+                },
+                "cropId": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "photographer": {
+                    "type": "string"
+                },
+                "imageType": {
+                    "type": "string"
+                },
+                "caption": {
+                    "type": "string"
+                },
+                "mediaApiUrl": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "url",
+                "mediaId",
+                "cropId"
+            ]
         },
         "timings": {
           "type": "array",

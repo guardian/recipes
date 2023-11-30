@@ -59,7 +59,7 @@ export interface RecipeFields {
 	webPublicationDate: string; // Date recipe was published
 	title: string; // Name of the recipe
 	description: string; // Short description of the recipe
-	featuredImage: string; // !! Actually capiImage
+	featuredImage: ImageObject; // !! Actually capiImage
 	contributors: ContributorTag[]; // Structured data for contributors, where available
 	byline: BylineEntry[]; // Authorship data for the piece, including references to contributors where available, and text where not. Accommodates cases like this
 	ingredients: IngredientsGroup[]; // List of ingredients
@@ -74,6 +74,17 @@ export interface RecipeFields {
 	timings: Timing[];
 	instructions: Instruction[]; // Steps breaking down the recipe. For recipes that can't be stepified this would just be one big 'step' containing the method
 }
+
+export type ImageObject = {
+	url: string;
+	mediaId: string;
+	cropId: string;
+	source?: string;
+	photographer?: string;
+	imageType?: string;
+	caption?: string;
+	mediaApiUri?: string;
+};
 
 export type DifficultyLevel = 'easy' | 'medium' | 'hard';
 export interface Instruction {
