@@ -52,7 +52,7 @@ const renderInput = (
         typeof value === 'number'
           ? '50px' : key.includes("ingredient") ? key.includes("unit") ? "50px" : "200px" : "600px"
       }`,
-    }}value="" />)
+    }} value="" min={0} />)
   }
 
 	if (choices === null || choices === undefined) {
@@ -91,13 +91,15 @@ const renderInput = (
 						width: `${
 							typeof value === 'number'
 								? '50px' : key.includes("ingredient") ? key.includes("unit") ? "50px" : "200px" : "600px"
-						}`,
+						}
+            `,
 					}}
 					key={key}
 					id={key}
 					type={typeof value}
 					label={key}
 					value={value}
+          min={0}
 					onChange={(event) => {
 						typeof value === 'number'
 							? handleChangeNumber(event, dispatcher)

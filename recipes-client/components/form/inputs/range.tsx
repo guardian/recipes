@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { ActionType } from 'interfaces/main';
+import { ActionType, Range } from 'interfaces/main';
 import { Dispatch } from 'react';
 import FormItem from '../form-item';
 

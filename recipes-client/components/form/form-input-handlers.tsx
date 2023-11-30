@@ -44,7 +44,9 @@ export const handleChangeNumber = (
 	dispatcher: Dispatch<ActionType>,
 ): void => {
 	const objId = event.target.id;
+  console.log('objId', objId)
 	const objVal = Number(event.target.value);
+  console.log('objVal', objVal)
 	dispatcher({
 		type: actions.change,
 		payload: { [objId]: objVal },

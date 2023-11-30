@@ -73,7 +73,9 @@ export const renderIngredientsFormGroup = (
 								`${prefix}.${i}.${k}`,
 								dispatcher,
 							);
-						} else
+						} else if (k === "amount") {
+              return renderRangeFormGroup({min: 0, max: 0}, choices, `${prefix}.${i}.amount`, dispatcher)
+            } else
 							return (
 								<div css={{ display: "grid", fontFamily: "GuardianTextSans", color: "gray", fontSize: "0.9rem" }}>
 									{k}
