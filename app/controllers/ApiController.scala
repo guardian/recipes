@@ -597,8 +597,7 @@ class ApiController (
     def scanRequest(tableName: String) = new ScanRequest()
         .withTableName(tableName)
         .withProjectionExpression("%s, title, contributors, canonicalArticle, isAppReady".format(partition_alias))
-        .withExpressionAttributeNames(expressionAttributeValues)
-        .withLimit(60);
+        .withExpressionAttributeNames(expressionAttributeValues);
 
     val rawResult = dbClient.scan(scanRequest( config.rawRecipesTableName ));
     val rawResultData = ItemUtils.toItemList(rawResult.getItems()).asScala
