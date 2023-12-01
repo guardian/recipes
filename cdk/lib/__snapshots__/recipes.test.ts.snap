@@ -76,11 +76,11 @@ exports[`The Recipes stack matches the snapshot 1`] = `
         "HealthCheckType": "ELB",
         "LaunchTemplate": {
           "LaunchTemplateId": {
-            "Ref": "playgroundTESTrecipesC8C65EB2",
+            "Ref": "playgroundPRODrecipes441F470D",
           },
           "Version": {
             "Fn::GetAtt": [
-              "playgroundTESTrecipesC8C65EB2",
+              "playgroundPRODrecipes441F470D",
               "LatestVersionNumber",
             ],
           },
@@ -118,7 +118,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           {
             "Key": "Stage",
             "PropagateAtLaunch": true,
-            "Value": "TEST",
+            "Value": "PROD",
           },
           {
             "Key": "SystemdUnit",
@@ -164,7 +164,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "ValidationMethod": "DNS",
@@ -184,7 +184,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "Stage": "TEST",
+        "Stage": "PROD",
         "TTL": 3600,
       },
       "Type": "Guardian::DNS::RecordSet",
@@ -230,7 +230,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
                     {
                       "Ref": "DistributionBucketName",
                     },
-                    "/playground/TEST/recipes/*",
+                    "/playground/PROD/recipes/*",
                   ],
                 ],
               },
@@ -278,7 +278,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "VpcId": {
@@ -322,11 +322,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:kinesis:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:kinesis:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
@@ -398,7 +394,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
       },
@@ -570,7 +566,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "Type": "application",
@@ -608,7 +604,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "VpcId": {
@@ -670,15 +666,11 @@ exports[`The Recipes stack matches the snapshot 1`] = `
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/playground/recipes",
+                    ":parameter/PROD/playground/recipes",
                   ],
                 ],
               },
@@ -693,15 +685,11 @@ exports[`The Recipes stack matches the snapshot 1`] = `
                 "Fn::Join": [
                   "",
                   [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
+                    "arn:aws:ssm:eu-west-1:",
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/TEST/playground/recipes/*",
+                    ":parameter/PROD/playground/recipes/*",
                   ],
                 ],
               },
@@ -746,7 +734,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "TargetGroupAttributes": [
@@ -801,7 +789,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
         "VpcId": {
@@ -854,7 +842,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
         "SSESpecification": {
           "SSEEnabled": true,
         },
-        "TableName": "curatedRecipesTableTEST",
+        "TableName": "curatedRecipesTablePROD",
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -870,14 +858,14 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
       },
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Retain",
     },
-    "playgroundTESTrecipesC8C65EB2": {
+    "playgroundPRODrecipes441F470D": {
       "DependsOn": [
         "InstanceRoleRecipesDefaultPolicy207A92A7",
         "InstanceRoleRecipes248BE506",
@@ -887,7 +875,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           "IamInstanceProfile": {
             "Arn": {
               "Fn::GetAtt": [
-                "playgroundTESTrecipesProfile44E4F03F",
+                "playgroundPRODrecipesProfile76BE93F6",
                 "Arn",
               ],
             },
@@ -927,7 +915,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
                 },
                 {
                   "Key": "Name",
-                  "Value": "Recipes/playground-TEST-recipes",
+                  "Value": "Recipes/playground-PROD-recipes",
                 },
                 {
                   "Key": "Stack",
@@ -935,7 +923,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
                 },
                 {
                   "Key": "Stage",
-                  "Value": "TEST",
+                  "Value": "PROD",
                 },
               ],
             },
@@ -952,7 +940,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
                 },
                 {
                   "Key": "Name",
-                  "Value": "Recipes/playground-TEST-recipes",
+                  "Value": "Recipes/playground-PROD-recipes",
                 },
                 {
                   "Key": "Stack",
@@ -960,7 +948,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
                 },
                 {
                   "Key": "Stage",
-                  "Value": "TEST",
+                  "Value": "PROD",
                 },
               ],
             },
@@ -972,25 +960,17 @@ exports[`The Recipes stack matches the snapshot 1`] = `
                 [
                   "#!/bin/bash -ev
 mkdir /etc/gu
-echo 'TEST' > /etc/gu/stage
-aws --region ",
-                  {
-                    "Ref": "AWS::Region",
-                  },
-                  " s3 cp s3://",
+echo 'PROD' > /etc/gu/stage
+aws --region eu-west-1 s3 cp s3://",
                   {
                     "Ref": "DistributionBucketName",
                   },
-                  "/playground/TEST/recipes/recipes.conf /etc/gu/recipes.conf
-aws --region ",
-                  {
-                    "Ref": "AWS::Region",
-                  },
-                  " s3 cp s3://",
+                  "/playground/PROD/recipes/recipes.conf /etc/gu/recipes.conf
+aws --region eu-west-1 s3 cp s3://",
                   {
                     "Ref": "DistributionBucketName",
                   },
-                  "/playground/TEST/recipes/recipes.deb /tmp/package.deb
+                  "/playground/PROD/recipes/recipes.deb /tmp/package.deb
 dpkg -i /tmp/package.deb",
                 ],
               ],
@@ -1011,7 +991,7 @@ dpkg -i /tmp/package.deb",
               },
               {
                 "Key": "Name",
-                "Value": "Recipes/playground-TEST-recipes",
+                "Value": "Recipes/playground-PROD-recipes",
               },
               {
                 "Key": "Stack",
@@ -1019,7 +999,7 @@ dpkg -i /tmp/package.deb",
               },
               {
                 "Key": "Stage",
-                "Value": "TEST",
+                "Value": "PROD",
               },
             ],
           },
@@ -1027,7 +1007,7 @@ dpkg -i /tmp/package.deb",
       },
       "Type": "AWS::EC2::LaunchTemplate",
     },
-    "playgroundTESTrecipesProfile44E4F03F": {
+    "playgroundPRODrecipesProfile76BE93F6": {
       "Properties": {
         "Roles": [
           {
@@ -1060,7 +1040,7 @@ dpkg -i /tmp/package.deb",
         "SSESpecification": {
           "SSEEnabled": true,
         },
-        "TableName": "rawRecipesTableTEST",
+        "TableName": "rawRecipesTablePROD",
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -1076,7 +1056,7 @@ dpkg -i /tmp/package.deb",
           },
           {
             "Key": "Stage",
-            "Value": "TEST",
+            "Value": "PROD",
           },
         ],
       },
