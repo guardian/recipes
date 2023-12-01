@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 
-import { Legend } from '@guardian/source-react-components';
 import { ActionType, Instruction, SchemaItem } from 'interfaces/main';
 import { Dispatch } from 'react';
 import { getItemButtons } from '../form-buttons';

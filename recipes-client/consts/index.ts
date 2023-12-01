@@ -114,7 +114,7 @@ export const UIschema: UIschemaItem = {
 	timings: {
 		'ui:display': true,
 		'ui:locked': false,
-		'ui:removable': false,
+		'ui:removable': true,
 		'ui:order': ['qualifier', 'durationInMins'],
 		qualifier: {
 			'ui:display': true,

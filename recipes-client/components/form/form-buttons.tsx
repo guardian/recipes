@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Button } from '@guardian/source-react-components';
 import { ActionType, SchemaItem } from 'interfaces/main';
+import { servesSchema } from 'interfaces/nastyHardcodedSchemas';
 import { Dispatch } from 'react';
 import { handleAddField, handleRemoveField } from './form-input-handlers';
 
@@ -11,6 +12,9 @@ export const getItemButtons = (
 	formFieldsSchema: SchemaItem,
 	dispatcher: Dispatch<ActionType>,
 ): JSX.Element => {
+	if (key === 'timings') {
+		formFieldsSchema = formFieldsSchema.properties;
+	}
 	return (
 		<div css={{ marginTop: '5px' }}>
 			<FormButton
