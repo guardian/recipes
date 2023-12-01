@@ -42,7 +42,7 @@ export const renderIngredientsFormGroup = (
 						Recipe Section Name (if applicable):{' '}
 					</p>
 					<FormItem
-						text={formItems[ k ]}
+						text={formItems[k]}
 						choices={choices}
 						label={`${key}.${k}`}
 						key={`${key}.${k}`}
@@ -51,7 +51,7 @@ export const renderIngredientsFormGroup = (
 				</div>
 			);
 		else {
-			let ingredientsList = formItems[ k ] as Ingredient[];
+			let ingredientsList = formItems[k] as Ingredient[];
 			const prefix = `${key}.${k}`;
 			const listInputs = ingredientsList.map((ingredient, i) => {
 				const formFieldsSchema = ingredientSchema;
@@ -65,52 +65,64 @@ export const renderIngredientsFormGroup = (
 					dispatcher,
 				);
 
-        const updateAmount = (
-          key: string,
-          dispatcher: Dispatch<ActionType>,
-        ): void => {
-          dispatcher({
-            type: actions.change,
-            payload: { [key]: {min: 0, max: 0} },
-          });
-        };
+				const updateAmount = (
+					key: string,
+					dispatcher: Dispatch<ActionType>,
+				): void => {
+					dispatcher({
+						type: actions.change,
+						payload: { [key]: { min: 0, max: 0 } },
+					});
+				};
 
 				const fields = Object.keys(displayOrder)
-					.sort((a, b) => displayOrder[ a ] - displayOrder[ b ])
+					.sort((a, b) => displayOrder[a] - displayOrder[b])
 					.map((k: keyof Ingredient) => {
-						if (isRangeField(ingredient[ k ])) {
+						if (isRangeField(ingredient[k])) {
 							return renderRangeFormGroup(
-								ingredient[ k ],
+								ingredient[k],
 								choices,
 								`${prefix}.${i}.${k}`,
 								dispatcher,
 							);
-						} else if (k === "amount") {
-              return <div
-                css={{
-                  width: '120px',
-                  height: '27px',
-                  fontFamily: "GuardianTextSans",
-                  alignSelf: 'end',
-                  border: '1px solid black',
-                  padding: '8px',
-                  margin: '4px',
-                  marginLeft: '2px',
-                  borderRadius: '4px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  backgroundColor: '#052962',
-                  color: 'white'
-
-                }}
-                onClick={() => updateAmount(`${prefix}.${i}.${k}`, dispatcher)}
-                >Edit amount</div>
-            } else
+						} else if (k === 'amount') {
 							return (
-								<div css={{ display: "grid", fontFamily: "GuardianTextSans", color: "gray", fontSize: "0.9rem" }}>
+								<div
+									css={{
+										width: '120px',
+										height: '27px',
+										fontFamily: 'GuardianTextSans',
+										alignSelf: 'end',
+										border: '1px solid black',
+										padding: '8px',
+										margin: '4px',
+										marginLeft: '2px',
+										borderRadius: '4px',
+										textAlign: 'center',
+										cursor: 'pointer',
+										backgroundColor: '#052962',
+										color: 'white',
+									}}
+									onClick={() =>
+										updateAmount(`${prefix}.${i}.${k}`, dispatcher)
+									}
+								>
+									Add amount
+								</div>
+							);
+						} else
+							return (
+								<div
+									css={{
+										display: 'grid',
+										fontFamily: 'GuardianTextSans',
+										color: 'gray',
+										fontSize: '0.9rem',
+									}}
+								>
 									{k}
 									<FormItem
-										text={ingredient[ k ] || ""}
+										text={ingredient[k] || ''}
 										choices={choices}
 										label={`${prefix}.${i}.${k}`}
 										key={`${prefix}.${i}.${k}`}
