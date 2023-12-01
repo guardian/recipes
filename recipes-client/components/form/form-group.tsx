@@ -210,7 +210,7 @@ export const FormGroup = ({
 	);
 
 	return (
-		<div>
+		<div css={{ overflow: 'scroll' }}>
 			<Legend key={`${key}.legend`} text={key} css={{ width: '150px' }} />
 			<div css={{ display: 'grid' }}>{formFields}</div>
 			<div>{isFormItemRemovable && formItemButtons}</div>

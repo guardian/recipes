@@ -18,11 +18,10 @@ const renderInput = (
 	const removeId = key;
 	const rmAllowed = removable !== undefined ? removable : false;
 
-	if (typeof value === 'boolean') {
+	if (typeof value === 'boolean' || key.includes('optional')) {
 		if (key.includes('ingredients')) {
 			return (
 				<Checkbox
-					label={'optional'}
 					checked={value}
 					id={key}
 					key={key}
@@ -42,6 +41,31 @@ const renderInput = (
 		}
 	}
 
+	if (value === null || value === undefined) {
+		return (
+			<input
+				css={{
+					height: '25px',
+					padding: '8px',
+					margin: '4px 4px 4px 0',
+					fontFamily: 'GuardianTextSans',
+					fontSize: '1.0625rem',
+					width: `${
+						typeof value === 'number'
+							? '50px'
+							: key.includes('ingredient')
+							? key.includes('unit')
+								? '50px'
+								: '200px'
+							: '600px'
+					}`,
+				}}
+				value=""
+				min={0}
+			/>
+		);
+	}
+
 	if (choices === null || choices === undefined) {
 		if (key.includes('instructions') && key.includes('description')) {
 			return (
@@ -53,7 +77,7 @@ const renderInput = (
 							fontSize: '1.0625rem',
 							width: '500px',
 							height: '60px',
-							margin: '4px',
+							margin: '4px 4px 4px 0',
 						}}
 						key={key}
 						id={key}
@@ -72,24 +96,29 @@ const renderInput = (
 					css={{
 						height: '25px',
 						padding: '8px',
-						margin: '4px',
+						margin: '4px 4px 4px 0',
 						fontFamily: 'GuardianTextSans',
 						fontSize: '1.0625rem',
 						width: `${
 							typeof value === 'number'
 								? '50px'
-								: key.includes('unit')
-								? '80px'
-								: key.includes('ingredients')
-								? '250px'
-								: '400px'
-						}`,
+								: key.includes('ingredient')
+								? key.includes('unit')
+									? '50px'
+									: key.includes('recipeSection')
+									? '400px'
+									: '200px'
+								: '600px'
+						}
+            `,
 					}}
 					key={key}
 					id={key}
 					type={typeof value}
 					label={key}
+					step={'any'}
 					value={value}
+					min={0}
 					onChange={(event) => {
 						typeof value === 'number'
 							? handleChangeNumber(event, dispatcher)
@@ -145,7 +174,7 @@ const FormItem = ({
 	choices,
 	dispatcher,
 }: FormItemProps): JSX.Element => {
-	const itemText = text === null ? 'None' : text;
+	const itemText = text === null ? '' : text;
 
 	return renderInput(itemText, label, choices, dispatcher, removable);
 };

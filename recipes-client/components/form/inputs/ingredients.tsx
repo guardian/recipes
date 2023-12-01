@@ -14,6 +14,7 @@ import { isRangeField } from 'utils/recipe-field-checkers';
 import { getItemButtons } from '../form-buttons';
 import FormItem from '../form-item';
 import { renderRangeFormGroup } from './range';
+import { actions } from 'actions/recipeActions';
 
 export const renderIngredientsFormGroup = (
 	formItems: IngredientsGroup,
@@ -50,7 +51,7 @@ export const renderIngredientsFormGroup = (
 				</div>
 			);
 		else {
-			const ingredientsList = formItems[k] as Ingredient[];
+			let ingredientsList = formItems[k] as Ingredient[];
 			const prefix = `${key}.${k}`;
 			const listInputs = ingredientsList.map((ingredient, i) => {
 				const formFieldsSchema = ingredientSchema;
@@ -63,7 +64,18 @@ export const renderIngredientsFormGroup = (
 					formFieldsSchema,
 					dispatcher,
 				);
-				const fields = Object.keys(ingredient)
+
+				const updateAmount = (
+					key: string,
+					dispatcher: Dispatch<ActionType>,
+				): void => {
+					dispatcher({
+						type: actions.change,
+						payload: { [key]: { min: 0, max: 0 } },
+					});
+				};
+
+				const fields = Object.keys(displayOrder)
 					.sort((a, b) => displayOrder[a] - displayOrder[b])
 					.map((k: keyof Ingredient) => {
 						if (isRangeField(ingredient[k])) {
@@ -73,15 +85,50 @@ export const renderIngredientsFormGroup = (
 								`${prefix}.${i}.${k}`,
 								dispatcher,
 							);
+						} else if (k === 'amount') {
+							return (
+								<div
+									css={{
+										width: '120px',
+										height: '27px',
+										fontFamily: 'GuardianTextSans',
+										alignSelf: 'end',
+										border: '1px solid black',
+										padding: '8px',
+										margin: '4px',
+										marginLeft: '2px',
+										borderRadius: '4px',
+										textAlign: 'center',
+										cursor: 'pointer',
+										backgroundColor: '#052962',
+										color: 'white',
+									}}
+									onClick={() =>
+										updateAmount(`${prefix}.${i}.${k}`, dispatcher)
+									}
+								>
+									Add amount
+								</div>
+							);
 						} else
 							return (
-								<FormItem
-									text={ingredient[k]}
-									choices={choices}
-									label={`${prefix}.${i}.${k}`}
-									key={`${prefix}.${i}.${k}`}
-									dispatcher={dispatcher}
-								/>
+								<div
+									css={{
+										display: 'grid',
+										fontFamily: 'GuardianTextSans',
+										color: 'gray',
+										fontSize: '0.9rem',
+									}}
+								>
+									{k}
+									<FormItem
+										text={ingredient[k] || ''}
+										choices={choices}
+										label={`${prefix}.${i}.${k}`}
+										key={`${prefix}.${i}.${k}`}
+										dispatcher={dispatcher}
+									/>
+								</div>
 							);
 					});
 				return [
@@ -105,9 +152,9 @@ export const renderIngredientsFormGroup = (
 const displayOrder = {
 	name: 1,
 	amount: 2,
-	prefix: 3,
-	suffix: 4,
-	unit: 5,
+	unit: 3,
+	prefix: 4,
+	suffix: 5,
 	text: 6,
 	optional: 7,
 };

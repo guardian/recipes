@@ -16,16 +16,16 @@ export const getItemButtons = (
 		formFieldsSchema = formFieldsSchema.properties;
 	}
 	return (
-		<div css={{ marginTop: '5px' }}>
+		<div css={{ marginTop: '5px', display: 'flex', alignItems: 'center' }}>
 			<FormButton
-				text={`+ ${key.split('.').slice(-1)[0]}`}
+				text={`Add`}
 				buttonId={`${key}.add`}
 				onClick={() =>
 					handleAddField(formItemAddId, formFieldsSchema, dispatcher)
 				}
 			/>
 			<FormButton
-				text={`- ${key.split('.').slice(-1)[0]}`}
+				text={`Remove`}
 				buttonId={`${key}.add`}
 				onClick={() => handleRemoveField(formItemRemoveLastId, dispatcher)}
 			/>
