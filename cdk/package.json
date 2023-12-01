@@ -12,14 +12,14 @@
     "diff": "cdk diff --path-metadata false --version-reporting false"
   },
   "devDependencies": {
-    "@guardian/cdk": "52.0.0",
+    "@guardian/cdk": "52.3.0",
     "@guardian/eslint-config-typescript": "7.0.0",
     "@guardian/prettier": "5.0.0",
     "@guardian/tsconfig": "^0.2.0",
     "@types/jest": "^29.5.6",
     "@types/node": "20.8.8",
-    "aws-cdk": "2.100.0",
-    "aws-cdk-lib": "2.100.0",
+    "aws-cdk": "2.109.0",
+    "aws-cdk-lib": "2.109.0",
     "constructs": "10.3.0",
     "eslint": "^8.50.0",
     "jest": "^29.7.0",
