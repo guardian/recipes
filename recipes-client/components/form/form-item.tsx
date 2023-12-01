@@ -98,6 +98,7 @@ const renderInput = (
 					id={key}
 					type={typeof value}
 					label={key}
+          step={'any'}
 					value={value}
           min={0}
 					onChange={(event) => {

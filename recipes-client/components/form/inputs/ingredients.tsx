@@ -14,6 +14,7 @@ import { isRangeField } from 'utils/recipe-field-checkers';
 import { getItemButtons } from '../form-buttons';
 import FormItem from '../form-item';
 import { renderRangeFormGroup } from './range';
+import { actions } from 'actions/recipeActions';
 
 export const renderIngredientsFormGroup = (
 	formItems: IngredientsGroup,
@@ -63,6 +64,17 @@ export const renderIngredientsFormGroup = (
 					formFieldsSchema,
 					dispatcher,
 				);
+
+        const updateAmount = (
+          key: string,
+          dispatcher: Dispatch<ActionType>,
+        ): void => {
+          dispatcher({
+            type: actions.change,
+            payload: { [key]: {min: 0, max: 0} },
+          });
+        };
+
 				const fields = Object.keys(displayOrder)
 					.sort((a, b) => displayOrder[ a ] - displayOrder[ b ])
 					.map((k: keyof Ingredient) => {
@@ -74,7 +86,7 @@ export const renderIngredientsFormGroup = (
 								dispatcher,
 							);
 						} else if (k === "amount") {
-              return renderRangeFormGroup({min: 0, max: 0}, choices, `${prefix}.${i}.amount`, dispatcher)
+              return <div css={{width: '150px'}} onClick={() => updateAmount(`${prefix}.${i}.${k}`, dispatcher)}>click!</div>
             } else
 							return (
 								<div css={{ display: "grid", fontFamily: "GuardianTextSans", color: "gray", fontSize: "0.9rem" }}>
