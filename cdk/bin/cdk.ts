@@ -7,5 +7,6 @@ export const prodProps = {
   stack: "playground",
   stage: "PROD",
   env: { region: "eu-west-1" },
+  withBackup: true,
 };
 new Recipes(app, "Recipes-euwest-1-PROD", prodProps);
