@@ -68,6 +68,9 @@ export const PinboardTrackAndPreselect = ({
 
 	return maybeWorkflowId ? (
 		// @ts-ignore -- this element is not valid JSX but IS meaningful/detected by Pinboard
-		<pinboard-preselect data-composer-id={maybeComposerId}></pinboard-preselect>
+		<pinboard-preselect
+			data-composer-id={maybeComposerId}
+			data-composer-section="Recipes Data"
+		/>
 	) : null;
 };
