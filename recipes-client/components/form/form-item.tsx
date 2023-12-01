@@ -90,7 +90,7 @@ const renderInput = (
 						fontSize: '1.0625rem',
 						width: `${
 							typeof value === 'number'
-								? '50px' : key.includes("ingredient") ? key.includes("unit") ? "50px" : "200px" : "600px"
+								? '50px' : key.includes("ingredient") ? key.includes("unit") ? "50px" : key.includes("recipeSection") ? "400px" : "200px" : "600px"
 						}
             `,
 					}}

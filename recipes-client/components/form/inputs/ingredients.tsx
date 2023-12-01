@@ -86,7 +86,25 @@ export const renderIngredientsFormGroup = (
 								dispatcher,
 							);
 						} else if (k === "amount") {
-              return <div css={{width: '150px'}} onClick={() => updateAmount(`${prefix}.${i}.${k}`, dispatcher)}>click!</div>
+              return <div
+                css={{
+                  width: '120px',
+                  height: '27px',
+                  fontFamily: "GuardianTextSans",
+                  alignSelf: 'end',
+                  border: '1px solid black',
+                  padding: '8px',
+                  margin: '4px',
+                  marginLeft: '2px',
+                  borderRadius: '4px',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  backgroundColor: '#052962',
+                  color: 'white'
+
+                }}
+                onClick={() => updateAmount(`${prefix}.${i}.${k}`, dispatcher)}
+                >Edit amount</div>
             } else
 							return (
 								<div css={{ display: "grid", fontFamily: "GuardianTextSans", color: "gray", fontSize: "0.9rem" }}>
