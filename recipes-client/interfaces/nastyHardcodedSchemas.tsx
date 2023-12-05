@@ -40,3 +40,18 @@ export const ingredientGroupSchema = {
 		required: ['name'],
 	},
 };
+
+export const methodStepSchema = {
+	stepNumber: {
+		type: 'integer',
+	},
+	description: {
+		type: 'string',
+	},
+	images: {
+		type: ['array', 'null'],
+		items: {
+			type: ['string', 'null'],
+		},
+	},
+};
