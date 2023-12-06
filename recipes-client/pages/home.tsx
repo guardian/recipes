@@ -26,7 +26,7 @@ const Home = (): JSX.Element => {
 			} else if (listFilter === 'edited-but-not-app-ready') {
 				return !recipe.isAppReady && recipe.isInCuratedTable;
 			} else if (listFilter === 'non-curated') {
-				return !recipe.isAppReady;
+				return !recipe.isAppReady && !recipe.isInCuratedTable;
 			} else {
 				console.error('Invalid filter');
 				return true;
