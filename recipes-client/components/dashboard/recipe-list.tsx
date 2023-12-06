@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { SvgExternal } from '@guardian/source-react-components';
 import { curationEndpoint } from '../../consts/index';
-import { AppReadyStatus } from '../reusables/app-ready-status';
+import { CheckedSymbol } from '../reusables/app-ready-status';
 
 interface RecipeListProps {
 	list: RecipeListType[];
@@ -14,14 +14,16 @@ export interface RecipeListType {
 	contributors: string[];
 	canonicalArticle: string;
 	isAppReady: boolean;
+	isInCuratedTable: boolean;
 }
 
 const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 	return (
 		<table css={tableStyles}>
 			<colgroup>
-				<col style={{ width: '60%' }} />
+				<col style={{ width: '50%' }} />
 				<col style={{ width: '20%' }} />
+				<col style={{ width: '10%' }} />
 				<col style={{ width: '10%' }} />
 				<col style={{ width: '10%' }} />
 			</colgroup>
@@ -29,13 +31,24 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 				<tr>
 					<th>Recipe</th>
 					<th>Author(s)</th>
+					<th>Edited</th>
 					<th>App-ready</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{list.map(
-					({ id, title, contributors, canonicalArticle, isAppReady }, i) => {
+					(
+						{
+							id,
+							title,
+							contributors,
+							canonicalArticle,
+							isAppReady,
+							isInCuratedTable,
+						},
+						i,
+					) => {
 						return (
 							<tr key={`row_${i}`}>
 								<td key={`path_${i}_title`}>
@@ -48,8 +61,11 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 									</a>
 								</td>
 								<td key={`path_${i}_author`}> {contributors.join(', ')} </td>
+								<td key={`path_${i}_edited`}>
+									<CheckedSymbol isAppReady={isInCuratedTable} />
+								</td>
 								<td key={`path_${i}_app`}>
-									<AppReadyStatus isAppReady={isAppReady} />
+									<CheckedSymbol isAppReady={isAppReady} />
 								</td>
 								<td key={`path_${i}_links`}>
 									<a href={curationEndpoint + '/' + id}>Edit</a>

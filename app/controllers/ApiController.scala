@@ -607,6 +607,16 @@ class ApiController (
 
     val combinedData = rawResultData.filter( i => !curatedResultData.exists( _.getString(config.hashKey) == i.getString(config.hashKey) ) ) ++ curatedResultData
 
+    combinedData.foreach( i => {
+      val id = i.getString(config.hashKey)
+      val isInCuratedTable = if (curatedResultData.exists( _.getString(config.hashKey) == id )) {
+        true
+      } else {
+        false
+      }
+      i.withBoolean("isInCuratedTable", isInCuratedTable)
+    })
+
       val response = Json.toJson(combinedData.map(
         i => Json.parse(i.toJSON())
       ))

@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 
-export const AppReadyStatus = ({ isAppReady }: { isAppReady: boolean }) => {
+export const CheckedSymbol = ({ isAppReady }: { isAppReady: boolean }) => {
 	{
 		return isAppReady ? (
 			<span css={tickStyles}>
