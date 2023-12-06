@@ -14,6 +14,8 @@ const prettifyNumber = (num: number): string => {
 		return num.toString();
 	} else {
 		switch (num) {
+			case 0.13:
+				return '⅛';
 			case 0.25:
 				return '¼';
 			case 0.33:
