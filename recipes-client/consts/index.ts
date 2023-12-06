@@ -92,7 +92,7 @@ export const UIschema: UIschemaItem = {
 	serves: {
 		'ui:display': true,
 		'ui:locked': false,
-		'ui:removable': false,
+		'ui:removable': true,
 		'ui:order': ['amount', 'unit'],
 		amount: {
 			'ui:display': true,
@@ -101,6 +101,11 @@ export const UIschema: UIschemaItem = {
 			'ui:order': ['min', 'max'],
 		},
 		unit: {
+			'ui:display': true,
+			'ui:locked': false,
+			'ui:removable': false,
+		},
+		text: {
 			'ui:display': true,
 			'ui:locked': false,
 			'ui:removable': false,

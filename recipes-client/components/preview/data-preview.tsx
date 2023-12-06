@@ -42,6 +42,7 @@ const prettifyNumber = (num: number): string => {
 };
 
 const prettifyRange = (amount: Range) => {
+	if (!amount) return '';
 	return amount.min === amount.max
 		? prettifyNumber(amount.min)
 		: `${amount.min}-${amount.max}`;
