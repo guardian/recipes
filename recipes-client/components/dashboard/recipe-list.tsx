@@ -12,12 +12,37 @@ export interface RecipeListType {
 	id: string;
 	title: string;
 	contributors: string[];
+	byline: string[];
 	canonicalArticle: string;
 	isAppReady: boolean;
 	isInCuratedTable: boolean;
 }
 
 const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
+	const displayAuthor = (contributors: string[], byline: string[]) => {
+		const prettifyContributorId = (contributorId: string) => {
+			if (contributorId === 'profile/yotamottolenghi') {
+				return 'Yotam Ottolenghi';
+			}
+			if (contributorId === 'profile/nigelslater') {
+				return 'Nigel Slater';
+			}
+			return contributorId
+				.split('/')
+				.pop()
+				.split('-')
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+				.join(' ');
+		};
+		contributors = contributors.map(prettifyContributorId);
+		if (contributors.length > 0) {
+			return contributors.map((c) => prettifyContributorId(c)).join(', ');
+		} else if (byline.length > 0) {
+			return byline.join(', ');
+		} else {
+			return '-';
+		}
+	};
 	return (
 		<table css={tableStyles}>
 			<colgroup>
@@ -43,6 +68,7 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 							id,
 							title,
 							contributors,
+							byline,
 							canonicalArticle,
 							isAppReady,
 							isInCuratedTable,
@@ -60,7 +86,9 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 										<SvgExternal isAnnouncedByScreenReader size="xsmall" />
 									</a>
 								</td>
-								<td key={`path_${i}_author`}> {contributors.join(', ')} </td>
+								<td key={`path_${i}_author`}>
+									{displayAuthor(contributors, byline)}{' '}
+								</td>
 								<td key={`path_${i}_edited`}>
 									<CheckedSymbol isAppReady={isInCuratedTable} />
 								</td>

@@ -596,7 +596,7 @@ class ApiController (
 
     def scanRequest(tableName: String) = new ScanRequest()
         .withTableName(tableName)
-        .withProjectionExpression("%s, title, contributors, canonicalArticle, isAppReady".format(partition_alias))
+        .withProjectionExpression("%s, title, contributors, byline, canonicalArticle, isAppReady".format(partition_alias))
         .withExpressionAttributeNames(expressionAttributeValues);
 
     val rawResult = dbClient.scan(scanRequest( config.rawRecipesTableName ));
