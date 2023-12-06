@@ -10,7 +10,8 @@ interface DataPreviewProps {
 }
 
 const prettifyNumber = (num: number): string => {
-	if (num % 1 === 0) {
+	if (!num) return '';
+	else if (num % 1 === 0) {
 		return num.toString();
 	} else {
 		switch (num) {

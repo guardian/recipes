@@ -1,11 +1,10 @@
 /** @jsxImportSource @emotion/react */
 
-import { Legend } from '@guardian/source-react-components';
 import { ActionType, SchemaItem, Serves } from 'interfaces/main';
+import { servesSchema } from 'interfaces/nastyHardcodedSchemas';
 import { Dispatch } from 'react';
 import { isRangeField } from 'utils/recipe-field-checkers';
 import { getItemButtons } from '../form-buttons';
-import { getFormFieldsSchema } from '../form-group';
 import FormItem from '../form-item';
 import { renderRangeFormGroup } from './range';
 
@@ -16,7 +15,7 @@ export const renderServesFormGroup = (
 	key: string,
 	dispatcher: Dispatch<ActionType>,
 ) => {
-	const formFieldsSchema = getFormFieldsSchema(formItems, schema);
+	const formFieldsSchema = servesSchema;
 	const formItemAddId =
 		key.slice(0, -1) + (parseInt(key.slice(-1)) + 1).toString();
 	const formItemRemoveId = key;
