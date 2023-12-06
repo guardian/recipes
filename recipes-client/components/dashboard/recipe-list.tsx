@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { SvgExternal } from '@guardian/source-react-components';
 import { curationEndpoint } from '../../consts/index';
-import { AppReadyStatus } from '../reusables/app-ready-status';
+import { CheckedSymbol } from '../reusables/app-ready-status';
 
 interface RecipeListProps {
 	list: RecipeListType[];
@@ -12,16 +12,43 @@ export interface RecipeListType {
 	id: string;
 	title: string;
 	contributors: string[];
+	byline: string[];
 	canonicalArticle: string;
 	isAppReady: boolean;
+	isInCuratedTable: boolean;
 }
 
 const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
+	const displayAuthor = (contributors: string[], byline: string[]) => {
+		const prettifyContributorId = (contributorId: string) => {
+			if (contributorId === 'profile/yotamottolenghi') {
+				return 'Yotam Ottolenghi';
+			}
+			if (contributorId === 'profile/nigelslater') {
+				return 'Nigel Slater';
+			}
+			return contributorId
+				.split('/')
+				.pop()
+				.split('-')
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+				.join(' ');
+		};
+		contributors = contributors.map(prettifyContributorId);
+		if (contributors.length > 0) {
+			return contributors.map((c) => prettifyContributorId(c)).join(', ');
+		} else if (byline.length > 0) {
+			return byline.join(', ');
+		} else {
+			return '-';
+		}
+	};
 	return (
 		<table css={tableStyles}>
 			<colgroup>
-				<col style={{ width: '60%' }} />
+				<col style={{ width: '50%' }} />
 				<col style={{ width: '20%' }} />
+				<col style={{ width: '10%' }} />
 				<col style={{ width: '10%' }} />
 				<col style={{ width: '10%' }} />
 			</colgroup>
@@ -29,13 +56,25 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 				<tr>
 					<th>Recipe</th>
 					<th>Author(s)</th>
+					<th>Edited</th>
 					<th>App-ready</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{list.map(
-					({ id, title, contributors, canonicalArticle, isAppReady }, i) => {
+					(
+						{
+							id,
+							title,
+							contributors,
+							byline,
+							canonicalArticle,
+							isAppReady,
+							isInCuratedTable,
+						},
+						i,
+					) => {
 						return (
 							<tr key={`row_${i}`}>
 								<td key={`path_${i}_title`}>
@@ -47,9 +86,14 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 										<SvgExternal isAnnouncedByScreenReader size="xsmall" />
 									</a>
 								</td>
-								<td key={`path_${i}_author`}> {contributors.join(', ')} </td>
+								<td key={`path_${i}_author`}>
+									{displayAuthor(contributors, byline)}{' '}
+								</td>
+								<td key={`path_${i}_edited`}>
+									<CheckedSymbol isAppReady={isInCuratedTable} />
+								</td>
 								<td key={`path_${i}_app`}>
-									<AppReadyStatus isAppReady={isAppReady} />
+									<CheckedSymbol isAppReady={isAppReady} />
 								</td>
 								<td key={`path_${i}_links`}>
 									<a href={curationEndpoint + '/' + id}>Edit</a>

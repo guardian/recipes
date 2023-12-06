@@ -596,7 +596,7 @@ class ApiController (
 
     def scanRequest(tableName: String) = new ScanRequest()
         .withTableName(tableName)
-        .withProjectionExpression("%s, title, contributors, canonicalArticle, isAppReady".format(partition_alias))
+        .withProjectionExpression("%s, title, contributors, byline, canonicalArticle, isAppReady".format(partition_alias))
         .withExpressionAttributeNames(expressionAttributeValues);
 
     val rawResult = dbClient.scan(scanRequest( config.rawRecipesTableName ));
@@ -606,6 +606,16 @@ class ApiController (
     val curatedResultData = ItemUtils.toItemList(curatedResult.getItems()).asScala
 
     val combinedData = rawResultData.filter( i => !curatedResultData.exists( _.getString(config.hashKey) == i.getString(config.hashKey) ) ) ++ curatedResultData
+
+    combinedData.foreach( i => {
+      val id = i.getString(config.hashKey)
+      val isInCuratedTable = if (curatedResultData.exists( _.getString(config.hashKey) == id )) {
+        true
+      } else {
+        false
+      }
+      i.withBoolean("isInCuratedTable", isInCuratedTable)
+    })
 
       val response = Json.toJson(combinedData.map(
         i => Json.parse(i.toJSON())

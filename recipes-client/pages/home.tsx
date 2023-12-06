@@ -14,15 +14,17 @@ const Home = (): JSX.Element => {
 		[],
 	);
 	const [listFilter, setListFilter] = useState<
-		'all' | 'curated' | 'non-curated'
+		'all' | 'app-ready' | 'edited-but-not-app-ready' | 'non-curated'
 	>('all');
 
 	useEffect(() => {
 		const recipes = recipeList.filter((recipe) => {
 			if (listFilter === 'all') {
 				return true;
-			} else if (listFilter === 'curated') {
+			} else if (listFilter === 'app-ready') {
 				return recipe.isAppReady;
+			} else if (listFilter === 'edited-but-not-app-ready') {
+				return !recipe.isAppReady && recipe.isInCuratedTable;
 			} else if (listFilter === 'non-curated') {
 				return !recipe.isAppReady;
 			} else {
@@ -91,10 +93,17 @@ const Home = (): JSX.Element => {
 					/>
 					<Radio
 						name="filter"
-						value="curated"
-						label="Curated"
-						onChange={() => setListFilter('curated')}
-						checked={listFilter === 'curated'}
+						value="app-ready"
+						label="App-approved"
+						onChange={() => setListFilter('app-ready')}
+						checked={listFilter === 'app-ready'}
+					/>
+					<Radio
+						name="filter"
+						value="edited-but-not-app-ready"
+						label="Edited but not app-approved"
+						onChange={() => setListFilter('edited-but-not-app-ready')}
+						checked={listFilter === 'edited-but-not-app-ready'}
 					/>
 					<Radio
 						name="filter"
