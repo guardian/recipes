@@ -55,3 +55,20 @@ export const methodStepSchema = {
 		},
 	},
 };
+
+export const servesSchema = {
+	amount: {
+		min: {
+			type: 'integer',
+		},
+		max: {
+			type: 'integer',
+		},
+	},
+	unit: {
+		type: 'string',
+	},
+	text: {
+		type: 'string',
+	},
+};

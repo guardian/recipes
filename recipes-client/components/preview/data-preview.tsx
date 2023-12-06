@@ -10,7 +10,8 @@ interface DataPreviewProps {
 }
 
 const prettifyNumber = (num: number): string => {
-	if (num % 1 === 0) {
+	if (!num) return '';
+	else if (num % 1 === 0) {
 		return num.toString();
 	} else {
 		switch (num) {
@@ -41,6 +42,7 @@ const prettifyNumber = (num: number): string => {
 };
 
 const prettifyRange = (amount: Range) => {
+	if (!amount) return '';
 	return amount.min === amount.max
 		? prettifyNumber(amount.min)
 		: `${amount.min}-${amount.max}`;
