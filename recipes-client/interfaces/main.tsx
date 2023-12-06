@@ -59,6 +59,7 @@ export interface RecipeFields {
 	webPublicationDate: string; // Date recipe was published
 	title: string; // Name of the recipe
 	description: string; // Short description of the recipe
+	bookCredit?: string; // Credit for the book the recipe is from
 	featuredImage: ImageObject; // !! Actually capiImage
 	contributors: ContributorTag[]; // Structured data for contributors, where available
 	byline: BylineEntry[]; // Authorship data for the piece, including references to contributors where available, and text where not. Accommodates cases like this
