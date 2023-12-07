@@ -113,7 +113,7 @@ function getSchemaItem(
 	if (getSchemaType(schemaI.type).includes('string')) {
 		return '';
 	} else if (getSchemaType(schemaI.type).includes('integer')) {
-		return 1;
+		return 0;
 	} else if (getSchemaType(schemaI.type).includes('boolean')) {
 		return false;
 	} else if (
@@ -152,7 +152,10 @@ function Entries2Object(
 ): Record<string, unknown> {
 	// Helper function to replace `Object.fromEntries(arr)`
 	return [...arr].reduce((obj: Record<string, unknown>, [key, val]) => {
-		if (typeof key === 'string') {
+		if (key == 'min' || key == 'max') {
+      return null;
+    }
+    if (typeof key === 'string') {
 			obj[key] = val;
 			return obj;
 		}
