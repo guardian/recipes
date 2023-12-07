@@ -153,9 +153,9 @@ function Entries2Object(
 	// Helper function to replace `Object.fromEntries(arr)`
 	return [...arr].reduce((obj: Record<string, unknown>, [key, val]) => {
 		if (key == 'min' || key == 'max') {
-      return null;
-    }
-    if (typeof key === 'string') {
+			return null;
+		}
+		if (typeof key === 'string') {
 			obj[key] = val;
 			return obj;
 		}
