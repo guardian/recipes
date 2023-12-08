@@ -29,7 +29,16 @@ export const renderTimingsFormGroup = (
 			<FormItem
 				text={formItems[k]}
 				choices={
-					k === 'qualifier' ? ['prep-time', 'cook-time', 'set-time'] : null
+					k === 'qualifier'
+						? [
+								'prep-time',
+								'cook-time',
+								'set-time',
+								'marinate-time',
+								'soak-time',
+								'chill-time',
+						  ]
+						: null
 				}
 				label={`${key}.${k}`}
 				key={`${key}.${k}`}
