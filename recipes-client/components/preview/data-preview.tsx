@@ -111,6 +111,10 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 				</div>
 			</div>
 			<div>
+				<small>Book credit</small>
+				<div>{recipeData.bookCredit ? recipeData.bookCredit : '-'}</div>
+			</div>
+			<div>
 				<small>Title</small>
 				<div>{recipeData.title}</div>
 			</div>
