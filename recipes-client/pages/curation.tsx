@@ -20,6 +20,8 @@ import { Tabs } from '@guardian/source-react-components-development-kitchen';
 import { DataPreview } from 'components/preview/data-preview';
 import { PinboardTrackAndPreselect } from '../components/curation/pinboard-track-and-preselect';
 import { ImageObject } from 'interfaces/main';
+import { useIdleTimer } from 'react-idle-timer';
+import { useNavigate } from 'react-router-dom';
 
 const Curation = () => {
 	const { section: id } = useParams();
@@ -30,6 +32,48 @@ const Curation = () => {
 	const scrubbedId = articleId.replace(/^\/+/, '');
 
 	const [selectedTab, setSelectedTab] = useState('summary');
+
+	// idle timer
+	const [remaining, setRemaining] = useState<number>(0);
+	const [openAlert, setOpenAlert] = useState<boolean>(false);
+	const timeout = 120000; // 2 minutes
+	const promptBeforeIdle = 60000; // 1 minute
+	const navigate = useNavigate();
+
+	const onIdle = () => {
+		setOpenAlert(false);
+		navigate('/');
+	};
+
+	const onActive = () => {
+		setOpenAlert(false);
+	};
+	const onPrompt = () => {
+		setOpenAlert(true);
+	};
+
+	const { getRemainingTime, activate } = useIdleTimer({
+		onIdle,
+		onActive,
+		onPrompt,
+		timeout,
+		promptBeforeIdle,
+		throttle: 500,
+	});
+
+	const handleStillHere = () => {
+		activate();
+	};
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setRemaining(Math.ceil(getRemainingTime() / 1000));
+		}, 500);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -43,7 +87,7 @@ const Curation = () => {
 						dispatch,
 					),
 				);
-		}, 10000);
+		}, 60000);
 		return () => clearInterval(interval);
 	}, [state]);
 
@@ -120,6 +164,33 @@ const Curation = () => {
 	return (
 		<div css={gridLayout}>
 			<div css={footer}>
+				<div
+					className="modal"
+					style={{
+						display: openAlert ? 'flex' : 'none',
+						zIndex: '100',
+						width: '20em',
+						border: '2px solid gray',
+						background: 'white',
+						fontFamily: 'GuardianTextSans',
+						borderRadius: '1em',
+						padding: '1em',
+						position: 'absolute',
+						flexDirection: 'column',
+						alignItems: 'center',
+						left: 'calc(50vw - 10em)',
+						right: 'calc(50vh - 10em)',
+					}}
+				>
+					<h3>Are you still here?</h3>
+					<p>Redirecting in {remaining} seconds</p>
+					<button
+						css={{ fontFamily: 'GuardianTextSans' }}
+						onClick={handleStillHere}
+					>
+						I'm still here!
+					</button>
+				</div>
 				<CurationOptionsBar
 					articleId={articleId}
 					body={state.body}
