@@ -35,7 +35,7 @@ export const renderServesFormGroup = (
 	): void => {
 		dispatcher({
 			type: actions.change,
-			payload: { [key]: { min: 0, max: 0 } },
+			payload: { [key]: { min: 1, max: 1 } },
 		});
 	};
 
