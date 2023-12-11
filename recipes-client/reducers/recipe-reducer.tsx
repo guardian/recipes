@@ -144,6 +144,9 @@ function getSchemaItem(
 				const nextStepNumber = parseInt(keyPathArr.slice(-1)) + 1 || 0;
 				return [key, nextStepNumber];
 			}
+			if (key === 'images') {
+				return [key, null];
+			}
 			return [key, getSchemaItem(schemaI[key])];
 		}, []);
 		return Entries2Object(outputArray);

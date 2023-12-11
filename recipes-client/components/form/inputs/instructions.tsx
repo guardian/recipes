@@ -27,6 +27,9 @@ export const renderInstructionsFormGroup = (
 	const fields = Object.keys(formItems)
 		.sort((a, b) => displayOrder[a] - displayOrder[b])
 		.map((k: keyof Instruction) => {
+			if (k === 'images') {
+				return null;
+			}
 			return (
 				<FormItem
 					text={formItems[k]}
