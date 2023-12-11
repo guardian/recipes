@@ -89,6 +89,11 @@ export const UIschema: UIschemaItem = {
 		'ui:locked': false,
 		'ui:removable': false,
 	},
+	bookCredit: {
+		'ui:display': true,
+		'ui:locked': false,
+		'ui:removable': false,
+	},
 	serves: {
 		'ui:display': true,
 		'ui:locked': false,

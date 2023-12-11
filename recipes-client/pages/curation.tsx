@@ -22,6 +22,7 @@ import { PinboardTrackAndPreselect } from '../components/curation/pinboard-track
 import { ImageObject } from 'interfaces/main';
 import { useIdleTimer } from 'react-idle-timer';
 import { useNavigate } from 'react-router-dom';
+import { BookCreditInput } from 'components/curation/book-credit-input';
 
 const Curation = () => {
 	const { section: id } = useParams();
@@ -156,6 +157,11 @@ const Curation = () => {
 							/>
 						)}
 					</form>
+					<BookCreditInput
+						isLoading={state.isLoading}
+						body={state.body}
+						dispatcher={dispatch}
+					/>
 				</>
 			),
 		},
