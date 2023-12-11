@@ -7,6 +7,7 @@ import { isRangeField } from 'utils/recipe-field-checkers';
 import { getItemButtons } from '../form-buttons';
 import FormItem from '../form-item';
 import { renderRangeFormGroup } from './range';
+import { actions } from 'actions/recipeActions';
 
 export const renderServesFormGroup = (
 	formItems: Serves,
@@ -28,6 +29,16 @@ export const renderServesFormGroup = (
 		dispatcher,
 	);
 
+	const updateAmount = (
+		key: string,
+		dispatcher: Dispatch<ActionType>,
+	): void => {
+		dispatcher({
+			type: actions.change,
+			payload: { [key]: { min: 0, max: 0 } },
+		});
+	};
+
 	const fields = Object.keys(formItems).map((k: keyof Serves) => {
 		if (isRangeField(formItems[k])) {
 			return renderRangeFormGroup(
@@ -36,16 +47,49 @@ export const renderServesFormGroup = (
 				`${key}.${k}`,
 				dispatcher,
 			);
-		}
-		return (
-			<FormItem
-				text={formItems[k]}
-				choices={null}
-				label={`${key}.${k}`}
-				key={`${key}.${k}`}
-				dispatcher={dispatcher}
-			/>
-		);
+		} else if (k === 'amount') {
+			return (
+				<div
+					css={{
+						width: '120px',
+						height: '27px',
+						fontFamily: 'GuardianTextSans',
+						alignSelf: 'end',
+						border: '1px solid black',
+						padding: '8px',
+						margin: '4px',
+						marginLeft: '2px',
+						borderRadius: '4px',
+						textAlign: 'center',
+						cursor: 'pointer',
+						backgroundColor: '#052962',
+						color: 'white',
+					}}
+					onClick={() => updateAmount(`${key}.${k}`, dispatcher)}
+				>
+					Add amount
+				</div>
+			);
+		} else
+			return (
+				<div
+					css={{
+						display: 'grid',
+						fontFamily: 'GuardianTextSans',
+						color: 'gray',
+						fontSize: '0.9rem',
+					}}
+				>
+					{k}
+					<FormItem
+						text={formItems[k]}
+						choices={null}
+						label={`${key}.${k}`}
+						key={`${key}.${k}`}
+						dispatcher={dispatcher}
+					/>
+				</div>
+			);
 	});
 	return [
 		<div css={{ display: 'flex !important' }}>

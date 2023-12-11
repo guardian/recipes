@@ -192,6 +192,9 @@ class ApiController (
         "description": {
             "type": ["string", "null"]
         },
+        "bookCredit": {
+            "type": ["string", "null"]
+        },
         "serves": {
           "type": "array",
           "items": {
