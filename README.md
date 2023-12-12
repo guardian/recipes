@@ -37,7 +37,7 @@ We can now setup the project!
 
 - Use [dev-nginx] to create the nginx reverse proxy for the [app in DEV][recipes-dev]: `dev-nginx setup-app nginx/nginx-mapping.yml`
 - Install npm packages: `npm ci`
-- Create a `recipes.conf` file in the root directory with your developer CAPI key (`CAPI=YOUR_KEY_HERE`) and the local dbUrl (`dbUrl="http://localhost:8000"`)
+- Create a `recipes.conf` file in the root directory with your developer CAPI key (`CAPI_KEY=YOUR_KEY_HERE`) and the local dbUrl (`dbUrl="http://localhost:8000"`)
 
 ### Running
 By now you should have all dependencies installed,
