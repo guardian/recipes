@@ -24,19 +24,36 @@ export async function postRecipe(
 		return { error: 'No data provided.' };
 	}
 	const recipeId = aId.replace(/^\/+/, '');
-	const response = await fetch(`${location.origin}${apiURL}${recipeId}`, {
-		method: 'POST', // *GET, POST, PUT, DELETE, etc.
-		mode: 'cors', // no-cors, *cors, same-origin
-		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-		credentials: 'same-origin', // include, *same-origin, omit
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		redirect: 'follow', // manual, *follow, error
-		referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-		body: JSON.stringify(data), // body data type must match "Content-Type" header
-	});
-	return { status: response.status }; //.json(); // parses JSON response into native JavaScript objects
+
+	try {
+		const response = await fetch(`${location.origin}${apiURL}${recipeId}`, {
+			method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			mode: 'cors', // no-cors, *cors, same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			redirect: 'follow', // manual, *follow, error
+			referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+			body: JSON.stringify(data), // body data type must match "Content-Type" header
+		});
+
+		if (!response.ok) {
+			alert(
+				'Oops, a hiccup in the kitchen, recipe was not saved, sorry 😢\nPlease contact engineers if problem persists 🚑',
+			);
+		} else {
+			alert('Successfully saved and ready to be cooked! 🍲✨');
+		}
+	} catch (error) {
+		console.error(error);
+		alert(
+			'An error occurred, recipe was not saved, sorry 😢. Contact engineers if problem persists.',
+		);
+	}
+
+	// return { status: response.status }; //.json(); // parses JSON response into native JavaScript objects
 }
 
 const resetRecipe = (
