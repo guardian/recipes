@@ -335,7 +335,8 @@ class ApiController (
                   "profile/jayrayner",
                   "profile/joe-trivelli",
                   "profile/thompson-melissa",
-                  "profile/fuchsia-dunlop"
+                  "profile/fuchsia-dunlop",
+                  "profile/benjamina-ebuehi"
                 ]
             }
         },
