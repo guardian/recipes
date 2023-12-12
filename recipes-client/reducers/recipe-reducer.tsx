@@ -103,6 +103,7 @@ function initStateItem(
 
 function getSchemaItem(
 	schemaI: SchemaItem,
+	keyPathArr: string[],
 ):
 	| string
 	| number
@@ -139,6 +140,13 @@ function getSchemaItem(
 		const outputArray = schemaPropKeys.map<
 			Array<string | Record<string, unknown>>
 		>((key) => {
+			if (key === 'stepNumber') {
+				const nextStepNumber = parseInt(keyPathArr.slice(-1)) + 1 || 0;
+				return [key, nextStepNumber];
+			}
+			if (key === 'images') {
+				return [key, null];
+			}
 			return [key, getSchemaItem(schemaI[key])];
 		}, []);
 		return Entries2Object(outputArray);
@@ -198,7 +206,7 @@ export const recipeReducer = produce(
 			case actions.add: {
 				if (isAddRemoveItemType(action.payload)) {
 					const keyPathArr = action.payload['objId'].split('.');
-					const value = getSchemaItem(action.schemaItem);
+					const value = getSchemaItem(action.schemaItem, keyPathArr);
 					addStateItem(draft.body, keyPathArr, value);
 				}
 				break;
