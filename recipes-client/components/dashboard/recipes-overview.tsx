@@ -6,10 +6,20 @@ interface RecipesOverviewProps {
 	recipesList: RecipeListType[];
 }
 
+interface Chef {
+	name: string;
+	contributorTag: string;
+}
+
+interface RichChef extends Chef {
+	recipeCount: number;
+	percentOfAllRecipes: number;
+}
+
 export const RecipesOverview = ({ recipesList }: RecipesOverviewProps) => {
 	const appReadyRecipes = recipesList.filter((recipe) => recipe.isAppReady);
 
-	const chefs = [
+	const chefs: Chef[] = [
 		{
 			name: 'Felicity Cloake',
 			contributorTag: 'profile/felicity-cloake',
@@ -60,6 +70,24 @@ export const RecipesOverview = ({ recipesList }: RecipesOverviewProps) => {
 		},
 	];
 
+	const richChefsObjectArray: RichChef[] = chefs
+		.map((chef) => {
+			const chefRecipeCount = appReadyRecipes.reduce(
+				(acc, recipe) =>
+					recipe.contributors.includes(chef.contributorTag) ? ++acc : acc,
+				0,
+			);
+			const percentOfAllRecipes = Math.round(
+				(chefRecipeCount / appReadyRecipes.length) * 100,
+			);
+			return {
+				...chef,
+				recipeCount: chefRecipeCount,
+				percentOfAllRecipes: percentOfAllRecipes,
+			};
+		})
+		.sort((a, b) => b.recipeCount - a.recipeCount)
+		.filter((chef) => chef.recipeCount > 0);
 	const countOfRecipesByOtherChefs = appReadyRecipes.reduce(
 		(acc, recipe) =>
 			recipe.contributors.some(
@@ -70,20 +98,15 @@ export const RecipesOverview = ({ recipesList }: RecipesOverviewProps) => {
 				: acc,
 		0,
 	);
-	const authorSummaryCard = (name: string, contributorTag: string) => {
-		const chefRecipeCount = appReadyRecipes.reduce(
-			(acc, recipe) =>
-				recipe.contributors.includes(contributorTag) ? ++acc : acc,
-			0,
-		);
-		const percentOfAllRecipes = Math.round(
-			(chefRecipeCount / appReadyRecipes.length) * 100,
-		);
-		return (
-			<div css={infoBoxStyles}>
-				<strong>{name}:</strong> {chefRecipeCount} ({percentOfAllRecipes}%)
-			</div>
-		);
+	const renderChefSummaryCards = (chefs: RichChef[]) => {
+		return chefs.map((chef) => {
+			return (
+				<div css={infoBoxStyles}>
+					<strong>{chef.name}:</strong> {chef.recipeCount} (
+					{chef.percentOfAllRecipes}%)
+				</div>
+			);
+		});
 	};
 	return (
 		<>
@@ -98,7 +121,7 @@ export const RecipesOverview = ({ recipesList }: RecipesOverviewProps) => {
 					flex-wrap: wrap;
 				`}
 			>
-				{chefs.map((chef) => authorSummaryCard(chef.name, chef.contributorTag))}
+				{renderChefSummaryCards(richChefsObjectArray)}
 				<div css={infoBoxStyles}>
 					<strong>Other chefs:</strong> {countOfRecipesByOtherChefs} (
 					{Math.round(
