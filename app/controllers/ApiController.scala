@@ -613,12 +613,18 @@ class ApiController (
 
     combinedData.foreach( i => {
       val id = i.getString(config.hashKey)
-      val isInCuratedTable = if (curatedResultData.exists( _.getString(config.hashKey) == id )) {
-        true
+      val rawData = dbClient.getItem(new GetItemRequest()
+        .withKey(MMap(config.hashKey -> new AttributeValue(id)).asJava)
+        .withTableName(config.rawRecipesTableName)).getItem();
+      val curatedData = dbClient.getItem(new GetItemRequest()
+        .withKey(MMap(config.hashKey -> new AttributeValue(id)).asJava)
+        .withTableName(config.curatedRecipesTableName)).getItem();
+      val hasBeenEdited = if (curatedData != null) {
+        !rawData.get("description").equals(curatedData.get("description"))
       } else {
         false
       }
-      i.withBoolean("isInCuratedTable", isInCuratedTable)
+      i.withBoolean("hasBeenEdited", hasBeenEdited)
     })
 
       val response = Json.toJson(combinedData.map(
