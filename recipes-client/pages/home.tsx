@@ -2,6 +2,7 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source-foundations';
 import { Radio, RadioGroup } from '@guardian/source-react-components';
+import { RecipesOverview } from 'components/dashboard/recipes-overview';
 import { useEffect, useState } from 'react';
 import RecipeList, {
 	RecipeListType,
@@ -81,6 +82,7 @@ const Home = (): JSX.Element => {
 					for a more in-depth breakdown.
 				</div>
 			</div>
+			<RecipesOverview recipesList={recipeList} />
 			<hr />
 			<div>
 				<RadioGroup orientation="horizontal" label="Filter displayed recipes">
