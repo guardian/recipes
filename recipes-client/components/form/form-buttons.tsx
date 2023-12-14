@@ -11,13 +11,7 @@ export const getItemButtons = (
 	formFieldsSchema: SchemaItem,
 	dispatcher: Dispatch<ActionType>,
 ): JSX.Element => {
-	if (key === 'timings') {
-		formFieldsSchema = formFieldsSchema.properties;
-	}
-	if (key === 'instructions') {
-		formFieldsSchema = formFieldsSchema.properties;
-	}
-	if (key === 'serves') {
+	if (key === 'instructions' || key === 'serves' || key === 'timings') {
 		formFieldsSchema = formFieldsSchema.properties;
 	}
 	return (
@@ -31,7 +25,7 @@ export const getItemButtons = (
 			/>
 			<FormButton
 				text={`Remove`}
-				buttonId={`${key}.add`}
+				buttonId={`${key}.remove`}
 				onClick={() => handleRemoveField(formItemRemoveLastId, dispatcher)}
 			/>
 		</div>
