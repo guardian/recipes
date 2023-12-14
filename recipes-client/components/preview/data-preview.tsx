@@ -48,10 +48,37 @@ const prettifyRange = (amount: Range) => {
 		: `${amount.min}-${amount.max}`;
 };
 
-const prettifyDurationInMins = (durationInMins: number): string => {
-	const hours = Math.floor(durationInMins / 60);
-	const mins = durationInMins % 60;
-	return `${hours > 0 ? `${hours}h` : ''} ${mins > 0 ? `${mins}m` : ''}`;
+const prettifyDurationInMins = (durationInMins: number | Range): string => {
+	if (!durationInMins) return '';
+	if (typeof durationInMins === 'number') {
+		const hours = Math.floor(durationInMins / 60);
+		const mins = durationInMins % 60;
+		return `${hours > 0 ? `${hours}h` : ''} ${mins > 0 ? `${mins}m` : ''}`;
+	} else {
+		const min = durationInMins.min;
+		const max = durationInMins.max;
+		if (min === max) {
+			const hours = Math.floor(min / 60);
+			const mins = min % 60;
+			return `${hours > 0 ? `${hours}h` : ''} ${mins > 0 ? `${mins}m` : ''}`;
+		}
+		const minHours = Math.floor(min / 60);
+		const minMins = min % 60;
+		const maxHours = Math.floor(max / 60);
+		const maxMins = max % 60;
+		if (minHours === 0 && maxHours === 0) {
+			return `${minMins} - ${maxMins}m`;
+		}
+		if (minHours > 0 && maxHours > 0) {
+			return `${minHours}h${minMins > 0 ? `${minMins}m` : ''} - ${maxHours}h${
+				maxMins > 0 ? `${maxMins}m` : ''
+			}`;
+		}
+		if (minHours === 0 && maxHours > 0) {
+			return `${minMins} - ${maxHours}h ${maxMins > 0 ? `${maxMins}m` : ''}`;
+		}
+		return `${min}m - ${max}m`;
+	}
 };
 
 export const DataPreview = ({ recipeData }: DataPreviewProps) => {
@@ -91,7 +118,10 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 			<div>
 				<small>Canonical article</small>
 				<div>
-					<a href={recipeData.canonicalArticle} target="_blank">
+					<a
+						href={`https://theguardian.com/${recipeData.canonicalArticle}`}
+						target="_blank"
+					>
 						{recipeData.canonicalArticle}
 					</a>
 				</div>
