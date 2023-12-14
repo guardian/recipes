@@ -126,7 +126,11 @@
             "enum": [
               "prep-time",
               "cook-time",
-              "set-time"
+              "set-time",
+              "marinate-time",
+              "soak-time",
+              "chill-time",
+              "freeze-time"
             ]
           },
           "durationInMins": {
