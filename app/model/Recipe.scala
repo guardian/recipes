@@ -1,6 +1,6 @@
 package model
 import play.api.{Logger, Logging}
-import play.api.libs.json.{JsError, JsSuccess, JsValue, Json, OFormat, Writes}
+import play.api.libs.json.{JsError, JsNumber, JsObject, JsSuccess, JsValue, Json, OFormat, Writes}
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import scala.collection.immutable.{Map => MMap}
 
@@ -10,7 +10,7 @@ case class Ingredient(name: String, amount: Option[Range], unit: Option[String],
 case class IngredientsList(recipeSection: Option[String], ingredientsList: List[Ingredient])
 case class Serves(amount: Range, unit: String, text: Option[String])
 case class Instruction(stepNumber: Int, description: String, images: Option[List[String]])
-case class Timing(qualifier: String, durationInMins: Int, text: Option[String])
+case class Timing(qualifier: String, durationInMins: Range, text: Option[String])
 case class ImageObject(url: String, mediaId: String, cropId: String, source: Option[String], photographer: Option[String], imageType: Option[String], caption: Option[String], mediaApiUrl: Option[String])
 
 case class Recipe(
@@ -74,7 +74,17 @@ object Recipe extends Logging {
   implicit val formats: OFormat[Recipe] = Json.format[Recipe]
 
   def parseRecipe(json: JsValue)= {
-    Json.fromJson[Recipe](json) match {
+    val timings = (json \ "timings").as[List[JsValue]]
+    val timingsWithRange = timings.map{timing =>
+      val durationInMins = (timing \ "durationInMins").as[JsValue]
+      val durationInMinsWithRange = durationInMins match {
+        case JsNumber(value) => Json.obj("min" -> value, "max" -> value)
+        case _ => durationInMins
+      }
+      timing.as[JsObject] ++ Json.obj("durationInMins" -> durationInMinsWithRange)
+    }
+    val adjustedJson = json.as[JsObject] ++ Json.obj("timings" -> timingsWithRange)
+    Json.fromJson[Recipe](adjustedJson) match {
       case JsSuccess(value, path) =>
         Some(value)
       case JsError(errors) =>
