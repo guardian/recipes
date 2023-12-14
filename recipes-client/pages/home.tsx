@@ -2,11 +2,13 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source-foundations';
 import { Radio, RadioGroup } from '@guardian/source-react-components';
+import { RecipesOverview } from 'components/dashboard/recipes-overview';
 import { useEffect, useState } from 'react';
 import RecipeList, {
 	RecipeListType,
 } from '../components/dashboard/recipe-list';
 import { listEndpoint } from '../consts/index';
+import { WelcomeExplainer } from 'components/dashboard/welcome-explainer';
 
 const Home = (): JSX.Element => {
 	const [recipeList, setList] = useState<RecipeListType[]>([]);
@@ -63,22 +65,26 @@ const Home = (): JSX.Element => {
 					app-approved recipes and counting
 				</div>
 			</div>
-			<div css={explainerStyles}>
-				<h2>This is it how it works:</h2>
-				<ul>
-					<li>Pick a recipe.</li>
-					<li>Edit it.</li>
-					<li>Save it.</li>
-				</ul>
-				<div>
-					Read the{' '}
-					<a
-						href="https://docs.google.com/document/d/1wrVUX7vVTLBd0fxqDbQxqmyXoY4Vvyw5aX79tMxROhk/edit#heading=h.7n6l8nswve9p"
-						target="_blank"
-					>
-						recipe data curation guide
-					</a>{' '}
-					for a more in-depth breakdown.
+			<div
+				css={css`
+					display: flex;
+					flex-direction: row;
+					justify-content: space-between;
+				`}
+			>
+				<div
+					css={css`
+						width: 33%;
+					`}
+				>
+					<WelcomeExplainer />
+				</div>
+				<div
+					css={css`
+						width: 67%;
+					`}
+				>
+					<RecipesOverview recipesList={recipeList} />
 				</div>
 			</div>
 			<hr />
@@ -126,8 +132,4 @@ export default Home;
 
 const mainContainerStyles = css`
 	padding: 20px;
-`;
-
-const explainerStyles = css`
-	margin-bottom: 30px;
 `;
