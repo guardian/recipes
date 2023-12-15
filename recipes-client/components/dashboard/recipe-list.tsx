@@ -15,7 +15,7 @@ export interface RecipeListType {
 	byline: string[];
 	canonicalArticle: string;
 	isAppReady: boolean;
-	isInCuratedTable: boolean;
+	hasBeenEdited: boolean;
 }
 
 const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
@@ -71,7 +71,7 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 							byline,
 							canonicalArticle,
 							isAppReady,
-							isInCuratedTable,
+							hasBeenEdited,
 						},
 						i,
 					) => {
@@ -90,7 +90,7 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 									{displayAuthor(contributors, byline)}{' '}
 								</td>
 								<td key={`path_${i}_edited`}>
-									<CheckedSymbol isAppReady={isInCuratedTable} />
+									<CheckedSymbol isAppReady={hasBeenEdited} />
 								</td>
 								<td key={`path_${i}_app`}>
 									<CheckedSymbol isAppReady={isAppReady} />

@@ -26,9 +26,9 @@ const Home = (): JSX.Element => {
 			} else if (listFilter === 'app-ready') {
 				return recipe.isAppReady;
 			} else if (listFilter === 'edited-but-not-app-ready') {
-				return !recipe.isAppReady && recipe.isInCuratedTable;
+				return !recipe.isAppReady && recipe.hasBeenEdited;
 			} else if (listFilter === 'non-curated') {
-				return !recipe.isAppReady && !recipe.isInCuratedTable;
+				return !recipe.isAppReady && !recipe.hasBeenEdited;
 			} else {
 				console.error('Invalid filter');
 				return true;
