@@ -130,7 +130,10 @@
               "marinate-time",
               "soak-time",
               "chill-time",
-              "freeze-time"
+              "freeze-time",
+              "infuse-time",
+              "rest-time",
+              "prove-time"
             ]
           },
           "durationInMins": {
@@ -372,7 +375,9 @@
           "snack",
           "dessert",
           "drink",
-          "starter"
+          "starter",
+          "side",
+          "bake"
         ]
       }
     },
