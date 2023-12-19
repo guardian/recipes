@@ -1,0 +1,446 @@
+{
+  "type": "object",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "isAppReady": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "string"
+    },
+    "canonicalArticle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "composerId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "webPublicationDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bookCredit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "serves": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "integer"
+              },
+              "max": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "min",
+              "max"
+            ]
+          },
+          "unit": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "unit"
+        ]
+      }
+    },
+    "featuredImage": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "mediaId": {
+          "type": "string"
+        },
+        "cropId": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "photographer": {
+          "type": "string"
+        },
+        "imageType": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        },
+        "mediaApiUrl": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "mediaId",
+        "cropId"
+      ]
+    },
+    "timings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "qualifier": {
+            "type": "string",
+            "enum": [
+              "prep-time",
+              "cook-time",
+              "set-time",
+              "marinate-time",
+              "soak-time",
+              "chill-time",
+              "freeze-time",
+              "infuse-time",
+              "rest-time",
+              "prove-time"
+            ]
+          },
+          "durationInMins": {
+            "type": "integer"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "qualifier",
+          "durationInMins"
+        ]
+      }
+    },
+    "instructions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stepNumber": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "images": {
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "stepNumber",
+          "description"
+        ]
+      }
+    },
+    "contributors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "profile/felicity-cloake",
+          "profile/meera-sodha",
+          "profile/holly-o-neill",
+          "profile/yotamottolenghi",
+          "profile/nigelslater",
+          "profile/jack-monroe",
+          "profile/thomasina-miers",
+          "profile/rukmini-iyer",
+          "profile/ed-cumming",
+          "profile/anna-jones",
+          "profile/rachel-roddy",
+          "profile/sally-clarke",
+          "profile/nigella-lawson",
+          "profile/jayrayner",
+          "profile/joe-trivelli",
+          "profile/thompson-melissa",
+          "profile/fuchsia-dunlop",
+          "profile/benjamina-ebuehi"
+        ]
+      }
+    },
+    "byline": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ingredients": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "recipeSection": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ingredientsList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "object",
+                  "properties": {
+                    "min": {
+                      "type": "integer"
+                    },
+                    "max": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "min",
+                    "max"
+                  ]
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "ingredientId": {
+                  "type": "string"
+                },
+                "prefix": {
+                  "type": "string"
+                },
+                "suffix": {
+                  "type": "string"
+                },
+                "optional": {
+                  "type": "boolean"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ingredientsList"
+        ]
+      }
+    },
+    "celebrationIds": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "minItems": 0,
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          null,
+          "christmas",
+          "boxing-day",
+          "new-years-eve",
+          "thanksgiving",
+          "veganuary",
+          "burns-night",
+          "chinese-new-year",
+          "valentines-day",
+          "pancake-day",
+          "mothers-day",
+          "holi",
+          "ramadan",
+          "easter",
+          "st-patricks-day",
+          "eid",
+          "passover",
+          "birthday",
+          "bank-holiday",
+          "fathers-day",
+          "halloween",
+          "diwali",
+          "bonfire-night",
+          "hanukkah",
+          "rosh-hashanah",
+          "yom-kippur"
+        ]
+      }
+    },
+    "cuisineIds": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "minItems": 1,
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          null,
+          "nordic",
+          "italian",
+          "mexican",
+          "indian",
+          "french",
+          "chinese",
+          "thai",
+          "japanese",
+          "british",
+          "greek",
+          "spanish",
+          "middle-eastern",
+          "eastern-european",
+          "african",
+          "vietnamese",
+          "korean",
+          "filipino",
+          "irish",
+          "jamaican",
+          "brazilian",
+          "scandinavian",
+          "australian",
+          "turkish",
+          "south-east-asian",
+          "sri-lankan",
+          "american",
+          "south-american",
+          "caribbean",
+          "portuguese"
+        ]
+      }
+    },
+    "mealTypeIds": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "breakfast",
+          "brunch",
+          "lunch",
+          "dinner",
+          "snack",
+          "dessert",
+          "drink",
+          "starter",
+          "side",
+          "bake"
+        ]
+      }
+    },
+    "suitableForDietIds": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "vegetarian",
+          "vegan",
+          "pescatarian",
+          "gluten-free",
+          "dairy-free"
+        ]
+      }
+    },
+    "utensilsAndApplianceIds": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "air-fryer"
+        ]
+      }
+    },
+    "techniquesUsedIds": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "baking",
+          "marinating"
+        ]
+      }
+    },
+    "difficultyLevel": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "easy",
+        "medium",
+        "hard"
+      ]
+    }
+  }
+}
