@@ -5,10 +5,7 @@ import {
 	IngredientsGroup,
 	SchemaItem,
 } from 'interfaces/main';
-import {
-	ingredientGroupSchema,
-	ingredientSchema,
-} from 'interfaces/nastyHardcodedSchemas';
+import model from '../../../../shared/model.json';
 import { Dispatch } from 'react';
 import { isRangeField } from 'utils/recipe-field-checkers';
 import { getItemButtons } from '../form-buttons';
@@ -23,7 +20,7 @@ export const renderIngredientsFormGroup = (
 	key: string,
 	dispatcher: Dispatch<ActionType>,
 ) => {
-	const formFieldsSchema = ingredientGroupSchema;
+	const formFieldsSchema = model.properties.ingredients.items.properties;
 	const formItemAddId =
 		key.slice(0, -1) + (parseInt(key.slice(-1)) + 1).toString();
 	const formItemRemoveId = key;
@@ -54,7 +51,9 @@ export const renderIngredientsFormGroup = (
 			let ingredientsList = formItems[k] as Ingredient[];
 			const prefix = `${key}.${k}`;
 			const listInputs = ingredientsList.map((ingredient, i) => {
-				const formFieldsSchema = ingredientSchema;
+				const formFieldsSchema =
+					model.properties.ingredients.items.properties.ingredientsList.items
+						.properties;
 				const formItemAddId = `${prefix}.${i + 1}`;
 				const formItemRemove = `${prefix}.${i}`;
 				const formItemButtons = getItemButtons(

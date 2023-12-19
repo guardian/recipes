@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 
 import { ActionType, SchemaItem, Serves } from 'interfaces/main';
-import { servesSchema } from 'interfaces/nastyHardcodedSchemas';
 import { Dispatch } from 'react';
 import { isRangeField } from 'utils/recipe-field-checkers';
 import { getItemButtons } from '../form-buttons';
 import FormItem from '../form-item';
 import { renderRangeFormGroup } from './range';
 import { actions } from 'actions/recipeActions';
+import model from '../../../../shared/model.json';
 
 export const renderServesFormGroup = (
 	formItems: Serves,
@@ -16,7 +16,7 @@ export const renderServesFormGroup = (
 	key: string,
 	dispatcher: Dispatch<ActionType>,
 ) => {
-	const formFieldsSchema = servesSchema;
+	const formFieldsSchema = model.properties.serves.items.properties;
 	const formItemAddId =
 		key.slice(0, -1) + (parseInt(key.slice(-1)) + 1).toString();
 	const formItemRemoveId = key;
