@@ -10,6 +10,5 @@ export const actions = {
 	error: 'error',
 	fetchSuccess: 'fetchSuccess',
 	fetchFail: 'fetchFail',
-	changeColours: 'changeColours',
 	selectImg: 'selectImg',
 };

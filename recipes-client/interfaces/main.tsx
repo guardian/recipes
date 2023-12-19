@@ -156,15 +156,6 @@ export interface ActionType {
 
 export type ErrorItemType = string;
 
-export interface GuCAPIProps {
-	articlePath: string;
-	isLoading: boolean;
-	html: Record<string, Record<string, unknown>>;
-	recipeItems: RecipeFields | null; //|Record<string, unknown>|null;
-	schema: SchemaType;
-	colours?: string[] | null;
-}
-
 export function isCurationState(
 	payload: keyof typeof ActionType.payload,
 ): payload is CurationState {
@@ -209,7 +200,6 @@ export interface CurationState {
 	readonly body: AllRecipeFields | null;
 	readonly schema: Record<string, unknown> | null;
 	readonly html: Record<string, unknown> | null;
-	readonly colours?: string[] | null;
 }
 
 export type HighlightType = string; //keyof recipeFields;

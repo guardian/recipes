@@ -5,14 +5,12 @@ import {
 	ActionType,
 	AppDataState,
 	SchemaItem,
-	isCurationState,
 	isLoadingState,
 	AddRemoveItemType,
 	ErrorItemType,
 	isAddRemoveItemType,
 	isSchemaArray,
 } from '../interfaces/main';
-import { defaultHighlightColours } from '../consts';
 import { getSchemaType } from '../utils/schema';
 
 export const defaultState: AppDataState = {
@@ -20,7 +18,6 @@ export const defaultState: AppDataState = {
 	body: null,
 	schema: null,
 	html: null,
-	colours: null,
 };
 
 function updateStateItem(
@@ -208,25 +205,6 @@ export const recipeReducer = produce(
 					const keyPathArr = action.payload['objId'].split('.');
 					const value = getSchemaItem(action.schemaItem, keyPathArr);
 					addStateItem(draft.body, keyPathArr, value);
-				}
-				break;
-			}
-			case actions.changeColours: {
-				if (isCurationState(action.payload)) {
-					const colours =
-						action.payload.colours !== null
-							? action.payload.colours
-							: defaultHighlightColours;
-					// let colourMap = null;
-					// if (colours === null) {
-					//   colourMap = Object.keys(recipeItems).reduce((acc, key, i) => {
-					//     acc[key] = cols[i % cols.length];
-					//     return acc
-					//   }, {})
-					// } else {
-
-					// }
-					initStateItem(draft, 'colours', colours);
 				}
 				break;
 			}
