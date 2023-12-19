@@ -4,7 +4,6 @@ import { Dispatch } from 'react';
 import { getItemButtons } from '../form-buttons';
 import { getFormFieldsSchema } from '../form-group';
 import FormItem from '../form-item';
-import model from '../../../../shared/model.json';
 
 export const renderTimingsFormGroup = (
 	formItems: Timing,
@@ -31,7 +30,14 @@ export const renderTimingsFormGroup = (
 				text={formItems[k]}
 				choices={
 					k === 'qualifier'
-						? model.properties.timings.items.properties.qualifier.enum
+						? [
+								'prep-time',
+								'cook-time',
+								'set-time',
+								'marinate-time',
+								'soak-time',
+								'chill-time',
+						  ]
 						: null
 				}
 				label={`${key}.${k}`}
