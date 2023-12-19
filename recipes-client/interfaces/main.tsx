@@ -12,9 +12,13 @@ export interface SchemaItem {
 export type ComplexRecipeFields =
 	| IngredientsGroup
 	| Timing
+	| Timing[]
 	| IngredientsGroup[]
 	| Ingredient
 	| Instruction
+	| Instruction[]
+	| Serves
+	| Serves[]
 	| Range;
 
 export interface SchemaArrayItem {
@@ -100,7 +104,9 @@ export type RecipeItem =
 	| string[]
 	| IngredientsGroup[]
 	| Timing[]
-	| Ingredient[];
+	| Ingredient[]
+	| Instruction[]
+	| Serves[];
 
 export interface Range {
 	min: number; // Minimum value
@@ -150,44 +156,25 @@ export interface ActionType {
 
 export type ErrorItemType = string;
 
-export interface GuCAPIProps {
-	articlePath: string;
-	isLoading: boolean;
-	html: Record<string, Record<string, unknown>>;
-	recipeItems: RecipeFields | null; //|Record<string, unknown>|null;
-	schema: SchemaType;
-	colours?: string[] | null;
-}
-
-export function isCurationState(
+export const isLoadingState = (
 	payload: keyof typeof ActionType.payload,
-): payload is CurationState {
-	const cs = payload as CurationState;
-	if (cs.body || cs.schema || cs.html) {
-		return true;
-	}
-	return false;
-}
-
-export function isLoadingState(
-	payload: keyof typeof ActionType.payload,
-): payload is LoadingState {
+): payload is LoadingState => {
 	const ls = payload as LoadingState;
 	if (ls.isLoading !== undefined) {
 		return true;
 	}
 	return false;
-}
+};
 
-export function isAddRemoveItemType(
+export const isAddRemoveItemType = (
 	payload: keyof typeof ActionType.payload,
-): payload is AddRemoveItemType {
+): payload is AddRemoveItemType => {
 	const p = payload as AddRemoveItemType;
 	if (p.objId !== undefined) {
 		return true;
 	}
 	return false;
-}
+};
 
 export interface AddRemoveItemType {
 	objId: string;
@@ -203,7 +190,6 @@ export interface CurationState {
 	readonly body: AllRecipeFields | null;
 	readonly schema: Record<string, unknown> | null;
 	readonly html: Record<string, unknown> | null;
-	readonly colours?: string[] | null;
 }
 
 export type HighlightType = string; //keyof recipeFields;

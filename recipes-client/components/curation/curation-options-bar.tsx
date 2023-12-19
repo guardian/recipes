@@ -12,10 +12,10 @@ interface FooterProps {
 	dispatcher: Dispatch<ActionType>;
 }
 
-export async function postRecipe(
+export const postRecipe = async (
 	aId: string | null,
 	data: AllRecipeFields | null,
-): Promise<Record<string, unknown>> {
+): Promise<Record<string, unknown>> => {
 	if (aId === null) {
 		console.warn('No url provided!');
 		return { error: 'No url provided.' };
@@ -54,7 +54,7 @@ export async function postRecipe(
 	}
 
 	// return { status: response.status }; //.json(); // parses JSON response into native JavaScript objects
-}
+};
 
 const resetRecipe = (
 	aId: string | null,

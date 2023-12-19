@@ -1,10 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Button } from '@guardian/source-react-components';
 import { ActionType, SchemaItem } from 'interfaces/main';
-import {
-	methodStepSchema,
-	servesSchema,
-} from 'interfaces/nastyHardcodedSchemas';
 import { Dispatch } from 'react';
 import { handleAddField, handleRemoveField } from './form-input-handlers';
 
@@ -19,10 +15,10 @@ export const getItemButtons = (
 		formFieldsSchema = formFieldsSchema.properties;
 	}
 	if (key === 'instructions') {
-		formFieldsSchema = methodStepSchema;
+		formFieldsSchema = formFieldsSchema.properties;
 	}
 	if (key === 'serves') {
-		formFieldsSchema = servesSchema;
+		formFieldsSchema = formFieldsSchema.properties;
 	}
 	return (
 		<div css={{ marginTop: '5px', display: 'flex', alignItems: 'center' }}>

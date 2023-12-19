@@ -155,10 +155,7 @@ const getFormFields = (
 	}
 };
 
-export function getFormFieldsSchema(
-	formItems: FormItems,
-	schema: SchemaItem,
-): SchemaItem {
+export const getFormFieldsSchema = (schema: SchemaItem): SchemaItem => {
 	// Get schema for contents of given formItem
 	if (getSchemaType(schema.type).includes('string')) {
 		return { type: 'string' } as SchemaItem;
@@ -169,7 +166,7 @@ export function getFormFieldsSchema(
 	} else {
 		return schema; //{"type": "null"} as schemaItem
 	}
-}
+};
 
 export const FormGroup = ({
 	formItems,
@@ -198,7 +195,7 @@ export const FormGroup = ({
 	const isFormItemRemovable = isRemovable(getLabel(key));
 
 	// Set up buttons under form group
-	const formFieldsSchema = getFormFieldsSchema(rComponents, schema);
+	const formFieldsSchema = getFormFieldsSchema(schema);
 	const formItemAddId = `${key}.${formFields.length}`;
 	const formItemRemoveId = `${key}.${formFields.length - 1}`;
 	const formItemButtons = getItemButtons(

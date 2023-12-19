@@ -7,12 +7,12 @@ import {
 	ErrorItemType,
 } from '../interfaces/main';
 
-export async function fetchAndDispatch(
+export const fetchAndDispatch = async (
 	url: string,
 	action: string,
 	payloadType: string,
 	dispatcher: Dispatch<ActionType>,
-): Promise<void> {
+): Promise<void> => {
 	const payload: {
 		[id: string]: AppDataState | AddRemoveItemType | ErrorItemType;
 	} = {};
@@ -34,7 +34,7 @@ export async function fetchAndDispatch(
 				payload: `Error fetching ${payloadType} data.`,
 			}),
 		);
-}
-export function setLoadingFinished(dispatcher: Dispatch<ActionType>): void {
+};
+export const setLoadingFinished = (dispatcher: Dispatch<ActionType>): void => {
 	dispatcher({ type: actions.init, payload: { isLoading: false } });
-}
+};

@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { Legend, TextInput } from '@guardian/source-react-components';
-import FormItem from 'components/form/form-item';
 import { ActionType } from 'interfaces/main';
 import { useState } from 'react';
 

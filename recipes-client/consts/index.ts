@@ -14,26 +14,6 @@ export const urls = {
 	matches: 'check',
 };
 
-/* UI display output config */
-export const newColours = [
-	'aquamarine',
-	'blue',
-	'brown',
-	'coral',
-	'yellow',
-	'chartreuse',
-	'darkseagreen',
-];
-export const defaultHighlightColours = [
-	'#E69F0090',
-	'#56B4E990',
-	'#009E7390',
-	'#FEDC2A',
-	'#0072B290',
-	'#D55E0090',
-	'#CC79A790',
-];
-
 export const excludeInForm = ['byline', 'featuredImage'];
 export const excludeInHighlights = excludeInForm.concat([
 	'cuisineIds',
@@ -214,12 +194,6 @@ export const UIschema: UIschemaItem = {
 	},
 };
 
-// function isRemovable(key:string){
-
-// }
-// function isLocked(key:string){
-
-// }
 export const isDisplayed = (key: keyof SchemaItem | string): boolean => {
 	// const wObj: {[k: string]: unknown} = obj;
 	const wUIschema: { [key: string]: { 'ui:display': false } } = UIschema; // safely widen to wObj
