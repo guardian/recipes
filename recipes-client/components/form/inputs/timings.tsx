@@ -37,6 +37,10 @@ export const renderTimingsFormGroup = (
 								'marinate-time',
 								'soak-time',
 								'chill-time',
+								'freeze-time',
+								'infuse-time',
+								'rest-time',
+								'prove-time',
 						  ]
 						: null
 				}

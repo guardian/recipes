@@ -340,7 +340,9 @@ class ApiController (
                   "profile/ravneet-gill",
                   "profile/nik-sharma",
                   "profile/chetna-makan",
-                  "profile/signe-johansen"
+                  "profile/signe-johansen",
+                  "profile/miguel-barclay",
+                  "profile/tamal-ray"
                 ]
             }
         },
@@ -509,7 +511,9 @@ class ApiController (
                   "snack",
                   "dessert",
                   "drink",
-                  "starter"
+                  "starter",
+                  "side",
+                  "bake"
               ]
             }
         },
