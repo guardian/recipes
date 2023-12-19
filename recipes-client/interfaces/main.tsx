@@ -156,35 +156,25 @@ export interface ActionType {
 
 export type ErrorItemType = string;
 
-export function isCurationState(
+export const isLoadingState = (
 	payload: keyof typeof ActionType.payload,
-): payload is CurationState {
-	const cs = payload as CurationState;
-	if (cs.body || cs.schema || cs.html) {
-		return true;
-	}
-	return false;
-}
-
-export function isLoadingState(
-	payload: keyof typeof ActionType.payload,
-): payload is LoadingState {
+): payload is LoadingState => {
 	const ls = payload as LoadingState;
 	if (ls.isLoading !== undefined) {
 		return true;
 	}
 	return false;
-}
+};
 
-export function isAddRemoveItemType(
+export const isAddRemoveItemType = (
 	payload: keyof typeof ActionType.payload,
-): payload is AddRemoveItemType {
+): payload is AddRemoveItemType => {
 	const p = payload as AddRemoveItemType;
 	if (p.objId !== undefined) {
 		return true;
 	}
 	return false;
-}
+};
 
 export interface AddRemoveItemType {
 	objId: string;

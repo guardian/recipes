@@ -20,11 +20,11 @@ export const defaultState: AppDataState = {
 	html: null,
 };
 
-function updateStateItem(
+const updateStateItem = (
 	obj: Record<string, unknown>,
 	keyPath: Array<string>,
 	value: string | number | boolean | AppDataState,
-): void {
+): void => {
 	const lastKeyIndex = keyPath.length - 1;
 	for (let i = 0; i < lastKeyIndex; ++i) {
 		const key = isFinite(keyPath[i]) ? parseInt(keyPath[i]) : keyPath[i];
@@ -36,13 +36,13 @@ function updateStateItem(
 		obj = obj[key];
 	}
 	obj[keyPath[lastKeyIndex]] = value;
-}
+};
 
-function addStateItem(
+const addStateItem = (
 	obj: Record<string, unknown>,
 	keyPath: Array<string>,
 	value: string | number | AppDataState,
-): void {
+): void => {
 	const lastKeyIndex = keyPath.length - 1;
 	// Get nested object
 	for (let i = 0; i < lastKeyIndex; ++i) {
@@ -63,12 +63,12 @@ function addStateItem(
 		// New item, set value
 		obj[keyPath[lastKeyIndex]] = value;
 	}
-}
+};
 
-function deleteStateItem(
+const deleteStateItem = (
 	keyPath: Array<string | number>,
 	obj: Record<string, unknown>,
-): void {
+): void => {
 	const lastKeyIndex = keyPath.length - 1;
 	for (let i = 0; i < lastKeyIndex; ++i) {
 		const key = isFinite(keyPath[i]) ? parseInt(keyPath[i]) : keyPath[i];
@@ -88,17 +88,17 @@ function deleteStateItem(
 	} else {
 		delete obj[keyPath[lastKeyIndex]];
 	}
-}
+};
 
-function initStateItem(
+const initStateItem = (
 	draft: Record<string, unknown>,
 	k: string,
 	value: string | number,
-): void {
+): void => {
 	draft[k] = value;
-}
+};
 
-function getSchemaItem(
+const getSchemaItem = (
 	schemaI: SchemaItem,
 	keyPathArr: string[],
 ):
@@ -106,7 +106,7 @@ function getSchemaItem(
 	| number
 	| boolean
 	| Record<string, unknown>
-	| Array<Record<string, unknown>> {
+	| Array<Record<string, unknown>> => {
 	// Function returning "default" values for new item of type schemaItem.
 	if (getSchemaType(schemaI.type).includes('string')) {
 		return '';
@@ -146,15 +146,15 @@ function getSchemaItem(
 			}
 			return [key, getSchemaItem(schemaI[key])];
 		}, []);
-		return Entries2Object(outputArray);
+		return entriesToObject(outputArray);
 	} else {
 		new ErrorEvent('Invalid schemaItem provided.');
 	}
-}
+};
 
-function Entries2Object(
+const entriesToObject = (
 	arr: (string | Record<string, unknown>)[][],
-): Record<string, unknown> {
+): Record<string, unknown> => {
 	// Helper function to replace `Object.fromEntries(arr)`
 	return [...arr].reduce((obj: Record<string, unknown>, [key, val]) => {
 		if (key === 'min' || key === 'max') {
@@ -165,7 +165,7 @@ function Entries2Object(
 			return obj;
 		}
 	}, {});
-}
+};
 
 export const recipeReducer = produce(
 	(
@@ -223,6 +223,3 @@ export const recipeReducer = produce(
 	},
 	{},
 );
-function isSchemaObject(schemaI: SchemaItem): boolean {
-	return schemaI.type === 'object' && schemaI.properties !== undefined;
-}

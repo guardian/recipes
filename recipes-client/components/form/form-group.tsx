@@ -155,7 +155,7 @@ const getFormFields = (
 	}
 };
 
-export function getFormFieldsSchema(schema: SchemaItem): SchemaItem {
+export const getFormFieldsSchema = (schema: SchemaItem): SchemaItem => {
 	// Get schema for contents of given formItem
 	if (getSchemaType(schema.type).includes('string')) {
 		return { type: 'string' } as SchemaItem;
@@ -166,7 +166,7 @@ export function getFormFieldsSchema(schema: SchemaItem): SchemaItem {
 	} else {
 		return schema; //{"type": "null"} as schemaItem
 	}
-}
+};
 
 export const FormGroup = ({
 	formItems,
