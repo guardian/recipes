@@ -12,9 +12,13 @@ export interface SchemaItem {
 export type ComplexRecipeFields =
 	| IngredientsGroup
 	| Timing
+	| Timing[]
 	| IngredientsGroup[]
 	| Ingredient
 	| Instruction
+	| Instruction[]
+	| Serves
+	| Serves[]
 	| Range;
 
 export interface SchemaArrayItem {
@@ -100,7 +104,9 @@ export type RecipeItem =
 	| string[]
 	| IngredientsGroup[]
 	| Timing[]
-	| Ingredient[];
+	| Ingredient[]
+	| Instruction[]
+	| Serves[];
 
 export interface Range {
 	min: number; // Minimum value

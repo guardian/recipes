@@ -12,7 +12,7 @@ export const renderTimingsFormGroup = (
 	key: string,
 	dispatcher: Dispatch<ActionType>,
 ) => {
-	const formFieldsSchema = getFormFieldsSchema(formItems, schema);
+	const formFieldsSchema = getFormFieldsSchema(schema);
 	const formItemAddId =
 		key.slice(0, -1) + (parseInt(key.slice(-1)) + 1).toString();
 	const formItemRemoveId = key;
