@@ -7,8 +7,6 @@ import play.api.Logging
 import play.api.mvc._
 import play.api.libs.json.Json
 import java.util.Map
-import ujson._
-import os._
 
 import scala.collection.immutable.{Map => MMap}
 import scala.jdk.CollectionConverters._
@@ -88,12 +86,476 @@ class ApiController (
   }
 
   def index(id: String) = Action {
-    val data: String = ""
+    val data: String = """{
+    "id": "superUniqueRecipeId1",
+    "canonicalArticle": "food/2019/mar/02/yotam-ottolenghi-north-african-recipes-tunisian-pepper-salad-moroccan-chicken-pastilla-umm-ali-pudding"
+    "title": "Grilled pepper salad with fresh cucumber and herbs",
+    "description": "A simple, fresh salad that can be served as a side or a main",
+    "serves": {
+      "amount": {
+        "min": 4,
+        "max": 4
+      },
+      "unit": "people"
+    },
+    "timings": [
+      {
+      "instruction": "Prep",
+      "quantity": "20",
+      "unit": "min",
+      "text": "Prep 20 min"
+      },
+      {
+        "instruction": "Cook",
+        "quantity": "40",
+        "unit": "min",
+        "text": "Cook 40 min"
+      }
+    ],
+    "instructions": [
+			{
+				"stepNumber": 1,
+				"description": "Espresso is ideal, because you want the coffee to have as intense a flavour as possible, but if you don’t have the wherewithal at home, a strongly brewed cafetiere, moka or filter pot, or even a cup of instant, will do, as will a takeaway from your favourite coffee shop if you don’t.",
+				"images": [
+					"https://i.guim.co.uk/img/media/d16236d4a8333e1ee2aeba3d6d551e6b2a36bf82/874_952_5055_5052/master/5055.jpg?width=620&quality=85&fit=max&s=772c5a231bb63bab36fa26e5491ea6b5"
+				]
+			},
+			{
+				"stepNumber": 2,
+				"description": "Separate the eggs into two large, clean bowls – you’ll be beating the whites into a foam, so it’s important they’re not contaminated with any yolk, which might interfere with the process. As such, I’d advise cracking each white into a small bowl first, so you can make sure of this before you add it to the larger bowl."
+			},
+			{
+				"stepNumber": 3,
+				"description": "Whisk the whites until they form stiff, rather than droopy peaks – you should be able to hold the bowl upside down with confidence, though be careful when testing this. (Don’t be tempted to keep whisking after they reach this stage, because they’ll quickly start to break down into a watery mess, and you’ll need to whisk in a fresh white to get them back.) Set aside.",
+				"images": [
+					"https://i.guim.co.uk/img/media/73469f6ffea172d74eaee006493540b9e4253879/0_633_7442_6217/master/7442.jpg?width=620&quality=85&fit=max&s=b5579f9f24abb11a26d03c72359c6b3e"
+				]
+			}
+		],
+    "byline": "Yotam Ottolenghi",
+    "ingredients": [
+    	{
+			"recipeSection": "Sauce",
+          	"ingredientsList": [
+          		{
+        			"name": "Carrot",
+          			"amount": {
+                    	"min": 2,
+                        "max": 2
+                    },
+          			"unit": "items",
+          			"ingredientId": "carrot",
+          			"prefix": "large",
+          			"suffix": "chopped",
+          			"optional": false
+        		}
+          ]
+		  }
+    ],
+    "celebrationIds": "summer-food-and-drink",
+    "cuisineIds": [
+      "north-african/moroccan",
+      "middleeastern",
+      "indian"
+    ],
+    "mealTypeIds": "main-course",
+    "featuredImage": "https://media.guim.co.uk/5eb266e966f8aa7c74f449804d13ee3b57eb81d6/1_0_3356_3355/1000.jpg"
+  }"""
     Ok(Json.parse(data))
   }
 
   def schema() = Action {
-    val schema: String = ujson.read(os.read(os.pwd / "shared" / "model.json")).toString()
+    val schema: String = """{
+    "type": "object",
+    "required": [
+        "id"
+    ],
+    "properties": {
+        "isAppReady": {
+            "type": "boolean"
+        },
+        "id": {
+            "type": "string"
+        },
+        "canonicalArticle": {
+            "type": ["string", "null"]
+        },
+        "composerId": {
+            "type": ["string", "null"]
+        },
+        "webPublicationDate": {
+            "type": ["string", "null"]
+        },
+        "title": {
+            "type": ["string", "null"]
+        },
+        "description": {
+            "type": ["string", "null"]
+        },
+        "bookCredit": {
+            "type": ["string", "null"]
+        },
+        "serves": {
+          "type": "array",
+          "items": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "object",
+                  "properties": {
+                    "min": {
+                      "type": "integer"
+                    },
+                    "max": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "min",
+                    "max"
+                  ]
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "amount",
+                "unit"
+              ]
+            }
+        },
+        "featuredImage": {
+            "type": ["object", "null"],
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "mediaId": {
+                    "type": "string"
+                },
+                "cropId": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "photographer": {
+                    "type": "string"
+                },
+                "imageType": {
+                    "type": "string"
+                },
+                "caption": {
+                    "type": "string"
+                },
+                "mediaApiUrl": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "url",
+                "mediaId",
+                "cropId"
+            ]
+        },
+        "timings": {
+          "type": "array",
+          "items": {
+              "type": "object",
+              "properties": {
+                "qualifier": {
+                  "type": "string",
+                  "enum": [
+                    "prep-time",
+                    "cook-time",
+                    "set-time"
+                  ]
+                },
+                "durationInMins": {
+                  "type": "integer"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "qualifier",
+                "durationInMins"
+              ]
+            }
+        },
+        "instructions": {
+          "type": "array",
+          "items": {
+              "type": "object",
+              "properties": {
+                "stepNumber": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "images": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "stepNumber",
+                "description"
+              ]
+            }
+        },
+        "contributors": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "enum": [
+                  "profile/felicity-cloake",
+                  "profile/meera-sodha",
+                  "profile/holly-o-neill",
+                  "profile/yotamottolenghi",
+                  "profile/nigelslater",
+                  "profile/jack-monroe",
+                  "profile/thomasina-miers",
+                  "profile/rukmini-iyer",
+                  "profile/ed-cumming",
+                  "profile/anna-jones",
+                  "profile/rachel-roddy",
+                  "profile/sally-clarke",
+                  "profile/nigella-lawson",
+                  "profile/jayrayner",
+                  "profile/joe-trivelli",
+                  "profile/thompson-melissa",
+                  "profile/fuchsia-dunlop",
+                  "profile/benjamina-ebuehi",
+                  "profile/ravneet-gill",
+                  "profile/nik-sharma",
+                  "profile/chetna-makan",
+                  "profile/signe-johansen"
+                ]
+            }
+        },
+        "byline": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "ingredients": {
+            "type": "array",
+            "items":
+              {
+                "type": "object",
+                "properties": {
+                  "recipeSection": {
+                    "type": ["string", "null"]
+                  },
+                  "ingredientsList": {
+                    "type": "array",
+                    "items":
+                      {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "object",
+                            "properties": {
+                              "min": {
+                                "type": "integer"
+                              },
+                              "max": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "min",
+                              "max"
+                            ]
+                          },
+                          "unit": {
+                            "type": "string"
+                          },
+                          "ingredientId": {
+                            "type": "string"
+                          },
+                          "prefix": {
+                            "type": "string"
+                          },
+                          "suffix": {
+                            "type": "string"
+                          },
+                          "optional": {
+                            "type": "boolean"
+                          },
+                          "text": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ]
+                      }
+
+                  }
+                },
+                "required": [
+                  "ingredientsList"
+                ]
+              }
+          },
+        "celebrationIds": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "minItems": 0,
+                "type": [
+                    "string",
+                    "null"
+                ],
+                "enum": [
+                    null,
+                    "christmas",
+                    "boxing-day",
+                    "new-years-eve",
+                    "thanksgiving",
+                    "veganuary",
+                    "burns-night",
+                    "chinese-new-year",
+                    "valentines-day",
+                    "pancake-day",
+                    "mothers-day",
+                    "holi",
+                    "ramadan",
+                    "easter",
+                    "st-patricks-day",
+                    "eid",
+                    "passover",
+                    "birthday",
+                    "bank-holiday",
+                    "fathers-day",
+                    "halloween",
+                    "diwali",
+                    "bonfire-night",
+                    "hanukkah",
+                    "rosh-hashanah",
+                    "yom-kippur"
+                ]
+            }
+        },
+        "cuisineIds": {
+            "type": ["array", "null"],
+            "items": {
+                "minItems": 1,
+                "type": ["string", "null"],
+                "enum": [
+                    null,
+                    "nordic",
+                    "italian",
+                    "mexican",
+                    "indian",
+                    "french",
+                    "chinese",
+                    "thai",
+                    "japanese",
+                    "british",
+                    "greek",
+                    "spanish",
+                    "middle-eastern",
+                    "eastern-european",
+                    "african",
+                    "vietnamese",
+                    "korean",
+                    "filipino",
+                    "irish",
+                    "jamaican",
+                    "brazilian",
+                    "scandinavian",
+                    "australian",
+                    "turkish",
+                    "south-east-asian",
+                    "sri-lankan",
+                    "american",
+                    "south-american",
+                    "caribbean",
+                    "portuguese"
+                ]
+            }
+        },
+        "mealTypeIds": {
+          "type": ["array", "null"],
+          "items": {
+              "type": [
+                  "string",
+                  "null"
+              ],
+              "enum": [
+                  "breakfast",
+                  "brunch",
+                  "lunch",
+                  "dinner",
+                  "snack",
+                  "dessert",
+                  "drink",
+                  "starter"
+              ]
+            }
+        },
+        "suitableForDietIds": {
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "vegetarian",
+                    "vegan",
+                    "pescatarian",
+                    "gluten-free",
+                    "dairy-free"
+                ]
+            }
+        },
+        "utensilsAndApplianceIds": {
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "air-fryer"
+                ]
+            }
+        },
+        "techniquesUsedIds": {
+            "type": ["array", "null"],
+            "items": {
+                "type": ["string", "null"],
+                "enum": [
+                    "baking",
+                    "marinating"
+                ]
+            }
+        },
+        "difficultyLevel": {
+            "type": ["string", "null"],
+            "enum": [
+                    "easy",
+                    "medium",
+                    "hard"
+                ]
+        }
+    }
+}
+"""
     Ok(Json.parse(schema))
   }
 

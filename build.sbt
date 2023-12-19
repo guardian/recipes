@@ -20,8 +20,6 @@ lazy val root = (project in file("."))
       "com.beachape" %% "enumeratum" % enumeratumVersion,
       "com.beachape" %% "enumeratum-play" % enumeratumVersion,
       "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-      "com.lihaoyi" %% "ujson" % "1.2.0",
-      "com.lihaoyi" %% "os-lib" % "0.8.1",
 
       // logstash-logback-encoder brings in version 2.11.0
       // exclude transitive dependency to avoid a runtime exception:
