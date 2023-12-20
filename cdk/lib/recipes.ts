@@ -1,20 +1,34 @@
-import { AccessScope } from "@guardian/cdk/lib/constants";
-import { GuDistributionBucketParameter, type GuStackProps } from "@guardian/cdk/lib/constructs/core";
-import { GuStack } from "@guardian/cdk/lib/constructs/core";
-import { GuCname } from "@guardian/cdk/lib/constructs/dns";
-import { GuEc2App } from "@guardian/cdk/lib/patterns/";
-import { type App, Duration } from "aws-cdk-lib";
-import { AttributeType, Table, TableEncryption } from "aws-cdk-lib/aws-dynamodb";
-import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
+import { AccessScope } from '@guardian/cdk/lib/constants';
+import {
+  GuDistributionBucketParameter,
+  type GuStackProps,
+} from '@guardian/cdk/lib/constructs/core';
+import { GuStack } from '@guardian/cdk/lib/constructs/core';
+import { GuCname } from '@guardian/cdk/lib/constructs/dns';
+import { GuEc2App } from '@guardian/cdk/lib/patterns/';
+import { type App, Duration } from 'aws-cdk-lib';
+import {
+  AttributeType,
+  Table,
+  TableEncryption,
+} from 'aws-cdk-lib/aws-dynamodb';
+import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
 
-const appName = "recipes";
-const appDomainName = 'recipes.gutools.co.uk';
+const appName = 'recipes';
 
-export class Recipes extends GuStack {
-  constructor(scope: App, id: string, props: GuStackProps) {
+interface RecipesStackProps extends GuStackProps {
+  domainName: string;
+}
+export class RecipesStack extends GuStack {
+  constructor(
+    scope: App,
+    id: string,
+    { domainName, ...props }: RecipesStackProps,
+  ) {
     super(scope, id, props);
-    const artifactBucketName = GuDistributionBucketParameter.getInstance(this).valueAsString;
+    const artifactBucketName =
+      GuDistributionBucketParameter.getInstance(this).valueAsString;
     const ec2App = new GuEc2App(this, {
       applicationPort: 9000,
       app: appName,
@@ -29,7 +43,7 @@ export class Recipes extends GuStack {
         'dpkg -i /tmp/package.deb',
       ].join('\n'),
       certificateProps: {
-        domainName: appDomainName,
+        domainName,
       },
       monitoringConfiguration: { noMonitoring: true },
       scaling: {
@@ -41,7 +55,7 @@ export class Recipes extends GuStack {
         systemdUnitName: appName,
       },
       imageRecipe: 'editorial-tools-focal-java8',
-    })
+    });
     const rawRecipesTable = new Table(this, 'rawRecipesTable', {
       tableName: `rawRecipesTable${this.stage}`,
       partitionKey: {
@@ -62,12 +76,16 @@ export class Recipes extends GuStack {
       encryption: TableEncryption.AWS_MANAGED,
     });
     curatedRecipesTable.grantReadWriteData(ec2App.autoScalingGroup.role);
-    const bucket = Bucket.fromBucketName(this, 'pan-domain-auth-settings', 'pan-domain-auth-settings');
+    const bucket = Bucket.fromBucketName(
+      this,
+      'pan-domain-auth-settings',
+      'pan-domain-auth-settings',
+    );
     bucket.grantRead(ec2App.autoScalingGroup.role, '*public');
     new GuCname(this, 'DNS', {
       app: appName,
       ttl: Duration.hours(1),
-      domainName: appDomainName,
+      domainName,
       resourceRecord: ec2App.loadBalancer.loadBalancerDnsName,
     });
   }
