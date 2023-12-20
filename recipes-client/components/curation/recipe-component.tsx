@@ -9,7 +9,7 @@ import { FormGroup } from '../form/form-group';
 import { isDisplayed, UIschema } from '../../consts/index';
 import { isUIschemaItem } from '../../interfaces/ui';
 import { orderComponents } from '../../utils/ordering';
-import { BookCreditInput } from './book-credit-input';
+import { BookCreditInput } from '../form/inputs/book-credit';
 
 interface RecipeComponentProps {
 	body: AllRecipeFields;
