@@ -1,280 +1,149 @@
 /** @jsxImportSource @emotion/react */
-import { AllRecipeFields, Ingredient } from 'interfaces/main';
+import { AllRecipeFields } from 'interfaces/main';
 import { css } from '@emotion/react';
 import { CheckedSymbol } from '../reusables/app-ready-status';
-import { Range } from 'interfaces/main';
 import { palette } from '@guardian/source-foundations';
+import {
+  prettifyDurationInMins,
+  prettifyRange,
+  renderIngredientAsSentence,
+} from './prettifiers';
 
 interface DataPreviewProps {
-	recipeData: AllRecipeFields | null;
+  recipeData: AllRecipeFields | null;
 }
 
-const prettifyNumber = (num: number): string => {
-	if (!num) return '';
-	else if (num % 1 === 0) {
-		return num.toString();
-	} else {
-		switch (num) {
-			case 0.13:
-				return '⅛';
-			case 0.25:
-				return '¼';
-			case 0.33:
-				return '⅓';
-			case 0.5:
-				return '½';
-			case 0.66:
-				return '⅔';
-			case 0.75:
-				return '¾';
-			case 1.5:
-				return '1½';
-			case 2.5:
-				return '2½';
-			case 3.5:
-				return '3½';
-			case 4.5:
-				return '4½';
-			default:
-				return num.toString();
-		}
-	}
-};
-
-const prettifyRange = (amount: Range) => {
-	if (!amount) return '';
-	return amount.min === amount.max
-		? prettifyNumber(amount.min)
-		: `${amount.min}-${amount.max}`;
-};
-
-const prettifyDurationInMins = (durationInMins: number | Range): string => {
-	if (!durationInMins) return '';
-	if (typeof durationInMins === 'number') {
-		const hours = Math.floor(durationInMins / 60);
-		const mins = durationInMins % 60;
-		return `${hours > 0 ? `${hours}h` : ''} ${mins > 0 ? `${mins}m` : ''}`;
-	} else {
-		const min = durationInMins.min;
-		const max = durationInMins.max;
-		if (min === max) {
-			const hours = Math.floor(min / 60);
-			const mins = min % 60;
-			return `${hours > 0 ? `${hours}h` : ''} ${mins > 0 ? `${mins}m` : ''}`;
-		}
-		const minHours = Math.floor(min / 60);
-		const minMins = min % 60;
-		const maxHours = Math.floor(max / 60);
-		const maxMins = max % 60;
-		if (minHours === 0 && maxHours === 0) {
-			return `${minMins} - ${maxMins}m`;
-		}
-		if (minHours > 0 && maxHours > 0) {
-			return `${minHours}h${minMins > 0 ? `${minMins}m` : ''} - ${maxHours}h${
-				maxMins > 0 ? `${maxMins}m` : ''
-			}`;
-		}
-		if (minHours === 0 && maxHours > 0) {
-			return `${minMins} - ${maxHours}h ${maxMins > 0 ? `${maxMins}m` : ''}`;
-		}
-		return `${min}m - ${max}m`;
-	}
-};
-
 export const DataPreview = ({ recipeData }: DataPreviewProps) => {
-	const renderIngredientAsSentence = ({
-		name,
-		amount,
-		unit,
-		prefix,
-		suffix,
-	}: Ingredient) => {
-		const concernsTins = unit?.includes('tin');
-		const isUnitRequiringSpace =
-			unit?.includes('tbsp') ||
-			unit?.includes('tsp') ||
-			unit?.includes('clove');
-		return `${amount ? prettifyRange(amount) : ''}${
-			isUnitRequiringSpace ? ' ' : ''
-		}${concernsTins ? ' x ' : ''}${unit ? unit : ''} ${
-			prefix ? prefix : ''
-		} ${name} ${suffix ? suffix : ''}`;
-	};
+  const plainTextPreview = (label: string, content: string | undefined) => {
+    const displayedContent = content && content.length > 0 ? content : '-';
+    return (
+      <div>
+        <small>{label}</small>
+        <div>{displayedContent}</div>
+      </div>
+    );
+  };
 
-	return recipeData === null ? (
-		<div>Recipe data could not be loaded.</div>
-	) : (
-		<div css={previewStyles}>
-			<div>
-				<small>Marked app-ready</small>
-				<div>
-					<CheckedSymbol isAppReady={recipeData.isAppReady} />
-				</div>
-			</div>
-			<div>
-				<small>Recipe ID</small>
-				<div>{recipeData.id}</div>
-			</div>
-			<div>
-				<small>Canonical article</small>
-				<div>
-					<a
-						href={`https://theguardian.com/${recipeData.canonicalArticle}`}
-						target="_blank"
-					>
-						{recipeData.canonicalArticle}
-					</a>
-				</div>
-			</div>
-			<div>
-				<small>Featured image</small>
-				<div>
-					{recipeData.featuredImage ? (
-						<img
-							src={recipeData.featuredImage.url}
-							alt={`Featured image of ${recipeData.title} recipe`}
-							css={imageStyles}
-						/>
-					) : (
-						'-'
-					)}
-				</div>
-			</div>
-			<div>
-				<small>Book credit</small>
-				<div>{recipeData.bookCredit ? recipeData.bookCredit : '-'}</div>
-			</div>
-			<div>
-				<small>Title</small>
-				<div>{recipeData.title}</div>
-			</div>
-			<div>
-				<small>Description</small>
-				<div>
-					{recipeData.description.length > 0 ? recipeData.description : '-'}
-				</div>
-			</div>
-			<div>
-				<small>Contributor(s)</small>
-				<div>
-					{recipeData.contributors.length > 0
-						? recipeData.contributors.join(', ')
-						: '-'}
-				</div>
-			</div>
-			<div>
-				<small>Byline(s)</small>
-				<div>
-					{recipeData.byline.length > 0 ? recipeData.byline.join(', ') : '-'}
-				</div>
-			</div>
-			<div>
-				<small>Serves</small>
-				<ul>
-					{recipeData.serves?.map((serves, i) => {
-						return (
-							<li key={i}>
-								{prettifyRange(serves.amount)} {serves.unit}
-							</li>
-						);
-					})}
-				</ul>
-			</div>
-			<div>
-				<small>Timings</small>
-				<ul>
-					{recipeData.timings.map((timing, i) => {
-						return (
-							<li key={i}>
-								<strong>{timing.qualifier}</strong>:{' '}
-								{prettifyDurationInMins(timing.durationInMins)}
-							</li>
-						);
-					})}
-				</ul>
-			</div>
-			<div>
-				<small>Method</small>
-				<ul>
-					{recipeData.instructions.map((instruction, i) => {
-						return (
-							<li key={i}>
-								<strong>{instruction.stepNumber}.</strong>{' '}
-								{instruction.description}
-							</li>
-						);
-					})}
-				</ul>
-			</div>
-			<div>
-				<small>Ingredients</small>
-				<ul>
-					{recipeData.ingredients.map((ingredientGroup, i) => {
-						return (
-							<li key={i}>
-								{ingredientGroup.recipeSection}
-								<ul>
-									{ingredientGroup.ingredientsList.map((ingredient, i) => {
-										return (
-											<li key={i}>{renderIngredientAsSentence(ingredient)}</li>
-										);
-									})}
-								</ul>
-							</li>
-						);
-					})}
-				</ul>
-			</div>
-			<div>
-				<small>Diets</small>
-				{recipeData.suitableForDietIds.length === 0 ? (
-					<div>-</div>
-				) : (
-					<ul>
-						{recipeData.suitableForDietIds.map((diet, i) => {
-							return <li key={i}>{diet}</li>;
-						})}
-					</ul>
-				)}
-			</div>
-			<div>
-				<small>Cuisines</small>
-				{recipeData.cuisineIds.length === 0 ? (
-					<div>-</div>
-				) : (
-					<ul>
-						{recipeData.cuisineIds.map((cuisine, i) => {
-							return <li key={i}>{cuisine}</li>;
-						})}
-					</ul>
-				)}
-			</div>
-			<div>
-				<small>Meal types</small>
-				{recipeData.mealTypeIds.length === 0 ? (
-					<div>-</div>
-				) : (
-					<ul>
-						{recipeData.mealTypeIds.map((mealType, i) => {
-							return <li key={i}>{mealType}</li>;
-						})}
-					</ul>
-				)}
-			</div>
-			<div>
-				<small>Celebrations</small>
-				{recipeData.celebrationIds.length === 0 ? (
-					<div>-</div>
-				) : (
-					<ul>
-						{recipeData.celebrationIds.map((celebration, i) => {
-							return <li key={i}>{celebration}</li>;
-						})}
-					</ul>
-				)}
-			</div>
-		</div>
-	);
+  const stringListPreview = (label: string, content: string[]) => {
+    return (
+      <div>
+        <small>{label}</small>
+        {content.length > 0 ? (
+          <ul>
+            {content.map((item, i) => {
+              return <li key={i}>{item}</li>;
+            })}
+          </ul>
+        ) : (
+          <div>-</div>
+        )}
+      </div>
+    );
+  };
+  return recipeData === null ? (
+    <div>Recipe data could not be loaded.</div>
+  ) : (
+    <div css={previewStyles}>
+      <div>
+        <small>Marked app-ready</small>
+        <div>
+          <CheckedSymbol isAppReady={recipeData.isAppReady} />
+        </div>
+      </div>
+      {plainTextPreview('Recipe ID', recipeData.id)}
+      <div>
+        <small>Canonical article</small>
+        <div>
+          <a
+            href={`https://theguardian.com/${recipeData.canonicalArticle}`}
+            target="_blank"
+          >
+            {recipeData.canonicalArticle}
+          </a>
+        </div>
+      </div>
+      <div>
+        <small>Featured image</small>
+        <div>
+          {recipeData.featuredImage ? (
+            <img
+              src={recipeData.featuredImage.url}
+              alt={`Featured image of ${recipeData.title} recipe`}
+              css={imageStyles}
+            />
+          ) : (
+            '-'
+          )}
+        </div>
+      </div>
+      {plainTextPreview('Book credit', recipeData.bookCredit)}
+      {plainTextPreview('Title', recipeData.title)}
+      {plainTextPreview('Description', recipeData.description)}
+      {stringListPreview('Contributor(s)', recipeData.contributors)}
+      {stringListPreview('Byline(s)', recipeData.byline)}
+      <div>
+        <small>Serves</small>
+        <ul>
+          {recipeData.serves?.map((serves, i) => {
+            return (
+              <li key={i}>
+                {prettifyRange(serves.amount)} {serves.unit}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div>
+        <small>Timings</small>
+        <ul>
+          {recipeData.timings.map((timing, i) => {
+            return (
+              <li key={i}>
+                <strong>{timing.qualifier}</strong>:{' '}
+                {prettifyDurationInMins(timing.durationInMins)}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div>
+        <small>Method</small>
+        <ul>
+          {recipeData.instructions.map((instruction, i) => {
+            return (
+              <li key={i}>
+                <strong>{instruction.stepNumber}.</strong>{' '}
+                {instruction.description}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div>
+        <small>Ingredients</small>
+        <ul>
+          {recipeData.ingredients.map((ingredientGroup, i) => {
+            return (
+              <li key={i}>
+                {ingredientGroup.recipeSection}
+                <ul>
+                  {ingredientGroup.ingredientsList.map((ingredient, i) => {
+                    return (
+                      <li key={i}>{renderIngredientAsSentence(ingredient)}</li>
+                    );
+                  })}
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      {stringListPreview('Diets', recipeData.suitableForDietIds)}
+      {stringListPreview('Cuisines', recipeData.cuisineIds)}
+      {stringListPreview('Meal types', recipeData.mealTypeIds)}
+      {stringListPreview('Celebrations', recipeData.celebrationIds)}
+    </div>
+  );
 };
 
 const previewStyles = css`

@@ -65,8 +65,8 @@ export interface RecipeFields {
 	description: string; // Short description of the recipe
 	bookCredit?: string; // Credit for the book the recipe is from
 	featuredImage: ImageObject; // !! Actually capiImage
-	contributors: ContributorTag[]; // Structured data for contributors, where available
-	byline: BylineEntry[]; // Authorship data for the piece, including references to contributors where available, and text where not. Accommodates cases like this
+	contributors: string[]; // Structured data for contributors, where available
+	byline: string[]; // Authorship data for the piece, including references to contributors where available, and text where not. Accommodates cases like this
 	ingredients: IngredientsGroup[]; // List of ingredients
 	suitableForDietIds: string[]; // List of diets recipe is suitable for (e.g. vegetarian, vegan, kosher, halal, etc.)
 	cuisineIds: string[]; // Cuisine type(s) of recipe (e.g. Italian, Mexican, etc.)
@@ -139,14 +139,6 @@ export interface Serves {
 	amount: Range; // Number of servings
 	unit: string; // Unit of measurement, 'people' of 'units'
 	text?: string; // Original text
-}
-
-export type BylineEntry =
-	| { type: 'tag'; tagId: string }
-	| { type: 'text'; text: string };
-
-export interface ContributorTag {
-	tag: 'string';
 }
 
 export interface ActionType {
