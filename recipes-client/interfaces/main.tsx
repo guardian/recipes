@@ -183,17 +183,3 @@ export interface CurationState {
 	readonly schema: Record<string, unknown> | null;
 	readonly html: Record<string, unknown> | null;
 }
-
-export type HighlightType = string; //keyof recipeFields;
-
-export type Highlight = {
-	id: string;
-	type: HighlightType;
-	range: ResourceRange;
-};
-
-export type ResourceRange = {
-	elementNumber: number;
-	startCharacter: number;
-	endCharacter: number;
-};
