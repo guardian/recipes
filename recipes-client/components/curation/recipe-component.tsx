@@ -2,7 +2,6 @@
 import { Dispatch } from 'react';
 import {
 	ActionType,
-	SchemaItem,
 	AllRecipeFields,
 	isSchemaType,
 } from '../../interfaces/main';
@@ -10,6 +9,7 @@ import { FormGroup } from '../form/form-group';
 import { isDisplayed, UIschema } from '../../consts/index';
 import { isUIschemaItem } from '../../interfaces/ui';
 import { orderComponents } from '../../utils/ordering';
+import { BookCreditInput } from './book-credit-input';
 
 interface RecipeComponentProps {
 	body: AllRecipeFields;
@@ -34,24 +34,32 @@ const RecipeComponent = ({
 		return <h3> No bodayyyyy</h3>;
 	} else {
 		const recipeComponents = UIOrder ? orderComponents(body, UIOrder) : body;
-		return Object.keys(recipeComponents).reduce((acc, key) => {
-			if (isDisplayed(key) && isSchemaType(schema)) {
-				return [
-					...acc,
-					<FormGroup
-						formItems={body[key]}
-						schema={schema.properties[key]}
-						UIschema={UIschema[key]}
-						key_={key}
-						title={key}
-						dispatcher={dispatcher}
-						key={key}
-					></FormGroup>,
-				];
-			} else {
-				return acc;
-			}
-		}, [] as JSX.Element[]);
+		return Object.keys(recipeComponents)
+			.reduce((acc, key) => {
+				if (isDisplayed(key) && isSchemaType(schema)) {
+					return [
+						...acc,
+						<FormGroup
+							formItems={body[key]}
+							schema={schema.properties[key]}
+							UIschema={UIschema[key]}
+							key_={key}
+							title={key}
+							dispatcher={dispatcher}
+							key={key}
+						></FormGroup>,
+					];
+				} else {
+					return acc;
+				}
+			}, [] as JSX.Element[])
+			.concat(
+				<BookCreditInput
+					body={body}
+					dispatcher={dispatcher}
+					key={'bookCredit'}
+				/>,
+			);
 	}
 };
 

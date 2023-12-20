@@ -198,7 +198,7 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 				<ul>
 					{recipeData.instructions.map((instruction, i) => {
 						return (
-							<li>
+							<li key={i}>
 								<strong>{instruction.stepNumber}.</strong>{' '}
 								{instruction.description}
 							</li>
@@ -209,18 +209,18 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 			<div>
 				<small>Ingredients</small>
 				<ul>
-					{recipeData.ingredients.map((ingredient, i) => {
+					{recipeData.ingredients.map((ingredientGroup, i) => {
 						return (
-							<>
-								<li key={i}>{ingredient.recipeSection}</li>
+							<li key={i}>
+								{ingredientGroup.recipeSection}
 								<ul>
-									{ingredient.ingredientsList.map((ingredient, i) => {
+									{ingredientGroup.ingredientsList.map((ingredient, i) => {
 										return (
 											<li key={i}>{renderIngredientAsSentence(ingredient)}</li>
 										);
 									})}
 								</ul>
-							</>
+							</li>
 						);
 					})}
 				</ul>

@@ -1,22 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { Legend, TextInput } from '@guardian/source-react-components';
-import { ActionType } from 'interfaces/main';
+import { ActionType, AllRecipeFields } from 'interfaces/main';
 import { useState } from 'react';
 
 interface BookCreditInputProps {
-	isLoading: boolean;
-	body: Record<string, unknown>;
+	body: AllRecipeFields;
 	dispatcher: React.Dispatch<ActionType>;
 }
 
-export const BookCreditInput = ({
-	isLoading,
-	body,
-	dispatcher,
-}: BookCreditInputProps) => {
-	if (isLoading) {
-		return <h3> LOADING... </h3>;
-	} else if (body.bookCredit === undefined || body.bookCredit === null) {
+export const BookCreditInput = ({ body, dispatcher }: BookCreditInputProps) => {
+	if (body.bookCredit === undefined || body.bookCredit === null) {
 		return (
 			<div
 				css={{
