@@ -276,7 +276,19 @@ class ApiController (
                   ]
                 },
                 "durationInMins": {
-                  "type": "integer"
+                  "type": "object",
+                  "properties": {
+                              "min": {
+                                "type": "integer"
+                              },
+                              "max": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "min",
+                              "max"
+                            ]
                 },
                 "text": {
                   "type": "string"

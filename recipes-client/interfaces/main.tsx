@@ -131,7 +131,7 @@ export interface Ingredient {
 
 export type Timing = {
 	qualifier: string; // e.g. 'passive', 'active', 'set', 'chill'
-	durationInMins: number;
+	durationInMins: Range;
 	text?: string; // Original text
 };
 

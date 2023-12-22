@@ -144,6 +144,9 @@ const getSchemaItem = (
 			if (key === 'images') {
 				return [key, null];
 			}
+			if (key === 'durationInMins') {
+				return [key, { min: 0, max: 0 }];
+			}
 			return [key, getSchemaItem(schemaI[key])];
 		}, []);
 		return entriesToObject(outputArray);

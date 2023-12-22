@@ -115,6 +115,7 @@ export const UIschema: UIschemaItem = {
 			'ui:display': true,
 			'ui:locked': false,
 			'ui:removable': true,
+			'ui:order': ['min', 'max'],
 		},
 	},
 	instructions: {
