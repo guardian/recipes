@@ -8,70 +8,70 @@ import { renderRangeFormGroup } from './range';
 import { isRangeField } from 'utils/recipe-field-checkers';
 
 export const renderTimingsFormGroup = (
-  formItems: Timing,
-  schema: SchemaItem,
-  choices: string[] | null,
-  key: string,
-  dispatcher: Dispatch<ActionType>,
+	formItems: Timing,
+	schema: SchemaItem,
+	choices: string[] | null,
+	key: string,
+	dispatcher: Dispatch<ActionType>,
 ) => {
-  const formFieldsSchema = getFormFieldsSchema(schema);
-  const formItemAddId =
-    key.slice(0, -1) + (parseInt(key.slice(-1)) + 1).toString();
-  const formItemRemoveId = key;
+	const formFieldsSchema = getFormFieldsSchema(schema);
+	const formItemAddId =
+		key.slice(0, -1) + (parseInt(key.slice(-1)) + 1).toString();
+	const formItemRemoveId = key;
 
-  const formItemButtons = getItemButtons(
-    key,
-    formItemAddId,
-    formItemRemoveId,
-    formFieldsSchema,
-    dispatcher,
-  );
-  const fields = Object.keys(formItems).map((k: keyof Timing) => {
-    if (isRangeField(formItems[k])) {
-      return renderRangeFormGroup(
-        formItems[k],
-        choices,
-        `${key}.${k}`,
-        dispatcher,
-      );
-    } else {
-      return (
-        <FormItem
-          text={formItems[k]}
-          choices={
-            k === 'qualifier'
-              ? [
-                'prep-time',
-                'cook-time',
-                'set-time',
-                'marinate-time',
-                'soak-time',
-                'chill-time',
-                'freeze-time',
-                'infuse-time',
-                'rest-time',
-                'prove-time',
-              ]
-              : null
-          }
-          label={`${key}.${k}`}
-          key={`${key}.${k}`}
-          dispatcher={dispatcher}
-        />
-      );
-    }
-  });
-  return [
-    <div
-      css={{
-        display: 'flex !important',
-        fontFamily: 'GuardianTextSans',
-        fontSize: '1.0625rem',
-        justifyContent: 'top',
-      }}
-    >
-      {fields} minutes
-      {formItemButtons}
-    </div>,
-  ];
+	const formItemButtons = getItemButtons(
+		key,
+		formItemAddId,
+		formItemRemoveId,
+		formFieldsSchema,
+		dispatcher,
+	);
+	const fields = Object.keys(formItems).map((k: keyof Timing) => {
+		if (isRangeField(formItems[k])) {
+			return renderRangeFormGroup(
+				formItems[k],
+				choices,
+				`${key}.${k}`,
+				dispatcher,
+			);
+		} else {
+			return (
+				<FormItem
+					text={formItems[k]}
+					choices={
+						k === 'qualifier'
+							? [
+									'prep-time',
+									'cook-time',
+									'set-time',
+									'marinate-time',
+									'soak-time',
+									'chill-time',
+									'freeze-time',
+									'infuse-time',
+									'rest-time',
+									'prove-time',
+							  ]
+							: null
+					}
+					label={`${key}.${k}`}
+					key={`${key}.${k}`}
+					dispatcher={dispatcher}
+				/>
+			);
+		}
+	});
+	return [
+		<div
+			css={{
+				display: 'flex !important',
+				fontFamily: 'GuardianTextSans',
+				fontSize: '1.0625rem',
+				justifyContent: 'top',
+			}}
+		>
+			{fields} minutes
+			{formItemButtons}
+		</div>,
+	];
 };
