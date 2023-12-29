@@ -15,7 +15,7 @@ interface FooterProps {
 export const postRecipe = async (
 	aId: string | null,
 	data: AllRecipeFields | null,
-): Promise<Record<string, unknown>> => {
+): Promise<Record<string, unknown> | void> => {
 	if (aId === null) {
 		console.warn('No url provided!');
 		return { error: 'No url provided.' };
