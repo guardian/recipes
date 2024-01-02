@@ -120,11 +120,7 @@ const Home = (): JSX.Element => {
 					/>
 				</RadioGroup>
 			</div>
-			{recipeList.length > 0 && (
-				<div>
-					<RecipeList list={displayedRecipes} />
-				</div>
-			)}
+			{recipeList.length > 0 && <RecipeList list={displayedRecipes} />}
 		</div>
 	);
 };

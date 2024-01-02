@@ -101,7 +101,7 @@ export const RecipesOverview = ({ recipesList }: RecipesOverviewProps) => {
 	const renderChefSummaryCards = (chefs: RichChef[]) => {
 		return chefs.map((chef) => {
 			return (
-				<div css={infoBoxStyles}>
+				<div css={infoBoxStyles} key={chef.contributorTag}>
 					<strong>{chef.name}:</strong> {chef.recipeCount} (
 					{chef.percentOfAllRecipes}%)
 				</div>

@@ -65,8 +65,8 @@ export interface RecipeFields {
 	description: string; // Short description of the recipe
 	bookCredit?: string; // Credit for the book the recipe is from
 	featuredImage: ImageObject; // !! Actually capiImage
-	contributors: ContributorTag[]; // Structured data for contributors, where available
-	byline: BylineEntry[]; // Authorship data for the piece, including references to contributors where available, and text where not. Accommodates cases like this
+	contributors: string[]; // Structured data for contributors, where available
+	byline: string[]; // Authorship data for the piece, including references to contributors where available, and text where not. Accommodates cases like this
 	ingredients: IngredientsGroup[]; // List of ingredients
 	suitableForDietIds: string[]; // List of diets recipe is suitable for (e.g. vegetarian, vegan, kosher, halal, etc.)
 	cuisineIds: string[]; // Cuisine type(s) of recipe (e.g. Italian, Mexican, etc.)
@@ -141,14 +141,6 @@ export interface Serves {
 	text?: string; // Original text
 }
 
-export type BylineEntry =
-	| { type: 'tag'; tagId: string }
-	| { type: 'text'; text: string };
-
-export interface ContributorTag {
-	tag: 'string';
-}
-
 export interface ActionType {
 	payload: AppDataState | AddRemoveItemType | ErrorItemType;
 	type: string;
@@ -191,17 +183,3 @@ export interface CurationState {
 	readonly schema: Record<string, unknown> | null;
 	readonly html: Record<string, unknown> | null;
 }
-
-export type HighlightType = string; //keyof recipeFields;
-
-export type Highlight = {
-	id: string;
-	type: HighlightType;
-	range: ResourceRange;
-};
-
-export type ResourceRange = {
-	elementNumber: number;
-	startCharacter: number;
-	endCharacter: number;
-};

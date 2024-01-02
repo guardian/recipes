@@ -11,7 +11,12 @@ export const getItemButtons = (
 	formFieldsSchema: SchemaItem,
 	dispatcher: Dispatch<ActionType>,
 ): JSX.Element => {
-	if (key === 'instructions' || key === 'serves' || key === 'timings') {
+	if (
+		key === 'instructions' ||
+		key === 'serves' ||
+		key === 'timings' ||
+		key === 'ingredients'
+	) {
 		formFieldsSchema = formFieldsSchema.properties;
 	}
 	return (

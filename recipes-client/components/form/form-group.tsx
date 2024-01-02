@@ -124,7 +124,7 @@ const getFormFields = (
 				rComponents,
 				schema.items,
 				UIschema,
-				key + '.' + String(i),
+				`${key}.${i}`,
 				dispatcher,
 			);
 		});
