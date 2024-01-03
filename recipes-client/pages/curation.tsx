@@ -36,8 +36,8 @@ const Curation = () => {
 	// idle timer
 	const [remaining, setRemaining] = useState<number>(0);
 	const [openAlert, setOpenAlert] = useState<boolean>(false);
-	const timeout = 120000; // 2 minutes
-	const promptBeforeIdle = 60000; // 1 minute
+	const timeout = 180000; // 3 minutes
+	const promptBeforeIdle = 120000; // 2 minutes
 	const navigate = useNavigate();
 
 	const onIdle = () => {
