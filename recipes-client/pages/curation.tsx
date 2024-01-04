@@ -22,6 +22,7 @@ import { PinboardTrackAndPreselect } from '../components/curation/pinboard-track
 import { ImageObject } from 'interfaces/main';
 import { useIdleTimer } from 'react-idle-timer';
 import { useNavigate } from 'react-router-dom';
+import { CurationPanel } from 'components/form/form-curation-panel';
 
 const Curation = () => {
 	const { section: id } = useParams();
@@ -199,6 +200,13 @@ const Curation = () => {
 			</div>
 			<div css={articleView}>{capiId && <GuFrame articlePath={capiId} />}</div>
 			<div css={dataView}>
+				{state.body && (
+					<CurationPanel
+						isLoading={state.isLoading}
+						body={state.body}
+						dispatcher={dispatch}
+					/>
+				)}
 				<Tabs
 					tabsLabel="Toggle between form and preview"
 					tabElement="button"

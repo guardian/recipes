@@ -55,8 +55,11 @@ export const isAllRecipeFields = (
 	return keys.includes('canonicalArticle') && keys.includes('byline');
 };
 
-export interface RecipeFields {
+interface CurationFields {
 	isAppReady: boolean;
+	curationAssignee?: string;
+}
+export interface RecipeFields extends CurationFields {
 	composerId: string; // Unique identifier of canonical article in Composer
 	id: string; // Unique identifier
 	canonicalArticle: string; // ID of recipe in Content API

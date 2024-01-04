@@ -15,6 +15,7 @@ case class ImageObject(url: String, mediaId: String, cropId: String, source: Opt
 
 case class Recipe(
   isAppReady: Boolean,
+  curationAssignee: Option[String],
   id: String,
   featuredImage: Option[ImageObject],
   composerId: Option[String],
@@ -35,7 +36,7 @@ case class Recipe(
   utensilsAndApplianceIds: List[String],
   suitableForDietIds: List[String],
   techniquesUsedIds: List[String],
-  difficultyLevel: Option[String],
+  // difficultyLevel: Option[String],
 )
 
 object Quantity {
@@ -98,6 +99,7 @@ object Recipe extends Logging {
   implicit val recipeWrites = new Writes[Recipe] {
     def writes(recipe: Recipe) = Json.obj(
         "isAppReady" -> recipe.isAppReady,
+        "curationAssignee" -> recipe.curationAssignee,
         "id" -> recipe.id,
         "featuredImage" -> recipe.featuredImage,
         "composerId" -> recipe.composerId,
@@ -117,7 +119,7 @@ object Recipe extends Logging {
         "mealTypeIds" -> recipe.mealTypeIds,
         "utensilsAndApplianceIds" -> recipe.utensilsAndApplianceIds,
         "techniquesUsedIds" -> recipe.techniquesUsedIds,
-        "difficultyLevel" -> recipe.difficultyLevel,
+        // "difficultyLevel" -> recipe.difficultyLevel,
     )
   }
 

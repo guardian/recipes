@@ -13,6 +13,7 @@ export interface RecipeListType {
 	title: string;
 	contributors: string[];
 	byline: string[];
+	curationAssignee: string;
 	canonicalArticle: string;
 	isAppReady: boolean;
 	isInCuratedTable: boolean;
@@ -46,8 +47,9 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 	return (
 		<table css={tableStyles}>
 			<colgroup>
-				<col style={{ width: '50%' }} />
+				<col style={{ width: '40%' }} />
 				<col style={{ width: '20%' }} />
+				<col style={{ width: '10%' }} />
 				<col style={{ width: '10%' }} />
 				<col style={{ width: '10%' }} />
 				<col style={{ width: '10%' }} />
@@ -55,7 +57,8 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 			<thead>
 				<tr>
 					<th>Recipe</th>
-					<th>Author(s)</th>
+					<th>Chef(s)</th>
+					<th>Assignee</th>
 					<th>Edited</th>
 					<th>App-ready</th>
 					<th>Actions</th>
@@ -69,6 +72,7 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 							title,
 							contributors,
 							byline,
+							curationAssignee,
 							canonicalArticle,
 							isAppReady,
 							isInCuratedTable,
@@ -88,6 +92,9 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 								</td>
 								<td key={`path_${i}_author`}>
 									{displayAuthor(contributors, byline)}{' '}
+								</td>
+								<td key={`path_${i}_assignee`}>
+									{curationAssignee !== '' ? curationAssignee : '-'}
 								</td>
 								<td key={`path_${i}_edited`}>
 									<CheckedSymbol isAppReady={isInCuratedTable} />

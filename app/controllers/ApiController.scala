@@ -174,6 +174,16 @@ class ApiController (
         "isAppReady": {
             "type": "boolean"
         },
+        "curationAssignee": {
+            "type": ["string", "null"],
+            "enum": [
+                    "Anna Berrill",
+                    "Tim Lusher",
+                    "Gareth Grundy",
+                    "Dave Hall",
+                    "Mina Holland"
+                ]
+        },
         "id": {
             "type": "string"
         },
@@ -620,7 +630,7 @@ class ApiController (
 
     def scanRequest(tableName: String) = new ScanRequest()
         .withTableName(tableName)
-        .withProjectionExpression("%s, title, contributors, byline, canonicalArticle, isAppReady".format(partition_alias))
+        .withProjectionExpression("%s, title, contributors, byline, canonicalArticle, isAppReady, curationAssignee".format(partition_alias))
         .withExpressionAttributeNames(expressionAttributeValues);
 
     val rawResult = dbClient.scan(scanRequest( config.rawRecipesTableName ));
@@ -633,6 +643,10 @@ class ApiController (
 
     combinedData.foreach( i => {
       val id = i.getString(config.hashKey)
+      // If curationAssignee is null, return the field with an empty string
+      if (i.getString("curationAssignee") == null) {
+        i.withString("curationAssignee", "")
+      }
       val isInCuratedTable = if (curatedResultData.exists( _.getString(config.hashKey) == id )) {
         true
       } else {
