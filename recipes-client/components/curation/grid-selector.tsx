@@ -1,119 +1,157 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { palette } from '@guardian/source-foundations';
-import { apiURL } from 'consts';
 import { ImageObject } from 'interfaces/main';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // TODO: Vary based on stage
 const gridOrigin = 'https://media.test.dev-gutools.co.uk';
 
-export const isValidGridUrl = (url: string): boolean => {
-	return url.startsWith(gridOrigin);
-};
+type WithGridSelectorProps = React.PropsWithChildren<{
+	callback: (chosenImage: ImageObject) => void;
+}>;
+export const WithGridSelector = ({
+	children,
+	callback,
+}: WithGridSelectorProps) => {
+	const [maybeIframeUrl, setMaybeIframeUrl] = useState<string | null>(null);
+	const [isDropTarget, setIsDropTarget] = useState(false);
 
-const isValidCropUrl = (url: string): boolean => {
-	return url.startsWith(gridOrigin) && new URL(url).searchParams.has('crop');
-};
-
-export const useGridSelector = (): [
-	JSX.Element | null,
-	(startingUrl?: string) => Promise<ImageObject | null>,
-] => {
-	const [iframeStartingUrl, setIframeStartingUrl] = useState<string>(
-		`${gridOrigin}/?cropType=all`,
-	);
-	const [promiseResolveFn, setPromiseResolveFn] = useState<
-		((value: ImageObject | null) => void) | null
-	>(null);
-	useEffect(() => {
-		if (!promiseResolveFn) return;
-		const handleSelectedCrop = async (event: MessageEvent) => {
-			if (event.origin !== gridOrigin) return;
-			const { data } = event;
-			const cropId = data?.crop.data.id;
-			const mediaApiUri = data?.image.uri;
-			const { data: imageData } = (await (
-				await fetch(mediaApiUri, {
-					credentials: 'include',
-				})
-			).json()) as {
-				data: {
-					exports: {
-						id: string;
-						assets: { dimensions: { width: number }; file: string }[];
-						master: { file: string };
-					}[];
-					id: string;
-					metadata: { credit: string; description: string };
-				};
-			};
-			const cropExport = imageData.exports.find((crop) => crop.id === cropId)!;
-			const preferredAsset =
-				cropExport.assets.find((asset) => asset.dimensions.width === 1000) ||
-				cropExport.assets.find((asset) => asset.dimensions.width === 500) ||
-				cropExport.master;
-			const imageObject: ImageObject = {
-				url: preferredAsset.file,
-				mediaId: imageData.id,
-				cropId,
-				source: imageData.metadata.credit,
-				// photographer: string | undefined;
-				// imageType: string | undefined;
-				caption: imageData.metadata.description,
+	const handleSelectedCrop = async (cropId: string, mediaApiUri: string) => {
+		const mediaApiResponse = await fetch(mediaApiUri, {
+			credentials: 'include',
+		});
+		if (!mediaApiResponse.ok) {
+			console.error(
+				'Could not fetch media-api response for ',
 				mediaApiUri,
+				mediaApiResponse,
+			);
+			alert('Could not load data from the Grid. Please try again.');
+			return;
+		}
+		const { data } = (await mediaApiResponse.json()) as {
+			data: {
+				exports: {
+					id: string;
+					assets: { dimensions: { width: number }; file: string }[];
+					master: { file: string };
+				}[];
+				id: string;
+				metadata: { credit: string; description: string };
 			};
-			promiseResolveFn(imageObject);
-			setPromiseResolveFn(null);
-			// TODO: Support dragging and dropping images into Hatch
-			// TODO: Make iframe path based on dropped URL
-			// TODO: Shortcut to fetch step if crop URL dropped
 		};
-		window.addEventListener('message', handleSelectedCrop);
-		return () => window.removeEventListener('message', handleSelectedCrop); // Cleanup/unmount function
-	}, [promiseResolveFn]);
-	const maybeElement = promiseResolveFn && (
+		const cropExport = data.exports.find((crop) => crop.id === cropId)!;
+		const preferredAsset =
+			cropExport.assets.find((asset) => asset.dimensions.width === 1000) ||
+			cropExport.assets.find((asset) => asset.dimensions.width === 500) ||
+			cropExport.master;
+		const imageObject: ImageObject = {
+			url: preferredAsset.file,
+			mediaId: data.id,
+			cropId,
+			source: data.metadata.credit,
+			// photographer: string | undefined; //TODO extract photographer from media-api response
+			// imageType: string | undefined; //TODO extract imageType from media-api response
+			caption: data.metadata.description,
+			mediaApiUri,
+		};
+		setMaybeIframeUrl(null);
+		callback(imageObject);
+	};
+
+	useEffect(() => {
+		const handleGridMessage = (event: MessageEvent) =>
+			event.origin === gridOrigin &&
+			event.data &&
+			handleSelectedCrop(event.data.crop.data.id, event.data.image.uri);
+		window.addEventListener('message', handleGridMessage);
+		return () => window.removeEventListener('message', handleGridMessage); // Cleanup/unmount function
+	}, []);
+
+	const displayGridPicker = (
+		startingUrl: string = `${gridOrigin}/?cropType=all`,
+	) => {
+		// TODO: Shortcut to handleSelectedCrop if crop URL dropped -- url.startsWith(gridOrigin) && new URL(url).searchParams.get('crop');
+		setMaybeIframeUrl(startingUrl);
+	};
+
+	return (
 		<div
 			css={css`
-				background-color: rgba(0, 0, 0, 0.5);
-				position: fixed;
-				bottom: 0;
-				top: 0;
-				left: 0;
-				right: 0;
-				z-index: 999999;
+				position: relative;
 			`}
+			onDragEnter={(e) => {
+				if (e.dataTransfer.types.includes('text/uri-list')) {
+					e.preventDefault();
+					e.stopPropagation();
+					setIsDropTarget(true);
+				}
+			}}
+			onDragOver={(e) => e.preventDefault()}
+			onDrop={(e) => {
+				e.preventDefault();
+				displayGridPicker(e.dataTransfer.getData('URL'));
+				setIsDropTarget(false);
+			}}
 		>
+			{children}
 			<button
-				onClick={() => {
-					promiseResolveFn(null);
-					setPromiseResolveFn(null);
-				}}
+				onClick={() => displayGridPicker()}
 				css={css`
-					position: absolute;
-					top: 40px;
-					right: 40px;
+					font-size: 40px;
 				`}
 			>
-				Close
+				➕
 			</button>
-			<iframe
-				src={iframeStartingUrl}
-				css={css`
-					width: calc(100% - 100px);
-					height: calc(100vh - 100px);
-					display: block;
-					margin: 50px;
-				`}
-			/>
+			{isDropTarget && (
+				<div
+					css={css`
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+						background: rgba(0, 0, 0, 0.5);
+						border: 2px dashed black;
+					`}
+					onDragLeave={() => setIsDropTarget(false)}
+					onDragEnd={() => setIsDropTarget(false)}
+					onDragExit={() => setIsDropTarget(false)}
+				/>
+			)}
+			{maybeIframeUrl && (
+				<div
+					css={css`
+						background-color: rgba(0, 0, 0, 0.5);
+						position: fixed;
+						bottom: 0;
+						top: 0;
+						left: 0;
+						right: 0;
+						z-index: 999999;
+					`}
+				>
+					<button
+						onClick={() => setMaybeIframeUrl(null)}
+						css={css`
+							position: absolute;
+							top: 40px;
+							right: 40px;
+						`}
+					>
+						Close
+					</button>
+					<iframe
+						src={maybeIframeUrl}
+						css={css`
+							width: calc(100% - 100px);
+							height: calc(100vh - 100px);
+							display: block;
+							margin: 50px;
+						`}
+					/>
+				</div>
+			)}
 		</div>
 	);
-	const callback = (startingUrl?: string) =>
-		new Promise<ImageObject>((resolve) => {
-			setIframeStartingUrl(startingUrl || `${gridOrigin}/?cropType=all`);
-			// must use the function overload of setState here, to avoid resolve being invoked immediately
-			setPromiseResolveFn(() => resolve);
-		});
-	return [maybeElement, callback];
 };

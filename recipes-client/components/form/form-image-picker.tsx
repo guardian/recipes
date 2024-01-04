@@ -6,12 +6,8 @@ import { ActionType } from '../../interfaces/main';
 import minBy from 'lodash-es/minBy';
 import { actions } from '../../actions/recipeActions';
 import { ImageObject } from '../../interfaces/main';
-import {
-	isValidGridUrl,
-	useGridSelector,
-} from 'components/curation/grid-selector';
+import { WithGridSelector } from 'components/curation/grid-selector';
 import { css } from '@emotion/react';
-import { is } from '@react-three/fiber/dist/declarations/src/core/utils';
 
 type assetsInfo = {
 	assets: imageInfo[];
@@ -103,119 +99,78 @@ const PictureGrid = ({
 	dispatcher,
 }: PictureGridProps) => {
 	const [picHovered, setHover] = useState(-1);
-	const [maybeGridSelector, gridSelectorCallback] = useGridSelector();
-	const [isDropTarget, setIsDropTarget] = useState(false);
 	return (
 		<>
 			<h3 css={{ fontFamily: 'GuardianTextSans' }}>
 				Images featured in the canonical article
 			</h3>
-			<div
-				onDragEnter={(e) => {
-					if (e.dataTransfer.types.includes('text/uri-list')) {
-						e.preventDefault();
-						setIsDropTarget(true);
-					}
+			<WithGridSelector
+				callback={(chosenImage) => {
+					console.log(chosenImage); // TODO - do something with this such as save it etc.
 				}}
-				onDragLeave={() => setIsDropTarget(false)}
-				onDragEnd={() => setIsDropTarget(false)}
-				onDragExit={() => setIsDropTarget(false)}
-				onDragOver={(e) => {
-					if (e.dataTransfer.types.includes('text/uri-list')) {
-						e.preventDefault();
-					}
-				}}
-				onDrop={(e) => {
-					e.preventDefault();
-					gridSelectorCallback(e.dataTransfer.getData('URL')).then(console.log);
-					setIsDropTarget(false);
-				}}
-				css={css`
-					position: relative;
-					display: grid;
-					grid-template-columns: 20% 20% 20% 20% 20%;
-					grid-template-rows: auto;
-					height: auto;
-					grid-template-areas: '1' '2' '3' '4' '5';
-					margin-bottom: 30px;
-					border-color: black;
-					border-width: 2px;
-				`}
 			>
-				{isDropTarget && (
-					<div
-						css={css`
-							position: absolute;
-							top: 0;
-							left: 0;
-							width: 100%;
-							height: 100%;
-							background: rgba(0, 0, 0, 0.5);
-							border: 2px dashed black;
-						`}
-					/>
-				)}
-				{picObjects.map((p, i) => {
-					return (
-						<div
-							onMouseOver={() => setHover(i)}
-							onMouseOut={() => setHover(-1)}
-							onClick={() =>
-								select(
-									picObjects[i],
-									picObjects[i] === selectedImage,
-									setSelectedImage,
-									dispatcher,
-								)
-							}
-							css={{
-								gridArea: `${Math.floor(i / 5 + 1)}`,
-								justifyItems: 'center',
-								display: 'grid',
-								align: 'center',
-								maxWidth: '100%',
-								alignContent: 'center',
-								borderColor: 'black',
-								borderWidth: '1px',
-								cursor: 'pointer',
-								pointerEvents: 'visible',
-							}}
-							key={`img_${i}`}
-						>
-							<img style={{ maxWidth: 'inherit' }} src={p.url} alt={p.url} />
+				<div
+					css={css`
+						position: relative;
+						display: grid;
+						grid-template-columns: 20% 20% 20% 20% 20%;
+						grid-template-rows: auto;
+						height: auto;
+						grid-template-areas: '1' '2' '3' '4' '5';
+						margin-bottom: 30px;
+						border-color: black;
+						border-width: 2px;
+					`}
+				>
+					{picObjects.map((p, i) => {
+						return (
 							<div
-								key={`tile-icon-bar-${i}`}
-								style={{
-									pointerEvents: 'none',
-									opacity: 1,
-									position: 'relative',
-									top: '-90px',
-									height: '36px',
-									width: '100%',
+								onMouseOver={() => setHover(i)}
+								onMouseOut={() => setHover(-1)}
+								onClick={() =>
+									select(
+										picObjects[i],
+										picObjects[i] === selectedImage,
+										setSelectedImage,
+										dispatcher,
+									)
+								}
+								css={{
+									gridArea: `${Math.floor(i / 5 + 1)}`,
+									justifyItems: 'center',
+									display: 'grid',
+									align: 'center',
+									maxWidth: '100%',
+									alignContent: 'center',
+									borderColor: 'black',
+									borderWidth: '1px',
+									cursor: 'pointer',
+									pointerEvents: 'visible',
 								}}
+								key={`img_${i}`}
 							>
-								<CheckButton
-									isSelected={picObjects[i]?.url === selectedImage?.url}
-									hover={i === picHovered}
-								/>
+								<img style={{ maxWidth: 'inherit' }} src={p.url} alt={p.url} />
+								<div
+									key={`tile-icon-bar-${i}`}
+									style={{
+										pointerEvents: 'none',
+										opacity: 1,
+										position: 'relative',
+										top: '-90px',
+										height: '36px',
+										width: '100%',
+									}}
+								>
+									<CheckButton
+										isSelected={picObjects[i]?.url === selectedImage?.url}
+										hover={i === picHovered}
+									/>
+								</div>
 							</div>
-						</div>
-					);
-				})}
-			</div>
-			{maybeGridSelector}
-			<button
-				onClick={() => {
-					gridSelectorCallback().then((maybeImageObject) => {
-						console.log(maybeImageObject);
-					});
-				}}
-				css={css`
-					font-size: 40px;
-				`}
-			>
-				➕
-			</button>
+						);
+					})}
+				</div>
+			</WithGridSelector>
 			<hr />
 		</>
 	);
