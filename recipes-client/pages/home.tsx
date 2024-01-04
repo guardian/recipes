@@ -57,12 +57,19 @@ const Home = (): JSX.Element => {
 		z-index: 1;
 	`;
 
+	const appReadyCount = recipeList.filter((recipe) => recipe.isAppReady).length;
+	const editedButNotAppReadyCount = recipeList.filter(
+		(recipe) => !recipe.isAppReady && recipe.isInCuratedTable,
+	).length;
+	const awaitingCurationCount = recipeList.filter(
+		(recipe) => !recipe.isAppReady && !recipe.isInCuratedTable,
+	).length;
+
 	return (
 		<div css={mainContainerStyles}>
 			<div css={counterStyles}>
 				<div>
-					<span>{recipeList.filter((recipe) => recipe.isAppReady).length}</span>{' '}
-					app-approved recipes and counting
+					<span>{appReadyCount}</span> app-approved recipes and counting
 				</div>
 			</div>
 			<div
@@ -100,21 +107,21 @@ const Home = (): JSX.Element => {
 					<Radio
 						name="filter"
 						value="app-ready"
-						label="App-approved"
+						label={`App-approved (${appReadyCount})`}
 						onChange={() => setListFilter('app-ready')}
 						checked={listFilter === 'app-ready'}
 					/>
 					<Radio
 						name="filter"
 						value="edited-but-not-app-ready"
-						label="Edited but not app-approved"
+						label={`In progress (${editedButNotAppReadyCount})`}
 						onChange={() => setListFilter('edited-but-not-app-ready')}
 						checked={listFilter === 'edited-but-not-app-ready'}
 					/>
 					<Radio
 						name="filter"
 						value="non-curated"
-						label="Awaiting curation"
+						label={`Awaiting curation (${awaitingCurationCount})`}
 						onChange={() => setListFilter('non-curated')}
 						checked={listFilter === 'non-curated'}
 					/>
