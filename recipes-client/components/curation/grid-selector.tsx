@@ -68,11 +68,19 @@ export const WithGridSelector = ({
 		return () => window.removeEventListener('message', handleGridMessage); // Cleanup/unmount function
 	}, []);
 
-	const displayGridPicker = (
+	const start = (
 		startingUrl: string = `${gridOrigin}/?cropType=all`,
 	) => {
-		// TODO: Shortcut to handleSelectedCrop if crop URL dropped -- url.startsWith(gridOrigin) && new URL(url).searchParams.get('crop');
-		setMaybeIframeUrl(startingUrl);
+		const url = new URL(startingUrl);
+		const maybeCropId = url.searchParams.get('crop');
+		if (maybeCropId) {
+			handleSelectedCrop(
+				maybeCropId,
+				`https://api.${url.hostname}/${url.pathname}`
+			);
+		} else {
+			setMaybeIframeUrl(startingUrl);
+		}
 	};
 
 	return (
@@ -90,13 +98,13 @@ export const WithGridSelector = ({
 			onDragOver={(e) => e.preventDefault()}
 			onDrop={(e) => {
 				e.preventDefault();
-				displayGridPicker(e.dataTransfer.getData('URL'));
+				start(e.dataTransfer.getData('URL'));
 				setIsDropTarget(false);
 			}}
 		>
 			{children}
 			<button
-				onClick={() => displayGridPicker()}
+				onClick={() => start()}
 				css={css`
 					font-size: 40px;
 				`}
