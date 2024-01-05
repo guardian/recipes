@@ -3,8 +3,10 @@ import { css } from '@emotion/react';
 import { ImageObject } from 'interfaces/main';
 import React, { useEffect, useState } from 'react';
 
-// TODO: Vary based on stage
-const gridOrigin = 'https://media.test.dev-gutools.co.uk';
+const gridTopLevelDomain = window.location.hostname.includes('.gutools.co.uk')
+	? 'gutools.co.uk'
+	: 'test.dev-gutools.co.uk';
+const gridOrigin = `https://media.${gridTopLevelDomain}`;
 
 type WithGridSelectorProps = React.PropsWithChildren<{
 	callback: (chosenImage: ImageObject) => void;
@@ -68,15 +70,13 @@ export const WithGridSelector = ({
 		return () => window.removeEventListener('message', handleGridMessage); // Cleanup/unmount function
 	}, []);
 
-	const start = (
-		startingUrl: string = `${gridOrigin}/?cropType=all`,
-	) => {
+	const start = (startingUrl: string = `${gridOrigin}/?cropType=all`) => {
 		const url = new URL(startingUrl);
 		const maybeCropId = url.searchParams.get('crop');
 		if (maybeCropId) {
 			handleSelectedCrop(
 				maybeCropId,
-				`https://api.${url.hostname}/${url.pathname}`
+				`https://api.${url.hostname}/${url.pathname}`,
 			);
 		} else {
 			setMaybeIframeUrl(startingUrl);
