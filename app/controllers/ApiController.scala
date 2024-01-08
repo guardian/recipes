@@ -26,6 +26,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression
 import com.amazonaws.services.dynamodbv2.model.QueryRequest
 import play.api.libs.json.JsPath
 import java.util.ArrayList
+import scala.annotation.tailrec
 
 import com.amazonaws.services.dynamodbv2.document.Item
 import com.amazonaws.services.dynamodbv2.model.ScanRequest
@@ -612,22 +613,33 @@ class ApiController (
     }
   }
 
+  // @tailrec
+  private def getItems(tableName: String, maybeStartKey: java.util.Map[String, AttributeValue] = null): List[Item] = {
+    val partition_alias = "#p"
+    val expressionAttributeValues = MMap(partition_alias -> config.hashKey).asJava
+
+    val scanRequest = new ScanRequest()
+        .withTableName(tableName)
+        .withProjectionExpression("%s, title, contributors, byline, canonicalArticle, isAppReady, composerId".format(partition_alias))
+        .withExpressionAttributeNames(expressionAttributeValues)
+        .withExclusiveStartKey(maybeStartKey)
+
+    val result = dbClient.scan(scanRequest)
+    val data = ItemUtils.toItemList(result.getItems()).asScala
+
+    (if (result.getLastEvaluatedKey() != null) {
+      getItems(tableName, result.getLastEvaluatedKey())
+    } else {
+      List()
+    }) ++ data
+  }
+
   def get_list() = Action {
     // Get a list of recipes
 
-    val partition_alias = "#p";
-    val expressionAttributeValues = MMap(partition_alias -> config.hashKey).asJava;
+    val rawResultData = getItems(config.rawRecipesTableName)
 
-    def scanRequest(tableName: String) = new ScanRequest()
-        .withTableName(tableName)
-        .withProjectionExpression("%s, title, contributors, byline, canonicalArticle, isAppReady".format(partition_alias))
-        .withExpressionAttributeNames(expressionAttributeValues);
-
-    val rawResult = dbClient.scan(scanRequest( config.rawRecipesTableName ));
-    val rawResultData = ItemUtils.toItemList(rawResult.getItems()).asScala
-
-    val curatedResult = dbClient.scan(scanRequest( config.curatedRecipesTableName ));
-    val curatedResultData = ItemUtils.toItemList(curatedResult.getItems()).asScala
+    val curatedResultData = getItems(config.curatedRecipesTableName)
 
     val combinedData = rawResultData.filter( i => !curatedResultData.exists( _.getString(config.hashKey) == i.getString(config.hashKey) ) ) ++ curatedResultData
 
