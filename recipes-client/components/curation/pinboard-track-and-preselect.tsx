@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from 'react';
+import { workflowContentUrl } from 'utils/workflow';
 
 interface PinboardTrackAndPreselectProps {
 	maybeComposerId: string | undefined;
@@ -15,10 +16,6 @@ export const PinboardTrackAndPreselect = ({
 	useEffect(() => {
 		(async () => {
 			if (!maybeComposerId) return;
-			const workflowDomain = window.location.host
-				.replace('recipes', 'workflow')
-				.replace('.local.', '.code.');
-			const workflowContentUrl = `https://${workflowDomain}/api/content`;
 			const workflowLookupResponse = await fetch(
 				`${workflowContentUrl}/${maybeComposerId}`,
 				{

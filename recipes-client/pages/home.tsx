@@ -3,15 +3,16 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source-foundations';
 import { Radio, RadioGroup } from '@guardian/source-react-components';
 import { RecipesOverview } from 'components/dashboard/recipes-overview';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import RecipeList, {
 	RecipeListType,
 } from '../components/dashboard/recipe-list';
 import { listEndpoint } from '../consts/index';
 import { WelcomeExplainer } from 'components/dashboard/welcome-explainer';
+import { WorkflowLookup, workflowContentUrl } from 'utils/workflow';
 
 const Home = (): JSX.Element => {
-	const [recipeList, setList] = useState<RecipeListType[]>([]);
+	const [recipeList, setRecipeList] = useState<RecipeListType[]>([]);
 	const [displayedRecipes, setDisplayedRecipes] = useState<RecipeListType[]>(
 		[],
 	);
@@ -40,9 +41,43 @@ const Home = (): JSX.Element => {
 	useEffect(() => {
 		fetch(listEndpoint)
 			.then((response) => response.json())
-			.then((data) => setList(data))
+			.then((data) => setRecipeList(data))
 			.catch(() => null);
 	}, []);
+
+	const [workflowLookup, setWorkflowLookup] = useState<WorkflowLookup>({});
+	useEffect(() => {
+		fetch(`${workflowContentUrl}?section=Recipes+Data`, {
+			credentials: 'include',
+		})
+			.then((response) => response.json())
+			.then(({ content }) => {
+				setWorkflowLookup(
+					Object.values(content)
+						.flat()
+						.reduce(
+							({ composerId, assignee, status }, acc) => ({
+								...acc,
+								[composerId]: {
+									assignee,
+									status,
+								},
+							}),
+							{} as WorkflowLookup,
+						),
+				);
+			})
+			.catch(() => null);
+	}, []);
+
+	const unifiedRecipeList = useMemo(
+		() =>
+			recipeList.map((recipe) => ({
+				...recipe,
+				workflow: workflowLookup[recipe.composerId],
+			})),
+		[recipeList, workflowLookup],
+	);
 
 	const counterStyles = css`
 		position: fixed;
@@ -120,7 +155,7 @@ const Home = (): JSX.Element => {
 					/>
 				</RadioGroup>
 			</div>
-			{recipeList.length > 0 && <RecipeList list={displayedRecipes} />}
+			{recipeList.length > 0 && <RecipeList list={unifiedRecipeList} />}
 		</div>
 	);
 };
