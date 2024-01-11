@@ -276,6 +276,16 @@ export const FormGroup = ({
 					type="button"
 					onClick={() => mergeSteps()}
 					disabled={stepsToMerge.length < 2}
+          style={{fontSize: '0.9375rem',
+            fontWeight: stepsToMerge.length >= 2 ? '800' : '400',
+            fontFamily: 'GuardianTextSans,Guardian Text Sans Web,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif',
+            // border: 'none',
+            color: stepsToMerge.length >= 2 ? '#fff' : 'gray',
+            width: '150px',
+            background: stepsToMerge.length >= 2 ? '#052962' : 'transparent', // Change background based on condition
+            padding: '8px',
+            cursor: stepsToMerge.length >= 2 ? 'pointer' : 'default'
+          }}
 				>
 					Merge Steps
 				</button>
