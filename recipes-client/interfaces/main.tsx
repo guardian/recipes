@@ -177,7 +177,6 @@ export interface AddRemoveItemType {
 	objId: string;
 	description?: string;
 	stepNumber?: number;
-	images?: string[];
 }
 
 export type AppDataState = CurationState & LoadingState;

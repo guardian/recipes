@@ -79,7 +79,7 @@ export const handleMergeFields = (
 		payload: {
 			objId: newObjId,
 			description: newFieldValue,
-			stepNumber: fieldsToDelete[0].stepNumber,
+			stepNumber: fieldsToDelete[0]?.stepNumber,
 		},
 	});
 };

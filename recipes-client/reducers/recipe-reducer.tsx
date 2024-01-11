@@ -228,11 +228,11 @@ export const recipeReducer = produce(
 			case actions.addMergedField: {
 				const keyPathArr = action.payload['objId'].split('.');
 				const value = {
-					// images: action.payload['images'] as string[],
 					description: action.payload['description'] as string,
 					stepNumber: action.payload['stepNumber'] as number,
 				};
 				addStateItem(draft.body, keyPathArr, value);
+        break;
 			}
 			case actions.selectImg: {
 				updateStateItem(draft.body, ['featuredImage'], action.payload);
