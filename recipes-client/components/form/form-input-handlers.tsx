@@ -1,4 +1,4 @@
-import { ActionType, SchemaItem } from 'interfaces/main';
+import { ActionType, ModifiedInstruction, SchemaItem } from 'interfaces/main';
 import { Dispatch } from 'react';
 import { actions } from '../../actions/recipeActions';
 
@@ -60,5 +60,26 @@ export const handleChangeBoolean = (
 	dispatcher({
 		type: actions.change,
 		payload: { [objId]: objVal },
+	});
+};
+
+export const handleMergeFields = (
+	newObjId: string,
+	newFieldValue: string,
+	fieldsToDelete: ModifiedInstruction[],
+	dispatcher: Dispatch<ActionType>,
+) => {
+	dispatcher({
+		type: actions.deleteMultiple,
+		payload: fieldsToDelete.map((f) => f.objId),
+	});
+
+	dispatcher({
+		type: actions.addMergedField,
+		payload: {
+			objId: newObjId,
+			description: newFieldValue,
+			stepNumber: fieldsToDelete[0].stepNumber,
+		},
 	});
 };

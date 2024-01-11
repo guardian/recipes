@@ -94,7 +94,7 @@ const renderInput = (
 			<div css={{ display: 'grid' }}>
 				<input
 					css={{
-						height: '25px',
+						height: `${key.includes('stepNumber') ? '50px' : '25px'}`,
 						padding: '8px',
 						margin: '4px 4px 4px 0',
 						fontFamily: 'GuardianTextSans',

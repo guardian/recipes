@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { Dispatch } from 'react';
+import { ChangeEvent, Dispatch, useEffect, useState } from 'react';
 import FormItem from './form-item';
 import {
 	ActionType,
 	IngredientsGroup,
+	Instruction,
+	ModifiedInstruction,
 	SchemaItem,
 } from '../../interfaces/main';
 import { getSchemaType } from '../../utils/schema';
@@ -22,6 +24,7 @@ import { renderIngredientsFormGroup } from './inputs/ingredients';
 import { renderInstructionsFormGroup } from './inputs/instructions';
 import { renderServesFormGroup } from './inputs/serves';
 import { getItemButtons } from './form-buttons';
+import { handleMergeFields } from './form-input-handlers';
 
 const isStringNumberOrBoolean = (
 	item:
@@ -81,6 +84,12 @@ const getFormFields = (
 	UIschema: UIschemaItem,
 	key: string,
 	dispatcher: Dispatch<ActionType>,
+	toggleStepsToMerge: (
+		event: ChangeEvent<HTMLInputElement>,
+		key: Instruction[],
+	) => void,
+	checkedStates: Record<string, boolean>,
+	setCheckedStates: (value: React.SetStateAction<{}>) => void,
 ): JSX.Element[] => {
 	// Get form components for each item in `formItems`
 	const choices = schema.enum || null;
@@ -126,6 +135,9 @@ const getFormFields = (
 				UIschema,
 				`${key}.${i}`,
 				dispatcher,
+				toggleStepsToMerge,
+				checkedStates,
+				setCheckedStates,
 			);
 		});
 	} else if (isTimingsField(formItems)) {
@@ -145,6 +157,9 @@ const getFormFields = (
 			choices,
 			key,
 			dispatcher,
+			toggleStepsToMerge,
+			checkedStates,
+			setCheckedStates,
 		);
 	} else if (isServesField(formItems)) {
 		return renderServesFormGroup(formItems, schema, choices, key, dispatcher);
@@ -180,6 +195,28 @@ export const FormGroup = ({
 	const key = key_ || title;
 	const formDispatcher = dispatcher || null;
 
+	const [stepsToMerge, setStepsToMerge] = useState<ModifiedInstruction[]>([]);
+
+	const toggleStepsToMerge = (
+		e: ChangeEvent<HTMLInputElement>,
+		newStep: Instruction,
+		key: string,
+	) => {
+		const modifiedStep: ModifiedInstruction = {
+			...newStep,
+			objId: key,
+		};
+		if (e?.target.checked) {
+			setStepsToMerge((steps) => [...steps, modifiedStep]);
+		} else {
+			setStepsToMerge((steps) =>
+				steps.filter((step) => step.objId !== modifiedStep.objId),
+			);
+		}
+	};
+
+	const [checkedStates, setCheckedStates] = useState({});
+
 	// Set up form group
 	const rComponents =
 		UIschema['ui:order'] && !Array.isArray(formItems)
@@ -191,6 +228,9 @@ export const FormGroup = ({
 		UIschema,
 		key,
 		dispatcher,
+		toggleStepsToMerge,
+		checkedStates,
+		setCheckedStates,
 	);
 	const isFormItemRemovable = isRemovable(getLabel(key));
 
@@ -206,9 +246,40 @@ export const FormGroup = ({
 		formDispatcher,
 	);
 
+	const mergeSteps = () => {
+		const sortedSteps = stepsToMerge.sort(
+			(a, b) => a.stepNumber - b.stepNumber,
+		);
+		const combinedDescription = sortedSteps
+			.map((s) => s.description)
+			.join('. ');
+		handleMergeFields(
+			sortedSteps[0]?.objId!,
+			combinedDescription,
+			sortedSteps,
+			dispatcher!,
+		);
+
+		setStepsToMerge([]);
+		const resetCheckedStates = { ...checkedStates };
+		Object.keys(resetCheckedStates).forEach((key) => {
+			resetCheckedStates[key] = false;
+		});
+		setCheckedStates(resetCheckedStates);
+	};
+
 	return (
 		<div css={{ overflow: 'scroll' }}>
 			<Legend key={`${key}.legend`} text={key} css={{ width: '150px' }} />
+			{key.includes('instructions') && (
+				<button
+					type="button"
+					onClick={() => mergeSteps()}
+					disabled={stepsToMerge.length < 2}
+				>
+					Merge Steps
+				</button>
+			)}
 			<div css={{ display: 'grid' }}>{formFields}</div>
 			<div>{isFormItemRemovable && formItemButtons}</div>
 			<hr />

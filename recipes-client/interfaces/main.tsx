@@ -93,9 +93,14 @@ export type ImageObject = {
 
 export type DifficultyLevel = 'easy' | 'medium' | 'hard';
 export interface Instruction {
+	[x: string]: string;
 	stepNumber: number; // Order of the step
 	description: string; // Detailed description of step
 	images?: string[]; // Actually capiImage[]
+}
+
+export interface ModifiedInstruction extends Instruction {
+	objId: string;
 }
 
 export type RecipeItem =
@@ -170,6 +175,9 @@ export const isAddRemoveItemType = (
 
 export interface AddRemoveItemType {
 	objId: string;
+	description?: string;
+	stepNumber?: number;
+	images?: string[];
 }
 
 export type AppDataState = CurationState & LoadingState;
