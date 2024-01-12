@@ -68,7 +68,10 @@ export const DataPreview = ({ recipeData }: DataPreviewProps) => {
 					{recipeData.featuredImage ? (
 						<img
 							src={recipeData.featuredImage.url}
-							alt={`Featured image of ${recipeData.title} recipe`}
+							alt={
+								recipeData.featuredImage.caption ||
+								`Featured image of ${recipeData.title} recipe`
+							}
 							css={imageStyles}
 						/>
 					) : (

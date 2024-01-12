@@ -39,7 +39,7 @@ export const WithGridSelector = ({
 					master: { file: string };
 				}[];
 				id: string;
-				metadata: { credit: string; description: string };
+				metadata: { credit: string; description: string; byline: string };
 			};
 		};
 		const cropExport = data.exports.find((crop) => crop.id === cropId)!;
@@ -52,7 +52,7 @@ export const WithGridSelector = ({
 			mediaId: data.id,
 			cropId,
 			source: data.metadata.credit,
-			// photographer: string | undefined; //TODO extract photographer from media-api response
+			photographer: data.metadata.byline,
 			// imageType: string | undefined; //TODO extract imageType from media-api response
 			caption: data.metadata.description,
 			mediaApiUri,
