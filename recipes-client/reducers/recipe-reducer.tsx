@@ -10,6 +10,7 @@ import {
 	ErrorItemType,
 	isAddRemoveItemType,
 	isSchemaArray,
+	Instruction,
 } from '../interfaces/main';
 import { getSchemaType } from '../utils/schema';
 
@@ -170,6 +171,20 @@ const entriesToObject = (
 	}, {});
 };
 
+const convertPathStringToArray = (pathString) => {
+	return pathString.split('.').map((key) => {
+		return isFinite(key) ? parseInt(key, 10) : key;
+	});
+};
+
+const reindexStepNumbers = (instructions: Instruction[], draft) => {
+  instructions.forEach((instruction: Instruction, index: number) => {
+    const newStepNumber = index + 1;
+    const keyPathArr = ['instructions', index.toString(), 'stepNumber'];
+    updateStateItem(draft.body, keyPathArr, newStepNumber)
+  })
+}
+
 export const recipeReducer = produce(
 	(
 		draft: AppDataState | AddRemoveItemType | ErrorItemType,
@@ -203,6 +218,13 @@ export const recipeReducer = produce(
 				}
 				break;
 			}
+			case actions.deleteMultiple: {
+				action.payload.reverse().forEach((pathString: string) => {
+					const keyPath = convertPathStringToArray(pathString);
+					deleteStateItem(keyPath, draft.body);
+				});
+				break;
+			}
 			case actions.add: {
 				if (isAddRemoveItemType(action.payload)) {
 					const keyPathArr = action.payload['objId'].split('.');
@@ -210,6 +232,16 @@ export const recipeReducer = produce(
 					addStateItem(draft.body, keyPathArr, value);
 				}
 				break;
+			}
+			case actions.addMergedField: {
+				const keyPathArr = action.payload['objId'].split('.');
+				const value = {
+					description: action.payload['description'] as string,
+					stepNumber: action.payload['stepNumber'] as number,
+				};
+				addStateItem(draft.body, keyPathArr, value);
+        reindexStepNumbers(draft.body.instructions, draft)
+        break;
 			}
 			case actions.selectImg: {
 				updateStateItem(draft.body, ['featuredImage'], action.payload);

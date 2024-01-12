@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { Dispatch } from 'react';
+import { ChangeEvent, Dispatch, useEffect, useState } from 'react';
 import FormItem from './form-item';
 import {
 	ActionType,
 	IngredientsGroup,
+	Instruction,
+	ModifiedInstruction,
 	SchemaItem,
 } from '../../interfaces/main';
 import { getSchemaType } from '../../utils/schema';
@@ -22,6 +24,7 @@ import { renderIngredientsFormGroup } from './inputs/ingredients';
 import { renderInstructionsFormGroup } from './inputs/instructions';
 import { renderServesFormGroup } from './inputs/serves';
 import { getItemButtons } from './form-buttons';
+import { handleMergeFields } from './form-input-handlers';
 
 const isStringNumberOrBoolean = (
 	item:
@@ -81,6 +84,12 @@ const getFormFields = (
 	UIschema: UIschemaItem,
 	key: string,
 	dispatcher: Dispatch<ActionType>,
+	toggleInstructionsToMerge: (
+		event: ChangeEvent<HTMLInputElement>,
+		key: Instruction[],
+	) => void,
+	checkedFields: Record<string, boolean>,
+	setCheckedFields: (value: React.SetStateAction<{}>) => void,
 ): JSX.Element[] => {
 	// Get form components for each item in `formItems`
 	const choices = schema.enum || null;
@@ -126,6 +135,9 @@ const getFormFields = (
 				UIschema,
 				`${key}.${i}`,
 				dispatcher,
+				toggleInstructionsToMerge,
+				checkedFields,
+				setCheckedFields,
 			);
 		});
 	} else if (isTimingsField(formItems)) {
@@ -145,6 +157,9 @@ const getFormFields = (
 			choices,
 			key,
 			dispatcher,
+			toggleInstructionsToMerge,
+			checkedFields,
+			setCheckedFields,
 		);
 	} else if (isServesField(formItems)) {
 		return renderServesFormGroup(formItems, schema, choices, key, dispatcher);
@@ -180,6 +195,28 @@ export const FormGroup = ({
 	const key = key_ || title;
 	const formDispatcher = dispatcher || null;
 
+	const [instructionsToMerge, setInstructionsToMerge] = useState<ModifiedInstruction[]>([]);
+	const [checkedFields, setCheckedFields] = useState({});
+
+	const toggleInstructionsToMerge = (
+		e: ChangeEvent<HTMLInputElement>,
+		newStep: Instruction,
+		key: string,
+	) => {
+		const modifiedInstruction: ModifiedInstruction = {
+			...newStep,
+			objId: key,
+		};
+		if (e?.target.checked) {
+			setInstructionsToMerge((instructions) => [...instructions, modifiedInstruction]);
+		} else {
+			setInstructionsToMerge((instructions) =>
+				instructions.filter((instruction) => instruction.objId !== modifiedInstruction.objId),
+			);
+		}
+	};
+
+
 	// Set up form group
 	const rComponents =
 		UIschema['ui:order'] && !Array.isArray(formItems)
@@ -191,6 +228,9 @@ export const FormGroup = ({
 		UIschema,
 		key,
 		dispatcher,
+		toggleInstructionsToMerge,
+		checkedFields,
+		setCheckedFields,
 	);
 	const isFormItemRemovable = isRemovable(getLabel(key));
 
@@ -206,9 +246,51 @@ export const FormGroup = ({
 		formDispatcher,
 	);
 
+	const mergeInstructions = () => {
+		const sortedInstructions = instructionsToMerge.sort(
+			(a, b) => a.stepNumber - b.stepNumber,
+		);
+		const combinedDescription = sortedInstructions
+			.map((s) => s.description)
+			.join('. ');
+		handleMergeFields(
+			sortedInstructions[0]?.objId!,
+			combinedDescription,
+			sortedInstructions,
+			dispatcher!,
+		);
+
+		setInstructionsToMerge([]);
+
+    // De-select checkboxes previously selected after the merge
+		const resetCheckedFields = { ...checkedFields };
+		Object.keys(resetCheckedFields).forEach((key) => {
+			resetCheckedFields[key] = false;
+		});
+		setCheckedFields(resetCheckedFields);
+	};
+
 	return (
 		<div css={{ overflow: 'scroll' }}>
 			<Legend key={`${key}.legend`} text={key} css={{ width: '150px' }} />
+			{key.includes('instructions') && (
+				<button
+					type="button"
+					onClick={() => mergeInstructions()}
+					disabled={instructionsToMerge.length < 2}
+          style={{fontSize: '0.9375rem',
+            fontWeight: instructionsToMerge.length >= 2 ? '800' : '400',
+            fontFamily: 'GuardianTextSans,Guardian Text Sans Web,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif',
+            color: instructionsToMerge.length >= 2 ? '#fff' : 'gray',
+            width: '150px',
+            background: instructionsToMerge.length >= 2 ? '#052962' : 'transparent', // Change background based on condition
+            padding: '8px',
+            cursor: instructionsToMerge.length >= 2 ? 'pointer' : 'default'
+          }}
+				>
+					Merge instructions
+				</button>
+			)}
 			<div css={{ display: 'grid' }}>{formFields}</div>
 			<div>{isFormItemRemovable && formItemButtons}</div>
 			<hr />

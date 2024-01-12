@@ -98,6 +98,10 @@ export interface Instruction {
 	images?: string[]; // Actually capiImage[]
 }
 
+export interface ModifiedInstruction extends Instruction {
+	objId: string;
+}
+
 export type RecipeItem =
 	| null
 	| string
@@ -170,6 +174,8 @@ export const isAddRemoveItemType = (
 
 export interface AddRemoveItemType {
 	objId: string;
+	description?: string;
+	stepNumber?: number;
 }
 
 export type AppDataState = CurationState & LoadingState;

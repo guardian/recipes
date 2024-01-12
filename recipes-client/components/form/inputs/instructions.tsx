@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { ActionType, Instruction, SchemaItem } from 'interfaces/main';
-import { Dispatch } from 'react';
+import { ChangeEvent, Dispatch, useEffect, useState } from 'react';
 import { getItemButtons } from '../form-buttons';
 import { getFormFieldsSchema } from '../form-group';
 import FormItem from '../form-item';
@@ -12,6 +12,13 @@ export const renderInstructionsFormGroup = (
 	choices: string[] | null,
 	key: string,
 	dispatcher: Dispatch<ActionType>,
+	toggleInstructionsToMerge: (
+		event: ChangeEvent<HTMLInputElement>,
+		step: Instruction[],
+		key: string,
+	) => void,
+	checkedFields: Record<string, boolean>,
+	setCheckedFields: (value: React.SetStateAction<{}>) => void,
 ) => {
 	const formFieldsSchema = getFormFieldsSchema(schema);
 	const formItemAddId =
@@ -40,8 +47,24 @@ export const renderInstructionsFormGroup = (
 				/>
 			);
 		});
+
 	return [
 		<div css={{ display: 'flex !important' }}>
+			<input
+				type="checkbox"
+				id={key}
+				style={{
+					width: '25px',
+					height: '25px',
+					marginRight: '10px',
+					alignSelf: 'center',
+				}}
+				checked={checkedFields[key] || false}
+				onChange={(e) => {
+					setCheckedFields({ ...checkedFields, [key]: e.target.checked }); // Update state
+					toggleInstructionsToMerge(e, formItems, key);
+				}}
+			/>
 			{fields}
 			{formItemButtons}
 		</div>,
