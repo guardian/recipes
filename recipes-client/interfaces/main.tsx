@@ -93,7 +93,6 @@ export type ImageObject = {
 
 export type DifficultyLevel = 'easy' | 'medium' | 'hard';
 export interface Instruction {
-	[x: string]: string;
 	stepNumber: number; // Order of the step
 	description: string; // Detailed description of step
 	images?: string[]; // Actually capiImage[]

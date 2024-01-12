@@ -84,12 +84,12 @@ const getFormFields = (
 	UIschema: UIschemaItem,
 	key: string,
 	dispatcher: Dispatch<ActionType>,
-	toggleStepsToMerge: (
+	toggleInstructionsToMerge: (
 		event: ChangeEvent<HTMLInputElement>,
 		key: Instruction[],
 	) => void,
-	checkedStates: Record<string, boolean>,
-	setCheckedStates: (value: React.SetStateAction<{}>) => void,
+	checkedFields: Record<string, boolean>,
+	setCheckedFields: (value: React.SetStateAction<{}>) => void,
 ): JSX.Element[] => {
 	// Get form components for each item in `formItems`
 	const choices = schema.enum || null;
@@ -135,9 +135,9 @@ const getFormFields = (
 				UIschema,
 				`${key}.${i}`,
 				dispatcher,
-				toggleStepsToMerge,
-				checkedStates,
-				setCheckedStates,
+				toggleInstructionsToMerge,
+				checkedFields,
+				setCheckedFields,
 			);
 		});
 	} else if (isTimingsField(formItems)) {
@@ -157,9 +157,9 @@ const getFormFields = (
 			choices,
 			key,
 			dispatcher,
-			toggleStepsToMerge,
-			checkedStates,
-			setCheckedStates,
+			toggleInstructionsToMerge,
+			checkedFields,
+			setCheckedFields,
 		);
 	} else if (isServesField(formItems)) {
 		return renderServesFormGroup(formItems, schema, choices, key, dispatcher);
@@ -195,27 +195,27 @@ export const FormGroup = ({
 	const key = key_ || title;
 	const formDispatcher = dispatcher || null;
 
-	const [stepsToMerge, setStepsToMerge] = useState<ModifiedInstruction[]>([]);
+	const [instructionsToMerge, setInstructionsToMerge] = useState<ModifiedInstruction[]>([]);
+	const [checkedFields, setCheckedFields] = useState({});
 
-	const toggleStepsToMerge = (
+	const toggleInstructionsToMerge = (
 		e: ChangeEvent<HTMLInputElement>,
 		newStep: Instruction,
 		key: string,
 	) => {
-		const modifiedStep: ModifiedInstruction = {
+		const modifiedInstruction: ModifiedInstruction = {
 			...newStep,
 			objId: key,
 		};
 		if (e?.target.checked) {
-			setStepsToMerge((steps) => [...steps, modifiedStep]);
+			setInstructionsToMerge((instructions) => [...instructions, modifiedInstruction]);
 		} else {
-			setStepsToMerge((steps) =>
-				steps.filter((step) => step.objId !== modifiedStep.objId),
+			setInstructionsToMerge((instructions) =>
+				instructions.filter((instruction) => instruction.objId !== modifiedInstruction.objId),
 			);
 		}
 	};
 
-	const [checkedStates, setCheckedStates] = useState({});
 
 	// Set up form group
 	const rComponents =
@@ -228,9 +228,9 @@ export const FormGroup = ({
 		UIschema,
 		key,
 		dispatcher,
-		toggleStepsToMerge,
-		checkedStates,
-		setCheckedStates,
+		toggleInstructionsToMerge,
+		checkedFields,
+		setCheckedFields,
 	);
 	const isFormItemRemovable = isRemovable(getLabel(key));
 
@@ -246,26 +246,28 @@ export const FormGroup = ({
 		formDispatcher,
 	);
 
-	const mergeSteps = () => {
-		const sortedSteps = stepsToMerge.sort(
+	const mergeInstructions = () => {
+		const sortedInstructions = instructionsToMerge.sort(
 			(a, b) => a.stepNumber - b.stepNumber,
 		);
-		const combinedDescription = sortedSteps
+		const combinedDescription = sortedInstructions
 			.map((s) => s.description)
 			.join('. ');
 		handleMergeFields(
-			sortedSteps[0]?.objId!,
+			sortedInstructions[0]?.objId!,
 			combinedDescription,
-			sortedSteps,
+			sortedInstructions,
 			dispatcher!,
 		);
 
-		setStepsToMerge([]);
-		const resetCheckedStates = { ...checkedStates };
-		Object.keys(resetCheckedStates).forEach((key) => {
-			resetCheckedStates[key] = false;
+		setInstructionsToMerge([]);
+
+    // De-select checkboxes previously selected after the merge
+		const resetCheckedFields = { ...checkedFields };
+		Object.keys(resetCheckedFields).forEach((key) => {
+			resetCheckedFields[key] = false;
 		});
-		setCheckedStates(resetCheckedStates);
+		setCheckedFields(resetCheckedFields);
 	};
 
 	return (
@@ -274,20 +276,19 @@ export const FormGroup = ({
 			{key.includes('instructions') && (
 				<button
 					type="button"
-					onClick={() => mergeSteps()}
-					disabled={stepsToMerge.length < 2}
+					onClick={() => mergeInstructions()}
+					disabled={instructionsToMerge.length < 2}
           style={{fontSize: '0.9375rem',
-            fontWeight: stepsToMerge.length >= 2 ? '800' : '400',
+            fontWeight: instructionsToMerge.length >= 2 ? '800' : '400',
             fontFamily: 'GuardianTextSans,Guardian Text Sans Web,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif',
-            // border: 'none',
-            color: stepsToMerge.length >= 2 ? '#fff' : 'gray',
+            color: instructionsToMerge.length >= 2 ? '#fff' : 'gray',
             width: '150px',
-            background: stepsToMerge.length >= 2 ? '#052962' : 'transparent', // Change background based on condition
+            background: instructionsToMerge.length >= 2 ? '#052962' : 'transparent', // Change background based on condition
             padding: '8px',
-            cursor: stepsToMerge.length >= 2 ? 'pointer' : 'default'
+            cursor: instructionsToMerge.length >= 2 ? 'pointer' : 'default'
           }}
 				>
-					Merge Steps
+					Merge instructions
 				</button>
 			)}
 			<div css={{ display: 'grid' }}>{formFields}</div>

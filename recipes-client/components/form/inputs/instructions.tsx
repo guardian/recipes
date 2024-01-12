@@ -12,13 +12,13 @@ export const renderInstructionsFormGroup = (
 	choices: string[] | null,
 	key: string,
 	dispatcher: Dispatch<ActionType>,
-	toggleStepsToMerge: (
+	toggleInstructionsToMerge: (
 		event: ChangeEvent<HTMLInputElement>,
 		step: Instruction[],
 		key: string,
 	) => void,
-	checkedStates: Record<string, boolean>,
-	setCheckedStates: (value: React.SetStateAction<{}>) => void,
+	checkedFields: Record<string, boolean>,
+	setCheckedFields: (value: React.SetStateAction<{}>) => void,
 ) => {
 	const formFieldsSchema = getFormFieldsSchema(schema);
 	const formItemAddId =
@@ -59,10 +59,10 @@ export const renderInstructionsFormGroup = (
 					marginRight: '10px',
 					alignSelf: 'center',
 				}}
-				checked={checkedStates[key] || false}
+				checked={checkedFields[key] || false}
 				onChange={(e) => {
-					setCheckedStates({ ...checkedStates, [key]: e.target.checked }); // Update state
-					toggleStepsToMerge(e, formItems, key);
+					setCheckedFields({ ...checkedFields, [key]: e.target.checked }); // Update state
+					toggleInstructionsToMerge(e, formItems, key);
 				}}
 			/>
 			{fields}

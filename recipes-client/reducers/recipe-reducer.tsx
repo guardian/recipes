@@ -177,8 +177,8 @@ const convertPathStringToArray = (pathString) => {
 	});
 };
 
-const reindexStepNumbers = (steps: Instruction[], draft) => {
-  steps.forEach((step: Instruction, index: number) => {
+const reindexStepNumbers = (instructions: Instruction[], draft) => {
+  instructions.forEach((instruction: Instruction, index: number) => {
     const newStepNumber = index + 1;
     const keyPathArr = ['instructions', index.toString(), 'stepNumber'];
     updateStateItem(draft.body, keyPathArr, newStepNumber)
