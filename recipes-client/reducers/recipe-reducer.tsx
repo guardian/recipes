@@ -178,12 +178,12 @@ const convertPathStringToArray = (pathString) => {
 };
 
 const reindexStepNumbers = (instructions: Instruction[], draft) => {
-  instructions.forEach((instruction: Instruction, index: number) => {
-    const newStepNumber = index + 1;
-    const keyPathArr = ['instructions', index.toString(), 'stepNumber'];
-    updateStateItem(draft.body, keyPathArr, newStepNumber)
-  })
-}
+	instructions.forEach((instruction: Instruction, index: number) => {
+		const newStepNumber = index + 1;
+		const keyPathArr = ['instructions', index.toString(), 'stepNumber'];
+		updateStateItem(draft.body, keyPathArr, newStepNumber);
+	});
+};
 
 export const recipeReducer = produce(
 	(
@@ -240,8 +240,8 @@ export const recipeReducer = produce(
 					stepNumber: action.payload['stepNumber'] as number,
 				};
 				addStateItem(draft.body, keyPathArr, value);
-        reindexStepNumbers(draft.body.instructions, draft)
-        break;
+				reindexStepNumbers(draft.body.instructions, draft);
+				break;
 			}
 			case actions.selectImg: {
 				updateStateItem(draft.body, ['featuredImage'], action.payload);
