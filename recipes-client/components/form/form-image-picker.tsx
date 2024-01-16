@@ -6,6 +6,8 @@ import { ActionType } from '../../interfaces/main';
 import minBy from 'lodash-es/minBy';
 import { actions } from '../../actions/recipeActions';
 import { ImageObject } from '../../interfaces/main';
+import { WithGridSelector } from 'components/curation/grid-selector';
+import { css } from '@emotion/react';
 
 type assetsInfo = {
 	assets: imageInfo[];
@@ -84,85 +86,123 @@ const select = (
 };
 
 interface PictureGridProps {
-	picObjects: ImageObject[];
+	canonicalArticlePicObjects: ImageObject[];
 	selectedImage: ImageObject | null;
 	setSelectedImage: Dispatch<ImageObject | null>;
 	dispatcher: Dispatch<ActionType>;
 }
 
 const PictureGrid = ({
-	picObjects,
+	canonicalArticlePicObjects,
 	selectedImage,
 	setSelectedImage,
 	dispatcher,
 }: PictureGridProps) => {
 	const [picHovered, setHover] = useState(-1);
+	const selectedImageIsFromGrid =
+		selectedImage &&
+		!canonicalArticlePicObjects.some((p) => p.url === selectedImage.url);
 	return (
 		<>
 			<h3 css={{ fontFamily: 'GuardianTextSans' }}>
-				Available pictures for the featured image
+				Images featured in the canonical article
 			</h3>
-			<div
-				css={{
-					display: 'grid',
-					gridTemplateColumns: '20% 20% 20% 20% 20%',
-					gridTemplateRows: 'auto',
-					height: 'auto',
-					// gridTemplateRows: "40px 1fr 30px",
-					gridTemplateAreas: `"1" "2" "3" "4" "5"`,
-					marginBottom: '30px',
-					borderColor: 'black',
-					borderWidth: '2px',
+			<WithGridSelector
+				callback={(chosenImage) => {
+					const isSelected = false; // forces it to become selected, regardless of what's already selected
+					select(chosenImage, isSelected, setSelectedImage, dispatcher);
 				}}
 			>
-				{picObjects.map((p, i) => {
-					return (
-						<div
-							onMouseOver={() => setHover(i)}
-							onMouseOut={() => setHover(-1)}
-							onClick={() =>
-								select(
-									picObjects[i],
-									picObjects[i] === selectedImage,
-									setSelectedImage,
-									dispatcher,
-								)
-							}
-							css={{
-								gridArea: `${Math.floor(i / 5 + 1)}`,
-								justifyItems: 'center',
-								display: 'grid',
-								align: 'center',
-								maxWidth: '100%',
-								alignContent: 'center',
-								borderColor: 'black',
-								borderWidth: '1px',
-								cursor: 'pointer',
-								pointerEvents: 'visible',
-							}}
-							key={`img_${i}`}
-						>
-							<img style={{ maxWidth: 'inherit' }} src={p.url} alt={p.url} />
+				<div
+					css={css`
+						position: relative;
+						display: grid;
+						grid-template-columns: 20% 20% 20% 20% 20%;
+						grid-template-rows: auto;
+						height: auto;
+						grid-template-areas: '1' '2' '3' '4' '5';
+						margin-bottom: 30px;
+						border-color: black;
+						border-width: 2px;
+					`}
+				>
+					{canonicalArticlePicObjects.map((p, i) => {
+						return (
 							<div
-								key={`tile-icon-bar-${i}`}
-								style={{
-									pointerEvents: 'none',
-									opacity: 1,
-									position: 'relative',
-									top: '-90px',
-									height: '36px',
-									width: '100%',
+								onMouseOver={() => setHover(i)}
+								onMouseOut={() => setHover(-1)}
+								onClick={() =>
+									select(
+										canonicalArticlePicObjects[i],
+										canonicalArticlePicObjects[i] === selectedImage,
+										setSelectedImage,
+										dispatcher,
+									)
+								}
+								css={{
+									gridArea: `${Math.floor(i / 5 + 1)}`,
+									justifyItems: 'center',
+									display: 'grid',
+									align: 'center',
+									maxWidth: '100%',
+									alignContent: 'center',
+									borderColor: 'black',
+									borderWidth: '1px',
+									cursor: 'pointer',
+									pointerEvents: 'visible',
 								}}
+								key={`img_${i}`}
 							>
-								<CheckButton
-									isSelected={picObjects[i]?.url === selectedImage?.url}
-									hover={i === picHovered}
-								/>
+								<img style={{ maxWidth: 'inherit' }} src={p.url} alt={p.url} />
+								<div
+									key={`tile-icon-bar-${i}`}
+									style={{
+										pointerEvents: 'none',
+										opacity: 1,
+										position: 'relative',
+										top: '-90px',
+										height: '36px',
+										width: '100%',
+									}}
+								>
+									<CheckButton
+										isSelected={
+											canonicalArticlePicObjects[i]?.url === selectedImage?.url
+										}
+										hover={i === picHovered}
+									/>
+								</div>
 							</div>
-						</div>
-					);
-				})}
-			</div>
+						);
+					})}
+				</div>
+				<h3>Custom image/crop selected from the Grid</h3>
+				{selectedImageIsFromGrid ? (
+					<div
+						css={css`
+							position: relative;
+							display: inline-block;
+						`}
+					>
+						<img
+							css={css`
+								max-width: 150px;
+								max-height: 150px;
+							`}
+							src={selectedImage.url}
+							alt={selectedImage.mediaId}
+						/>
+						<CheckButton isSelected={true} hover={false} />
+					</div>
+				) : (
+					<div>
+						<p>
+							Select an image from the Grid using the plus button below, or drag
+							one in from Pinboard 📌
+						</p>
+					</div>
+				)}
+			</WithGridSelector>
 			<hr />
 		</>
 	);
@@ -190,7 +230,7 @@ const ImagePicker = ({
 
 		return (
 			<PictureGrid
-				picObjects={picObjects}
+				canonicalArticlePicObjects={picObjects}
 				selectedImage={selectedImage}
 				setSelectedImage={setSelectedImage}
 				dispatcher={dispatcher}

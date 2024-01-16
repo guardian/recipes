@@ -195,7 +195,9 @@ export const FormGroup = ({
 	const key = key_ || title;
 	const formDispatcher = dispatcher || null;
 
-	const [instructionsToMerge, setInstructionsToMerge] = useState<ModifiedInstruction[]>([]);
+	const [instructionsToMerge, setInstructionsToMerge] = useState<
+		ModifiedInstruction[]
+	>([]);
 	const [checkedFields, setCheckedFields] = useState({});
 
 	const toggleInstructionsToMerge = (
@@ -208,14 +210,18 @@ export const FormGroup = ({
 			objId: key,
 		};
 		if (e?.target.checked) {
-			setInstructionsToMerge((instructions) => [...instructions, modifiedInstruction]);
+			setInstructionsToMerge((instructions) => [
+				...instructions,
+				modifiedInstruction,
+			]);
 		} else {
 			setInstructionsToMerge((instructions) =>
-				instructions.filter((instruction) => instruction.objId !== modifiedInstruction.objId),
+				instructions.filter(
+					(instruction) => instruction.objId !== modifiedInstruction.objId,
+				),
 			);
 		}
 	};
-
 
 	// Set up form group
 	const rComponents =
@@ -262,7 +268,7 @@ export const FormGroup = ({
 
 		setInstructionsToMerge([]);
 
-    // De-select checkboxes previously selected after the merge
+		// De-select checkboxes previously selected after the merge
 		const resetCheckedFields = { ...checkedFields };
 		Object.keys(resetCheckedFields).forEach((key) => {
 			resetCheckedFields[key] = false;
@@ -278,15 +284,18 @@ export const FormGroup = ({
 					type="button"
 					onClick={() => mergeInstructions()}
 					disabled={instructionsToMerge.length < 2}
-          style={{fontSize: '0.9375rem',
-            fontWeight: instructionsToMerge.length >= 2 ? '800' : '400',
-            fontFamily: 'GuardianTextSans,Guardian Text Sans Web,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif',
-            color: instructionsToMerge.length >= 2 ? '#fff' : 'gray',
-            width: '150px',
-            background: instructionsToMerge.length >= 2 ? '#052962' : 'transparent', // Change background based on condition
-            padding: '8px',
-            cursor: instructionsToMerge.length >= 2 ? 'pointer' : 'default'
-          }}
+					style={{
+						fontSize: '0.9375rem',
+						fontWeight: instructionsToMerge.length >= 2 ? '800' : '400',
+						fontFamily:
+							'GuardianTextSans,Guardian Text Sans Web,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif',
+						color: instructionsToMerge.length >= 2 ? '#fff' : 'gray',
+						width: '150px',
+						background:
+							instructionsToMerge.length >= 2 ? '#052962' : 'transparent', // Change background based on condition
+						padding: '8px',
+						cursor: instructionsToMerge.length >= 2 ? 'pointer' : 'default',
+					}}
 				>
 					Merge instructions
 				</button>
