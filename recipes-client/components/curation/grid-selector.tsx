@@ -107,6 +107,7 @@ export const WithGridSelector = ({
 				onClick={() => start()}
 				css={css`
 					font-size: 40px;
+					display: block;
 				`}
 			>
 				➕
