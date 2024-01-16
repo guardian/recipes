@@ -99,9 +99,9 @@ const PictureGrid = ({
 	dispatcher,
 }: PictureGridProps) => {
 	const [picHovered, setHover] = useState(-1);
-	const selectedImageIsFromGrid = !canonicalArticlePicObjects.some(
-		(p) => p.url === selectedImage?.url,
-	);
+	const selectedImageIsFromGrid =
+		!canonicalArticlePicObjects.some((p) => p.url === selectedImage?.url) &&
+		selectedImage !== null;
 	return (
 		<>
 			<h3 css={{ fontFamily: 'GuardianTextSans' }}>
@@ -190,7 +190,7 @@ const PictureGrid = ({
 					<div>
 						<p>
 							Select an image from the Grid using the plus button below, or drag
-							one over this space from Pinboard.
+							one in from Pinboard 📌
 						</p>
 					</div>
 				)}
