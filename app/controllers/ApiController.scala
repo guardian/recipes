@@ -636,8 +636,8 @@ class ApiController (
 
   def get_list() = Action {
     // Get a list of recipes
-
-    val rawResultData = getItems(config.rawRecipesTableName)
+    val partition_alias = "#p"
+    val expressionAttributeValues = MMap(partition_alias -> config.hashKey).asJava
 
     def scanRequest(tableName: String) = new ScanRequest()
         .withTableName(tableName)
