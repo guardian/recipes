@@ -17,9 +17,15 @@ export interface RecipeListType {
 	canonicalArticle: string;
 	isAppReady: boolean;
 	isInCuratedTable: boolean;
+	workflow?: {
+		assignee: string;
+	};
 }
 
-const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
+const RecipeList = ({ list: unsortedList }: RecipeListProps): JSX.Element => {
+	const list = unsortedList.sort((a, b) =>
+		a.composerId.localeCompare(b.composerId),
+	);
 	const displayAuthor = (contributors: string[], byline: string[]) => {
 		const prettifyContributorId = (contributorId: string) => {
 			if (contributorId === 'profile/yotamottolenghi') {
@@ -76,34 +82,58 @@ const RecipeList = ({ list }: RecipeListProps): JSX.Element => {
 							isAppReady,
 							isInCuratedTable,
 							workflow,
+							composerId,
 						},
 						i,
 					) => {
+						const isDifferentToPreviousComposerId =
+							composerId !== list[i - 1]?.composerId;
 						return (
-							<tr key={`row_${i}`}>
-								<td key={`path_${i}_title`}>
-									<a
-										href={`https://theguardian.com/${canonicalArticle}`}
-										target="_blank"
+							<>
+								{isDifferentToPreviousComposerId && (
+									<tr
+										css={css`
+											background-color: #eee;
+										`}
 									>
-										{title}{' '}
-										<SvgExternal isAnnouncedByScreenReader size="xsmall" />
-									</a>
-								</td>
-								<td key={`path_${i}_author`}>
-									{displayAuthor(contributors, byline)}{' '}
-								</td>
-								<td key={`path_${i}_assignee`}>{workflow?.assignee ?? '-'}</td>
-								<td key={`path_${i}_edited`}>
-									<CheckedSymbol isAppReady={isInCuratedTable} />
-								</td>
-								<td key={`path_${i}_app`}>
-									<CheckedSymbol isAppReady={isAppReady} />
-								</td>
-								<td key={`path_${i}_links`}>
-									<a href={curationEndpoint + '/' + id}>Edit</a>
-								</td>
-							</tr>
+										<td colSpan={6} key={`path_${i}_title`}>
+											<a
+												href={`https://theguardian.co.uk/${canonicalArticle}`}
+												target="_blank"
+											>
+												{canonicalArticle}{' '}
+												<SvgExternal isAnnouncedByScreenReader size="xsmall" />
+											</a>
+										</td>
+									</tr>
+								)}
+								<tr key={`row_${i}`}>
+									<td key={`path_${i}_title`}>
+										<span
+											css={css`
+												padding-left: 2rem;
+											`}
+										>
+											{title}
+										</span>
+									</td>
+									<td key={`path_${i}_author`}>
+										{displayAuthor(contributors, byline)}{' '}
+									</td>
+									<td key={`path_${i}_assignee`}>
+										{workflow?.assignee ? workflow.assignee.split('@')[0] : '-'}
+									</td>
+									<td key={`path_${i}_edited`}>
+										<CheckedSymbol isAppReady={isInCuratedTable} />
+									</td>
+									<td key={`path_${i}_app`}>
+										<CheckedSymbol isAppReady={isAppReady} />
+									</td>
+									<td key={`path_${i}_links`}>
+										<a href={curationEndpoint + '/' + id}>Edit</a>
+									</td>
+								</tr>
+							</>
 						);
 					},
 				)}
@@ -119,12 +149,12 @@ const tableStyles = css`
 	text-align: left;
 	th,
 	td {
-		padding: 0.5rem;
+		padding: 0.5rem; // TODO: Get rid
 		border-bottom: 1px solid #ccc;
 	}
 	th {
 		font-weight: bold;
-		background-color: #eee;
+		background-color: lightgray;
 	}
 `;
 

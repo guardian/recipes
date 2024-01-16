@@ -13,30 +13,66 @@ import { WorkflowLookup, workflowContentUrl } from 'utils/workflow';
 
 const Home = (): JSX.Element => {
 	const [recipeList, setRecipeList] = useState<RecipeListType[]>([]);
-	const [displayedRecipes, setDisplayedRecipes] = useState<RecipeListType[]>(
-		[],
-	);
 	const [listFilter, setListFilter] = useState<
 		'all' | 'app-ready' | 'edited-but-not-app-ready' | 'non-curated'
 	>('all');
 
+	const [workflowLookup, setWorkflowLookup] = useState<WorkflowLookup>({});
 	useEffect(() => {
-		const recipes = recipeList.filter((recipe) => {
-			if (listFilter === 'all') {
-				return true;
-			} else if (listFilter === 'app-ready') {
-				return recipe.isAppReady;
-			} else if (listFilter === 'edited-but-not-app-ready') {
-				return !recipe.isAppReady && recipe.isInCuratedTable;
-			} else if (listFilter === 'non-curated') {
-				return !recipe.isAppReady && !recipe.isInCuratedTable;
-			} else {
-				console.error('Invalid filter');
-				return true;
-			}
-		});
-		setDisplayedRecipes(recipes);
-	}, [recipeList, listFilter]);
+		const populateWorkflowLookup = () => {
+			fetch(`${workflowContentUrl}?section=Recipes+Data`, {
+				credentials: 'include',
+			})
+				.then((response) => response.json())
+				.then(({ content }) => {
+					setWorkflowLookup(
+						Object.values(content)
+							.flat()
+							.reduce(
+								(acc, { composerId, assignee, status }) => ({
+									...acc,
+									[composerId]: {
+										assignee,
+										status,
+									},
+								}),
+								{} as WorkflowLookup,
+							),
+					);
+				})
+				.catch(console.error);
+		};
+		populateWorkflowLookup();
+		setInterval(
+			populateWorkflowLookup,
+			5000, // Five seconds to match Workflow polling frequency
+		);
+	}, []);
+
+	const displayedRecipeList = useMemo(
+		() =>
+			recipeList
+				.filter((recipe) => {
+					if (listFilter === 'all') {
+						return true;
+					} else if (listFilter === 'app-ready') {
+						return recipe.isAppReady;
+					} else if (listFilter === 'edited-but-not-app-ready') {
+						return !recipe.isAppReady && recipe.isInCuratedTable;
+					} else if (listFilter === 'non-curated') {
+						return !recipe.isAppReady && !recipe.isInCuratedTable;
+					} else {
+						console.error('Invalid filter');
+						return true;
+					}
+				})
+				.map((recipe) => ({
+					...recipe,
+					workflow: workflowLookup[recipe.composerId],
+				})),
+
+		[recipeList, listFilter, workflowLookup],
+	);
 
 	useEffect(() => {
 		fetch(listEndpoint)
@@ -44,40 +80,6 @@ const Home = (): JSX.Element => {
 			.then((data) => setRecipeList(data))
 			.catch(() => null);
 	}, []);
-
-	const [workflowLookup, setWorkflowLookup] = useState<WorkflowLookup>({});
-	useEffect(() => {
-		fetch(`${workflowContentUrl}?section=Recipes+Data`, {
-			credentials: 'include',
-		})
-			.then((response) => response.json())
-			.then(({ content }) => {
-				setWorkflowLookup(
-					Object.values(content)
-						.flat()
-						.reduce(
-							({ composerId, assignee, status }, acc) => ({
-								...acc,
-								[composerId]: {
-									assignee,
-									status,
-								},
-							}),
-							{} as WorkflowLookup,
-						),
-				);
-			})
-			.catch(() => null);
-	}, []);
-
-	const unifiedRecipeList = useMemo(
-		() =>
-			recipeList.map((recipe) => ({
-				...recipe,
-				workflow: workflowLookup[recipe.composerId],
-			})),
-		[recipeList, workflowLookup],
-	);
 
 	const counterStyles = css`
 		position: fixed;
@@ -155,7 +157,7 @@ const Home = (): JSX.Element => {
 					/>
 				</RadioGroup>
 			</div>
-			{recipeList.length > 0 && <RecipeList list={unifiedRecipeList} />}
+			{recipeList.length > 0 && <RecipeList list={displayedRecipeList} />}
 		</div>
 	);
 };
