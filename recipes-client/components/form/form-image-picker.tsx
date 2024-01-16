@@ -100,8 +100,8 @@ const PictureGrid = ({
 }: PictureGridProps) => {
 	const [picHovered, setHover] = useState(-1);
 	const selectedImageIsFromGrid =
-		!canonicalArticlePicObjects.some((p) => p.url === selectedImage?.url) &&
-		selectedImage !== null;
+		selectedImage &&
+		!canonicalArticlePicObjects.some((p) => p.url === selectedImage.url);
 	return (
 		<>
 			<h3 css={{ fontFamily: 'GuardianTextSans' }}>
@@ -109,7 +109,7 @@ const PictureGrid = ({
 			</h3>
 			<WithGridSelector
 				callback={(chosenImage) => {
-					const isSelected = chosenImage?.url === selectedImage?.url;
+					const isSelected = false; // forces it to become selected, regardless of what's already selected
 					select(chosenImage, isSelected, setSelectedImage, dispatcher);
 				}}
 			>
@@ -178,11 +178,19 @@ const PictureGrid = ({
 				</div>
 				<h3>Custom image/crop selected from the Grid</h3>
 				{selectedImageIsFromGrid ? (
-					<div>
+					<div
+						css={css`
+							position: relative;
+							display: inline-block;
+						`}
+					>
 						<img
-							style={{ maxWidth: '30%' }}
-							src={selectedImage?.url}
-							alt={selectedImage?.url}
+							css={css`
+								max-width: 150px;
+								max-height: 150px;
+							`}
+							src={selectedImage.url}
+							alt={selectedImage.mediaId}
 						/>
 						<CheckButton isSelected={true} hover={false} />
 					</div>

@@ -14,8 +14,10 @@ const CheckButton = ({
 			title="Select this one"
 			style={{
 				visibility: vis,
-				background: 'none',
-				float: 'left',
+				position: 'absolute',
+				top: '50%',
+				left: '50%',
+				transform: 'translate(-50%, -50%)',
 				width: '36px',
 				height: '36px',
 				border: 'none',

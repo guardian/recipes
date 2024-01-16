@@ -35,8 +35,8 @@ export const WithGridSelector = ({
 			data: {
 				exports: {
 					id: string;
-					assets: { dimensions: { width: number }; file: string }[];
-					master: { file: string };
+					assets: { dimensions: { width: number }; secureUrl: string }[];
+					master: { secureUrl: string };
 				}[];
 				id: string;
 				metadata: { credit: string; description: string; byline: string };
@@ -48,7 +48,7 @@ export const WithGridSelector = ({
 			cropExport.assets.find((asset) => asset.dimensions.width === 500) ||
 			cropExport.master;
 		const imageObject: ImageObject = {
-			url: preferredAsset.file,
+			url: preferredAsset.secureUrl,
 			mediaId: data.id,
 			cropId,
 			source: data.metadata.credit,
