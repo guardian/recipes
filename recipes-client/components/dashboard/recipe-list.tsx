@@ -24,7 +24,11 @@ export interface RecipeListType {
 
 const RecipeList = ({ unsortedList }: RecipeListProps): JSX.Element => {
 	const list = unsortedList.sort((a, b) =>
-		a.composerId.localeCompare(b.composerId),
+		a.composerId === undefined
+			? -1
+			: b.composerId === undefined
+			? 1
+			: a.composerId.localeCompare(b.composerId),
 	);
 	const displayAuthor = (contributors: string[], byline: string[]) => {
 		const prettifyContributorId = (contributorId: string) => {
