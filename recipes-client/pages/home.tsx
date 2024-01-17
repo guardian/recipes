@@ -3,44 +3,89 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source-foundations';
 import { Radio, RadioGroup } from '@guardian/source-react-components';
 import { RecipesOverview } from 'components/dashboard/recipes-overview';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import RecipeList, {
 	RecipeListType,
 } from '../components/dashboard/recipe-list';
 import { listEndpoint } from '../consts/index';
 import { WelcomeExplainer } from 'components/dashboard/welcome-explainer';
+import { WorkflowLookup, workflowContentUrl } from 'utils/workflow';
 
 const Home = (): JSX.Element => {
-	const [recipeList, setList] = useState<RecipeListType[]>([]);
-	const [displayedRecipes, setDisplayedRecipes] = useState<RecipeListType[]>(
-		[],
-	);
+	const [recipeList, setRecipeList] = useState<RecipeListType[]>([]);
 	const [listFilter, setListFilter] = useState<
 		'all' | 'app-ready' | 'edited-but-not-app-ready' | 'non-curated'
 	>('all');
 
+	const [workflowLookup, setWorkflowLookup] = useState<WorkflowLookup>({});
 	useEffect(() => {
-		const recipes = recipeList.filter((recipe) => {
-			if (listFilter === 'all') {
-				return true;
-			} else if (listFilter === 'app-ready') {
-				return recipe.isAppReady;
-			} else if (listFilter === 'edited-but-not-app-ready') {
-				return !recipe.isAppReady && recipe.isInCuratedTable;
-			} else if (listFilter === 'non-curated') {
-				return !recipe.isAppReady && !recipe.isInCuratedTable;
-			} else {
-				console.error('Invalid filter');
-				return true;
-			}
-		});
-		setDisplayedRecipes(recipes);
-	}, [recipeList, listFilter]);
+		const populateWorkflowLookup = () => {
+			fetch(`${workflowContentUrl}?section=Recipes+Data`, {
+				credentials: 'include',
+			})
+				.then((response) => {
+					if (response.ok) {
+						return response.json();
+					} else {
+						throw new Error(
+							`Error fetching workflow content: ${response.statusText}`,
+						);
+					}
+				})
+				.then(({ content }) => {
+					setWorkflowLookup(
+						Object.values(content)
+							.flat()
+							.reduce(
+								(acc, { composerId, assignee, status }) => ({
+									...acc,
+									[composerId]: {
+										assignee,
+										status,
+									},
+								}),
+								{} as WorkflowLookup,
+							),
+					);
+				})
+				.catch(console.error);
+		};
+		populateWorkflowLookup();
+		setInterval(
+			populateWorkflowLookup,
+			5000, // Five seconds to match Workflow polling frequency
+		);
+	}, []);
+
+	const displayedRecipeList = useMemo(
+		() =>
+			recipeList
+				.filter((recipe) => {
+					switch (listFilter) {
+						case 'all':
+							return true;
+						case 'app-ready':
+							return recipe.isAppReady;
+						case 'edited-but-not-app-ready':
+							return !recipe.isAppReady && recipe.isInCuratedTable;
+						case 'non-curated':
+							return !recipe.isAppReady && !recipe.isInCuratedTable;
+						default:
+							return true;
+					}
+				})
+				.map((recipe) => ({
+					...recipe,
+					workflow: workflowLookup[recipe.composerId],
+				})),
+
+		[recipeList, listFilter, workflowLookup],
+	);
 
 	useEffect(() => {
 		fetch(listEndpoint)
 			.then((response) => response.json())
-			.then((data) => setList(data))
+			.then((data) => setRecipeList(data))
 			.catch(() => null);
 	}, []);
 
@@ -120,7 +165,9 @@ const Home = (): JSX.Element => {
 					/>
 				</RadioGroup>
 			</div>
-			{recipeList.length > 0 && <RecipeList list={displayedRecipes} />}
+			{recipeList.length > 0 && (
+				<RecipeList unsortedList={displayedRecipeList} />
+			)}
 		</div>
 	);
 };
