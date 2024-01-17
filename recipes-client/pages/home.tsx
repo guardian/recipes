@@ -23,7 +23,15 @@ const Home = (): JSX.Element => {
 			fetch(`${workflowContentUrl}?section=Recipes+Data`, {
 				credentials: 'include',
 			})
-				.then((response) => response.json())
+				.then((response) => {
+					if (response.ok) {
+						return response.json();
+					} else {
+						throw new Error(
+							`Error fetching workflow content: ${response.statusText}`,
+						);
+					}
+				})
 				.then(({ content }) => {
 					setWorkflowLookup(
 						Object.values(content)
@@ -53,17 +61,17 @@ const Home = (): JSX.Element => {
 		() =>
 			recipeList
 				.filter((recipe) => {
-					if (listFilter === 'all') {
-						return true;
-					} else if (listFilter === 'app-ready') {
-						return recipe.isAppReady;
-					} else if (listFilter === 'edited-but-not-app-ready') {
-						return !recipe.isAppReady && recipe.isInCuratedTable;
-					} else if (listFilter === 'non-curated') {
-						return !recipe.isAppReady && !recipe.isInCuratedTable;
-					} else {
-						console.error('Invalid filter');
-						return true;
+					switch (listFilter) {
+						case 'all':
+							return true;
+						case 'app-ready':
+							return recipe.isAppReady;
+						case 'edited-but-not-app-ready':
+							return !recipe.isAppReady && recipe.isInCuratedTable;
+						case 'non-curated':
+							return !recipe.isAppReady && !recipe.isInCuratedTable;
+						default:
+							return true;
 					}
 				})
 				.map((recipe) => ({
@@ -157,7 +165,9 @@ const Home = (): JSX.Element => {
 					/>
 				</RadioGroup>
 			</div>
-			{recipeList.length > 0 && <RecipeList list={displayedRecipeList} />}
+			{recipeList.length > 0 && (
+				<RecipeList unsortedList={displayedRecipeList} />
+			)}
 		</div>
 	);
 };

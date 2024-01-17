@@ -5,7 +5,7 @@ import { curationEndpoint } from '../../consts/index';
 import { CheckedSymbol } from '../reusables/app-ready-status';
 
 interface RecipeListProps {
-	list: RecipeListType[];
+	unsortedList: RecipeListType[];
 }
 
 export interface RecipeListType {
@@ -22,7 +22,7 @@ export interface RecipeListType {
 	};
 }
 
-const RecipeList = ({ list: unsortedList }: RecipeListProps): JSX.Element => {
+const RecipeList = ({ unsortedList }: RecipeListProps): JSX.Element => {
 	const list = unsortedList.sort((a, b) =>
 		a.composerId.localeCompare(b.composerId),
 	);
@@ -86,17 +86,17 @@ const RecipeList = ({ list: unsortedList }: RecipeListProps): JSX.Element => {
 						},
 						i,
 					) => {
-						const isDifferentToPreviousComposerId =
+						const isDifferentComposerIdFromPreviousRow =
 							composerId !== list[i - 1]?.composerId;
 						return (
 							<>
-								{isDifferentToPreviousComposerId && (
+								{isDifferentComposerIdFromPreviousRow && (
 									<tr
 										css={css`
 											background-color: #eee;
 										`}
 									>
-										<td colSpan={6} key={`path_${i}_title`}>
+										<td colSpan={6} key={`path_${i}_path`}>
 											<a
 												href={`https://theguardian.co.uk/${canonicalArticle}`}
 												target="_blank"
@@ -149,7 +149,7 @@ const tableStyles = css`
 	text-align: left;
 	th,
 	td {
-		padding: 0.5rem; // TODO: Get rid
+		padding: 0.5rem;
 		border-bottom: 1px solid #ccc;
 	}
 	th {
