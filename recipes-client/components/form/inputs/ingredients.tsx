@@ -12,6 +12,7 @@ import FormItem from '../form-item';
 import { renderRangeFormGroup } from './range';
 import { actions } from 'actions/recipeActions';
 import { getFormFieldsSchema } from '../form-group';
+import { css } from '@emotion/react';
 
 export const renderIngredientsFormGroup = (
 	formItems: IngredientsGroup,
@@ -139,9 +140,22 @@ export const renderIngredientsFormGroup = (
 		}
 	});
 	return [
-		<div>
-			{fields}
-			{formItemButtons}
+		<div
+			css={css`
+				overflow-x: scroll;
+				overflow-y: auto;
+				transform: rotateX(180deg);
+				margin-bottom: 20px;
+			`}
+		>
+			<div
+				css={css`
+					transform: rotateX(180deg);
+				`}
+			>
+				{fields}
+				{formItemButtons}
+			</div>
 		</div>,
 	];
 };
