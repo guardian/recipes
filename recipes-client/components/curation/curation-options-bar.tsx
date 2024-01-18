@@ -43,8 +43,6 @@ export const postRecipe = async (
 			alert(
 				'Oops, a hiccup in the kitchen, recipe was not saved, sorry 😢\nPlease contact engineers if problem persists 🚑',
 			);
-		} else {
-			alert('Successfully saved and ready to be cooked! 🍲✨');
 		}
 	} catch (error) {
 		console.error(error);
