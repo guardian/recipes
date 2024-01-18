@@ -355,7 +355,10 @@ class ApiController (
                   "profile/chetna-makan",
                   "profile/signe-johansen",
                   "profile/miguel-barclay",
-                  "profile/tamal-ray"
+                  "profile/tamal-ray",
+                  "profile/tom-hunt",
+                  "profile/ravinder-bhogal",
+                  "profile/jose-pizarro"
                 ]
             }
         },
