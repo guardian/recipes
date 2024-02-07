@@ -25,7 +25,7 @@ const Header = (): JSX.Element => {
 		>
 			<a href="/">
 				<h2>Hatch</h2>
-				<span>A (temporary) recipe data curation tool</span>
+				<span>Formerly a (temporary) recipe data curation tool</span>
 			</a>
 		</header>
 	);
