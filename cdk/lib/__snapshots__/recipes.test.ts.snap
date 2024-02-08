@@ -85,7 +85,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
             ],
           },
         },
-        "MaxSize": "2",
+        "MaxSize": "4",
         "MinSize": "1",
         "Tags": [
           {
@@ -887,7 +887,7 @@ exports[`The Recipes stack matches the snapshot 1`] = `
           "ImageId": {
             "Ref": "AMIRecipes",
           },
-          "InstanceType": "t3.medium",
+          "InstanceType": "g3.medium",
           "MetadataOptions": {
             "HttpTokens": "required",
           },

@@ -18,7 +18,7 @@ export class Recipes extends GuStack {
     const ec2App = new GuEc2App(this, {
       applicationPort: 9000,
       app: appName,
-      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM),
+      instanceType: InstanceType.of(InstanceClass.G3, InstanceSize.MEDIUM),
       access: { scope: AccessScope.PUBLIC },
       userData: [
         '#!/bin/bash -ev',
@@ -34,7 +34,7 @@ export class Recipes extends GuStack {
       monitoringConfiguration: { noMonitoring: true },
       scaling: {
         minimumInstances: 1,
-        maximumInstances: 2,
+        maximumInstances: 4,
       },
       applicationLogging: {
         enabled: true,
