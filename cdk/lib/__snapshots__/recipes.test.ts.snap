@@ -845,10 +845,6 @@ exports[`The Recipes stack matches the snapshot 1`] = `
         "TableName": "curatedRecipesTablePROD",
         "Tags": [
           {
-            "Key": "devx-backup-enabled",
-            "Value": "true",
-          },
-          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
@@ -1046,10 +1042,6 @@ dpkg -i /tmp/package.deb",
         },
         "TableName": "rawRecipesTablePROD",
         "Tags": [
-          {
-            "Key": "devx-backup-enabled",
-            "Value": "true",
-          },
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
